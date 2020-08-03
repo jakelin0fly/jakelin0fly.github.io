@@ -1,27 +1,31 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
-    <loc>http://www.jakelin.cn/2020/01/08/centos7-k8s1.16.2%20%E9%9B%86%E7%BE%A4%E5%AE%89%E8%A3%85%E9%85%8D%E7%BD%AE/</loc>
+    <loc>jakelin.cn/2020/07/30/Hexo-Theme-Butterfly(%E4%B8%89)-%E4%B8%BB%E9%A2%98%E9%85%8D%E7%BD%AE/</loc>
     <lastmod>2020-08-03</lastmod>
   </url>
   <url>
-    <loc>http://www.jakelin.cn/2020/07/30/Hexo-Theme-Butterfly(%E4%B8%89)-%E4%B8%BB%E9%A2%98%E9%85%8D%E7%BD%AE/</loc>
+    <loc>jakelin.cn/2020/08/02/hexo-theme-next%E4%B8%BB%E9%A2%98%E9%85%8D%E7%BD%AE/</loc>
     <lastmod>2020-08-03</lastmod>
   </url>
   <url>
-    <loc>http://www.jakelin.cn/2020/07/29/Hexo-Theme-Butterfly(%E4%BA%8C)-%E4%B8%BB%E9%A2%98%E9%A1%B5%E9%9D%A2/</loc>
+    <loc>jakelin.cn/2020/01/08/centos7-k8s1.16.2%20%E9%9B%86%E7%BE%A4%E5%AE%89%E8%A3%85%E9%85%8D%E7%BD%AE/</loc>
     <lastmod>2020-08-03</lastmod>
   </url>
   <url>
-    <loc>http://www.jakelin.cn/2020/07/28/Linux%E4%B8%8Bgithub+hexo%E6%90%AD%E5%BB%BA%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2/</loc>
+    <loc>jakelin.cn/2020/07/29/Hexo-Theme-Butterfly(%E4%BA%8C)-%E4%B8%BB%E9%A2%98%E9%A1%B5%E9%9D%A2/</loc>
     <lastmod>2020-08-03</lastmod>
   </url>
   <url>
-    <loc>http://www.jakelin.cn/2020/07/29/Hexo-Theme-Butterfly(%E4%B8%80)-%E5%BF%AB%E9%80%9F%E5%BC%80%E5%A7%8B/</loc>
+    <loc>jakelin.cn/2020/07/28/Linux%E4%B8%8Bgithub+hexo%E6%90%AD%E5%BB%BA%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2/</loc>
     <lastmod>2020-08-03</lastmod>
   </url>
   <url>
-    <loc>http://www.jakelin.cn/2020/01/11/k8s%20weave%20scope%20%E5%AE%89%E8%A3%85%E9%85%8D%E7%BD%AE/</loc>
+    <loc>jakelin.cn/2020/07/29/Hexo-Theme-Butterfly(%E4%B8%80)-%E5%BF%AB%E9%80%9F%E5%BC%80%E5%A7%8B/</loc>
+    <lastmod>2020-08-03</lastmod>
+  </url>
+  <url>
+    <loc>jakelin.cn/2020/01/11/k8s%20weave%20scope%20%E5%AE%89%E8%A3%85%E9%85%8D%E7%BD%AE/</loc>
     <lastmod>2020-08-01</lastmod>
   </url>
 </urlset> 
