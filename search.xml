@@ -30,6 +30,148 @@
       </tags>
   </entry>
   <entry>
+    <title>Hexo-Theme-Butterfly(二) 主题页面</title>
+    <url>/2020/07/29/Hexo-Theme-Butterfly(%E4%BA%8C)-%E4%B8%BB%E9%A2%98%E9%A1%B5%E9%9D%A2/</url>
+    <content><![CDATA[<blockquote>
+<p>感谢原作者 <a href="https://jerryc.me/">JerryC</a> </p>
+<p>由于主题更新，此文件中部分配置可能失效。请参考作者博客或文档：<a href="https://demo.jerryc.me/posts/dc584b87/">Butterfly 安装文档(二) 主题页面</a> </p>
+</blockquote>
+<h1 id="Front-matter"><a href="#Front-matter" class="headerlink" title="Front-matter"></a>Front-matter</h1><h2 id="Page-Front-matter"><a href="#Page-Front-matter" class="headerlink" title="Page Front-matter"></a>Page Front-matter</h2><table>
+<thead>
+<tr>
+<th>参数</th>
+<th>解释</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>title</strong></td>
+<td>【必需】页面标题</td>
+</tr>
+<tr>
+<td><strong>date</strong></td>
+<td>【必需】页面创建日期</td>
+</tr>
+<tr>
+<td><strong>type</strong></td>
+<td>【必需】标签、分类和友情链接三个页面需要配置</td>
+</tr>
+<tr>
+<td>description</td>
+<td>页面描述（需要设置主页文章节选）</td>
+</tr>
+<tr>
+<td>keywords</td>
+<td>页面关键字</td>
+</tr>
+<tr>
+<td>comments</td>
+<td>是否要显示页面评论模块，默认true</td>
+</tr>
+<tr>
+<td>top_img</td>
+<td>页面顶部图片</td>
+</tr>
+</tbody></table>
+<p>查看完整参数：<a href="https://demo.jerryc.me/posts/dc584b87/#Page-Front-matter">Page Front-matter</a></p>
+<h2 id="Post-Front-matter"><a href="#Post-Front-matter" class="headerlink" title="Post Front-matter"></a>Post Front-matter</h2><table>
+<thead>
+<tr>
+<th>标签</th>
+<th>解释</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>title</strong></td>
+<td>【必需】文章标题</td>
+</tr>
+<tr>
+<td><strong>date</strong></td>
+<td>【必需】文章创建日期</td>
+</tr>
+<tr>
+<td>tags</td>
+<td>文章标签</td>
+</tr>
+<tr>
+<td>categories</td>
+<td>文章分类</td>
+</tr>
+<tr>
+<td>description</td>
+<td>文章描述（没看到哪儿显示……）</td>
+</tr>
+<tr>
+<td></td>
+<td>文章缩略图 (如果没有设置 top_img, 文章页顶部将显示缩略图，可设为 false / 图片地址 / 留空)</td>
+</tr>
+<tr>
+<td>keywords</td>
+<td>文章关键字</td>
+</tr>
+<tr>
+<td>comments</td>
+<td>显示文章评论模块，默认true</td>
+</tr>
+<tr>
+<td>top_img</td>
+<td>页面顶部图片</td>
+</tr>
+</tbody></table>
+<p>查看完整参数：<a href="https://demo.jerryc.me/posts/dc584b87/#Post-Front-matter">Post Front-matter</a></p>
+<h1 id="标签页"><a href="#标签页" class="headerlink" title="标签页"></a>标签页</h1><ol>
+<li>前往你的 Hexo 博客的根目录</li>
+<li>输入 <code>hexo new page tags</code></li>
+<li>你会找到 <code>source/tags/index.md</code> 这个文件</li>
+<li>根据 <a href="#Page-Front-matter"><strong>Page Front-matter</strong></a> 修改这个文件：</li>
+</ol>
+<figure class="highlight markdown"><table><tr><td class="code"><pre><span class="line">---</span><br><span class="line">title: 标签页</span><br><span class="line">date: 2020-07-29</span><br><span class="line">type: tags</span><br><span class="line">comments: false</span><br><span class="line">top<span class="emphasis">_img: /img/page-tags-top.png</span></span><br><span class="line"><span class="emphasis">---</span></span><br></pre></td></tr></table></figure>
+
+<h1 id="分类页"><a href="#分类页" class="headerlink" title="分类页"></a>分类页</h1><ol>
+<li>前往你的 Hexo 博客的根目录</li>
+<li>输入 <code>hexo new page categories</code></li>
+<li>你会找到 <code>source/categories/index.md</code> 这个文件</li>
+<li>根据 <a href="#Page-Front-matter"><strong>Page Front-matter</strong></a> 修改这个文件：</li>
+</ol>
+<figure class="highlight markdown"><table><tr><td class="code"><pre><span class="line">---</span><br><span class="line">title: 分类</span><br><span class="line">date: 2020-07-29</span><br><span class="line">type: categories</span><br><span class="line">comments: false</span><br><span class="line">top<span class="emphasis">_img: /img/page-categories-top.jpg</span></span><br><span class="line"><span class="emphasis">---</span></span><br></pre></td></tr></table></figure>
+
+<h1 id="友情链接"><a href="#友情链接" class="headerlink" title="友情链接"></a>友情链接</h1><h2 id="创建友情链接页面"><a href="#创建友情链接页面" class="headerlink" title="创建友情链接页面"></a>创建友情链接页面</h2><ol>
+<li>前往你的 Hexo 博客的根目录</li>
+<li>输入 <code>hexo new page link</code></li>
+<li>你会找到 <code>source/link/index.md</code> 这个文件</li>
+<li>根据 <a href="#Page-Front-matter"><strong>Page Front-matter</strong></a> 修改这个文件：</li>
+</ol>
+<figure class="highlight markdown"><table><tr><td class="code"><pre><span class="line">---</span><br><span class="line">title: 友情链接</span><br><span class="line">date: 2020-07-29</span><br><span class="line">type: link</span><br><span class="line">comments: false</span><br><span class="line">top<span class="emphasis">_img: /img/page-link-top.jpg</span></span><br><span class="line"><span class="emphasis">---</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="友情链接添加"><a href="#友情链接添加" class="headerlink" title="友情链接添加"></a>友情链接添加</h2><p>在 Hexo 博客目录中的 <code>source/_data</code>，创建一个文件 <code>link.yml</code>，格式如下：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">- class_name: 友情链接簇</span><br><span class="line">  class_desc: 友情链接簇描述</span><br><span class="line">  link_list:</span><br><span class="line">    1:</span><br><span class="line">      name: 链接名</span><br><span class="line">      link: 链接地址</span><br><span class="line">      avatar: 链接头像</span><br><span class="line">      descr: 链接描述</span><br><span class="line">    2:</span><br><span class="line">      name: 链接名</span><br><span class="line">      link: 链接地址</span><br><span class="line">      avatar: 链接头像</span><br><span class="line">      descr: 链接描述</span><br><span class="line"></span><br><span class="line">- class_name: 网站</span><br><span class="line">  class_desc: 值得推荐的网站</span><br><span class="line">  link_list:</span><br><span class="line">    - name: Youtube</span><br><span class="line">      link: https:&#x2F;&#x2F;www.youtube.com&#x2F;</span><br><span class="line">      avatar: https:&#x2F;&#x2F;i.loli.net&#x2F;2020&#x2F;05&#x2F;14&#x2F;9ZkGg8v3azHJfM1.png</span><br><span class="line">      descr: 视频网站</span><br><span class="line">    - name: Weibo</span><br><span class="line">      link: https:&#x2F;&#x2F;www.weibo.com&#x2F;</span><br><span class="line">      avatar: https:&#x2F;&#x2F;i.loli.net&#x2F;2020&#x2F;05&#x2F;14&#x2F;TLJBum386vcnI1P.png</span><br><span class="line">      descr: 中国最大社交分享平台</span><br><span class="line">    - name: Twitter</span><br><span class="line">      link: https:&#x2F;&#x2F;twitter.com&#x2F;</span><br><span class="line">      avatar: https:&#x2F;&#x2F;i.loli.net&#x2F;2020&#x2F;05&#x2F;14&#x2F;5VyHPQqR6LWF39a.png</span><br><span class="line">      descr: 社交分享平台</span><br></pre></td></tr></table></figure>
+
+<p><code>class_name</code> 和 <code>class_desc</code> 支持 <code>html</code> 格式书写，如不需要，也可以留空。</p>
+<h1 id="音乐"><a href="#音乐" class="headerlink" title="音乐"></a>音乐</h1><p>音乐界面使用了插件  。使用方法参考 <a href="https://github.com/MoePlayer/hexo-tag-aplayer/blob/master/docs/README-zh_cn.md"><strong>插件文档</strong></a> 。</p>
+<p>首先在 Hexo 根目录 <code>_config</code> 里配置 <code>asset_inject</code> 为 <code>false</code></p>
+<figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="attr">aplayer:</span></span><br><span class="line">  <span class="attr">asset_inject:</span> <span class="literal">false</span></span><br></pre></td></tr></table></figure>
+
+
+<p>然后在你需要使用 <code>aplayer</code> 的页面 <code>Front-matter</code> 添加</p>
+<figure class="highlight markdown"><table><tr><td class="code"><pre><span class="line">aplayer: true</span><br></pre></td></tr></table></figure>
+
+<p>这样只会在需要 aplayer 的页面插入 js 和 css。</p>
+<h1 id="电影"><a href="#电影" class="headerlink" title="电影"></a>电影</h1><p>电影界面使用了插件 <a href="https://github.com/mythsman/hexo-douban"><strong>hexo-douban</strong></a> ，使用方法参考插件文档。</p>
+<h1 id="404-页面"><a href="#404-页面" class="headerlink" title="404 页面"></a>404 页面</h1><p>主题内置了一个简单的 404 页面，可在设置中开启，<code>butterfly.yml</code> </p>
+<figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="comment"># A simple 404 page</span></span><br><span class="line"><span class="attr">error_404:</span></span><br><span class="line">  <span class="attr">enable:</span> <span class="literal">true</span></span><br><span class="line">  <span class="attr">subtitle:</span> <span class="string">&#x27;Page not found&#x27;</span></span><br><span class="line">  <span class="attr">background:</span> <span class="string">/img/page-404.jpg</span></span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>本地浏览： <a href="http://localhost:4000/404.html">http://localhost:4000/404.html</a></p>
+</blockquote>
+]]></content>
+      <categories>
+        <category>教程</category>
+      </categories>
+      <tags>
+        <tag>Butterfly</tag>
+        <tag>Hexo</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>Hexo-Theme-Butterfly(三) 主题配置</title>
     <url>/2020/07/30/Hexo-Theme-Butterfly(%E4%B8%89)-%E4%B8%BB%E9%A2%98%E9%85%8D%E7%BD%AE/</url>
     <content><![CDATA[<blockquote>
@@ -194,148 +336,6 @@
       </tags>
   </entry>
   <entry>
-    <title>Hexo-Theme-Butterfly(二) 主题页面</title>
-    <url>/2020/07/29/Hexo-Theme-Butterfly(%E4%BA%8C)-%E4%B8%BB%E9%A2%98%E9%A1%B5%E9%9D%A2/</url>
-    <content><![CDATA[<blockquote>
-<p>感谢原作者 <a href="https://jerryc.me/">JerryC</a> </p>
-<p>由于主题更新，此文件中部分配置可能失效。请参考作者博客或文档：<a href="https://demo.jerryc.me/posts/dc584b87/">Butterfly 安装文档(二) 主题页面</a> </p>
-</blockquote>
-<h1 id="Front-matter"><a href="#Front-matter" class="headerlink" title="Front-matter"></a>Front-matter</h1><h2 id="Page-Front-matter"><a href="#Page-Front-matter" class="headerlink" title="Page Front-matter"></a>Page Front-matter</h2><table>
-<thead>
-<tr>
-<th>参数</th>
-<th>解释</th>
-</tr>
-</thead>
-<tbody><tr>
-<td><strong>title</strong></td>
-<td>【必需】页面标题</td>
-</tr>
-<tr>
-<td><strong>date</strong></td>
-<td>【必需】页面创建日期</td>
-</tr>
-<tr>
-<td><strong>type</strong></td>
-<td>【必需】标签、分类和友情链接三个页面需要配置</td>
-</tr>
-<tr>
-<td>description</td>
-<td>页面描述（需要设置主页文章节选）</td>
-</tr>
-<tr>
-<td>keywords</td>
-<td>页面关键字</td>
-</tr>
-<tr>
-<td>comments</td>
-<td>是否要显示页面评论模块，默认true</td>
-</tr>
-<tr>
-<td>top_img</td>
-<td>页面顶部图片</td>
-</tr>
-</tbody></table>
-<p>查看完整参数：<a href="https://demo.jerryc.me/posts/dc584b87/#Page-Front-matter">Page Front-matter</a></p>
-<h2 id="Post-Front-matter"><a href="#Post-Front-matter" class="headerlink" title="Post Front-matter"></a>Post Front-matter</h2><table>
-<thead>
-<tr>
-<th>标签</th>
-<th>解释</th>
-</tr>
-</thead>
-<tbody><tr>
-<td><strong>title</strong></td>
-<td>【必需】文章标题</td>
-</tr>
-<tr>
-<td><strong>date</strong></td>
-<td>【必需】文章创建日期</td>
-</tr>
-<tr>
-<td>tags</td>
-<td>文章标签</td>
-</tr>
-<tr>
-<td>categories</td>
-<td>文章分类</td>
-</tr>
-<tr>
-<td>description</td>
-<td>文章描述（没看到哪儿显示……）</td>
-</tr>
-<tr>
-<td></td>
-<td>文章缩略图 (如果没有设置 top_img, 文章页顶部将显示缩略图，可设为 false / 图片地址 / 留空)</td>
-</tr>
-<tr>
-<td>keywords</td>
-<td>文章关键字</td>
-</tr>
-<tr>
-<td>comments</td>
-<td>显示文章评论模块，默认true</td>
-</tr>
-<tr>
-<td>top_img</td>
-<td>页面顶部图片</td>
-</tr>
-</tbody></table>
-<p>查看完整参数：<a href="https://demo.jerryc.me/posts/dc584b87/#Post-Front-matter">Post Front-matter</a></p>
-<h1 id="标签页"><a href="#标签页" class="headerlink" title="标签页"></a>标签页</h1><ol>
-<li>前往你的 Hexo 博客的根目录</li>
-<li>输入 <code>hexo new page tags</code></li>
-<li>你会找到 <code>source/tags/index.md</code> 这个文件</li>
-<li>根据 <a href="#Page-Front-matter"><strong>Page Front-matter</strong></a> 修改这个文件：</li>
-</ol>
-<figure class="highlight markdown"><table><tr><td class="code"><pre><span class="line">---</span><br><span class="line">title: 标签页</span><br><span class="line">date: 2020-07-29</span><br><span class="line">type: tags</span><br><span class="line">comments: false</span><br><span class="line">top<span class="emphasis">_img: /img/page-tags-top.png</span></span><br><span class="line"><span class="emphasis">---</span></span><br></pre></td></tr></table></figure>
-
-<h1 id="分类页"><a href="#分类页" class="headerlink" title="分类页"></a>分类页</h1><ol>
-<li>前往你的 Hexo 博客的根目录</li>
-<li>输入 <code>hexo new page categories</code></li>
-<li>你会找到 <code>source/categories/index.md</code> 这个文件</li>
-<li>根据 <a href="#Page-Front-matter"><strong>Page Front-matter</strong></a> 修改这个文件：</li>
-</ol>
-<figure class="highlight markdown"><table><tr><td class="code"><pre><span class="line">---</span><br><span class="line">title: 分类</span><br><span class="line">date: 2020-07-29</span><br><span class="line">type: categories</span><br><span class="line">comments: false</span><br><span class="line">top<span class="emphasis">_img: /img/page-categories-top.jpg</span></span><br><span class="line"><span class="emphasis">---</span></span><br></pre></td></tr></table></figure>
-
-<h1 id="友情链接"><a href="#友情链接" class="headerlink" title="友情链接"></a>友情链接</h1><h2 id="创建友情链接页面"><a href="#创建友情链接页面" class="headerlink" title="创建友情链接页面"></a>创建友情链接页面</h2><ol>
-<li>前往你的 Hexo 博客的根目录</li>
-<li>输入 <code>hexo new page link</code></li>
-<li>你会找到 <code>source/link/index.md</code> 这个文件</li>
-<li>根据 <a href="#Page-Front-matter"><strong>Page Front-matter</strong></a> 修改这个文件：</li>
-</ol>
-<figure class="highlight markdown"><table><tr><td class="code"><pre><span class="line">---</span><br><span class="line">title: 友情链接</span><br><span class="line">date: 2020-07-29</span><br><span class="line">type: link</span><br><span class="line">comments: false</span><br><span class="line">top<span class="emphasis">_img: /img/page-link-top.jpg</span></span><br><span class="line"><span class="emphasis">---</span></span><br></pre></td></tr></table></figure>
-
-<h2 id="友情链接添加"><a href="#友情链接添加" class="headerlink" title="友情链接添加"></a>友情链接添加</h2><p>在 Hexo 博客目录中的 <code>source/_data</code>，创建一个文件 <code>link.yml</code>，格式如下：</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">- class_name: 友情链接簇</span><br><span class="line">  class_desc: 友情链接簇描述</span><br><span class="line">  link_list:</span><br><span class="line">    1:</span><br><span class="line">      name: 链接名</span><br><span class="line">      link: 链接地址</span><br><span class="line">      avatar: 链接头像</span><br><span class="line">      descr: 链接描述</span><br><span class="line">    2:</span><br><span class="line">      name: 链接名</span><br><span class="line">      link: 链接地址</span><br><span class="line">      avatar: 链接头像</span><br><span class="line">      descr: 链接描述</span><br><span class="line"></span><br><span class="line">- class_name: 网站</span><br><span class="line">  class_desc: 值得推荐的网站</span><br><span class="line">  link_list:</span><br><span class="line">    - name: Youtube</span><br><span class="line">      link: https:&#x2F;&#x2F;www.youtube.com&#x2F;</span><br><span class="line">      avatar: https:&#x2F;&#x2F;i.loli.net&#x2F;2020&#x2F;05&#x2F;14&#x2F;9ZkGg8v3azHJfM1.png</span><br><span class="line">      descr: 视频网站</span><br><span class="line">    - name: Weibo</span><br><span class="line">      link: https:&#x2F;&#x2F;www.weibo.com&#x2F;</span><br><span class="line">      avatar: https:&#x2F;&#x2F;i.loli.net&#x2F;2020&#x2F;05&#x2F;14&#x2F;TLJBum386vcnI1P.png</span><br><span class="line">      descr: 中国最大社交分享平台</span><br><span class="line">    - name: Twitter</span><br><span class="line">      link: https:&#x2F;&#x2F;twitter.com&#x2F;</span><br><span class="line">      avatar: https:&#x2F;&#x2F;i.loli.net&#x2F;2020&#x2F;05&#x2F;14&#x2F;5VyHPQqR6LWF39a.png</span><br><span class="line">      descr: 社交分享平台</span><br></pre></td></tr></table></figure>
-
-<p><code>class_name</code> 和 <code>class_desc</code> 支持 <code>html</code> 格式书写，如不需要，也可以留空。</p>
-<h1 id="音乐"><a href="#音乐" class="headerlink" title="音乐"></a>音乐</h1><p>音乐界面使用了插件  。使用方法参考 <a href="https://github.com/MoePlayer/hexo-tag-aplayer/blob/master/docs/README-zh_cn.md"><strong>插件文档</strong></a> 。</p>
-<p>首先在 Hexo 根目录 <code>_config</code> 里配置 <code>asset_inject</code> 为 <code>false</code></p>
-<figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="attr">aplayer:</span></span><br><span class="line">  <span class="attr">asset_inject:</span> <span class="literal">false</span></span><br></pre></td></tr></table></figure>
-
-
-<p>然后在你需要使用 <code>aplayer</code> 的页面 <code>Front-matter</code> 添加</p>
-<figure class="highlight markdown"><table><tr><td class="code"><pre><span class="line">aplayer: true</span><br></pre></td></tr></table></figure>
-
-<p>这样只会在需要 aplayer 的页面插入 js 和 css。</p>
-<h1 id="电影"><a href="#电影" class="headerlink" title="电影"></a>电影</h1><p>电影界面使用了插件 <a href="https://github.com/mythsman/hexo-douban"><strong>hexo-douban</strong></a> ，使用方法参考插件文档。</p>
-<h1 id="404-页面"><a href="#404-页面" class="headerlink" title="404 页面"></a>404 页面</h1><p>主题内置了一个简单的 404 页面，可在设置中开启，<code>butterfly.yml</code> </p>
-<figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="comment"># A simple 404 page</span></span><br><span class="line"><span class="attr">error_404:</span></span><br><span class="line">  <span class="attr">enable:</span> <span class="literal">true</span></span><br><span class="line">  <span class="attr">subtitle:</span> <span class="string">&#x27;Page not found&#x27;</span></span><br><span class="line">  <span class="attr">background:</span> <span class="string">/img/page-404.jpg</span></span><br></pre></td></tr></table></figure>
-
-<blockquote>
-<p>本地浏览： <a href="http://localhost:4000/404.html">http://localhost:4000/404.html</a></p>
-</blockquote>
-]]></content>
-      <categories>
-        <category>教程</category>
-      </categories>
-      <tags>
-        <tag>Butterfly</tag>
-        <tag>Hexo</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>Linux下Hexo+GitHub搭建个人博客</title>
     <url>/2020/07/28/Linux%E4%B8%8Bgithub+hexo%E6%90%AD%E5%BB%BA%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2/</url>
     <content><![CDATA[<h2 id="配置信息"><a href="#配置信息" class="headerlink" title="配置信息"></a>配置信息</h2><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">[root@iZwz9c74ta983j746ynevpZ ~]# uname -a</span><br><span class="line">Linux iZwz9c74ta983j746ynevpZ 3.10.0-1127.10.1.el7.x86_64 #1 SMP Wed Jun 3 14:28:03 UTC 2020 x86_64 x86_64 x86_64 GNU/Linux</span><br></pre></td></tr></table></figure>
@@ -481,6 +481,31 @@
       <tags>
         <tag>linux</tag>
         <tag>k8s</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>hexo-theme-next valine评论</title>
+    <url>/2020/08/02/hexo-theme-next%20valine%E8%AF%84%E8%AE%BA/</url>
+    <content><![CDATA[<h1 id="绑定域名"><a href="#绑定域名" class="headerlink" title="绑定域名"></a>绑定域名</h1><p>新增域名解析：</p>
+<pre><code>1. 记录类型：CNAME
+ 2. 主机记录：@
+ 3. 记录值：Github Pages项目域名</code></pre>
+<h1 id="Valine"><a href="#Valine" class="headerlink" title="Valine"></a>Valine</h1><h2 id="注册LeanClound，获取APP-ID-和-APP-Key"><a href="#注册LeanClound，获取APP-ID-和-APP-Key" class="headerlink" title="注册LeanClound，获取APP ID 和 APP Key"></a>注册LeanClound，获取APP ID 和 APP Key</h2><p>注册链接： <a href="https://leancloud.cn/dashboard/login.html#/signup">LeanClound注册</a> </p>
+<p>【创建应用】-&gt;【随便起个名】-&gt;【开发版】-&gt;[创建]</p>
+<p><img src="https://i.loli.net/2020/08/03/kNErsH8PezWO1uj.png" alt="LeanClound创建应用.png"></p>
+<p><img src="https://i.loli.net/2020/08/03/uxdiBNf6g4MKwOs.png" alt="获取key.png"></p>
+<h2 id="修改主题配置文件"><a href="#修改主题配置文件" class="headerlink" title="修改主题配置文件"></a>修改主题配置文件</h2><figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="comment"># Valine</span></span><br><span class="line"><span class="comment"># For more information: https://valine.js.org, https://github.com/xCss/Valine</span></span><br><span class="line"><span class="attr">valine:</span></span><br><span class="line">  <span class="attr">enable:</span> <span class="literal">true</span></span><br><span class="line">  <span class="attr">appId:</span> <span class="string">这里填</span> <span class="string">AppID</span>  <span class="comment"># Your leancloud application appid</span></span><br><span class="line">  <span class="attr">appKey:</span> <span class="string">这里填</span> <span class="string">AppKey</span> <span class="comment"># Your leancloud application appkey</span></span><br><span class="line">  <span class="attr">placeholder:</span> <span class="string">&#x27;ヾﾉ≧∀≦)o来啊，快活啊!&#x27;</span> <span class="comment"># Comment box placeholder</span></span><br><span class="line">  <span class="attr">avatar:</span> <span class="string">mm</span> <span class="comment"># Gravatar style</span></span><br><span class="line">  <span class="attr">meta:</span> [<span class="string">nick</span>, <span class="string">mail</span>, <span class="string">link</span>] <span class="comment"># Custom comment header</span></span><br><span class="line">  <span class="attr">pageSize:</span> <span class="number">10</span> <span class="comment"># Pagination size</span></span><br><span class="line">  <span class="attr">language:</span> <span class="string">zh-cn</span> <span class="comment"># Language, available values: en, zh-cn</span></span><br><span class="line">  <span class="attr">visitor:</span> <span class="literal">true</span> <span class="comment"># Article reading statistic</span></span><br><span class="line">  <span class="attr">comment_count:</span> <span class="literal">true</span> <span class="comment"># If false, comment count will only be displayed in post page, not in home page</span></span><br><span class="line">  <span class="attr">recordIP:</span> <span class="literal">false</span> <span class="comment"># Whether to record the commenter IP</span></span><br><span class="line">  <span class="attr">serverURLs:</span> <span class="comment"># When the custom domain name is enabled, fill it in here (it will be detected automatically by default, no need to fill in)</span></span><br><span class="line">  <span class="attr">enableQQ:</span> <span class="literal">false</span> <span class="comment"># Whether to enable the Nickname box to automatically get QQ Nickname and QQ Avatar</span></span><br><span class="line">  <span class="attr">requiredFields:</span> [] <span class="comment"># Set required fields: [&#x27;nick&#x27;] | [&#x27;nick&#x27;,&#x27;mail&#x27;]</span></span><br><span class="line">  <span class="comment">#post_meta_order: 0</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="添加邮件提醒"><a href="#添加邮件提醒" class="headerlink" title="添加邮件提醒"></a>添加邮件提醒</h2><p>见： <a href="https://tding.top/archives/ed8b904f.html">小丁的个人博客–Hexo-NexT 配置 Valine</a> </p>
+<h1 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h1><p><a href="https://valine.js.org/quickstart.html">Valine-快速开始</a></p>
+]]></content>
+      <categories>
+        <category>教程</category>
+      </categories>
+      <tags>
+        <tag>Hexo</tag>
+        <tag>博客</tag>
+        <tag>Next</tag>
       </tags>
   </entry>
   <entry>
