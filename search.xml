@@ -486,10 +486,19 @@
   <entry>
     <title>hexo-theme-next valine评论</title>
     <url>/2020/08/02/hexo-theme-next%20valine%E8%AF%84%E8%AE%BA/</url>
-    <content><![CDATA[<h1 id="绑定域名"><a href="#绑定域名" class="headerlink" title="绑定域名"></a>绑定域名</h1><p>新增域名解析：</p>
-<pre><code>1. 记录类型：CNAME
- 2. 主机记录：@
- 3. 记录值：Github Pages项目域名</code></pre>
+    <content><![CDATA[<blockquote>
+<p>站点配置文件 <code>url</code> 地加 <code>http</code> 头，否则文章末尾【本文链接】地址为：<strong>域名/域名/xxxxxxx</strong></p>
+<figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="comment"># URL</span></span><br><span class="line"><span class="comment">## If your site is put in a subdirectory, set url as &#x27;http://yoursite.com/child&#x27; and root as &#x27;/child/&#x27;</span></span><br><span class="line"><span class="attr">url:</span> <span class="string">http://jakelin.cn</span></span><br><span class="line"><span class="attr">root:</span> <span class="string">/</span></span><br></pre></td></tr></table></figure>
+</blockquote>
+<h1 id="绑定域名"><a href="#绑定域名" class="headerlink" title="绑定域名"></a>绑定域名</h1><p>新增域名解析：</p>
+<ol>
+<li><p>记录类型：CNAME</p>
+<ol start="2">
+<li>主机记录：@</li>
+<li>记录值：Github Pages项目域名</li>
+</ol>
+</li>
+</ol>
 <h1 id="Valine"><a href="#Valine" class="headerlink" title="Valine"></a>Valine</h1><h2 id="注册LeanClound，获取APP-ID-和-APP-Key"><a href="#注册LeanClound，获取APP-ID-和-APP-Key" class="headerlink" title="注册LeanClound，获取APP ID 和 APP Key"></a>注册LeanClound，获取APP ID 和 APP Key</h2><p>注册链接： <a href="https://leancloud.cn/dashboard/login.html#/signup">LeanClound注册</a> </p>
 <p>【创建应用】-&gt;【随便起个名】-&gt;【开发版】-&gt;[创建]</p>
 <p><img src="https://i.loli.net/2020/08/03/kNErsH8PezWO1uj.png" alt="LeanClound创建应用.png"></p>
