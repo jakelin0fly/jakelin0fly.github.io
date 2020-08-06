@@ -512,10 +512,10 @@
 <li><p><strong>内核空间（kernel）</strong></p>
 </li>
 </ul>
-<h1 id="内核空间"><a href="#内核空间" class="headerlink" title="内核空间"></a>内核空间</h1><p> Linux的**<font color=red>虚拟地址空间</font>**范围为0～4G，Linux内核将这4G字节的空间分为两部分：</p>
+<h1 id="内核空间"><a href="#内核空间" class="headerlink" title="内核空间"></a>内核空间</h1><p> Linux的<font color=red><strong>虚拟地址空间</strong></font>范围为0～4G，Linux内核将这4G字节的空间分为两部分：</p>
 <p><strong>内核空间</strong>：将高地址的<strong>1G</strong>字节供内核使用，称为“内核空间“</p>
 <p><strong>用户空间</strong>：低地址的<strong>3G</strong>字节（供各个进程使用，称为“用户空间“</p>
-<p>因为每个进程可以通过系统调用进入内核，因此，**<font color=red>Linux内核由系统内的所有进程共享</font>**。</p>
+<p>因为每个进程可以通过系统调用进入内核，因此，<font color=red><strong>Linux内核由系统内的所有进程共享</strong></font>。</p>
 <p>Linux使用两级保护机制：</p>
 <ul>
 <li>0级供内核使用</li>
@@ -803,9 +803,9 @@
 </ul>
 <h2 id="标准库缓冲类型"><a href="#标准库缓冲类型" class="headerlink" title="标准库缓冲类型"></a>标准库缓冲类型</h2><p>C标准库的I/O缓冲区有三种类型：全缓冲、行缓冲和无缓冲。</p>
 <h3 id="全缓冲"><a href="#全缓冲" class="headerlink" title="全缓冲"></a>全缓冲</h3><p>如果缓冲区写满了就写回内核。对于驻留在<strong>磁盘</strong>上的文件通常是由标准I/O库实施全缓冲的。在一个流上执行第一次I/O操作时，相关标准I/O函数通常调用malloc获得需使用的缓冲区。</p>
-<h3 id="行缓冲"><a href="#行缓冲" class="headerlink" title="行缓冲"></a>行缓冲</h3><p>如果用户程序写的数据中有<strong>换行符</strong>就把这一行写回内核，或者如果<strong>缓冲区写满</strong>了就写回内核。**<font color=red>标准输入</font><strong>和</strong><font color=red>标准输出</font>**对应终端设备时通常是行缓冲的。 </p>
+<h3 id="行缓冲"><a href="#行缓冲" class="headerlink" title="行缓冲"></a>行缓冲</h3><p>如果用户程序写的数据中有<strong>换行符</strong>就把这一行写回内核，或者如果<strong>缓冲区写满</strong>了就写回内核。<font color=red><strong>标准输入</strong></font>和<font color=red><strong>标准输出</strong></font>对应终端设备时通常是行缓冲的。 </p>
 <h3 id="无缓冲"><a href="#无缓冲" class="headerlink" title="无缓冲"></a>无缓冲</h3><p>用户程序每次调库函数做写操作都要通过系统调用写回内核。</p>
-<p>**<font color=red>标准错误输出</font>**通常是无缓冲的，这样用户程序产生的错误信息可以尽快输出到设备。这里的无缓冲，并不是指缓冲区大小为0，其实，还是有缓冲的，大小为1。</p>
+<p><font color=red><strong>标准错误输出</strong></font>通常是无缓冲的，这样用户程序产生的错误信息可以尽快输出到设备。这里的无缓冲，并不是指缓冲区大小为0，其实，还是有缓冲的，大小为1。</p>
 ]]></content>
       <categories>
         <category>笔记</category>
