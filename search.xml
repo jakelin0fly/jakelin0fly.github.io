@@ -2,7 +2,7 @@
 <search>
   <entry>
     <title>Hexo-Theme-Butterfly(一) 快速开始</title>
-    <url>/2020/07/29/Hexo-Theme-Butterfly(%E4%B8%80)-%E5%BF%AB%E9%80%9F%E5%BC%80%E5%A7%8B/</url>
+    <url>/Hexo-Theme-Butterfly(%E4%B8%80)-%E5%BF%AB%E9%80%9F%E5%BC%80%E5%A7%8B/</url>
     <content><![CDATA[<blockquote>
 <p>感谢原作者 <a href="https://jerryc.me/">JerryC</a> 。</p>
 <p>由于主题更新，此文件中部分配置可能失效。请参考作者博客或文档：<a href="https://demo.jerryc.me/posts/21cfbf15/">Butterfly 安裝文檔(一) 快速開始</a> 。</p>
@@ -31,7 +31,7 @@
   </entry>
   <entry>
     <title>Hexo-Theme-Butterfly(三) 主题配置</title>
-    <url>/2020/07/30/Hexo-Theme-Butterfly(%E4%B8%89)-%E4%B8%BB%E9%A2%98%E9%85%8D%E7%BD%AE/</url>
+    <url>/Hexo-Theme-Butterfly(%E4%B8%89)-%E4%B8%BB%E9%A2%98%E9%85%8D%E7%BD%AE/</url>
     <content><![CDATA[<blockquote>
 <p>感谢原作者 <a href="https://jerryc.me/">JerryC</a> </p>
 <p>由于主题更新，此文件中部分配置可能失效。请参考作者博客或文档：<a href="https://demo.jerryc.me/posts/4aa8abbe/">Butterfly 安裝文档(三) 主题配置-1</a>  <a href="https://demo.jerryc.me/posts/ceeb73f/">Butterfly 安装文档(四) 主题配置-2</a></p>
@@ -195,7 +195,7 @@
   </entry>
   <entry>
     <title>Hexo-Theme-Butterfly(二) 主题页面</title>
-    <url>/2020/07/29/Hexo-Theme-Butterfly(%E4%BA%8C)-%E4%B8%BB%E9%A2%98%E9%A1%B5%E9%9D%A2/</url>
+    <url>/Hexo-Theme-Butterfly(%E4%BA%8C)-%E4%B8%BB%E9%A2%98%E9%A1%B5%E9%9D%A2/</url>
     <content><![CDATA[<blockquote>
 <p>感谢原作者 <a href="https://jerryc.me/">JerryC</a> </p>
 <p>由于主题更新，此文件中部分配置可能失效。请参考作者博客或文档：<a href="https://demo.jerryc.me/posts/dc584b87/">Butterfly 安装文档(二) 主题页面</a> </p>
@@ -337,7 +337,7 @@
   </entry>
   <entry>
     <title>Linux下Hexo+GitHub搭建个人博客</title>
-    <url>/2020/07/28/Linux%E4%B8%8Bgithub+hexo%E6%90%AD%E5%BB%BA%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2/</url>
+    <url>/Linux%E4%B8%8Bgithub+hexo%E6%90%AD%E5%BB%BA%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2/</url>
     <content><![CDATA[<h2 id="配置信息"><a href="#配置信息" class="headerlink" title="配置信息"></a>配置信息</h2><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">[root@iZwz9c74ta983j746ynevpZ ~]# uname -a</span><br><span class="line">Linux iZwz9c74ta983j746ynevpZ 3.10.0-1127.10.1.el7.x86_64 #1 SMP Wed Jun 3 14:28:03 UTC 2020 x86_64 x86_64 x86_64 GNU/Linux</span><br></pre></td></tr></table></figure>
 
 <h2 id="更新源（可略过）"><a href="#更新源（可略过）" class="headerlink" title="更新源（可略过）"></a>更新源（可略过）</h2><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"><span class="comment"># 备份原 源文件</span></span></span><br><span class="line">[root@iZwz9c74ta983j746ynevpZ ~]# mv /etc/yum.repos.d /etc/yum.repos.d.bak</span><br><span class="line">[root@iZwz9c74ta983j746ynevpZr ~]# mkdir /etc/yum.repos.d</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"><span class="comment"># 阿里云</span></span></span><br><span class="line">[root@iZwz9c74ta983j746ynevpZ ~]# wget -O /etc/yum.repos.d/CentOS-Base.repo https://mirrors.aliyun.com/repo/Centos-7.repo --no-check-certificate</span><br><span class="line"></span><br><span class="line">[root@iZwz9c74ta983j746ynevpZ ~]# yum clean all</span><br><span class="line"></span><br><span class="line">[root@iZwz9c74ta983j746ynevpZ ~]# yum makecache</span><br><span class="line"></span><br><span class="line">[root@iZwz9c74ta983j746ynevpZ ~]# yum update -y</span><br></pre></td></tr></table></figure>
@@ -409,7 +409,7 @@
   </entry>
   <entry>
     <title>centos-k8s1.16.2集群安装部署</title>
-    <url>/2020/01/08/centos7-k8s1.16.2%20%E9%9B%86%E7%BE%A4%E5%AE%89%E8%A3%85%E9%85%8D%E7%BD%AE/</url>
+    <url>/centos7-k8s1.16.2%20%E9%9B%86%E7%BE%A4%E5%AE%89%E8%A3%85%E9%85%8D%E7%BD%AE/</url>
     <content><![CDATA[<h2 id="1-centos-7-配置"><a href="#1-centos-7-配置" class="headerlink" title="1. centos 7 配置"></a>1. centos 7 配置</h2><p>关闭防火墙、关闭selinux、更新源</p>
 <figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash">防火墙</span></span><br><span class="line">systemctl disable firewalld.service</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash">关闭Selinux</span></span><br><span class="line">    sed -i &#x27;s/SELINUX=enforcing/SELINUX=disabled/&#x27; /etc/selinux/config</span><br><span class="line"><span class="meta">#</span><span class="bash"><span class="comment"># 或者</span></span></span><br><span class="line">    /etc/selinux/config</span><br><span class="line">    #将其中的 SELINUX=*处修改为如下</span><br><span class="line">    SELINUX=disabled</span><br><span class="line"><span class="meta">#</span><span class="bash">重启服务器</span></span><br><span class="line"><span class="meta">#</span><span class="bash">运行命令getenforce 确保 selinux 为<span class="built_in">disable</span></span></span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash">安装wget</span></span><br><span class="line">yum install -y wget</span><br><span class="line">wget -O /etc/yum.repos.d/CentOS-Base.repo http://mirrors.aliyun.com/repo/Centos-7.repo</span><br><span class="line">wget -O /etc/yum.repos.d/epel.repo http://mirrors.aliyun.com/repo/epel-7.repo</span><br><span class="line"><span class="meta">#</span><span class="bash">更新 源</span></span><br><span class="line">yum upgrade</span><br></pre></td></tr></table></figure>
 
@@ -484,8 +484,107 @@
       </tags>
   </entry>
   <entry>
+    <title>Linux进程地址空间（程序内存布局）</title>
+    <url>/Linux%E8%BF%9B%E7%A8%8B%E5%9C%B0%E5%9D%80%E7%A9%BA%E9%97%B4%EF%BC%88%E7%A8%8B%E5%BA%8F%E5%86%85%E5%AD%98%E5%B8%83%E5%B1%80%EF%BC%89/</url>
+    <content><![CDATA[<h1 id="进程地址空间分布图"><a href="#进程地址空间分布图" class="headerlink" title="进程地址空间分布图"></a>进程地址空间分布图</h1><img src="https://i.loli.net/2020/08/05/jxbWsi5ae4q1GfR.png" alt="Linux程序内存布局图.png" style="zoom:67%;" />
+
+<p>由低地址到高地址，依次是：</p>
+<ul>
+<li><p><strong>程序段（text）</strong>：程序代码在内存中的映射，存放函数体的二进制代码，常常是只读的</p>
+</li>
+<li><p><strong>初始化过的数据（data）</strong>：在程序运行初已经对变量进行初始化的数据</p>
+<ul>
+<li><p>只读数据段（RO data，即常量区）：</p>
+<blockquote>
+<p> 这个区域的存在与否，一直是一个争议的地方，但是我们这里认同是存在的，因为我们的程序中的确出现了与其他数据段不同的一块区域，但是往往很多时候大家把只读数据段（RO data）和下面的已初始化读写数据段（RW data）合成为数据段data，但是其实这个是不合适的，因为在执行过程中，这两个区域的读写权限是不同的，顾名思义，只读数据段（RO data）是只读的，而已初始化读写数据段是可读可写的。</p>
+</blockquote>
+</li>
+<li><p>读写数据段（RW data）：需要占用存储器的空间，在程序执行时它们需要位于可读写的内存区域内，并具有初值，以供程序运行时读写</p>
+</li>
+</ul>
+</li>
+<li><p><strong>未初始化过的数据（bss）</strong>：未初始化数据是在程序中声明，但是没有初始化的变量，这些变量在程序运行之前不需要占用存储器的空间。Block Started by Symbol，BSS段的变量只有名称和大小却没有值</p>
+</li>
+<li><p>堆 （heap）<strong>：存储动态内存分配,需要程序员手工分配,手工释放。注意它与数据结构中的堆是两回事，分配方式类似于链表</strong></p>
+</li>
+<li><p><strong>栈（stack）</strong>：存储局部、临时变量，函数调用时，存储函数的返回指针，用于控制函数的调用和返回。在程序块开始时自动分配内存，结束时自动释放内存，其操作方式类似于数据结构中的栈</p>
+</li>
+<li><p><strong>内核空间（kernel）</strong></p>
+</li>
+</ul>
+<h1 id="内核空间"><a href="#内核空间" class="headerlink" title="内核空间"></a>内核空间</h1><p> Linux的**<font color=red>虚拟地址空间</font>**范围为0～4G，Linux内核将这4G字节的空间分为两部分：</p>
+<p><strong>内核空间</strong>：将高地址的<strong>1G</strong>字节供内核使用，称为“内核空间“</p>
+<p><strong>用户空间</strong>：低地址的<strong>3G</strong>字节（供各个进程使用，称为“用户空间“</p>
+<p>因为每个进程可以通过系统调用进入内核，因此，**<font color=red>Linux内核由系统内的所有进程共享</font>**。</p>
+<p>Linux使用两级保护机制：</p>
+<ul>
+<li>0级供内核使用</li>
+<li>3级供用户程序使用</li>
+</ul>
+<h1 id="虚拟地址！！！"><a href="#虚拟地址！！！" class="headerlink" title="虚拟地址！！！"></a>虚拟地址！！！</h1><p>进程空间是<strong>虚拟地址</strong>，不管是内核空间还是用户空间，它们都处于虚拟空间中。</p>
+<p>使用虚拟地址可以很好的保护内核空间被用户空间破坏，虚拟地址到物理地址转换过程由操作系统和CPU共同完成(操作系统为CPU设置好页表，CPU通过MMU单元进行地址转换)。</p>
+<h1 id="段区对应数据"><a href="#段区对应数据" class="headerlink" title="段区对应数据"></a>段区对应数据</h1><table>
+<thead>
+<tr>
+<th>进程空间段区域</th>
+<th>地址空间</th>
+<th>存储变量</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>stack</td>
+<td>栈</td>
+<td>局部变量和常量</td>
+</tr>
+<tr>
+<td>heap</td>
+<td>堆</td>
+<td>动态分配的数据</td>
+</tr>
+<tr>
+<td>BSS</td>
+<td>未初始化数据段</td>
+<td>未初始化的全局变量以及静态变量</td>
+</tr>
+<tr>
+<td>RW data</td>
+<td>已初始化读写数据段</td>
+<td>已初始化的全局变量和静态变量</td>
+</tr>
+<tr>
+<td>RO data</td>
+<td>只读文本段中的数据段</td>
+<td>全局常量或者字符串面变量</td>
+</tr>
+<tr>
+<td>text</td>
+<td>只读文本段中的程序代码段</td>
+<td>程序的代码</td>
+</tr>
+</tbody></table>
+<h1 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h1><ul>
+<li><p>《UNIX环境高级编程》</p>
+</li>
+<li><p><a href="https://blog.csdn.net/zhangzhebjut/article/details/39060253">Linux - 进程(一) 进程空间</a></p>
+</li>
+<li><p><a href="https://blog.csdn.net/gatieme/article/details/43567433">C程序的内存布局(Memory Layout)</a></p>
+</li>
+</ul>
+]]></content>
+      <categories>
+        <category>笔记</category>
+        <category>apue</category>
+      </categories>
+      <tags>
+        <tag>linux</tag>
+        <tag>apue</tag>
+        <tag>进程</tag>
+        <tag>操作系统</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>hexo-theme-next valine评论</title>
-    <url>/2020/08/02/hexo-theme-next%20valine%E8%AF%84%E8%AE%BA/</url>
+    <url>/hexo-theme-next%20valine%E8%AF%84%E8%AE%BA/</url>
     <content><![CDATA[<blockquote>
 <p>站点配置文件 <code>url</code> 地加 <code>http</code> 头，否则文章末尾【本文链接】地址为：<strong>域名/域名/xxxxxxx</strong></p>
 <figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="comment"># URL</span></span><br><span class="line"><span class="comment">## If your site is put in a subdirectory, set url as &#x27;http://yoursite.com/child&#x27; and root as &#x27;/child/&#x27;</span></span><br><span class="line"><span class="attr">url:</span> <span class="string">http://jakelin.cn</span></span><br><span class="line"><span class="attr">root:</span> <span class="string">/</span></span><br></pre></td></tr></table></figure>
@@ -519,7 +618,7 @@
   </entry>
   <entry>
     <title>hexo-theme-next主题配置</title>
-    <url>/2020/08/02/hexo-theme-next%E4%B8%BB%E9%A2%98%E9%85%8D%E7%BD%AE/</url>
+    <url>/hexo-theme-next%E4%B8%BB%E9%A2%98%E9%85%8D%E7%BD%AE/</url>
     <content><![CDATA[<p>2020-08-02 版本信息</p>
 <blockquote>
 <p>nodejs : v12.18.3</p>
@@ -606,8 +705,68 @@
       </tags>
   </entry>
   <entry>
+    <title>hexo-theme-next提交给搜索引擎</title>
+    <url>/hexo-theme-next%E6%8F%90%E4%BA%A4%E7%BB%99%E6%90%9C%E7%B4%A2%E5%BC%95%E6%93%8E/</url>
+    <content><![CDATA[<h1 id="站点地图生成"><a href="#站点地图生成" class="headerlink" title="站点地图生成"></a>站点地图生成</h1><ol>
+<li><p>插件安装</p>
+<ul>
+<li><p>Google站点地图插件</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">npm install hexo-generator-sitemap --save</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>百度站点地图插件</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">npm install hexo-generator-baidu-sitemap --save</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+<li><p>修改站点配置文件</p>
+</li>
+</ol>
+<p><code>_config.yml</code> 中加入：</p>
+<figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="attr">sitemap:</span></span><br><span class="line">  <span class="attr">path:</span> <span class="string">sitemap.xml</span> <span class="comment"># 提交给Google</span></span><br><span class="line"><span class="attr">baidusitemap:</span></span><br><span class="line">  <span class="attr">path:</span> <span class="string">baidusitemap.xml</span> <span class="comment"># 提交给百度</span></span><br></pre></td></tr></table></figure>
+
+<ol start="3">
+<li><p>重新构建项目</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">hexo cl&amp;&amp;hexo g</span><br></pre></td></tr></table></figure>
+
+</li>
+</ol>
+<h1 id="提交站点地图"><a href="#提交站点地图" class="headerlink" title="提交站点地图"></a>提交站点地图</h1><p>直接参考：<a href="https://fanandjiu.com/Hexo%E9%97%AE%E9%A2%98-%E6%8F%90%E4%BA%A4%E7%AB%99%E7%82%B9%E7%BB%99%E6%90%9C%E7%B4%A2%E5%BC%95%E6%93%8E%E4%BB%A5%E5%8F%8ASEO/">Hexo问题-提交站点给搜索引擎以及SEO</a> </p>
+<p><strong><em>注意：在Google进行DNS记录验证域名所有权时，因为阿里云域名解析的记录值不允许两个 <code>@</code> ，但将域名记录值 <code>@</code> 用以验证，验证完后再更改记录值是可行的。验证后需要一定的时间才能google搜索到！</em></strong> </p>
+<p><img src="https://i.loli.net/2020/08/06/SBGhud2oF7V4ZKj.png" alt="DNS验证域名所有权-Google.png"></p>
+<h1 id="站点分析"><a href="#站点分析" class="headerlink" title="站点分析"></a>站点分析</h1><p>参考：<a href="https://theme-next.js.org/docs/third-party-services/statistics-and-analytics.html">Statistics and Analytics</a> </p>
+<h2 id="Google-分析"><a href="#Google-分析" class="headerlink" title="Google 分析"></a>Google 分析</h2><ol>
+<li><p>创建一个 <a href="https://analytics.google.com/">Google Analytics</a> 账号</p>
+</li>
+<li><p>得到一个 <code>跟踪ID</code> ：UA-xxxxxx</p>
+</li>
+<li><p>修改Next配置文件</p>
+<figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="comment"># Google Analytics</span></span><br><span class="line"><span class="attr">google_analytics:</span></span><br><span class="line">  <span class="attr">tracking_id:</span> <span class="string">你的跟踪ID</span> <span class="comment"># &lt;app_id&gt;</span></span><br></pre></td></tr></table></figure>
+
+</li>
+</ol>
+<h2 id="百度分析"><a href="#百度分析" class="headerlink" title="百度分析"></a>百度分析</h2><ol>
+<li><p>去<a href="https://tongji.baidu.com/web/welcome/login">百度统计</a>，新增一个网站</p>
+</li>
+<li><p>复制统计代码中的 <code>hm.src = &quot;https://hm.baidu.com/hm.js?[这里的脚本ID]&quot;</code></p>
+</li>
+<li><p>修改Next配置文件</p>
+<figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="comment"># Baidu Analytics</span></span><br><span class="line"><span class="attr">baidu_analytics:</span> <span class="string">脚本ID</span> <span class="comment"># &lt;app_id&gt;</span></span><br></pre></td></tr></table></figure>
+
+</li>
+</ol>
+]]></content>
+      <categories>
+        <category>教程</category>
+      </categories>
+      <tags>
+        <tag>Hexo</tag>
+        <tag>博客</tag>
+        <tag>Next</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>k8s Weave Scope 部署配置</title>
-    <url>/2020/01/11/k8s%20weave%20scope%20%E5%AE%89%E8%A3%85%E9%85%8D%E7%BD%AE/</url>
+    <url>/k8s%20weave%20scope%20%E5%AE%89%E8%A3%85%E9%85%8D%E7%BD%AE/</url>
     <content><![CDATA[<h2 id="1-Weave-Scope-安装"><a href="#1-Weave-Scope-安装" class="headerlink" title="1. Weave Scope 安装"></a>1. Weave Scope 安装</h2><p>在 master 上通过以下命令安装Weave Scope：<br>kubectl apply -f “<a href="https://cloud.weave.works/k8s/scope.yaml?k8s-version=$">https://cloud.weave.works/k8s/scope.yaml?k8s-version=$</a>(kubectl version | base64 | tr -d ‘\n’)”<br>运行后会发现已经起来几个pod:</p>
 <figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">[root@k8s-master ~]# kubectl apply -f &quot;https://cloud.weave.works/k8s/scope.yaml?k8s-version=$(kubectl version | base64 | tr -d &#x27;\n&#x27;)&quot;</span><br><span class="line">namespace/weave created</span><br><span class="line">serviceaccount/weave-scope created</span><br><span class="line">clusterrole.rbac.authorization.k8s.io/weave-scope created</span><br><span class="line">clusterrolebinding.rbac.authorization.k8s.io/weave-scope created</span><br><span class="line">deployment.apps/weave-scope-app created</span><br><span class="line">service/weave-scope-app created</span><br><span class="line">deployment.apps/weave-scope-cluster-agent created</span><br><span class="line">daemonset.apps/weave-scope-agent created</span><br><span class="line">[root@k8s-master ~]# kubectl get pod -n weave  -o wide</span><br><span class="line">NAME                                        READY   STATUS    RESTARTS   AGE   IP              NODE         NOMINATED NODE   READINESS GATES</span><br><span class="line">weave-scope-agent-8zzq5                     1/1     Running   0          11s   192.168.1.92    k8s-master   &lt;none&gt;           &lt;none&gt;</span><br><span class="line">weave-scope-agent-jhcff                     1/1     Running   0          11s   192.168.1.85    k8s-node1    &lt;none&gt;           &lt;none&gt;</span><br><span class="line">weave-scope-agent-qs45b                     1/1     Running   0          11s   192.168.1.133   k8s-node2    &lt;none&gt;           &lt;none&gt;</span><br><span class="line">weave-scope-app-848cd4d8b5-4rlnd            1/1     Running   0          11s   10.244.1.4      k8s-node1    &lt;none&gt;           &lt;none&gt;</span><br><span class="line">weave-scope-cluster-agent-b4f45797c-7srs9   1/1     Running   0          11s   10.244.2.4      k8s-node2    &lt;none&gt;           &lt;none&gt;</span><br><span class="line">[root@k8s-master ~]# kubectl get service -n weave -o wide</span><br><span class="line">NAME              TYPE        CLUSTER-IP    EXTERNAL-IP   PORT(S)   AGE   SELECTOR</span><br><span class="line">weave-scope-app   ClusterIP   10.1.31.163   &lt;none&gt;        80/TCP    57s   app=weave-scope,name=weave-scope-app,weave-cloud-component=scope,weave-scope-component=app</span><br></pre></td></tr></table></figure>
 
@@ -625,6 +784,37 @@
       <tags>
         <tag>linux</tag>
         <tag>k8s</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>系统I/O函数与C标准库函数</title>
+    <url>/%E7%B3%BB%E7%BB%9FIO%E5%87%BD%E6%95%B0%E4%B8%8EC%E6%A0%87%E5%87%86%E5%BA%93%E5%87%BD%E6%95%B0/</url>
+    <content><![CDATA[<p>先上图</p>
+<img src="https://i.loli.net/2020/08/06/RIMrGxbPWyizjnK.png" alt="库函数与系统调用的层次关系.png" style="zoom: 67%;" />
+
+<img src="https://i.loli.net/2020/08/06/tl8ykNe6wrx7VOd.png" alt="系统IO函数与C标库函数.png" style="zoom:67%;" />
+
+<p><strong><em>read、write函数常常被称为 Unbuffered I/O。指的是无用户输入级缓冲区，但不保证不使用内核缓冲区。</em></strong></p>
+<h2 id="系统I-O与标准库I-O差异"><a href="#系统I-O与标准库I-O差异" class="headerlink" title="系统I/O与标准库I/O差异"></a>系统I/O与标准库I/O差异</h2><p>用户程序在读写文件时既可以调用C标准I/O库函数，也可以直接调用底层的系统I/O函数，有什么区别呢？</p>
+<ul>
+<li>使用系统I/O函数每次读写都需要进入内核，调一个系统调用比调一个用户空间的函数要慢很多。（此时用户有必要维护一个I/O缓冲区，但用C标准I/O库函数就比较方便，省去了自己管理I/O缓冲区的麻烦）</li>
+<li>用C标准I/O库函数要时刻注意I/O缓冲区和实际文件有可能不一致，在必要时需调用<code>fflush</code></li>
+<li>UNIX是Everything is a file，在读写设备文件时通常是不希望有缓冲的，例如网络编程通常直接调用Unbuffered I/O函数。</li>
+</ul>
+<h2 id="标准库缓冲类型"><a href="#标准库缓冲类型" class="headerlink" title="标准库缓冲类型"></a>标准库缓冲类型</h2><p>C标准库的I/O缓冲区有三种类型：全缓冲、行缓冲和无缓冲。</p>
+<h3 id="全缓冲"><a href="#全缓冲" class="headerlink" title="全缓冲"></a>全缓冲</h3><p>如果缓冲区写满了就写回内核。对于驻留在<strong>磁盘</strong>上的文件通常是由标准I/O库实施全缓冲的。在一个流上执行第一次I/O操作时，相关标准I/O函数通常调用malloc获得需使用的缓冲区。</p>
+<h3 id="行缓冲"><a href="#行缓冲" class="headerlink" title="行缓冲"></a>行缓冲</h3><p>如果用户程序写的数据中有<strong>换行符</strong>就把这一行写回内核，或者如果<strong>缓冲区写满</strong>了就写回内核。**<font color=red>标准输入</font><strong>和</strong><font color=red>标准输出</font>**对应终端设备时通常是行缓冲的。 </p>
+<h3 id="无缓冲"><a href="#无缓冲" class="headerlink" title="无缓冲"></a>无缓冲</h3><p>用户程序每次调库函数做写操作都要通过系统调用写回内核。</p>
+<p>**<font color=red>标准错误输出</font>**通常是无缓冲的，这样用户程序产生的错误信息可以尽快输出到设备。这里的无缓冲，并不是指缓冲区大小为0，其实，还是有缓冲的，大小为1。</p>
+]]></content>
+      <categories>
+        <category>笔记</category>
+        <category>apue</category>
+      </categories>
+      <tags>
+        <tag>linux</tag>
+        <tag>apue</tag>
+        <tag>操作系统</tag>
       </tags>
   </entry>
 </search>
