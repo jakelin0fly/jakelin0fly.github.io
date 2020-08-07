@@ -1,35 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
-    <title>Hexo-Theme-Butterfly(一) 快速开始</title>
-    <url>/Hexo-Theme-Butterfly(%E4%B8%80)-%E5%BF%AB%E9%80%9F%E5%BC%80%E5%A7%8B/</url>
-    <content><![CDATA[<blockquote>
-<p>感谢原作者 <a href="https://jerryc.me/">JerryC</a> 。</p>
-<p>由于主题更新，此文件中部分配置可能失效。请参考作者博客或文档：<a href="https://demo.jerryc.me/posts/21cfbf15/">Butterfly 安裝文檔(一) 快速開始</a> 。</p>
-</blockquote>
-<h1 id="安装主题"><a href="#安装主题" class="headerlink" title="安装主题"></a>安装主题</h1><p>在hexo博客根目录克隆Butterfly主题到 <code>themes</code> 文件夹下：</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">git clone -b master https://github.com/jerryc127/hexo-theme-butterfly.git themes/butterfly</span><br></pre></td></tr></table></figure>
-
-<h1 id="应用主题"><a href="#应用主题" class="headerlink" title="应用主题"></a>应用主题</h1><p>修改博客更目录配置文件 <code>_config.yml</code> ，将主题改为 <code>butterfly</code> 。</p>
-<figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="comment"># Extensions</span></span><br><span class="line"><span class="comment">## Plugins: https://hexo.io/plugins/</span></span><br><span class="line"><span class="comment">## Themes: https://hexo.io/themes/</span></span><br><span class="line"><span class="attr">theme:</span> <span class="string">butterfly</span></span><br></pre></td></tr></table></figure>
-
-<h1 id="安装插件"><a href="#安装插件" class="headerlink" title="安装插件"></a>安装插件</h1><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">#pug 以及 stylus 的渲染器</span><br><span class="line">npm install hexo-renderer-pug hexo-renderer-stylus --save</span><br><span class="line">npm install cheerio@0.22.0 --save</span><br></pre></td></tr></table></figure>
-
-<h1 id="升级建议"><a href="#升级建议" class="headerlink" title="升级建议"></a>升级建议</h1><p>为了减少升级主题后带来的不便，<code>Butterfly</code> 使用了 <a href="https://hexo.io/docs/data-files.html">data files</a> 特性。推荐把主题默认的配置文件 <code>_config.yml</code> 复製到 Hexo 根目录下的 <code>source/_data/</code> 目录下，然后将文件名改为 <code>butterfly.yml</code>（如果 <code>source/_data/</code> 的目录不存在就创建一个）。</p>
-<blockquote>
-<p>升级：在主题目录下 <code>git pull</code></p>
-</blockquote>
-<p><strong><em>注意</em></strong>：<em>由于主题在添加功能或者修復 Bugs 的情况下，可能会涉及到配置文件的修改。这时候，如果升级主题，需要把新增加的配置添加到 <code>butterfly.yml</code> 去，不然很大机会会出现报错。</em></p>
-]]></content>
-      <categories>
-        <category>教程</category>
-      </categories>
-      <tags>
-        <tag>Butterfly</tag>
-        <tag>Hexo</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>Hexo-Theme-Butterfly(三) 主题配置</title>
     <url>/Hexo-Theme-Butterfly(%E4%B8%89)-%E4%B8%BB%E9%A2%98%E9%85%8D%E7%BD%AE/</url>
     <content><![CDATA[<blockquote>
@@ -194,6 +165,206 @@
       </tags>
   </entry>
   <entry>
+    <title>Hexo-Theme-Butterfly(一) 快速开始</title>
+    <url>/Hexo-Theme-Butterfly(%E4%B8%80)-%E5%BF%AB%E9%80%9F%E5%BC%80%E5%A7%8B/</url>
+    <content><![CDATA[<blockquote>
+<p>感谢原作者 <a href="https://jerryc.me/">JerryC</a> 。</p>
+<p>由于主题更新，此文件中部分配置可能失效。请参考作者博客或文档：<a href="https://demo.jerryc.me/posts/21cfbf15/">Butterfly 安裝文檔(一) 快速開始</a> 。</p>
+</blockquote>
+<h1 id="安装主题"><a href="#安装主题" class="headerlink" title="安装主题"></a>安装主题</h1><p>在hexo博客根目录克隆Butterfly主题到 <code>themes</code> 文件夹下：</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">git clone -b master https://github.com/jerryc127/hexo-theme-butterfly.git themes/butterfly</span><br></pre></td></tr></table></figure>
+
+<h1 id="应用主题"><a href="#应用主题" class="headerlink" title="应用主题"></a>应用主题</h1><p>修改博客更目录配置文件 <code>_config.yml</code> ，将主题改为 <code>butterfly</code> 。</p>
+<figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="comment"># Extensions</span></span><br><span class="line"><span class="comment">## Plugins: https://hexo.io/plugins/</span></span><br><span class="line"><span class="comment">## Themes: https://hexo.io/themes/</span></span><br><span class="line"><span class="attr">theme:</span> <span class="string">butterfly</span></span><br></pre></td></tr></table></figure>
+
+<h1 id="安装插件"><a href="#安装插件" class="headerlink" title="安装插件"></a>安装插件</h1><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">#pug 以及 stylus 的渲染器</span><br><span class="line">npm install hexo-renderer-pug hexo-renderer-stylus --save</span><br><span class="line">npm install cheerio@0.22.0 --save</span><br></pre></td></tr></table></figure>
+
+<h1 id="升级建议"><a href="#升级建议" class="headerlink" title="升级建议"></a>升级建议</h1><p>为了减少升级主题后带来的不便，<code>Butterfly</code> 使用了 <a href="https://hexo.io/docs/data-files.html">data files</a> 特性。推荐把主题默认的配置文件 <code>_config.yml</code> 复製到 Hexo 根目录下的 <code>source/_data/</code> 目录下，然后将文件名改为 <code>butterfly.yml</code>（如果 <code>source/_data/</code> 的目录不存在就创建一个）。</p>
+<blockquote>
+<p>升级：在主题目录下 <code>git pull</code></p>
+</blockquote>
+<p><strong><em>注意</em></strong>：<em>由于主题在添加功能或者修復 Bugs 的情况下，可能会涉及到配置文件的修改。这时候，如果升级主题，需要把新增加的配置添加到 <code>butterfly.yml</code> 去，不然很大机会会出现报错。</em></p>
+]]></content>
+      <categories>
+        <category>教程</category>
+      </categories>
+      <tags>
+        <tag>Butterfly</tag>
+        <tag>Hexo</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Linux进程地址空间（程序内存布局）</title>
+    <url>/Linux%E8%BF%9B%E7%A8%8B%E5%9C%B0%E5%9D%80%E7%A9%BA%E9%97%B4%EF%BC%88%E7%A8%8B%E5%BA%8F%E5%86%85%E5%AD%98%E5%B8%83%E5%B1%80%EF%BC%89/</url>
+    <content><![CDATA[<h1 id="进程地址空间分布图"><a href="#进程地址空间分布图" class="headerlink" title="进程地址空间分布图"></a>进程地址空间分布图</h1><img src="https://i.loli.net/2020/08/05/jxbWsi5ae4q1GfR.png" alt="Linux程序内存布局图.png" style="zoom:67%;" />
+
+<p>由低地址到高地址，依次是：</p>
+<ul>
+<li><p><strong>程序段（text）</strong>：程序代码在内存中的映射，存放函数体的二进制代码，常常是只读的</p>
+</li>
+<li><p><strong>初始化过的数据（data）</strong>：在程序运行初已经对变量进行初始化的数据</p>
+<ul>
+<li><p>只读数据段（RO data，即常量区）：</p>
+<blockquote>
+<p> 这个区域的存在与否，一直是一个争议的地方，但是我们这里认同是存在的，因为我们的程序中的确出现了与其他数据段不同的一块区域，但是往往很多时候大家把只读数据段（RO data）和下面的已初始化读写数据段（RW data）合成为数据段data，但是其实这个是不合适的，因为在执行过程中，这两个区域的读写权限是不同的，顾名思义，只读数据段（RO data）是只读的，而已初始化读写数据段是可读可写的。</p>
+</blockquote>
+</li>
+<li><p>读写数据段（RW data）：需要占用存储器的空间，在程序执行时它们需要位于可读写的内存区域内，并具有初值，以供程序运行时读写</p>
+</li>
+</ul>
+</li>
+<li><p><strong>未初始化过的数据（bss）</strong>：未初始化数据是在程序中声明，但是没有初始化的变量，这些变量在程序运行之前不需要占用存储器的空间。Block Started by Symbol，BSS段的变量只有名称和大小却没有值</p>
+</li>
+<li><p>堆 （heap）<strong>：存储动态内存分配,需要程序员手工分配,手工释放。注意它与数据结构中的堆是两回事，分配方式类似于链表</strong></p>
+</li>
+<li><p><strong>栈（stack）</strong>：存储局部、临时变量，函数调用时，存储函数的返回指针，用于控制函数的调用和返回。在程序块开始时自动分配内存，结束时自动释放内存，其操作方式类似于数据结构中的栈</p>
+</li>
+<li><p><strong>内核空间（kernel）</strong></p>
+</li>
+</ul>
+<h1 id="内核空间"><a href="#内核空间" class="headerlink" title="内核空间"></a>内核空间</h1><p> Linux的<font color=red><strong>虚拟地址空间</strong></font>范围为0～4G，Linux内核将这4G字节的空间分为两部分：</p>
+<p><strong>内核空间</strong>：将高地址的<strong>1G</strong>字节供内核使用，称为“内核空间“</p>
+<p><strong>用户空间</strong>：低地址的<strong>3G</strong>字节（供各个进程使用，称为“用户空间“</p>
+<p>因为每个进程可以通过系统调用进入内核，因此，<font color=red><strong>Linux内核由系统内的所有进程共享</strong></font>。</p>
+<p>Linux使用两级保护机制：</p>
+<ul>
+<li>0级供内核使用</li>
+<li>3级供用户程序使用</li>
+</ul>
+<h1 id="虚拟地址！！！"><a href="#虚拟地址！！！" class="headerlink" title="虚拟地址！！！"></a>虚拟地址！！！</h1><p>进程空间是<strong>虚拟地址</strong>，不管是内核空间还是用户空间，它们都处于虚拟空间中。</p>
+<p>使用虚拟地址可以很好的保护内核空间被用户空间破坏，虚拟地址到物理地址转换过程由操作系统和CPU共同完成(操作系统为CPU设置好页表，CPU通过MMU单元进行地址转换)。</p>
+<h1 id="段区对应数据"><a href="#段区对应数据" class="headerlink" title="段区对应数据"></a>段区对应数据</h1><table>
+<thead>
+<tr>
+<th>进程空间段区域</th>
+<th>地址空间</th>
+<th>存储变量</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>stack</td>
+<td>栈</td>
+<td>局部变量和常量</td>
+</tr>
+<tr>
+<td>heap</td>
+<td>堆</td>
+<td>动态分配的数据</td>
+</tr>
+<tr>
+<td>BSS</td>
+<td>未初始化数据段</td>
+<td>未初始化的全局变量以及静态变量</td>
+</tr>
+<tr>
+<td>RW data</td>
+<td>已初始化读写数据段</td>
+<td>已初始化的全局变量和静态变量</td>
+</tr>
+<tr>
+<td>RO data</td>
+<td>只读文本段中的数据段</td>
+<td>全局常量或者字符串面变量</td>
+</tr>
+<tr>
+<td>text</td>
+<td>只读文本段中的程序代码段</td>
+<td>程序的代码</td>
+</tr>
+</tbody></table>
+<h1 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h1><ul>
+<li><p>《UNIX环境高级编程》</p>
+</li>
+<li><p><a href="https://blog.csdn.net/zhangzhebjut/article/details/39060253">Linux - 进程(一) 进程空间</a></p>
+</li>
+<li><p><a href="https://blog.csdn.net/gatieme/article/details/43567433">C程序的内存布局(Memory Layout)</a></p>
+</li>
+</ul>
+]]></content>
+      <categories>
+        <category>笔记</category>
+        <category>apue</category>
+      </categories>
+      <tags>
+        <tag>linux</tag>
+        <tag>apue</tag>
+        <tag>进程</tag>
+        <tag>操作系统</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Linux下Hexo+GitHub搭建个人博客</title>
+    <url>/Linux%E4%B8%8Bgithub+hexo%E6%90%AD%E5%BB%BA%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2/</url>
+    <content><![CDATA[<h2 id="配置信息"><a href="#配置信息" class="headerlink" title="配置信息"></a>配置信息</h2><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">[root@iZwz9c74ta983j746ynevpZ ~]# uname -a</span><br><span class="line">Linux iZwz9c74ta983j746ynevpZ 3.10.0-1127.10.1.el7.x86_64 #1 SMP Wed Jun 3 14:28:03 UTC 2020 x86_64 x86_64 x86_64 GNU/Linux</span><br></pre></td></tr></table></figure>
+
+<h2 id="更新源（可略过）"><a href="#更新源（可略过）" class="headerlink" title="更新源（可略过）"></a>更新源（可略过）</h2><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"><span class="comment"># 备份原 源文件</span></span></span><br><span class="line">[root@iZwz9c74ta983j746ynevpZ ~]# mv /etc/yum.repos.d /etc/yum.repos.d.bak</span><br><span class="line">[root@iZwz9c74ta983j746ynevpZr ~]# mkdir /etc/yum.repos.d</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"><span class="comment"># 阿里云</span></span></span><br><span class="line">[root@iZwz9c74ta983j746ynevpZ ~]# wget -O /etc/yum.repos.d/CentOS-Base.repo https://mirrors.aliyun.com/repo/Centos-7.repo --no-check-certificate</span><br><span class="line"></span><br><span class="line">[root@iZwz9c74ta983j746ynevpZ ~]# yum clean all</span><br><span class="line"></span><br><span class="line">[root@iZwz9c74ta983j746ynevpZ ~]# yum makecache</span><br><span class="line"></span><br><span class="line">[root@iZwz9c74ta983j746ynevpZ ~]# yum update -y</span><br></pre></td></tr></table></figure>
+
+<h2 id="Hexo搭建"><a href="#Hexo搭建" class="headerlink" title="Hexo搭建"></a>Hexo搭建</h2><h3 id="安装git"><a href="#安装git" class="headerlink" title="安装git"></a>安装git</h3><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">[root@iZwz9c74ta983j746ynevpZ ~]# yum install -y git</span><br></pre></td></tr></table></figure>
+
+<h3 id="node-js安装"><a href="#node-js安装" class="headerlink" title="node.js安装"></a>node.js安装</h3><h4 id="node-js安装包下载"><a href="#node-js安装包下载" class="headerlink" title="node.js安装包下载"></a>node.js安装包下载</h4><p><strong>网址：</strong> <a href="http://nodejs.cn/download/">http://nodejs.cn/download/</a></p>
+<p><strong>阿里云镜像：</strong> <a href="https://npm.taobao.org/mirrors/node">https://npm.taobao.org/mirrors/node</a></p>
+<p>下载对应二进制安装包：</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">[root@iZwz9c74ta983j746ynevpZ ~]# wget https://npm.taobao.org/mirrors/node/v14.6.0/node-v14.6.0-linux-x64.tar.gz --no-check-certificate</span><br></pre></td></tr></table></figure>
+
+<h4 id="node-js安装部署"><a href="#node-js安装部署" class="headerlink" title="node.js安装部署"></a>node.js安装部署</h4><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">[root@iZwz9c74ta983j746ynevpZ ~]# tar -zxf node-v14.6.0-linux-x64.tar.gz </span><br><span class="line">[root@iZwz9c74ta983j746ynevpZ ~]# mv node-v14.6.0-linux-x64 /opt/nodejs</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"> 创建软连接</span></span><br><span class="line">[root@iZwz9c74ta983j746ynevpZ ~]# ln -s /opt/nodejs/bin/node /usr/local/bin/node </span><br><span class="line">[root@iZwz9c74ta983j746ynevpZ ~]# ln -s /opt/nodejs/bin/npm /usr/local/bin/npm </span><br></pre></td></tr></table></figure>
+
+<h3 id="Hexo安装部署"><a href="#Hexo安装部署" class="headerlink" title="Hexo安装部署"></a>Hexo安装部署</h3><h4 id="Hexo安装"><a href="#Hexo安装" class="headerlink" title="Hexo安装"></a>Hexo安装</h4><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">[root@iZwz9c74ta983j746ynevpZ ~]# npm install hexo-cli -g</span><br><span class="line">/opt/nodejs/bin/hexo -&gt; /opt/nodejs/lib/node_modules/hexo-cli/bin/hexo</span><br><span class="line">npm WARN optional SKIPPING OPTIONAL DEPENDENCY: fsevents@~2.1.2 (node_modules/hexo-cli/node_modules/chokidar/node_modules/fsevents):</span><br><span class="line">npm WARN notsup SKIPPING OPTIONAL DEPENDENCY: Unsupported platform for fsevents@2.1.3: wanted &#123;&quot;os&quot;:&quot;darwin&quot;,&quot;arch&quot;:&quot;any&quot;&#125; (current: &#123;&quot;os&quot;:&quot;linux&quot;,&quot;arch&quot;:&quot;x64&quot;&#125;)</span><br><span class="line"></span><br><span class="line">+ hexo-cli@4.0.0</span><br><span class="line">added 61 packages from 315 contributors in 46.255s</span><br></pre></td></tr></table></figure>
+
+<p>若安装hexo报错如下：</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">[root@iZwz9c74ta983j746ynevpZ ~]# npm install hexo-cli -g</span><br><span class="line">npm ERR! code CERT_NOT_YET_VALID</span><br><span class="line">npm ERR! errno CERT_NOT_YET_VALID</span><br><span class="line">npm ERR! request to https://registry.npmjs.org/hexo-cli failed, reason: certificate is not yet valid</span><br><span class="line"></span><br><span class="line">npm ERR! A complete log of this run can be found in:</span><br><span class="line">npm ERR!     /root/.npm/_logs/2010-03-31T20_55_08_156Z-debug.log</span><br><span class="line">[root@iZwz9c74ta983j746ynevpZ ~]# npm install hexo-cli -g --no-check-certificate</span><br><span class="line">npm ERR! code CERT_NOT_YET_VALID</span><br><span class="line">npm ERR! errno CERT_NOT_YET_VALID</span><br><span class="line">npm ERR! request to https://registry.npmjs.org/hexo-cli failed, reason: certificate is not yet valid</span><br><span class="line"></span><br><span class="line">npm ERR! A complete log of this run can be found in:</span><br><span class="line">npm ERR!     /root/.npm/_logs/2010-03-31T20_55_35_518Z-debug.log</span><br></pre></td></tr></table></figure>
+
+<p>原因是https的自签名失败，临时解决办法：关闭ssl</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">[root@iZwz9c74ta983j746ynevpZ ~]# npm config set strict-ssl false</span><br></pre></td></tr></table></figure>
+
+<h4 id="Hexo部署"><a href="#Hexo部署" class="headerlink" title="Hexo部署"></a>Hexo部署</h4><p>将 hexo 命令添加到全局，采用软连接方式。</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">[root@iZwz9c74ta983j746ynevpZ ~]# ln -s /opt/nodejs/lib/node_modules/hexo-cli/bin/hexo /usr/local/bin/hexo</span><br></pre></td></tr></table></figure>
+
+<h2 id="Hexo博客环境部署"><a href="#Hexo博客环境部署" class="headerlink" title="Hexo博客环境部署"></a>Hexo博客环境部署</h2><h3 id="初始化Hexo博客根目录"><a href="#初始化Hexo博客根目录" class="headerlink" title="初始化Hexo博客根目录"></a>初始化Hexo博客根目录</h3><p><strong><em>强烈建议先换npm源！！！见：<a href="#%E6%9B%B4%E6%8D%A2npm%E6%BA%90">更换npm源</a></em></strong></p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">[root@iZwz9c74ta983j746ynevpZ ~]# mkdir /var/hexoblog</span><br><span class="line">[root@iZwz9c74ta983j746ynevpZ ~]# hexo init /var/hexoblog/</span><br><span class="line">INFO  Cloning hexo-starter https://github.com/hexojs/hexo-starter.git</span><br><span class="line">Submodule &#x27;themes/landscape&#x27; (https://github.com/hexojs/hexo-theme-landscape.git) registered for path &#x27;themes/landscape&#x27;</span><br><span class="line">Cloning into &#x27;themes/landscape&#x27;...</span><br><span class="line">remote: Enumerating objects: 8, done.</span><br><span class="line">remote: Counting objects: 100% (8/8), done.</span><br><span class="line">remote: Compressing objects: 100% (6/6), done.</span><br><span class="line">remote: Total 1071 (delta 1), reused 5 (delta 1), pack-reused 1063</span><br><span class="line">Receiving objects: 100% (1071/1071), 3.22 MiB | 12.00 KiB/s, done.</span><br><span class="line">Resolving deltas: 100% (586/586), done.</span><br><span class="line">Submodule path &#x27;themes/landscape&#x27;: checked out &#x27;73a23c51f8487cfcd7c6deec96ccc7543960d350&#x27;</span><br><span class="line">INFO  Install dependencies</span><br><span class="line">[ .................] - fetchMetadata: sill pacote range manifest for kind-of@^3.0.2 fetched in 386ms</span><br><span class="line">[ .................] - fetchMetadata: sill pacote range manifest for kind-of@^3.0.2 fetched in 386ms</span><br><span class="line">[ .................] - fetchMetadata: sill pacote range manifest for kind-of@^3.0.2 fetched in 386ms</span><br><span class="line">[ .................] - fetchMetadata: sill pacote range manifest for kind-of@^3.0.2 fetched in 386ms</span><br><span class="line">[ .................] - fetchMetadata: sill pacote range manifest for kind-of@^3.0.2 fetched in 386ms</span><br><span class="line">[ .................] - fetchMetadata: sill pacote range manifest for kind-of@^3.0.2 fetched in 386ms</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>卡住在这……，猜测是npm源问题，更换国内源</p>
+<h4 id="更换npm源"><a href="#更换npm源" class="headerlink" title="更换npm源"></a>更换npm源</h4><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"><span class="comment"># 查看 默认源</span></span></span><br><span class="line">[root@iZwz9c74ta983j746ynevpZ hexoblog]# npm config get registry</span><br><span class="line">https://registry.npmjs.org/</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"><span class="comment"># 更换阿里源</span></span></span><br><span class="line">[root@iZwz9c74ta983j746ynevpZ hexoblog]# npm config set registry https://registry.npm.taobao.org</span><br><span class="line">[root@iZwz9c74ta983j746ynevpZ hexoblog]# npm config get registry</span><br><span class="line">https://registry.npm.taobao.org/</span><br></pre></td></tr></table></figure>
+
+<p>若init失败，<strong>须清空文件夹下内容，ls -a 查看还有一个影藏文件</strong>，再次初始化。</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">[root@iZwz9c74ta983j746ynevpZ hexoblog]# rm ./* -rf</span><br><span class="line">[root@iZwz9c74ta983j746ynevpZ hexoblog]# ls -a</span><br><span class="line">.  ..  .gitignore</span><br><span class="line">[root@iZwz9c74ta983j746ynevpZ hexoblog]# rm .gitignore -f</span><br></pre></td></tr></table></figure>
+
+<h3 id="启动环境"><a href="#启动环境" class="headerlink" title="启动环境"></a>启动环境</h3><p>生成静态文件</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">[root@iZwz9c74ta983j746ynevpZ hexoblog]# hexo g</span><br><span class="line">[root@iZwz9c74ta983j746ynevpZ hexoblog]# ls -l </span><br><span class="line">total 132</span><br><span class="line">-rw-r--r--   1 root root  2367 Jul 28 15:54 _config.yml</span><br><span class="line">-rw-r--r--   1 root root 25111 Jul 28 15:59 db.json</span><br><span class="line">drwxr-xr-x 189 root root  4096 Jul 28 15:54 node_modules</span><br><span class="line">-rw-r--r--   1 root root   581 Jul 28 15:59 package.json</span><br><span class="line">-rw-r--r--   1 root root 74694 Jul 28 15:54 package-lock.json</span><br><span class="line">drwxr-xr-x   7 root root  4096 Jul 28 15:59 public        ## 存放生成的静态文件</span><br><span class="line">drwxr-xr-x   2 root root  4096 Jul 28 15:54 scaffolds</span><br><span class="line">drwxr-xr-x   3 root root  4096 Jul 28 15:54 source</span><br><span class="line">drwxr-xr-x   3 root root  4096 Jul 28 15:54 themes</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>启动服务</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">[root@iZwz9c74ta983j746ynevpZ hexoblog]# hexo s</span><br><span class="line">INFO  Start processing</span><br><span class="line">INFO  Hexo is running at http://localhost:4000 . Press Ctrl+C to stop.</span><br></pre></td></tr></table></figure>
+
+<h3 id="浏览器访问"><a href="#浏览器访问" class="headerlink" title="浏览器访问"></a>浏览器访问</h3><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">http:&#x2F;&#x2F;localhost:4000</span><br><span class="line">或</span><br><span class="line">http:&#x2F;&#x2F;服务器IP地址:4000&#x2F;</span><br></pre></td></tr></table></figure>
+
+<h2 id="GitHub配置"><a href="#GitHub配置" class="headerlink" title="GitHub配置"></a>GitHub配置</h2><h3 id="创建github-io仓储"><a href="#创建github-io仓储" class="headerlink" title="创建github.io仓储"></a>创建github.io仓储</h3><p>新建仓库，仓库名为：<code>your_github_user_name.github.io</code></p>
+<h3 id="GitHub-Pages-默认已开启"><a href="#GitHub-Pages-默认已开启" class="headerlink" title="GitHub Pages(默认已开启)"></a>GitHub Pages(默认已开启)</h3><h3 id="选择主题"><a href="#选择主题" class="headerlink" title="选择主题"></a>选择主题</h3><h3 id="浏览器访问-1"><a href="#浏览器访问-1" class="headerlink" title="浏览器访问"></a>浏览器访问</h3><blockquote>
+<p><code>https://your_github_user_name.github.io</code></p>
+</blockquote>
+<h3 id="添加SSH-keys-已有忽略"><a href="#添加SSH-keys-已有忽略" class="headerlink" title="添加SSH keys(已有忽略)"></a>添加SSH keys(已有忽略)</h3><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> 生成SSH Key，等待输入按下 Enter 回车键三次</span></span><br><span class="line">ssh-keygen -t rsa  </span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"> 复制公钥 添加到 github</span></span><br><span class="line">cat ~/.ssh/id_rsa.pub</span><br></pre></td></tr></table></figure>
+
+<h3 id="测试GitHub连接"><a href="#测试GitHub连接" class="headerlink" title="测试GitHub连接"></a>测试GitHub连接</h3><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">[root@iZwz9c74ta983j746ynevpZ hexoblog]# ssh -T git@github.com</span><br><span class="line">The authenticity of host &#x27;github.com (52.74.223.119)&#x27; can&#x27;t be established.</span><br><span class="line">RSA key fingerprint is SHA256:nThbg6kXUpJWGl7E1IGOCspRomTxdCARLviKw6E5SY8.</span><br><span class="line">RSA key fingerprint is MD5:16:27:ac:a5:76:28:2d:36:63:1b:56:4d:eb:df:a6:48.</span><br><span class="line">Are you sure you want to continue connecting (yes/no)? yes</span><br><span class="line">Hi JakeLin0fly! You&#x27;ve successfully authenticated, but GitHub does not provide shell access.</span><br></pre></td></tr></table></figure>
+
+<h3 id="设置Github账户信息"><a href="#设置Github账户信息" class="headerlink" title="设置Github账户信息"></a>设置Github账户信息</h3><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">git config --global user.name &quot;GitHub用户名&quot; </span><br><span class="line">git config --global user.email &quot;GitHub邮箱&quot;</span><br></pre></td></tr></table></figure>
+
+<h2 id="Hexo部署到GitHub-Pages"><a href="#Hexo部署到GitHub-Pages" class="headerlink" title="Hexo部署到GitHub Pages"></a>Hexo部署到GitHub Pages</h2><h3 id="Hexo-config-yml修改"><a href="#Hexo-config-yml修改" class="headerlink" title="Hexo _config.yml修改"></a>Hexo _config.yml修改</h3><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> Deployment</span></span><br><span class="line"><span class="meta">#</span><span class="bash"><span class="comment"># Docs: https://hexo.io/docs/deployment.html</span></span></span><br><span class="line">deploy:</span><br><span class="line">  type: git</span><br><span class="line">  repo: git仓库地址</span><br><span class="line">  branch: master</span><br></pre></td></tr></table></figure>
+
+<h3 id="同步到GitHub"><a href="#同步到GitHub" class="headerlink" title="同步到GitHub"></a>同步到GitHub</h3><p>需要安装插件 <code>hexo-deployer-git</code></p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">npm install --save hexo-deployer-git</span><br></pre></td></tr></table></figure>
+
+<p>Hexo命令，详细命令参考：<a href="https://hexo.io/docs/commands">https://hexo.io/docs/commands</a></p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">hexo cl    ## 删除 public/  db.json</span><br><span class="line">hexo g    ## 构建项目 主要是生成 public/  db.json</span><br><span class="line">hexo d    ## 部署到配置文件中设置的仓库</span><br></pre></td></tr></table></figure>
+
+]]></content>
+      <categories>
+        <category>教程</category>
+      </categories>
+      <tags>
+        <tag>Hexo</tag>
+        <tag>博客</tag>
+        <tag>github</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>Hexo-Theme-Butterfly(二) 主题页面</title>
     <url>/Hexo-Theme-Butterfly(%E4%BA%8C)-%E4%B8%BB%E9%A2%98%E9%A1%B5%E9%9D%A2/</url>
     <content><![CDATA[<blockquote>
@@ -336,67 +507,55 @@
       </tags>
   </entry>
   <entry>
-    <title>Linux下Hexo+GitHub搭建个人博客</title>
-    <url>/Linux%E4%B8%8Bgithub+hexo%E6%90%AD%E5%BB%BA%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2/</url>
-    <content><![CDATA[<h2 id="配置信息"><a href="#配置信息" class="headerlink" title="配置信息"></a>配置信息</h2><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">[root@iZwz9c74ta983j746ynevpZ ~]# uname -a</span><br><span class="line">Linux iZwz9c74ta983j746ynevpZ 3.10.0-1127.10.1.el7.x86_64 #1 SMP Wed Jun 3 14:28:03 UTC 2020 x86_64 x86_64 x86_64 GNU/Linux</span><br></pre></td></tr></table></figure>
+    <title>hexo-theme-next提交给搜索引擎</title>
+    <url>/hexo-theme-next%E6%8F%90%E4%BA%A4%E7%BB%99%E6%90%9C%E7%B4%A2%E5%BC%95%E6%93%8E/</url>
+    <content><![CDATA[<h1 id="站点地图生成"><a href="#站点地图生成" class="headerlink" title="站点地图生成"></a>站点地图生成</h1><ol>
+<li><p>插件安装</p>
+<ul>
+<li><p>Google站点地图插件</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">npm install hexo-generator-sitemap --save</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>百度站点地图插件</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">npm install hexo-generator-baidu-sitemap --save</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+<li><p>修改站点配置文件</p>
+</li>
+</ol>
+<p><code>_config.yml</code> 中加入：</p>
+<figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="attr">sitemap:</span></span><br><span class="line">  <span class="attr">path:</span> <span class="string">sitemap.xml</span> <span class="comment"># 提交给Google</span></span><br><span class="line"><span class="attr">baidusitemap:</span></span><br><span class="line">  <span class="attr">path:</span> <span class="string">baidusitemap.xml</span> <span class="comment"># 提交给百度</span></span><br></pre></td></tr></table></figure>
 
-<h2 id="更新源（可略过）"><a href="#更新源（可略过）" class="headerlink" title="更新源（可略过）"></a>更新源（可略过）</h2><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"><span class="comment"># 备份原 源文件</span></span></span><br><span class="line">[root@iZwz9c74ta983j746ynevpZ ~]# mv /etc/yum.repos.d /etc/yum.repos.d.bak</span><br><span class="line">[root@iZwz9c74ta983j746ynevpZr ~]# mkdir /etc/yum.repos.d</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"><span class="comment"># 阿里云</span></span></span><br><span class="line">[root@iZwz9c74ta983j746ynevpZ ~]# wget -O /etc/yum.repos.d/CentOS-Base.repo https://mirrors.aliyun.com/repo/Centos-7.repo --no-check-certificate</span><br><span class="line"></span><br><span class="line">[root@iZwz9c74ta983j746ynevpZ ~]# yum clean all</span><br><span class="line"></span><br><span class="line">[root@iZwz9c74ta983j746ynevpZ ~]# yum makecache</span><br><span class="line"></span><br><span class="line">[root@iZwz9c74ta983j746ynevpZ ~]# yum update -y</span><br></pre></td></tr></table></figure>
+<ol start="3">
+<li><p>重新构建项目</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">hexo cl&amp;&amp;hexo g</span><br></pre></td></tr></table></figure>
 
-<h2 id="Hexo搭建"><a href="#Hexo搭建" class="headerlink" title="Hexo搭建"></a>Hexo搭建</h2><h3 id="安装git"><a href="#安装git" class="headerlink" title="安装git"></a>安装git</h3><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">[root@iZwz9c74ta983j746ynevpZ ~]# yum install -y git</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<h1 id="提交站点地图"><a href="#提交站点地图" class="headerlink" title="提交站点地图"></a>提交站点地图</h1><p>直接参考：<a href="https://fanandjiu.com/Hexo%E9%97%AE%E9%A2%98-%E6%8F%90%E4%BA%A4%E7%AB%99%E7%82%B9%E7%BB%99%E6%90%9C%E7%B4%A2%E5%BC%95%E6%93%8E%E4%BB%A5%E5%8F%8ASEO/">Hexo问题-提交站点给搜索引擎以及SEO</a> </p>
+<p><strong><em>注意：在Google进行DNS记录验证域名所有权时，因为阿里云域名解析的记录值不允许两个 <code>@</code> ，但将域名记录值 <code>@</code> 用以验证，验证完后再更改记录值是可行的。验证后需要一定的时间才能google搜索到！</em></strong> </p>
+<p><img src="https://i.loli.net/2020/08/06/SBGhud2oF7V4ZKj.png" alt="DNS验证域名所有权-Google.png"></p>
+<h1 id="站点分析"><a href="#站点分析" class="headerlink" title="站点分析"></a>站点分析</h1><p>参考：<a href="https://theme-next.js.org/docs/third-party-services/statistics-and-analytics.html">Statistics and Analytics</a> </p>
+<h2 id="Google-分析"><a href="#Google-分析" class="headerlink" title="Google 分析"></a>Google 分析</h2><ol>
+<li><p>创建一个 <a href="https://analytics.google.com/">Google Analytics</a> 账号</p>
+</li>
+<li><p>得到一个 <code>跟踪ID</code> ：UA-xxxxxx</p>
+</li>
+<li><p>修改Next配置文件</p>
+<figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="comment"># Google Analytics</span></span><br><span class="line"><span class="attr">google_analytics:</span></span><br><span class="line">  <span class="attr">tracking_id:</span> <span class="string">你的跟踪ID</span> <span class="comment"># &lt;app_id&gt;</span></span><br></pre></td></tr></table></figure>
 
-<h3 id="node-js安装"><a href="#node-js安装" class="headerlink" title="node.js安装"></a>node.js安装</h3><h4 id="node-js安装包下载"><a href="#node-js安装包下载" class="headerlink" title="node.js安装包下载"></a>node.js安装包下载</h4><p><strong>网址：</strong> <a href="http://nodejs.cn/download/">http://nodejs.cn/download/</a></p>
-<p><strong>阿里云镜像：</strong> <a href="https://npm.taobao.org/mirrors/node">https://npm.taobao.org/mirrors/node</a></p>
-<p>下载对应二进制安装包：</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">[root@iZwz9c74ta983j746ynevpZ ~]# wget https://npm.taobao.org/mirrors/node/v14.6.0/node-v14.6.0-linux-x64.tar.gz --no-check-certificate</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<h2 id="百度分析"><a href="#百度分析" class="headerlink" title="百度分析"></a>百度分析</h2><ol>
+<li><p>去<a href="https://tongji.baidu.com/web/welcome/login">百度统计</a>，新增一个网站</p>
+</li>
+<li><p>复制统计代码中的 <code>hm.src = &quot;https://hm.baidu.com/hm.js?[这里的脚本ID]&quot;</code></p>
+</li>
+<li><p>修改Next配置文件</p>
+<figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="comment"># Baidu Analytics</span></span><br><span class="line"><span class="attr">baidu_analytics:</span> <span class="string">脚本ID</span> <span class="comment"># &lt;app_id&gt;</span></span><br></pre></td></tr></table></figure>
 
-<h4 id="node-js安装部署"><a href="#node-js安装部署" class="headerlink" title="node.js安装部署"></a>node.js安装部署</h4><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">[root@iZwz9c74ta983j746ynevpZ ~]# tar -zxf node-v14.6.0-linux-x64.tar.gz </span><br><span class="line">[root@iZwz9c74ta983j746ynevpZ ~]# mv node-v14.6.0-linux-x64 /opt/nodejs</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"> 创建软连接</span></span><br><span class="line">[root@iZwz9c74ta983j746ynevpZ ~]# ln -s /opt/nodejs/bin/node /usr/local/bin/node </span><br><span class="line">[root@iZwz9c74ta983j746ynevpZ ~]# ln -s /opt/nodejs/bin/npm /usr/local/bin/npm </span><br></pre></td></tr></table></figure>
-
-<h3 id="Hexo安装部署"><a href="#Hexo安装部署" class="headerlink" title="Hexo安装部署"></a>Hexo安装部署</h3><h4 id="Hexo安装"><a href="#Hexo安装" class="headerlink" title="Hexo安装"></a>Hexo安装</h4><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">[root@iZwz9c74ta983j746ynevpZ ~]# npm install hexo-cli -g</span><br><span class="line">/opt/nodejs/bin/hexo -&gt; /opt/nodejs/lib/node_modules/hexo-cli/bin/hexo</span><br><span class="line">npm WARN optional SKIPPING OPTIONAL DEPENDENCY: fsevents@~2.1.2 (node_modules/hexo-cli/node_modules/chokidar/node_modules/fsevents):</span><br><span class="line">npm WARN notsup SKIPPING OPTIONAL DEPENDENCY: Unsupported platform for fsevents@2.1.3: wanted &#123;&quot;os&quot;:&quot;darwin&quot;,&quot;arch&quot;:&quot;any&quot;&#125; (current: &#123;&quot;os&quot;:&quot;linux&quot;,&quot;arch&quot;:&quot;x64&quot;&#125;)</span><br><span class="line"></span><br><span class="line">+ hexo-cli@4.0.0</span><br><span class="line">added 61 packages from 315 contributors in 46.255s</span><br></pre></td></tr></table></figure>
-
-<p>若安装hexo报错如下：</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">[root@iZwz9c74ta983j746ynevpZ ~]# npm install hexo-cli -g</span><br><span class="line">npm ERR! code CERT_NOT_YET_VALID</span><br><span class="line">npm ERR! errno CERT_NOT_YET_VALID</span><br><span class="line">npm ERR! request to https://registry.npmjs.org/hexo-cli failed, reason: certificate is not yet valid</span><br><span class="line"></span><br><span class="line">npm ERR! A complete log of this run can be found in:</span><br><span class="line">npm ERR!     /root/.npm/_logs/2010-03-31T20_55_08_156Z-debug.log</span><br><span class="line">[root@iZwz9c74ta983j746ynevpZ ~]# npm install hexo-cli -g --no-check-certificate</span><br><span class="line">npm ERR! code CERT_NOT_YET_VALID</span><br><span class="line">npm ERR! errno CERT_NOT_YET_VALID</span><br><span class="line">npm ERR! request to https://registry.npmjs.org/hexo-cli failed, reason: certificate is not yet valid</span><br><span class="line"></span><br><span class="line">npm ERR! A complete log of this run can be found in:</span><br><span class="line">npm ERR!     /root/.npm/_logs/2010-03-31T20_55_35_518Z-debug.log</span><br></pre></td></tr></table></figure>
-
-<p>原因是https的自签名失败，临时解决办法：关闭ssl</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">[root@iZwz9c74ta983j746ynevpZ ~]# npm config set strict-ssl false</span><br></pre></td></tr></table></figure>
-
-<h4 id="Hexo部署"><a href="#Hexo部署" class="headerlink" title="Hexo部署"></a>Hexo部署</h4><p>将 hexo 命令添加到全局，采用软连接方式。</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">[root@iZwz9c74ta983j746ynevpZ ~]# ln -s /opt/nodejs/lib/node_modules/hexo-cli/bin/hexo /usr/local/bin/hexo</span><br></pre></td></tr></table></figure>
-
-<h2 id="Hexo博客环境部署"><a href="#Hexo博客环境部署" class="headerlink" title="Hexo博客环境部署"></a>Hexo博客环境部署</h2><h3 id="初始化Hexo博客根目录"><a href="#初始化Hexo博客根目录" class="headerlink" title="初始化Hexo博客根目录"></a>初始化Hexo博客根目录</h3><p><strong><em>强烈建议先换npm源！！！见：<a href="#%E6%9B%B4%E6%8D%A2npm%E6%BA%90">更换npm源</a></em></strong></p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">[root@iZwz9c74ta983j746ynevpZ ~]# mkdir /var/hexoblog</span><br><span class="line">[root@iZwz9c74ta983j746ynevpZ ~]# hexo init /var/hexoblog/</span><br><span class="line">INFO  Cloning hexo-starter https://github.com/hexojs/hexo-starter.git</span><br><span class="line">Submodule &#x27;themes/landscape&#x27; (https://github.com/hexojs/hexo-theme-landscape.git) registered for path &#x27;themes/landscape&#x27;</span><br><span class="line">Cloning into &#x27;themes/landscape&#x27;...</span><br><span class="line">remote: Enumerating objects: 8, done.</span><br><span class="line">remote: Counting objects: 100% (8/8), done.</span><br><span class="line">remote: Compressing objects: 100% (6/6), done.</span><br><span class="line">remote: Total 1071 (delta 1), reused 5 (delta 1), pack-reused 1063</span><br><span class="line">Receiving objects: 100% (1071/1071), 3.22 MiB | 12.00 KiB/s, done.</span><br><span class="line">Resolving deltas: 100% (586/586), done.</span><br><span class="line">Submodule path &#x27;themes/landscape&#x27;: checked out &#x27;73a23c51f8487cfcd7c6deec96ccc7543960d350&#x27;</span><br><span class="line">INFO  Install dependencies</span><br><span class="line">[ .................] - fetchMetadata: sill pacote range manifest for kind-of@^3.0.2 fetched in 386ms</span><br><span class="line">[ .................] - fetchMetadata: sill pacote range manifest for kind-of@^3.0.2 fetched in 386ms</span><br><span class="line">[ .................] - fetchMetadata: sill pacote range manifest for kind-of@^3.0.2 fetched in 386ms</span><br><span class="line">[ .................] - fetchMetadata: sill pacote range manifest for kind-of@^3.0.2 fetched in 386ms</span><br><span class="line">[ .................] - fetchMetadata: sill pacote range manifest for kind-of@^3.0.2 fetched in 386ms</span><br><span class="line">[ .................] - fetchMetadata: sill pacote range manifest for kind-of@^3.0.2 fetched in 386ms</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
-<p>卡住在这……，猜测是npm源问题，更换国内源</p>
-<h4 id="更换npm源"><a href="#更换npm源" class="headerlink" title="更换npm源"></a>更换npm源</h4><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"><span class="comment"># 查看 默认源</span></span></span><br><span class="line">[root@iZwz9c74ta983j746ynevpZ hexoblog]# npm config get registry</span><br><span class="line">https://registry.npmjs.org/</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"><span class="comment"># 更换阿里源</span></span></span><br><span class="line">[root@iZwz9c74ta983j746ynevpZ hexoblog]# npm config set registry https://registry.npm.taobao.org</span><br><span class="line">[root@iZwz9c74ta983j746ynevpZ hexoblog]# npm config get registry</span><br><span class="line">https://registry.npm.taobao.org/</span><br></pre></td></tr></table></figure>
-
-<p>若init失败，<strong>须清空文件夹下内容，ls -a 查看还有一个影藏文件</strong>，再次初始化。</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">[root@iZwz9c74ta983j746ynevpZ hexoblog]# rm ./* -rf</span><br><span class="line">[root@iZwz9c74ta983j746ynevpZ hexoblog]# ls -a</span><br><span class="line">.  ..  .gitignore</span><br><span class="line">[root@iZwz9c74ta983j746ynevpZ hexoblog]# rm .gitignore -f</span><br></pre></td></tr></table></figure>
-
-<h3 id="启动环境"><a href="#启动环境" class="headerlink" title="启动环境"></a>启动环境</h3><p>生成静态文件</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">[root@iZwz9c74ta983j746ynevpZ hexoblog]# hexo g</span><br><span class="line">[root@iZwz9c74ta983j746ynevpZ hexoblog]# ls -l </span><br><span class="line">total 132</span><br><span class="line">-rw-r--r--   1 root root  2367 Jul 28 15:54 _config.yml</span><br><span class="line">-rw-r--r--   1 root root 25111 Jul 28 15:59 db.json</span><br><span class="line">drwxr-xr-x 189 root root  4096 Jul 28 15:54 node_modules</span><br><span class="line">-rw-r--r--   1 root root   581 Jul 28 15:59 package.json</span><br><span class="line">-rw-r--r--   1 root root 74694 Jul 28 15:54 package-lock.json</span><br><span class="line">drwxr-xr-x   7 root root  4096 Jul 28 15:59 public        ## 存放生成的静态文件</span><br><span class="line">drwxr-xr-x   2 root root  4096 Jul 28 15:54 scaffolds</span><br><span class="line">drwxr-xr-x   3 root root  4096 Jul 28 15:54 source</span><br><span class="line">drwxr-xr-x   3 root root  4096 Jul 28 15:54 themes</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
-<p>启动服务</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">[root@iZwz9c74ta983j746ynevpZ hexoblog]# hexo s</span><br><span class="line">INFO  Start processing</span><br><span class="line">INFO  Hexo is running at http://localhost:4000 . Press Ctrl+C to stop.</span><br></pre></td></tr></table></figure>
-
-<h3 id="浏览器访问"><a href="#浏览器访问" class="headerlink" title="浏览器访问"></a>浏览器访问</h3><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">http:&#x2F;&#x2F;localhost:4000</span><br><span class="line">或</span><br><span class="line">http:&#x2F;&#x2F;服务器IP地址:4000&#x2F;</span><br></pre></td></tr></table></figure>
-
-<h2 id="GitHub配置"><a href="#GitHub配置" class="headerlink" title="GitHub配置"></a>GitHub配置</h2><h3 id="创建github-io仓储"><a href="#创建github-io仓储" class="headerlink" title="创建github.io仓储"></a>创建github.io仓储</h3><p>新建仓库，仓库名为：<code>your_github_user_name.github.io</code></p>
-<h3 id="GitHub-Pages-默认已开启"><a href="#GitHub-Pages-默认已开启" class="headerlink" title="GitHub Pages(默认已开启)"></a>GitHub Pages(默认已开启)</h3><h3 id="选择主题"><a href="#选择主题" class="headerlink" title="选择主题"></a>选择主题</h3><h3 id="浏览器访问-1"><a href="#浏览器访问-1" class="headerlink" title="浏览器访问"></a>浏览器访问</h3><blockquote>
-<p><code>https://your_github_user_name.github.io</code></p>
-</blockquote>
-<h3 id="添加SSH-keys-已有忽略"><a href="#添加SSH-keys-已有忽略" class="headerlink" title="添加SSH keys(已有忽略)"></a>添加SSH keys(已有忽略)</h3><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> 生成SSH Key，等待输入按下 Enter 回车键三次</span></span><br><span class="line">ssh-keygen -t rsa  </span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"> 复制公钥 添加到 github</span></span><br><span class="line">cat ~/.ssh/id_rsa.pub</span><br></pre></td></tr></table></figure>
-
-<h3 id="测试GitHub连接"><a href="#测试GitHub连接" class="headerlink" title="测试GitHub连接"></a>测试GitHub连接</h3><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">[root@iZwz9c74ta983j746ynevpZ hexoblog]# ssh -T git@github.com</span><br><span class="line">The authenticity of host &#x27;github.com (52.74.223.119)&#x27; can&#x27;t be established.</span><br><span class="line">RSA key fingerprint is SHA256:nThbg6kXUpJWGl7E1IGOCspRomTxdCARLviKw6E5SY8.</span><br><span class="line">RSA key fingerprint is MD5:16:27:ac:a5:76:28:2d:36:63:1b:56:4d:eb:df:a6:48.</span><br><span class="line">Are you sure you want to continue connecting (yes/no)? yes</span><br><span class="line">Hi JakeLin0fly! You&#x27;ve successfully authenticated, but GitHub does not provide shell access.</span><br></pre></td></tr></table></figure>
-
-<h3 id="设置Github账户信息"><a href="#设置Github账户信息" class="headerlink" title="设置Github账户信息"></a>设置Github账户信息</h3><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">git config --global user.name &quot;GitHub用户名&quot; </span><br><span class="line">git config --global user.email &quot;GitHub邮箱&quot;</span><br></pre></td></tr></table></figure>
-
-<h2 id="Hexo部署到GitHub-Pages"><a href="#Hexo部署到GitHub-Pages" class="headerlink" title="Hexo部署到GitHub Pages"></a>Hexo部署到GitHub Pages</h2><h3 id="Hexo-config-yml修改"><a href="#Hexo-config-yml修改" class="headerlink" title="Hexo _config.yml修改"></a>Hexo _config.yml修改</h3><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> Deployment</span></span><br><span class="line"><span class="meta">#</span><span class="bash"><span class="comment"># Docs: https://hexo.io/docs/deployment.html</span></span></span><br><span class="line">deploy:</span><br><span class="line">  type: git</span><br><span class="line">  repo: git仓库地址</span><br><span class="line">  branch: master</span><br></pre></td></tr></table></figure>
-
-<h3 id="同步到GitHub"><a href="#同步到GitHub" class="headerlink" title="同步到GitHub"></a>同步到GitHub</h3><p>需要安装插件 <code>hexo-deployer-git</code></p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">npm install --save hexo-deployer-git</span><br></pre></td></tr></table></figure>
-
-<p>Hexo命令，详细命令参考：<a href="https://hexo.io/docs/commands">https://hexo.io/docs/commands</a></p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">hexo cl    ## 删除 public/  db.json</span><br><span class="line">hexo g    ## 构建项目 主要是生成 public/  db.json</span><br><span class="line">hexo d    ## 部署到配置文件中设置的仓库</span><br></pre></td></tr></table></figure>
-
+</li>
+</ol>
 ]]></content>
       <categories>
         <category>教程</category>
@@ -404,106 +563,7 @@
       <tags>
         <tag>Hexo</tag>
         <tag>博客</tag>
-        <tag>github</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Linux进程地址空间（程序内存布局）</title>
-    <url>/Linux%E8%BF%9B%E7%A8%8B%E5%9C%B0%E5%9D%80%E7%A9%BA%E9%97%B4%EF%BC%88%E7%A8%8B%E5%BA%8F%E5%86%85%E5%AD%98%E5%B8%83%E5%B1%80%EF%BC%89/</url>
-    <content><![CDATA[<h1 id="进程地址空间分布图"><a href="#进程地址空间分布图" class="headerlink" title="进程地址空间分布图"></a>进程地址空间分布图</h1><img src="https://i.loli.net/2020/08/05/jxbWsi5ae4q1GfR.png" alt="Linux程序内存布局图.png" style="zoom:67%;" />
-
-<p>由低地址到高地址，依次是：</p>
-<ul>
-<li><p><strong>程序段（text）</strong>：程序代码在内存中的映射，存放函数体的二进制代码，常常是只读的</p>
-</li>
-<li><p><strong>初始化过的数据（data）</strong>：在程序运行初已经对变量进行初始化的数据</p>
-<ul>
-<li><p>只读数据段（RO data，即常量区）：</p>
-<blockquote>
-<p> 这个区域的存在与否，一直是一个争议的地方，但是我们这里认同是存在的，因为我们的程序中的确出现了与其他数据段不同的一块区域，但是往往很多时候大家把只读数据段（RO data）和下面的已初始化读写数据段（RW data）合成为数据段data，但是其实这个是不合适的，因为在执行过程中，这两个区域的读写权限是不同的，顾名思义，只读数据段（RO data）是只读的，而已初始化读写数据段是可读可写的。</p>
-</blockquote>
-</li>
-<li><p>读写数据段（RW data）：需要占用存储器的空间，在程序执行时它们需要位于可读写的内存区域内，并具有初值，以供程序运行时读写</p>
-</li>
-</ul>
-</li>
-<li><p><strong>未初始化过的数据（bss）</strong>：未初始化数据是在程序中声明，但是没有初始化的变量，这些变量在程序运行之前不需要占用存储器的空间。Block Started by Symbol，BSS段的变量只有名称和大小却没有值</p>
-</li>
-<li><p>堆 （heap）<strong>：存储动态内存分配,需要程序员手工分配,手工释放。注意它与数据结构中的堆是两回事，分配方式类似于链表</strong></p>
-</li>
-<li><p><strong>栈（stack）</strong>：存储局部、临时变量，函数调用时，存储函数的返回指针，用于控制函数的调用和返回。在程序块开始时自动分配内存，结束时自动释放内存，其操作方式类似于数据结构中的栈</p>
-</li>
-<li><p><strong>内核空间（kernel）</strong></p>
-</li>
-</ul>
-<h1 id="内核空间"><a href="#内核空间" class="headerlink" title="内核空间"></a>内核空间</h1><p> Linux的<font color=red><strong>虚拟地址空间</strong></font>范围为0～4G，Linux内核将这4G字节的空间分为两部分：</p>
-<p><strong>内核空间</strong>：将高地址的<strong>1G</strong>字节供内核使用，称为“内核空间“</p>
-<p><strong>用户空间</strong>：低地址的<strong>3G</strong>字节（供各个进程使用，称为“用户空间“</p>
-<p>因为每个进程可以通过系统调用进入内核，因此，<font color=red><strong>Linux内核由系统内的所有进程共享</strong></font>。</p>
-<p>Linux使用两级保护机制：</p>
-<ul>
-<li>0级供内核使用</li>
-<li>3级供用户程序使用</li>
-</ul>
-<h1 id="虚拟地址！！！"><a href="#虚拟地址！！！" class="headerlink" title="虚拟地址！！！"></a>虚拟地址！！！</h1><p>进程空间是<strong>虚拟地址</strong>，不管是内核空间还是用户空间，它们都处于虚拟空间中。</p>
-<p>使用虚拟地址可以很好的保护内核空间被用户空间破坏，虚拟地址到物理地址转换过程由操作系统和CPU共同完成(操作系统为CPU设置好页表，CPU通过MMU单元进行地址转换)。</p>
-<h1 id="段区对应数据"><a href="#段区对应数据" class="headerlink" title="段区对应数据"></a>段区对应数据</h1><table>
-<thead>
-<tr>
-<th>进程空间段区域</th>
-<th>地址空间</th>
-<th>存储变量</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>stack</td>
-<td>栈</td>
-<td>局部变量和常量</td>
-</tr>
-<tr>
-<td>heap</td>
-<td>堆</td>
-<td>动态分配的数据</td>
-</tr>
-<tr>
-<td>BSS</td>
-<td>未初始化数据段</td>
-<td>未初始化的全局变量以及静态变量</td>
-</tr>
-<tr>
-<td>RW data</td>
-<td>已初始化读写数据段</td>
-<td>已初始化的全局变量和静态变量</td>
-</tr>
-<tr>
-<td>RO data</td>
-<td>只读文本段中的数据段</td>
-<td>全局常量或者字符串面变量</td>
-</tr>
-<tr>
-<td>text</td>
-<td>只读文本段中的程序代码段</td>
-<td>程序的代码</td>
-</tr>
-</tbody></table>
-<h1 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h1><ul>
-<li><p>《UNIX环境高级编程》</p>
-</li>
-<li><p><a href="https://blog.csdn.net/zhangzhebjut/article/details/39060253">Linux - 进程(一) 进程空间</a></p>
-</li>
-<li><p><a href="https://blog.csdn.net/gatieme/article/details/43567433">C程序的内存布局(Memory Layout)</a></p>
-</li>
-</ul>
-]]></content>
-      <categories>
-        <category>笔记</category>
-        <category>apue</category>
-      </categories>
-      <tags>
-        <tag>linux</tag>
-        <tag>apue</tag>
-        <tag>进程</tag>
-        <tag>操作系统</tag>
+        <tag>Next</tag>
       </tags>
   </entry>
   <entry>
@@ -705,66 +765,6 @@
       </tags>
   </entry>
   <entry>
-    <title>hexo-theme-next提交给搜索引擎</title>
-    <url>/hexo-theme-next%E6%8F%90%E4%BA%A4%E7%BB%99%E6%90%9C%E7%B4%A2%E5%BC%95%E6%93%8E/</url>
-    <content><![CDATA[<h1 id="站点地图生成"><a href="#站点地图生成" class="headerlink" title="站点地图生成"></a>站点地图生成</h1><ol>
-<li><p>插件安装</p>
-<ul>
-<li><p>Google站点地图插件</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">npm install hexo-generator-sitemap --save</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>百度站点地图插件</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">npm install hexo-generator-baidu-sitemap --save</span><br></pre></td></tr></table></figure>
-</li>
-</ul>
-</li>
-<li><p>修改站点配置文件</p>
-</li>
-</ol>
-<p><code>_config.yml</code> 中加入：</p>
-<figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="attr">sitemap:</span></span><br><span class="line">  <span class="attr">path:</span> <span class="string">sitemap.xml</span> <span class="comment"># 提交给Google</span></span><br><span class="line"><span class="attr">baidusitemap:</span></span><br><span class="line">  <span class="attr">path:</span> <span class="string">baidusitemap.xml</span> <span class="comment"># 提交给百度</span></span><br></pre></td></tr></table></figure>
-
-<ol start="3">
-<li><p>重新构建项目</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">hexo cl&amp;&amp;hexo g</span><br></pre></td></tr></table></figure>
-
-</li>
-</ol>
-<h1 id="提交站点地图"><a href="#提交站点地图" class="headerlink" title="提交站点地图"></a>提交站点地图</h1><p>直接参考：<a href="https://fanandjiu.com/Hexo%E9%97%AE%E9%A2%98-%E6%8F%90%E4%BA%A4%E7%AB%99%E7%82%B9%E7%BB%99%E6%90%9C%E7%B4%A2%E5%BC%95%E6%93%8E%E4%BB%A5%E5%8F%8ASEO/">Hexo问题-提交站点给搜索引擎以及SEO</a> </p>
-<p><strong><em>注意：在Google进行DNS记录验证域名所有权时，因为阿里云域名解析的记录值不允许两个 <code>@</code> ，但将域名记录值 <code>@</code> 用以验证，验证完后再更改记录值是可行的。验证后需要一定的时间才能google搜索到！</em></strong> </p>
-<p><img src="https://i.loli.net/2020/08/06/SBGhud2oF7V4ZKj.png" alt="DNS验证域名所有权-Google.png"></p>
-<h1 id="站点分析"><a href="#站点分析" class="headerlink" title="站点分析"></a>站点分析</h1><p>参考：<a href="https://theme-next.js.org/docs/third-party-services/statistics-and-analytics.html">Statistics and Analytics</a> </p>
-<h2 id="Google-分析"><a href="#Google-分析" class="headerlink" title="Google 分析"></a>Google 分析</h2><ol>
-<li><p>创建一个 <a href="https://analytics.google.com/">Google Analytics</a> 账号</p>
-</li>
-<li><p>得到一个 <code>跟踪ID</code> ：UA-xxxxxx</p>
-</li>
-<li><p>修改Next配置文件</p>
-<figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="comment"># Google Analytics</span></span><br><span class="line"><span class="attr">google_analytics:</span></span><br><span class="line">  <span class="attr">tracking_id:</span> <span class="string">你的跟踪ID</span> <span class="comment"># &lt;app_id&gt;</span></span><br></pre></td></tr></table></figure>
-
-</li>
-</ol>
-<h2 id="百度分析"><a href="#百度分析" class="headerlink" title="百度分析"></a>百度分析</h2><ol>
-<li><p>去<a href="https://tongji.baidu.com/web/welcome/login">百度统计</a>，新增一个网站</p>
-</li>
-<li><p>复制统计代码中的 <code>hm.src = &quot;https://hm.baidu.com/hm.js?[这里的脚本ID]&quot;</code></p>
-</li>
-<li><p>修改Next配置文件</p>
-<figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="comment"># Baidu Analytics</span></span><br><span class="line"><span class="attr">baidu_analytics:</span> <span class="string">脚本ID</span> <span class="comment"># &lt;app_id&gt;</span></span><br></pre></td></tr></table></figure>
-
-</li>
-</ol>
-]]></content>
-      <categories>
-        <category>教程</category>
-      </categories>
-      <tags>
-        <tag>Hexo</tag>
-        <tag>博客</tag>
-        <tag>Next</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>k8s Weave Scope 部署配置</title>
     <url>/k8s%20weave%20scope%20%E5%AE%89%E8%A3%85%E9%85%8D%E7%BD%AE/</url>
     <content><![CDATA[<h2 id="1-Weave-Scope-安装"><a href="#1-Weave-Scope-安装" class="headerlink" title="1. Weave Scope 安装"></a>1. Weave Scope 安装</h2><p>在 master 上通过以下命令安装Weave Scope：<br>kubectl apply -f “<a href="https://cloud.weave.works/k8s/scope.yaml?k8s-version=$">https://cloud.weave.works/k8s/scope.yaml?k8s-version=$</a>(kubectl version | base64 | tr -d ‘\n’)”<br>运行后会发现已经起来几个pod:</p>
@@ -815,6 +815,121 @@
         <tag>linux</tag>
         <tag>apue</tag>
         <tag>操作系统</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>select函数-linux内核源码剖析</title>
+    <url>/select%E5%87%BD%E6%95%B0-linux%E5%86%85%E6%A0%B8%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/</url>
+    <content><![CDATA[<h1 id="用户态下select系统调用"><a href="#用户态下select系统调用" class="headerlink" title="用户态下select系统调用"></a>用户态下select系统调用</h1><h2 id="select函数原型"><a href="#select函数原型" class="headerlink" title="select函数原型"></a>select函数原型</h2><blockquote>
+<p>/usr/include/sys/select.h</p>
+</blockquote>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="comment">/* According to POSIX.1-2001 */</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;sys/select.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">select</span><span class="params">(<span class="keyword">int</span> nfds, fd_set *readfds, fd_set *writefds,</span></span></span><br><span class="line"><span class="function"><span class="params">        fd_set *exceptfds, struct timeval *timeout)</span></span>;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">FD_CLR</span><span class="params">(<span class="keyword">int</span> fd, fd_set *<span class="built_in">set</span>)</span></span>;        <span class="comment">//从fdset中删除fd</span></span><br><span class="line"><span class="function"><span class="keyword">int</span>  <span class="title">FD_ISSET</span><span class="params">(<span class="keyword">int</span> fd, fd_set *<span class="built_in">set</span>)</span></span>;        <span class="comment">//判断fd是否已存在fdset</span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">FD_SET</span><span class="params">(<span class="keyword">int</span> fd, fd_set *<span class="built_in">set</span>)</span></span>;        <span class="comment">//将fd添加到fdset</span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">FD_ZERO</span><span class="params">(fd_set *<span class="built_in">set</span>)</span></span>;                <span class="comment">//fdset所有位清0</span></span><br></pre></td></tr></table></figure>
+
+<p><strong>select参数：</strong></p>
+<blockquote>
+<ol>
+<li><p><strong>nfds</strong>：监控的文件描述符集中，待测试的<strong>最大描述符+1</strong></p>
+</li>
+<li><p><strong>readfds</strong>：监控有读数据到达文件描述符集合，传入传出参数</p>
+</li>
+<li><p><strong>writefds</strong>：监控有写数据到达文件描述符集合，传入传出参数</p>
+</li>
+<li><p><strong>exceptfds</strong>：监控异常发生达文件描述符集合，传入传出参数</p>
+<p>a）带外数据到达</p>
+<p>b）某个已置为分组模式的伪终端存在可从其主机端读取的控制状态信息</p>
+</li>
+<li><p><strong>timeout</strong>：定时阻塞监控时间，3种情况：</p>
+<p>1）NULL，永远等下去</p>
+<p>2）设置 timeval ，等待固定时间</p>
+<p>3）设置 timeval 里时间均为0，检查描述字后立即返回，轮询</p>
+</li>
+</ol>
+</blockquote>
+<p><em>注意：<code>FD_</code>为前缀的函数并非系统调用，而是几个对<code>fd_set</code>进行相关位操作的<strong>宏</strong></em></p>
+<p><code>fd_set</code>结构体的定义实际包含的是<code>fds_bits</code>位<strong>数组</strong>，其大小固定，由<code>FD_SETSIZE</code>指定，因此<font color=red><strong>每次select系统调用可监听处理的文件描述符最大数量为<code>FD_SETSIZE</code></strong></font>：</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="comment">/* fd_set for select and pselect.  */</span></span><br><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span></span></span><br><span class="line"><span class="class">  &#123;</span></span><br><span class="line">    <span class="comment">/* XPG4.2 requires this member name.  Otherwise avoid the name</span></span><br><span class="line"><span class="comment">       from the global namespace.  */</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">ifdef</span> __USE_XOPEN</span></span><br><span class="line">    __fd_mask fds_bits[__FD_SETSIZE / __NFDBITS];</span><br><span class="line"><span class="meta"># <span class="meta-keyword">define</span> __FDS_BITS(set) ((set)-&gt;fds_bits)</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">else</span></span></span><br><span class="line">    __fd_mask __fds_bits[__FD_SETSIZE / __NFDBITS];</span><br><span class="line"><span class="meta"># <span class="meta-keyword">define</span> __FDS_BITS(set) ((set)-&gt;__fds_bits)</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">endif</span></span></span><br><span class="line">  &#125; fd_set;</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="select函数作用"><a href="#select函数作用" class="headerlink" title="select函数作用"></a>select函数作用</h2><p><strong>select函数允许进程指示内核等待多个事件中的任何一个发生，并只在有一个或多个事件发生或经历一段指定的时间后才唤醒它。</strong></p>
+<p><code>readfds</code>、<code>writefds</code>、<code>exceptfds</code>三个参数中，若不关注某个参数，可将其设为<code>NULL</code>。三个参数均为<code>NULL</code>相当于一个定时器。</p>
+<h2 id="select函数局限"><a href="#select函数局限" class="headerlink" title="select函数局限"></a>select函数局限</h2><ol>
+<li><p>select能监听的文件描述符个数受限于<code>FD_SETSIZE</code>，一般为1024，单纯改变进程打开的文件描述符个数并不能改变select监听文件个数。</p>
+<blockquote>
+<p>/usr/include/sys/select.h</p>
+<p>/usr/include/bits/typesizes.h</p>
+</blockquote>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="comment">/* Maximum number of file descriptors in `fd_set&#x27;.  */</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> FD_SETSIZE              __FD_SETSIZE</span></span><br><span class="line"></span><br><span class="line"><span class="comment">/* Number of descriptors that can fit in an `fd_set&#x27;.  */</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> __FD_SETSIZE            1024</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>描述符集内任何与<strong>未就绪描述符</strong>对应的位返回时<strong>均清成0</strong>。为此，每次<strong>重新调用</strong>select函数时，我们都得<strong>再次</strong>把所有描述符集内所关心的位<strong>均置为1</strong>。</p>
+</li>
+<li><p>解决1024以下客户端时使用select是很合适的，但如果链接客户端过多，select采用的是<strong>轮询模型</strong>，会大大降低服务器响应效率，不应在select上投入更多精力。</p>
+</li>
+</ol>
+<h2 id="套接字就绪条件"><a href="#套接字就绪条件" class="headerlink" title="套接字就绪条件"></a>套接字就绪条件</h2><img src="https://i.loli.net/2020/08/07/WdJIKFkZlCmUpoO.png" alt="select返回某个套接字就绪条件.png" style="zoom:67%;" />
+
+<h1 id="select源码剖析"><a href="#select源码剖析" class="headerlink" title="select源码剖析"></a>select源码剖析</h1><blockquote>
+<p>内核源码：linux-3.10</p>
+<p>seelct源码：fs/select.c</p>
+<p>内核源码链接：<a href="https://mirrors.edge.kernel.org/pub/linux/kernel/v3.0/linux-3.10.tar.gz">https://mirrors.edge.kernel.org/pub/linux/kernel/v3.0/linux-3.10.tar.gz</a></p>
+</blockquote>
+<h2 id="select系统调用入口"><a href="#select系统调用入口" class="headerlink" title="select系统调用入口"></a>select系统调用入口</h2><ol>
+<li>若设置超时时间，用户空间（微秒量级）拷贝到内核空间（纳秒量级）</li>
+<li><code>core_sys_select</code> 真正执行入口</li>
+<li>传出剩余时间差，返回给用户空间</li>
+<li>正常结束，返回满足条件的描述符个数</li>
+</ol>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line">SYSCALL_DEFINE5(select, <span class="keyword">int</span>, n, fd_set __user *, inp, fd_set __user *, outp,</span><br><span class="line">        fd_set __user *, <span class="built_in">exp</span>, struct timeval __user *, tvp)</span><br><span class="line">&#123;</span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">timespec</span> <span class="title">end_time</span>, *<span class="title">to</span> = <span class="title">NULL</span>;</span></span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">timeval</span> <span class="title">tv</span>;</span></span><br><span class="line">    <span class="keyword">int</span> ret;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/* 1. 永久等待      tvp == NULL</span></span><br><span class="line"><span class="comment">     * 2. 不等待         tvp-&gt;tv_sec == 0 &amp;&amp; tvp-&gt;tc_nsec == 0</span></span><br><span class="line"><span class="comment">     * 3. 等待指定时间   tvp-&gt;tv_sec != 0 || tvp-&gt;tc_nsec != 0  */</span></span><br><span class="line">    <span class="keyword">if</span> (tvp) &#123;</span><br><span class="line">        <span class="comment">/** 在设置超时情况下，拷贝用户空间下的相对超时时间（微秒量级）到内核 **/</span></span><br><span class="line">        <span class="keyword">if</span> (copy_from_user(&amp;tv, tvp, <span class="keyword">sizeof</span>(tv))) </span><br><span class="line">            <span class="keyword">return</span> -EFAULT;</span><br><span class="line"></span><br><span class="line">        to = &amp;end_time;</span><br><span class="line">        <span class="comment">/** poll_select_set_timeout 设定成绝对的超时时间（纳秒量级） **/</span></span><br><span class="line">        <span class="keyword">if</span> (poll_select_set_timeout(to,</span><br><span class="line">                tv.tv_sec + (tv.tv_usec / USEC_PER_SEC),</span><br><span class="line">                (tv.tv_usec % USEC_PER_SEC) * NSEC_PER_USEC))</span><br><span class="line">            <span class="keyword">return</span> -EINVAL;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/** select 真正执行入口 **/</span></span><br><span class="line">    ret = core_sys_select(n, inp, outp, <span class="built_in">exp</span>, to);</span><br><span class="line">    <span class="comment">/* 将此次调用完成剩余的时间差值通过 tvp 指向的 timeval 结构返回给用户空间 */</span></span><br><span class="line">    ret = poll_select_copy_remaining(&amp;end_time, tvp, <span class="number">1</span>, ret);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> ret;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="core-sys-select"><a href="#core-sys-select" class="headerlink" title="core_sys_select"></a>core_sys_select</h2><ol>
+<li>先创建一个默认大小栈缓冲区（加快访问，但缓冲区大小可能不够）。</li>
+<li>检查最大fd是否超出进程文件描述符位图所容量的最大值（默认1024），超过部分不监听（修正）。</li>
+<li>计算前面创建的栈缓冲区是否足够存储输入、输出6个集合，若缓冲区大小不足则使用<code>kmalloc</code>分配内核空间。</li>
+<li>将缓冲区分成6段，从用户空间拷贝输入集到内核空间，并将内核空间结果集清0。</li>
+<li>执行主线 <strong>do_select</strong> 。</li>
+<li>若无错误，拷贝内核结果集到用户空间</li>
+<li>正常结束，返回满足条件的描述符数</li>
+</ol>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">core_sys_select</span><span class="params">(<span class="keyword">int</span> n, fd_set __user *inp, fd_set __user *outp,</span></span></span><br><span class="line"><span class="function"><span class="params">               fd_set __user *<span class="built_in">exp</span>, struct timespec *end_time)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    fd_set_bits fds;</span><br><span class="line">    <span class="keyword">void</span> *bits;</span><br><span class="line">    <span class="keyword">int</span> ret, max_fds;</span><br><span class="line">    <span class="keyword">unsigned</span> <span class="keyword">int</span> size;</span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">fdtable</span> *<span class="title">fdt</span>;</span></span><br><span class="line">    </span><br><span class="line">    <span class="comment">/* 需要将用户空间传进来的inset、outset、exset拷贝到内核空间，并且</span></span><br><span class="line"><span class="comment">     * 需要等容量的空间来存储结果集，之后会将结果集的内容写回到用户空间。</span></span><br><span class="line"><span class="comment">     * 定义一个SELECT_STACK_ALLOC(256字节)大小的栈上缓冲区，用于缓存输入输出结果集。</span></span><br><span class="line"><span class="comment">     * 如果缓存的空间大小不够，那么再使用kmalloc()动态分配，</span></span><br><span class="line"><span class="comment">     * 优先使用栈缓存而不用动态内存可以加快访问 */</span></span><br><span class="line">    <span class="keyword">long</span> stack_fds[SELECT_STACK_ALLOC/<span class="keyword">sizeof</span>(<span class="keyword">long</span>)];</span><br><span class="line"></span><br><span class="line">    ret = -EINVAL;</span><br><span class="line">    <span class="keyword">if</span> (n &lt; <span class="number">0</span>) </span><br><span class="line">        <span class="keyword">goto</span> out_nofds;</span><br><span class="line"></span><br><span class="line">   <span class="comment">/* rdlock加锁：保护struct files的访问 */</span></span><br><span class="line">    rcu_read_lock();</span><br><span class="line">    fdt = files_fdtable(current-&gt;files);</span><br><span class="line">    max_fds = fdt-&gt;max_fds;</span><br><span class="line">    rcu_read_unlock();</span><br><span class="line">    <span class="comment">/* 基于current宏，检查传入的最大fd对应参数n是否超出当前进程打开的</span></span><br><span class="line"><span class="comment">    * 文件描述符表内所示位图容量的最大数值，超出修正*/</span></span><br><span class="line">    <span class="keyword">if</span> (n &gt; max_fds)</span><br><span class="line">        n = max_fds;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/*</span></span><br><span class="line"><span class="comment">     * n个bits至少需要size个long才能装下（long表示bits段），</span></span><br><span class="line"><span class="comment">     * 为了存储输入输出集，我们需要6*size个long的存储空间</span></span><br><span class="line"><span class="comment">     * 栈上数组空间不足以存放本次select要处理的fd集合所需总计内存，</span></span><br><span class="line"><span class="comment">     * 则使用kmalloc从内核空间分配所需的连续物理内存 </span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    size = FDS_BYTES(n);</span><br><span class="line">    bits = stack_fds;</span><br><span class="line">    <span class="keyword">if</span> (size &gt; <span class="keyword">sizeof</span>(stack_fds) / <span class="number">6</span>) &#123;</span><br><span class="line">        <span class="comment">/* Not enough space in on-stack array; must use kmalloc */</span></span><br><span class="line">        ret = -ENOMEM;</span><br><span class="line">        bits = kmalloc(<span class="number">6</span> * size, GFP_KERNEL);</span><br><span class="line">        <span class="keyword">if</span> (!bits)</span><br><span class="line">            <span class="keyword">goto</span> out_nofds;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">/* 将数组分成6段 */</span></span><br><span class="line">    fds.in      = bits;</span><br><span class="line">    fds.out     = bits +   size;</span><br><span class="line">    fds.ex      = bits + <span class="number">2</span>*size;</span><br><span class="line">    fds.res_in  = bits + <span class="number">3</span>*size;</span><br><span class="line">    fds.res_out = bits + <span class="number">4</span>*size;</span><br><span class="line">    fds.res_ex  = bits + <span class="number">5</span>*size;</span><br><span class="line">    <span class="comment">/* 依次从用户空间拷贝输入集数据 */</span></span><br><span class="line">    <span class="keyword">if</span> ((ret = get_fd_set(n, inp, fds.in)) ||</span><br><span class="line">        (ret = get_fd_set(n, outp, fds.out)) ||</span><br><span class="line">        (ret = get_fd_set(n, <span class="built_in">exp</span>, fds.ex)))</span><br><span class="line">        <span class="keyword">goto</span> out;</span><br><span class="line">    <span class="comment">/* 将输出集清0 */</span></span><br><span class="line">    zero_fd_set(n, fds.res_in);</span><br><span class="line">    zero_fd_set(n, fds.res_out);</span><br><span class="line">    zero_fd_set(n, fds.res_ex);</span><br><span class="line">    <span class="comment">/* 主线 核心 */</span></span><br><span class="line">    ret = do_select(n, &amp;fds, end_time);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (ret &lt; <span class="number">0</span>)</span><br><span class="line">        <span class="keyword">goto</span> out;</span><br><span class="line">    <span class="keyword">if</span> (!ret) &#123;</span><br><span class="line">        ret = -ERESTARTNOHAND;</span><br><span class="line">        <span class="keyword">if</span> (signal_pending(current))</span><br><span class="line">            <span class="keyword">goto</span> out;</span><br><span class="line">        ret = <span class="number">0</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">/* 最后 将结果集返回用户空间 */</span></span><br><span class="line">    <span class="keyword">if</span> (set_fd_set(n, inp, fds.res_in) ||</span><br><span class="line">        set_fd_set(n, outp, fds.res_out) ||</span><br><span class="line">        set_fd_set(n, <span class="built_in">exp</span>, fds.res_ex))</span><br><span class="line">        ret = -EFAULT;</span><br><span class="line"></span><br><span class="line">out:</span><br><span class="line">    <span class="keyword">if</span> (bits != stack_fds)</span><br><span class="line">        kfree(bits);</span><br><span class="line">out_nofds:</span><br><span class="line">    <span class="keyword">return</span> ret;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="do-select（最核心）"><a href="#do-select（最核心）" class="headerlink" title="do_select（最核心）"></a>do_select（最核心）</h2><h3 id="相关结构体"><a href="#相关结构体" class="headerlink" title="相关结构体"></a>相关结构体</h3><h4 id="struct-poll-table-entry"><a href="#struct-poll-table-entry" class="headerlink" title="struct poll_table_entry"></a>struct poll_table_entry</h4><figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">poll_table_entry</span> &#123;</span></span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">file</span> *<span class="title">filp</span>;</span></span><br><span class="line">    <span class="keyword">unsigned</span> <span class="keyword">long</span> key;</span><br><span class="line">    <span class="keyword">wait_queue_t</span> wait;                  <span class="comment">//wait等待队列项</span></span><br><span class="line">    <span class="keyword">wait_queue_head_t</span> *wait_address;     <span class="comment">//wait的等待队列头</span></span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<h4 id="struct-poll-table-page"><a href="#struct-poll-table-page" class="headerlink" title="struct poll_table_page"></a>struct poll_table_page</h4><figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">poll_table_page</span> &#123;</span></span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">poll_table_page</span> * <span class="title">next</span>;</span></span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">poll_table_entry</span> * <span class="title">entry</span>;</span></span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">poll_table_entry</span> <span class="title">entries</span>[0];</span></span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<h4 id="struct-poll-table"><a href="#struct-poll-table" class="headerlink" title="struct poll_table"></a>struct poll_table</h4><figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> <span class="title">poll_table_struct</span> &#123;</span></span><br><span class="line">    poll_queue_proc _qproc;</span><br><span class="line">    <span class="keyword">unsigned</span> <span class="keyword">long</span> _key;</span><br><span class="line">&#125; poll_table;</span><br></pre></td></tr></table></figure>
+
+<h4 id="struct-poll-wqueues"><a href="#struct-poll-wqueues" class="headerlink" title="struct poll_wqueues"></a>struct poll_wqueues</h4><figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">poll_wqueues</span> &#123;</span></span><br><span class="line">    poll_table pt;                      <span class="comment">//</span></span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">poll_table_page</span> *<span class="title">table</span>;</span>      <span class="comment">//</span></span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">task_struct</span> *<span class="title">polling_task</span>;</span>   <span class="comment">//正在轮询的进程</span></span><br><span class="line">    <span class="keyword">int</span> triggered;</span><br><span class="line">    <span class="keyword">int</span> error;</span><br><span class="line">    <span class="keyword">int</span> inline_index;</span><br><span class="line">    <span class="comment">//记录poll信息的数组 </span></span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">poll_table_entry</span> <span class="title">inline_entries</span>[<span class="title">N_INLINE_POLL_ENTRIES</span>];</span></span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<h3 id="正题do-select剖析"><a href="#正题do-select剖析" class="headerlink" title="正题do_select剖析"></a>正题do_select剖析</h3><figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">do_select</span><span class="params">(<span class="keyword">int</span> n, fd_set_bits *fds, struct timespec *end_time)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">ktime_t</span> expire, *to = <span class="literal">NULL</span>;</span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">poll_wqueues</span> <span class="title">table</span>;</span></span><br><span class="line">    poll_table *wait;</span><br><span class="line">    <span class="keyword">int</span> retval, i, timed_out = <span class="number">0</span>; <span class="comment">/* timed_out指示是否已经超时，超时1，未超时0 */</span></span><br><span class="line">    <span class="keyword">unsigned</span> <span class="keyword">long</span> slack = <span class="number">0</span>;</span><br><span class="line">     <span class="comment">/* 借助当前进程已打开的文件描述符表检查传入且合法的已打开最大fd，并修正传入的n */</span></span><br><span class="line">    rcu_read_lock();</span><br><span class="line">    retval = max_select_fd(n, fds);</span><br><span class="line">    rcu_read_unlock();</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (retval &lt; <span class="number">0</span>)</span><br><span class="line">        <span class="keyword">return</span> retval;</span><br><span class="line">    n = retval;</span><br><span class="line">    <span class="comment">/* poll_initwait初始化poll_wqueues结构体table，这一结构体用于本次select调用</span></span><br><span class="line"><span class="comment">     * 对所有传入的待监听fd进行【轮询工作】，每个fd对应一个poll_table_entry。</span></span><br><span class="line"><span class="comment">     * 初始化poll_wqueues：</span></span><br><span class="line"><span class="comment">     * 1. 初始化poll_wqueues中的poll_table：</span></span><br><span class="line"><span class="comment">     *      * 设置监听注册函数为 __pollwait</span></span><br><span class="line"><span class="comment">     * 2. 设置polling_task指向当前进程PCB。*/</span></span><br><span class="line">    poll_initwait(&amp;table);</span><br><span class="line">    wait = &amp;table.pt;</span><br><span class="line">    <span class="comment">/* 根本不等待情况处理 */</span></span><br><span class="line">    <span class="keyword">if</span> (end_time &amp;&amp; !end_time-&gt;tv_sec &amp;&amp; !end_time-&gt;tv_nsec) &#123;</span><br><span class="line">        wait-&gt;_qproc = <span class="literal">NULL</span>; <span class="comment">/* 注意：设为NULL了！！！ */</span></span><br><span class="line">        timed_out = <span class="number">1</span>;  <span class="comment">/* 还没开始就已经超时，这样就实现了根本不等待... */</span></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">/* 重新估算相对超时时间... */</span></span><br><span class="line">    <span class="keyword">if</span> (end_time &amp;&amp; !timed_out)</span><br><span class="line">        slack = select_estimate_accuracy(end_time);</span><br><span class="line"></span><br><span class="line">    retval = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">for</span> (;;) &#123; <span class="comment">/* 无穷循环开始轮询事件监测 */</span></span><br><span class="line">        <span class="keyword">unsigned</span> <span class="keyword">long</span> *rinp, *routp, *rexp, *inp, *outp, *<span class="built_in">exp</span>;</span><br><span class="line"></span><br><span class="line">        inp = fds-&gt;in; outp = fds-&gt;out; <span class="built_in">exp</span> = fds-&gt;ex;</span><br><span class="line">        rinp = fds-&gt;res_in; routp = fds-&gt;res_out; rexp = fds-&gt;res_ex;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">for</span> (i = <span class="number">0</span>; i &lt; n; ++rinp, ++routp, ++rexp) &#123;</span><br><span class="line">            <span class="keyword">unsigned</span> <span class="keyword">long</span> in, out, ex, all_bits, bit = <span class="number">1</span>, mask, j;</span><br><span class="line">            <span class="keyword">unsigned</span> <span class="keyword">long</span> res_in = <span class="number">0</span>, res_out = <span class="number">0</span>, res_ex = <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line">            in = *inp++; out = *outp++; ex = *<span class="built_in">exp</span>++;</span><br><span class="line">            all_bits = in | out | ex;</span><br><span class="line">            <span class="keyword">if</span> (all_bits == <span class="number">0</span>) &#123;  <span class="comment">/* 跳过我们不关心的bits段 */</span></span><br><span class="line">                i += BITS_PER_LONG;</span><br><span class="line">                <span class="keyword">continue</span>;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="comment">/* 以BITS_PER_LONG个为一组依次挂载到等待队列，并对事件进行检测，</span></span><br><span class="line"><span class="comment">             * 如果没有事件到来，仅有第一次循环完成挂载，后续循环只监测事件。*/</span></span><br><span class="line">            <span class="keyword">for</span> (j = <span class="number">0</span>; j &lt; BITS_PER_LONG; ++j, ++i, bit &lt;&lt;= <span class="number">1</span>) &#123;</span><br><span class="line">                <span class="class"><span class="keyword">struct</span> <span class="title">fd</span> <span class="title">f</span>;</span></span><br><span class="line">                <span class="keyword">if</span> (i &gt;= n)  <span class="comment">/* 超出了关心的文件描述符范围[0, n)，那么跳出... */</span></span><br><span class="line">                    <span class="keyword">break</span>;</span><br><span class="line">                <span class="keyword">if</span> (!(bit &amp; all_bits)) <span class="comment">/* 跳过我们不关心的bit */</span></span><br><span class="line">                    <span class="keyword">continue</span>;</span><br><span class="line">                f = fdget(i);</span><br><span class="line">                <span class="comment">/* 因为没有rdlock加锁，因此当前进程中描述符i对应的文件可能已经</span></span><br><span class="line"><span class="comment">                 * 被异步关闭。这就是为什么需要判断file是否为空的原因 */</span></span><br><span class="line">                <span class="keyword">if</span> (f.file) &#123;</span><br><span class="line">                    <span class="keyword">const</span> <span class="class"><span class="keyword">struct</span> <span class="title">file_operations</span> *<span class="title">f_op</span>;</span></span><br><span class="line">                    f_op = f.file-&gt;f_op;</span><br><span class="line">                    <span class="comment">/* 注意：mask = POLLIN | POLLOUT | POLLRDNORM | POLLWRNORM; */</span></span><br><span class="line">                    mask = DEFAULT_POLLMASK; </span><br><span class="line">                    <span class="comment">/* 如果这个文件支持poll()，那么我们就向这个文件注册监听函数；</span></span><br><span class="line"><span class="comment">                     * 如果不支持，那么我们就忽略掉这个文件描述符 */</span></span><br><span class="line">                    <span class="keyword">if</span> (f_op &amp;&amp; f_op-&gt;poll) &#123;</span><br><span class="line">                        wait_key_set(wait, in, out, bit); <span class="comment">/* 设置poll_table中想要监听的事件 */</span></span><br><span class="line"><span class="comment">/* #核心调用#</span></span><br><span class="line"><span class="comment">* 在这里会根据fd的不同创建类别调用真正的poll函数，</span></span><br><span class="line"><span class="comment">* socket下对应是sock_poll，如ipv4/tcp下会继续调用tcp_poll，</span></span><br><span class="line"><span class="comment">* 在这里完成调用poll_table注册的函数指针__poll_wait挂载等待队列操作（实际借助poll_wait封装调用）</span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line">                        mask = (*f_op-&gt;poll)(f.file, wait); <span class="comment">/* 对文件注册监听函数，并返回资源的当前状态 */</span></span><br><span class="line">                    &#125;</span><br><span class="line">                    fdput(f);</span><br><span class="line">                    <span class="comment">/* 完成检测操作获取事件mask结果。events验证，其中retval表示就绪的资源数 */</span></span><br><span class="line">                    <span class="keyword">if</span> ((mask &amp; POLLIN_SET) &amp;&amp; (in &amp; bit)) &#123;</span><br><span class="line">                        res_in |= bit;</span><br><span class="line">                        retval++;</span><br><span class="line">                        <span class="comment">/* 保证仅在第一次循环时，完成本次fd对应挂载等待队列，</span></span><br><span class="line"><span class="comment">                         * 不论是否收到设备事件通知，本次调用仅挂载一次，因此置空poll_table注册的poll */</span></span><br><span class="line">                        wait-&gt;_qproc = <span class="literal">NULL</span>;  <span class="comment">//</span></span><br><span class="line">                    &#125;</span><br><span class="line">                    <span class="keyword">if</span> ((mask &amp; POLLOUT_SET) &amp;&amp; (out &amp; bit)) &#123;</span><br><span class="line">                        res_out |= bit;</span><br><span class="line">                        retval++;</span><br><span class="line">                        wait-&gt;_qproc = <span class="literal">NULL</span>; <span class="comment">//</span></span><br><span class="line">                    &#125;</span><br><span class="line">                    <span class="keyword">if</span> ((mask &amp; POLLEX_SET) &amp;&amp; (ex &amp; bit)) &#123;</span><br><span class="line">                        res_ex |= bit;</span><br><span class="line">                        retval++;</span><br><span class="line">                        wait-&gt;_qproc = <span class="literal">NULL</span>; <span class="comment">//</span></span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="comment">/* 结果写入内核空间的结果集 */</span></span><br><span class="line">            <span class="keyword">if</span> (res_in)</span><br><span class="line">                *rinp = res_in;</span><br><span class="line">            <span class="keyword">if</span> (res_out)</span><br><span class="line">                *routp = res_out;</span><br><span class="line">            <span class="keyword">if</span> (res_ex)</span><br><span class="line">                *rexp = res_ex;</span><br><span class="line">            cond_resched();</span><br><span class="line">        &#125;</span><br><span class="line">        wait-&gt;_qproc = <span class="literal">NULL</span>;  <span class="comment">/* 将wait-&gt;_qproc设为NULL，表示我们不希望再进行监听注册 */</span></span><br><span class="line">        <span class="comment">/* 事件发生、超时、中断，跳出死循环 */</span></span><br><span class="line">        <span class="keyword">if</span> (retval || timed_out || signal_pending(current))</span><br><span class="line">            <span class="keyword">break</span>;</span><br><span class="line">        <span class="keyword">if</span> (table.error) &#123;  <span class="comment">/* 发生了错误，我们也跳出死循环 */</span></span><br><span class="line">            retval = table.error;</span><br><span class="line">            <span class="keyword">break</span>;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="comment">/*</span></span><br><span class="line"><span class="comment">         * If this is the first loop and we have a timeout</span></span><br><span class="line"><span class="comment">         * given, then we convert to ktime_t and set the to</span></span><br><span class="line"><span class="comment">         * pointer to the expiry value.</span></span><br><span class="line"><span class="comment">         */</span></span><br><span class="line">        <span class="keyword">if</span> (end_time &amp;&amp; !to) &#123;</span><br><span class="line">            expire = timespec_to_ktime(*end_time);</span><br><span class="line">            to = &amp;expire;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">/* 能够到达这一步就说明没有发生就绪、中断以及超时 */</span></span><br><span class="line">        <span class="comment">/* </span></span><br><span class="line"><span class="comment">         * 判断poll_wqueues是否已触发，如果还没有触发，那就</span></span><br><span class="line"><span class="comment">           设置当前运行状态为可中断阻塞并进行睡眠，等待被唤醒。</span></span><br><span class="line"><span class="comment">         * 被唤醒之后重新进行迭代，获取资源就绪情况。</span></span><br><span class="line"><span class="comment">         * 在向资源注册监听与判断poll_wqueues是否已触发在这段时间内，可能资源异步就绪了，</span></span><br><span class="line"><span class="comment">           如果没有触发标志，那么可能就会丢失资源就绪这个事件，可能导致select()永久沉睡。</span></span><br><span class="line"><span class="comment">         * 这就是为什么需要poll_wqueues.triggered字段的原因。  */</span></span><br><span class="line">        <span class="keyword">if</span> (!poll_schedule_timeout(&amp;table, TASK_INTERRUPTIBLE,</span><br><span class="line">                       to, slack))</span><br><span class="line">            timed_out = <span class="number">1</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">/* 1. 卸载安装到资源监听队列上的poll_table_entry</span></span><br><span class="line"><span class="comment">     * 2. 释放poll_wqueues占用的资源  */</span></span><br><span class="line">    poll_freewait(&amp;table);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> retval;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><p>select负责将超时时间从用户空间（微秒级）拷贝到内核空间（纳秒级），接着转真正入口<code>core_sys_select</code>。</p>
+<p><code>core_sys_select</code>函数调用树如下（图片来源网络）：</p>
+<img src="https://i.loli.net/2020/08/07/hzjyYkINFRbuqaH.png" alt="core_sys_select调用树.png" style="zoom:67%;" />
+
+<h2 id="select注意点"><a href="#select注意点" class="headerlink" title="select注意点"></a>select注意点</h2><ol>
+<li>select函数第一个参数<code>nfds</code>为监控的文件描述符集中，待测试的<strong>最大描述符+1</strong>。</li>
+<li>每次调用select均需要将用户空间数据拷贝到内核空间</li>
+<li>select能监听的文件描述符个数受限于<code>FD_SETSIZE</code>，一般为1024，单纯改变进程打开的文件描述符个数并不能改变select监听文件个数。修改后需重新编译内核。</li>
+<li>每次select调用都要轮询完成将所有<code>fd</code>的挂载到等待队列，以及对事件进行检测。</li>
+<li>内核轮询检测监听集合中每一个描述符是否有事件发生，有事件到来时，不知道是哪些文件描述符有数据可以读写，需要把所有的文件描述符都轮询一遍才能知道。</li>
+<li>有事件发生，轮询完一遍，将内核空间中的整个结果集 <code>bitmap</code> 拷贝到用户空间。</li>
+<li>用户进程仅知道有多少满足条件的描述符，需要遍历监听集合去查询。</li>
+<li>select函数<code>readfds</code>、<code>writefds</code>、<code>exceptfds</code>三个集合参数均为<strong>传入传出参数</strong>，在每次调用select时需要对三个参数进行赋值。</li>
+<li>解决1024以下客户端时使用select是很合适的，但如果链接客户端过多，select 采用的是轮询模型，会大大降低服务器响应效率。</li>
+</ol>
+<h1 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h1><p>《UNIX网络编程 卷一：套接字联网API》</p>
+<p><a href="http://www.pandademo.com/2016/11/linux-kernel-select-source-dissect/">Linux内核select源码剖析</a></p>
+<p><a href="https://www.jianshu.com/p/da6642369ef0">https://www.jianshu.com/p/da6642369ef0</a></p>
+]]></content>
+      <categories>
+        <category>笔记</category>
+        <category>unp</category>
+      </categories>
+      <tags>
+        <tag>linux</tag>
+        <tag>unp</tag>
+        <tag>I/O复用</tag>
+        <tag>linux内核</tag>
       </tags>
   </entry>
 </search>
