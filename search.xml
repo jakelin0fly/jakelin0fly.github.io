@@ -1,8 +1,487 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>Linux进程地址空间（程序内存布局）</title>
+    <url>/APUE/Linux%E8%BF%9B%E7%A8%8B%E5%9C%B0%E5%9D%80%E7%A9%BA%E9%97%B4%EF%BC%88%E7%A8%8B%E5%BA%8F%E5%86%85%E5%AD%98%E5%B8%83%E5%B1%80%EF%BC%89/</url>
+    <content><![CDATA[<h1 id="进程地址空间分布图"><a href="#进程地址空间分布图" class="headerlink" title="进程地址空间分布图"></a>进程地址空间分布图</h1><img src="https://i.loli.net/2020/08/05/jxbWsi5ae4q1GfR.png" alt="Linux程序内存布局图.png" style="zoom:67%;" />
+
+<p>由低地址到高地址，依次是：</p>
+<ul>
+<li><p><strong>程序段（text）</strong>：程序代码在内存中的映射，存放函数体的二进制代码，常常是只读的</p>
+</li>
+<li><p><strong>初始化过的数据（data）</strong>：在程序运行初已经对变量进行初始化的数据</p>
+<ul>
+<li><p>只读数据段（RO data，即常量区）：</p>
+<blockquote>
+<p> 这个区域的存在与否，一直是一个争议的地方，但是我们这里认同是存在的，因为我们的程序中的确出现了与其他数据段不同的一块区域，但是往往很多时候大家把只读数据段（RO data）和下面的已初始化读写数据段（RW data）合成为数据段data，但是其实这个是不合适的，因为在执行过程中，这两个区域的读写权限是不同的，顾名思义，只读数据段（RO data）是只读的，而已初始化读写数据段是可读可写的。</p>
+</blockquote>
+</li>
+<li><p>读写数据段（RW data）：需要占用存储器的空间，在程序执行时它们需要位于可读写的内存区域内，并具有初值，以供程序运行时读写</p>
+</li>
+</ul>
+</li>
+<li><p><strong>未初始化过的数据（bss）</strong>：未初始化数据是在程序中声明，但是没有初始化的变量，这些变量在程序运行之前不需要占用存储器的空间。Block Started by Symbol，BSS段的变量只有名称和大小却没有值</p>
+</li>
+<li><p>堆 （heap）<strong>：存储动态内存分配,需要程序员手工分配,手工释放。注意它与数据结构中的堆是两回事，分配方式类似于链表</strong></p>
+</li>
+<li><p><strong>栈（stack）</strong>：存储局部、临时变量，函数调用时，存储函数的返回指针，用于控制函数的调用和返回。在程序块开始时自动分配内存，结束时自动释放内存，其操作方式类似于数据结构中的栈</p>
+</li>
+<li><p><strong>内核空间（kernel）</strong></p>
+</li>
+</ul>
+<h1 id="内核空间"><a href="#内核空间" class="headerlink" title="内核空间"></a>内核空间</h1><p> Linux的<font color=red><strong>虚拟地址空间</strong></font>范围为0～4G，Linux内核将这4G字节的空间分为两部分：</p>
+<p><strong>内核空间</strong>：将高地址的<strong>1G</strong>字节供内核使用，称为“内核空间“</p>
+<p><strong>用户空间</strong>：低地址的<strong>3G</strong>字节（供各个进程使用，称为“用户空间“</p>
+<p>因为每个进程可以通过系统调用进入内核，因此，<font color=red><strong>Linux内核由系统内的所有进程共享</strong></font>。</p>
+<p>Linux使用两级保护机制：</p>
+<ul>
+<li>0级供内核使用</li>
+<li>3级供用户程序使用</li>
+</ul>
+<h1 id="虚拟地址！！！"><a href="#虚拟地址！！！" class="headerlink" title="虚拟地址！！！"></a>虚拟地址！！！</h1><p>进程空间是<strong>虚拟地址</strong>，不管是内核空间还是用户空间，它们都处于虚拟空间中。</p>
+<p>使用虚拟地址可以很好的保护内核空间被用户空间破坏，虚拟地址到物理地址转换过程由操作系统和CPU共同完成(操作系统为CPU设置好页表，CPU通过MMU单元进行地址转换)。</p>
+<h1 id="段区对应数据"><a href="#段区对应数据" class="headerlink" title="段区对应数据"></a>段区对应数据</h1><table>
+<thead>
+<tr>
+<th>进程空间段区域</th>
+<th>地址空间</th>
+<th>存储变量</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>stack</td>
+<td>栈</td>
+<td>局部变量和常量</td>
+</tr>
+<tr>
+<td>heap</td>
+<td>堆</td>
+<td>动态分配的数据</td>
+</tr>
+<tr>
+<td>BSS</td>
+<td>未初始化数据段</td>
+<td>未初始化的全局变量以及静态变量</td>
+</tr>
+<tr>
+<td>RW data</td>
+<td>已初始化读写数据段</td>
+<td>已初始化的全局变量和静态变量</td>
+</tr>
+<tr>
+<td>RO data</td>
+<td>只读文本段中的数据段</td>
+<td>全局常量或者字符串面变量</td>
+</tr>
+<tr>
+<td>text</td>
+<td>只读文本段中的程序代码段</td>
+<td>程序的代码</td>
+</tr>
+</tbody></table>
+<h1 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h1><ul>
+<li><p>《UNIX环境高级编程》</p>
+</li>
+<li><p><a href="https://blog.csdn.net/zhangzhebjut/article/details/39060253">Linux - 进程(一) 进程空间</a></p>
+</li>
+<li><p><a href="https://blog.csdn.net/gatieme/article/details/43567433">C程序的内存布局(Memory Layout)</a></p>
+</li>
+</ul>
+]]></content>
+      <categories>
+        <category>笔记</category>
+        <category>apue</category>
+      </categories>
+      <tags>
+        <tag>linux</tag>
+        <tag>apue</tag>
+        <tag>进程</tag>
+        <tag>操作系统</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>系统I/O函数与C标准库函数</title>
+    <url>/APUE/%E7%B3%BB%E7%BB%9FIO%E5%87%BD%E6%95%B0%E4%B8%8EC%E6%A0%87%E5%87%86%E5%BA%93%E5%87%BD%E6%95%B0/</url>
+    <content><![CDATA[<p>先上图</p>
+<img src="https://i.loli.net/2020/08/06/RIMrGxbPWyizjnK.png" alt="库函数与系统调用的层次关系.png" style="zoom: 67%;" />
+
+<img src="https://i.loli.net/2020/08/06/tl8ykNe6wrx7VOd.png" alt="系统IO函数与C标库函数.png" style="zoom:67%;" />
+
+<p><strong><em>read、write函数常常被称为 Unbuffered I/O。指的是无用户输入级缓冲区，但不保证不使用内核缓冲区。</em></strong></p>
+<h2 id="系统I-O与标准库I-O差异"><a href="#系统I-O与标准库I-O差异" class="headerlink" title="系统I/O与标准库I/O差异"></a>系统I/O与标准库I/O差异</h2><p>用户程序在读写文件时既可以调用C标准I/O库函数，也可以直接调用底层的系统I/O函数，有什么区别呢？</p>
+<ul>
+<li>使用系统I/O函数每次读写都需要进入内核，调一个系统调用比调一个用户空间的函数要慢很多。（此时用户有必要维护一个I/O缓冲区，但用C标准I/O库函数就比较方便，省去了自己管理I/O缓冲区的麻烦）</li>
+<li>用C标准I/O库函数要时刻注意I/O缓冲区和实际文件有可能不一致，在必要时需调用<code>fflush</code></li>
+<li>UNIX是Everything is a file，在读写设备文件时通常是不希望有缓冲的，例如网络编程通常直接调用Unbuffered I/O函数。</li>
+</ul>
+<h2 id="标准库缓冲类型"><a href="#标准库缓冲类型" class="headerlink" title="标准库缓冲类型"></a>标准库缓冲类型</h2><p>C标准库的I/O缓冲区有三种类型：全缓冲、行缓冲和无缓冲。</p>
+<h3 id="全缓冲"><a href="#全缓冲" class="headerlink" title="全缓冲"></a>全缓冲</h3><p>如果缓冲区写满了就写回内核。对于驻留在<strong>磁盘</strong>上的文件通常是由标准I/O库实施全缓冲的。在一个流上执行第一次I/O操作时，相关标准I/O函数通常调用malloc获得需使用的缓冲区。</p>
+<h3 id="行缓冲"><a href="#行缓冲" class="headerlink" title="行缓冲"></a>行缓冲</h3><p>如果用户程序写的数据中有<strong>换行符</strong>就把这一行写回内核，或者如果<strong>缓冲区写满</strong>了就写回内核。<font color=red><strong>标准输入</strong></font>和<font color=red><strong>标准输出</strong></font>对应终端设备时通常是行缓冲的。 </p>
+<h3 id="无缓冲"><a href="#无缓冲" class="headerlink" title="无缓冲"></a>无缓冲</h3><p>用户程序每次调库函数做写操作都要通过系统调用写回内核。</p>
+<p><font color=red><strong>标准错误输出</strong></font>通常是无缓冲的，这样用户程序产生的错误信息可以尽快输出到设备。这里的无缓冲，并不是指缓冲区大小为0，其实，还是有缓冲的，大小为1。</p>
+]]></content>
+      <categories>
+        <category>笔记</category>
+        <category>apue</category>
+      </categories>
+      <tags>
+        <tag>linux</tag>
+        <tag>apue</tag>
+        <tag>操作系统</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>STL源码剖析-分配器Allocators</title>
+    <url>/STL/STL%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90-%E5%88%86%E9%85%8D%E5%99%A8Allocator/</url>
+    <content><![CDATA[<h1 id="先谈operator-new-和malloc"><a href="#先谈operator-new-和malloc" class="headerlink" title="先谈operator new()和malloc()"></a>先谈operator new()和malloc()</h1><p> <strong>new</strong>：指我们在C++里通常用到的<strong>运算符</strong></p>
+<p><strong>operator new()**：指对new的重载形式，它是一个</strong>函数**，并不是运算符</p>
+<p>函数operator new中调用malloc()进行内存分配。</p>
+<p>malloc实际内存分配得到的内存空间如下：</p>
+<p><img src="https://i.loli.net/2020/08/04/xN2TpBZyt3eKSoP.png" alt="malloc-new-分配得到的内存空间.png"></p>
+<p>new 运算符执行过程：</p>
+<ol>
+<li>调用operator new分配内存（可重载）</li>
+<li>调用构造函数构造生成类对象</li>
+<li>返回相应的指针</li>
+</ol>
+<h1 id="SGI标准的分配器-—-allocator"><a href="#SGI标准的分配器-—-allocator" class="headerlink" title="SGI标准的分配器 — allocator"></a>SGI标准的分配器 — allocator</h1><p>最重要的两个函数：<code>allocate</code> 、<code>deallocate</code> </p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="comment">//调用 operator new()</span></span><br><span class="line"><span class="function">pointer <span class="title">allocator::allocate</span><span class="params">(size_type n, <span class="keyword">const</span> <span class="keyword">void</span>* = <span class="number">0</span>)</span></span></span><br><span class="line"><span class="function"></span></span><br><span class="line"><span class="function"><span class="comment">//调用 operator delete()</span></span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">allocato::deallocate</span><span class="params">(pointer p, size_type n)</span></span></span><br></pre></td></tr></table></figure>
+
+<p>不建议使用，效率不佳，只对C++的<code>::operator new</code> 和 <code>::operator delete</code> 做了简单的包装在STL实际使用中，并没有使用 <code>allocator</code> 这个分配器。</p>
+<h1 id="SGI-STL分配器-—-alloc（G2-9"><a href="#SGI-STL分配器-—-alloc（G2-9" class="headerlink" title="SGI STL分配器 — alloc（G2.9)"></a>SGI STL分配器 — alloc（G2.9)</h1><p><strong><em>注意：G4.9以后默认的分配器又变成了allocator；G4.9的__pool_alloc就是G2.9的alloc</em></strong></p>
+<p>16条链表，每一条链表负责不同大小的区块。第0条负责8字节大小，以8字节大小增长</p>
+<p>优点：减少内存分配时多余空间的分配</p>
+<img src="https://i.loli.net/2020/08/04/NJt2yKDZ7E4Xo6P.png" alt="SGI-STL使用的分配器alloc原理图.png" style="zoom:70%;" />]]></content>
+      <categories>
+        <category>笔记</category>
+        <category>STL</category>
+      </categories>
+      <tags>
+        <tag>C++</tag>
+        <tag>STL</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>STL源码剖析-容器-deque</title>
+    <url>/STL/STL%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90-%E5%AE%B9%E5%99%A8-deque/</url>
+    <content><![CDATA[<img src="https://i.loli.net/2020/08/08/wGu91Lk2fCWIN5U.jpg" alt="deque示意图.jpg" style="zoom: 10%;" />
+
+<h2 id="deque概述"><a href="#deque概述" class="headerlink" title="deque概述"></a>deque概述</h2><ul>
+<li>deque 是一种<strong>双向开口</strong>的<strong>连续线性</strong>空间。可以在头尾两端分别做元素的插入和删除操作。</li>
+<li>deque是有一段一段的定量连续空间构成，是<strong>动态分段连续</strong>。</li>
+<li>deque 和 vector 的差异：<ul>
+<li>deque 允许于常数时间内对两端进行元素的插入或移除操作。</li>
+<li>deque 没有容量，它是动态地以分段连续空间组合而成。</li>
+</ul>
+</li>
+<li>deque 采用一块所谓的 <code>map</code> 作为主控。这个 map 是一小块连续空间（默认初值大小<strong>8个节点</strong>），其中每个节点都是指针，指向另一段（较大的）连续线性空间，称为缓冲区。缓冲区才是deque的存储空间主体。</li>
+<li>deque 是分段连续空间，迭代器维持其“整体连续”的<strong>假象</strong>，并提供随机存取的接口。</li>
+<li>一旦<code>map</code>提供的节点不足，就必须重新配置一个更大的一块<code>map</code>（<strong>至少两倍+2</strong>）。并将原来的数据放在<strong>中央</strong>，以使头尾两端的扩充能量一样大。</li>
+<li>插入数据时，deque会根据插入位置与两端的距离判断向前还是向后。</li>
+</ul>
+<img src="https://i.loli.net/2020/08/08/nl75O1bUu9TzIQ4.png" alt="deque分段连续示意图.png" style="zoom:80%;" />
+
+<h2 id="deque-的中控器map"><a href="#deque-的中控器map" class="headerlink" title="deque 的中控器map"></a>deque 的中控器map</h2><p>deque 采用一块所谓的 <code>map</code> 作为主控。这个 map 是一小块连续空间，其中每个节点都是指针，指向另一段（较大的）连续线性空间，称为缓冲区。缓冲区才是deque的存储空间主体。</p>
+<h3 id="map默认初始大小为8"><a href="#map默认初始大小为8" class="headerlink" title="map默认初始大小为8"></a>map默认初始大小为8</h3><figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="keyword">enum</span> &#123; _S_initial_map_size = <span class="number">8</span> &#125;; <span class="comment">// map默认初始大小 8</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// _M_initialize_map(size_t __num_elements)中</span></span><br><span class="line"><span class="comment">// map最少8个节点，最多“所需节点数+2”（前后各预留一个，扩容时可以用）</span></span><br><span class="line"><span class="keyword">this</span>-&gt;_M_impl._M_map_size = <span class="built_in">std</span>::<span class="built_in">max</span>((<span class="keyword">size_t</span>)_S_initial_map_size, <span class="keyword">size_t</span>(__num_nodes + <span class="number">2</span>));</span><br></pre></td></tr></table></figure>
+
+<h3 id="map空间重新配置"><a href="#map空间重新配置" class="headerlink" title="map空间重新配置"></a>map空间重新配置</h3><p>扩容一次至<strong>至少两倍+2</strong>。</p>
+<blockquote>
+<p>size_type __new_map_size = _M_map_size + max(_M_map_size, __nodes_to_add) + 2;</p>
+</blockquote>
+<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="keyword">void</span> _M_reserve_map_at_back (size_type __nodes_to_add = <span class="number">1</span>) &#123; <span class="comment">/*默认新增节点数=1*/</span></span><br><span class="line">  <span class="keyword">if</span> (__nodes_to_add + <span class="number">1</span> &gt; _M_map_size - (_M_finish._M_node - _M_map))</span><br><span class="line">    _M_reallocate_map(__nodes_to_add, <span class="literal">false</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">void</span> _M_reserve_map_at_front (size_type __nodes_to_add = <span class="number">1</span>) &#123; <span class="comment">/*默认新增节点数=1*/</span></span><br><span class="line">  <span class="keyword">if</span> (__nodes_to_add &gt; size_type(_M_start._M_node - _M_map))</span><br><span class="line">    _M_reallocate_map(__nodes_to_add, <span class="literal">true</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">template</span> &lt;<span class="class"><span class="keyword">class</span> _<span class="title">Tp</span>, <span class="title">class</span> _<span class="title">Alloc</span>&gt;</span></span><br><span class="line"><span class="class"><span class="title">void</span> <span class="title">deque</span>&lt;_Tp,_Alloc&gt;:</span>:_M_reallocate_map(size_type __nodes_to_add,</span><br><span class="line">                                          <span class="keyword">bool</span> __add_at_front)</span><br><span class="line">&#123;</span><br><span class="line">  size_type __old_num_nodes = _M_finish._M_node - _M_start._M_node + <span class="number">1</span>;</span><br><span class="line">  size_type __new_num_nodes = __old_num_nodes + __nodes_to_add;</span><br><span class="line"></span><br><span class="line">  _Map_pointer __new_nstart;</span><br><span class="line">   <span class="comment">/* map节点总数 &gt; 2倍新需节点数，则移动调整节点到中央 */</span></span><br><span class="line">  <span class="keyword">if</span> (_M_map_size &gt; <span class="number">2</span> * __new_num_nodes) &#123;</span><br><span class="line">    __new_nstart = _M_map + (_M_map_size - __new_num_nodes) / <span class="number">2</span> </span><br><span class="line">                     + (__add_at_front ? __nodes_to_add : <span class="number">0</span>);</span><br><span class="line">    <span class="keyword">if</span> (__new_nstart &lt; _M_start._M_node)</span><br><span class="line">      copy(_M_start._M_node, _M_finish._M_node + <span class="number">1</span>, __new_nstart);</span><br><span class="line">    <span class="keyword">else</span></span><br><span class="line">      copy_backward(_M_start._M_node, _M_finish._M_node + <span class="number">1</span>, </span><br><span class="line">                    __new_nstart + __old_num_nodes);</span><br><span class="line">  &#125;</span><br><span class="line">   <span class="comment">/* map节点总数不足2倍新需节点数，从新配置 */</span></span><br><span class="line">  <span class="keyword">else</span> &#123;</span><br><span class="line">    <span class="comment">/* 重点!!!  现有map节点数 + max(现有map节点数, 新增节点数) +2  !!! */</span></span><br><span class="line">    size_type __new_map_size = </span><br><span class="line">      _M_map_size + <span class="built_in">max</span>(_M_map_size, __nodes_to_add) + <span class="number">2</span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/* 拷贝原map节点数据到新map中央 */</span></span><br><span class="line">    _Map_pointer __new_map = _M_allocate_map(__new_map_size);</span><br><span class="line">    __new_nstart = __new_map + (__new_map_size - __new_num_nodes) / <span class="number">2</span></span><br><span class="line">                         + (__add_at_front ? __nodes_to_add : <span class="number">0</span>);</span><br><span class="line">    copy(_M_start._M_node, _M_finish._M_node + <span class="number">1</span>, __new_nstart);</span><br><span class="line">    _M_deallocate_map(_M_map, _M_map_size); <span class="comment">/* 释放原map空间 */</span></span><br><span class="line">    </span><br><span class="line">    _M_map = __new_map;</span><br><span class="line">    _M_map_size = __new_map_size;</span><br><span class="line">  &#125;</span><br><span class="line">    <span class="comment">/* 设置新的map的start、finish迭代器 */</span></span><br><span class="line">  _M_start._M_set_node(__new_nstart);</span><br><span class="line">  _M_finish._M_set_node(__new_nstart + __old_num_nodes - <span class="number">1</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="deque迭代器"><a href="#deque迭代器" class="headerlink" title="deque迭代器"></a>deque迭代器</h2><ul>
+<li>指向连续空间</li>
+<li>能判断空间边界，在边界上移动能指向正确的下一个连线空间</li>
+<li>随机存取</li>
+</ul>
+<p><strong>_Deque_iterator</strong>:</p>
+<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line">_Tp* _M_cur;        <span class="comment">//此迭代器所指的缓冲区的当前元素位置</span></span><br><span class="line">_Tp* _M_first;        <span class="comment">//此迭代器所指的缓冲区的头</span></span><br><span class="line">_Tp* _M_last;        <span class="comment">//此迭代器所指的缓冲区的尾</span></span><br><span class="line">_Map_pointer _M_node;    <span class="comment">//指向管控中心 map</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="deque插入数据"><a href="#deque插入数据" class="headerlink" title="deque插入数据"></a>deque插入数据</h2><ol>
+<li><p>若头部插入：<code>push_front</code></p>
+</li>
+<li><p>若尾部插入： <code>push_back</code></p>
+</li>
+<li><p>中间位置插入：</p>
+<p>1）判断距离哪端近</p>
+<p>2）移动元素</p>
+<p>3）插入新元素</p>
+</li>
+</ol>
+<h2 id="deque基本操作"><a href="#deque基本操作" class="headerlink" title="deque基本操作"></a>deque基本操作</h2><p><code>push_back()</code>：尾端插入</p>
+<p><code>push_front()</code>：头端插入</p>
+<p><code>pop_back()</code>：尾端取出</p>
+<p><code>pop_front()</code>：头端取出</p>
+]]></content>
+      <categories>
+        <category>笔记</category>
+        <category>STL</category>
+      </categories>
+      <tags>
+        <tag>C++</tag>
+        <tag>STL</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>STL源码剖析-容器-list</title>
+    <url>/STL/STL%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90-%E5%AE%B9%E5%99%A8-list/</url>
+    <content><![CDATA[<p>STL list 容器，又称<strong>双向链表容器</strong>，即该容器的底层是以双向链表的形式实现的。这意味着，list 容器中的元素可以分散存储在内存空间里，而不是必须存储在一整块连续的内存空间中。</p>
+<p>基于这样的存储结构，list 容器具有一些其它容器（array、vector 和 deque）所不具备的优势，即它可以在序列已知的任何位置快速<strong>插入</strong>或<strong>删除</strong>元素（时间复杂度为<code>O(1)</code>）。并且在 list 容器中移动元素，也比其它容器的效率高。</p>
+<p>查找元素需要遍历容器链表，时间复杂度为<code>O(n)</code>。</p>
+<h1 id="list节点"><a href="#list节点" class="headerlink" title="list节点"></a>list节点</h1><p>增加一个”哨兵“，便能符合STL对于”前闭后开“区间的要求。</p>
+<img src="https://i.loli.net/2020/08/04/vMCmnAWwHZXK39Y.png" alt="list-双向环形链表.png" style="zoom:67%;" />
+
+<h1 id="list迭代器"><a href="#list迭代器" class="headerlink" title="list迭代器"></a>list迭代器</h1><p>由于STL list是一个<strong>双向环形链表</strong>，迭代器必须具备前移、后移的能力，所以list提供的是 <code>Bidirectional Iterators</code> 。</p>
+<p>list一重要性质：插入（insert）和拼接（splice）都<strong>不会</strong>造成原有的list迭代器失效（区别于vector）。</p>
+<p>list迭代器部分设计：</p>
+<p> <strong><em>因前 <code>++</code> （或前 <code>--</code> ）返回值为引用，故允许：<code>++++i</code> 、 <code>----i</code> ；</em></strong></p>
+<p><strong><em>后 <code>++</code> (或 <code>--</code> )则不允许这样</em></strong></p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="comment">//对迭代器累计+1 也就是前进一个结点</span></span><br><span class="line">  self&amp; <span class="keyword">operator</span>++() &#123;     <span class="comment">// 前++ (++i) 无参数</span></span><br><span class="line">    node = (link_type)(node-&gt;next);</span><br><span class="line">    <span class="keyword">return</span> *<span class="keyword">this</span>;</span><br><span class="line">  &#125;</span><br><span class="line">  self <span class="keyword">operator</span>++(<span class="keyword">int</span>) &#123;   <span class="comment">// 后++ (i++) 有参数，参数无意义</span></span><br><span class="line">    self tmp = *<span class="keyword">this</span>;</span><br><span class="line">    ++*<span class="keyword">this</span>;</span><br><span class="line">    <span class="keyword">return</span> tmp;</span><br><span class="line">  &#125;</span><br><span class="line">  </span><br><span class="line"><span class="comment">//对迭代器累计-1 也就是前进一个结点</span></span><br><span class="line">  self&amp; <span class="keyword">operator</span>--() &#123; </span><br><span class="line">    node = (link_type)(node-&gt;prev);</span><br><span class="line">    <span class="keyword">return</span> *<span class="keyword">this</span>;</span><br><span class="line">  &#125;</span><br><span class="line">  self <span class="keyword">operator</span>--(<span class="keyword">int</span>) &#123; </span><br><span class="line">    self tmp = *<span class="keyword">this</span>;</span><br><span class="line">    --*<span class="keyword">this</span></span><br><span class="line">    <span class="keyword">return</span> tmp;</span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure>
+
+<h1 id="list数据结构"><a href="#list数据结构" class="headerlink" title="list数据结构"></a>list数据结构</h1><table>
+<thead>
+<tr>
+<th>函数</th>
+<th>用法</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>back()</td>
+<td>返回一个引用，指向最后一个元素</td>
+</tr>
+<tr>
+<td>begin()</td>
+<td>返回指向第一个元素的迭代器</td>
+</tr>
+<tr>
+<td>clear()</td>
+<td>删除所有元素</td>
+</tr>
+<tr>
+<td>empty()</td>
+<td>如果list是空的则返回true</td>
+</tr>
+<tr>
+<td>end()</td>
+<td>返回末尾的迭代器</td>
+</tr>
+<tr>
+<td>erase()</td>
+<td>删除以pos指示位置的元素, 或者删除<em>start</em>和<em>end</em>之间的元素。 返回值是一个迭代器，指向最后一个被删除元素的下一个元素。</td>
+</tr>
+<tr>
+<td>front()</td>
+<td>返回一个引用，指向第一个元素</td>
+</tr>
+<tr>
+<td><strong>insert()</strong></td>
+<td>插入元素val到位置pos，返回值是一个迭代器，指向被插入的元素。 或者插入num个元素val到pos之前。或者插入start到end之间的元素到pos的位置。</td>
+</tr>
+<tr>
+<td>merge()</td>
+<td>合并两个list（合并到this上，必须先经过<strong>递增排序</strong>）</td>
+</tr>
+<tr>
+<td>pop_back()</td>
+<td>删除最后一个元素</td>
+</tr>
+<tr>
+<td>pop_front()</td>
+<td>删除第一个元素</td>
+</tr>
+<tr>
+<td>push_back()</td>
+<td>在list的末尾添加一个元素</td>
+</tr>
+<tr>
+<td>push_front()</td>
+<td>在list的头部添加一个元素</td>
+</tr>
+<tr>
+<td>remove()</td>
+<td>从list删除所有值为val的元素</td>
+</tr>
+<tr>
+<td>remove_if()</td>
+<td>按指定条件删除元素</td>
+</tr>
+<tr>
+<td>resize()</td>
+<td>改变list的大小</td>
+</tr>
+<tr>
+<td>reverse()</td>
+<td>把list的元素倒转</td>
+</tr>
+<tr>
+<td>size()</td>
+<td>返回list中的元素个数</td>
+</tr>
+<tr>
+<td><strong>sort()</strong></td>
+<td>给list排序</td>
+</tr>
+<tr>
+<td>splice()</td>
+<td>合并两个list</td>
+</tr>
+<tr>
+<td>swap()</td>
+<td>交换两个list</td>
+</tr>
+<tr>
+<td>unique()</td>
+<td>删除list中<strong>数值相同的连续</strong>元素（保留连续的值相同的第一个元素）</td>
+</tr>
+</tbody></table>
+<h1 id="注意"><a href="#注意" class="headerlink" title="注意"></a>注意</h1><p><code>list</code> 不能使用 STL 算法 <code>sort()</code> ，必须使用自己的 <code>sort()</code> 。</p>
+<p>因为STL算法sort()只能接受 <code>RamdonAccessIterator</code> 。</p>
+]]></content>
+      <categories>
+        <category>笔记</category>
+        <category>STL</category>
+      </categories>
+      <tags>
+        <tag>C++</tag>
+        <tag>STL</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>STL源码剖析-容器-vector</title>
+    <url>/STL/STL%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90-%E5%AE%B9%E5%99%A8-vector/</url>
+    <content><![CDATA[<p>vector 常被称为向量容器，因为该容器擅长在<strong>尾部</strong>插入或删除元素，在常量时间内就可以完成，时间复杂度为<code>O(1)</code>；而对于在容器<strong>头部或者中部</strong>插入或删除元素，则花费时间要长一些（移动元素需要耗费时间），时间复杂度为线性阶<code>O(n)</code>。</p>
+<p>vector实现的关键在于其对<strong>大小的控制</strong>以及<strong>重新配置时的数据移动效率</strong>。</p>
+<h2 id="vector"><a href="#vector" class="headerlink" title="vector"></a>vector</h2><ul>
+<li>vector 与 array 唯一区别是空间的运用的灵活性。<ul>
+<li>array 是<strong>静态空间</strong>，一旦配置了就不能改变。</li>
+<li>vector是<strong>动态空间</strong>。</li>
+</ul>
+</li>
+<li>vector 维护的是一个<strong>连续线性空间</strong>，所以不论其元素类型为何，普通指针都可以作为 vector 的迭代器而满足所有必要条件。</li>
+<li>增加新元素时，如果超过当时的容量，则容量会扩大至<strong>两倍</strong>。</li>
+</ul>
+<img src="https://i.loli.net/2020/08/07/5KPtrc42gBWpMnz.png" alt="vector-两倍增长示意图.png" style="zoom:67%;" />
+
+<ul>
+<li><p>所谓动态增加大小，并不是在原空间之后接续新空间(因为无法保证原空间之后尚有可供配置的空间)，而是以原空间的两倍大小另外配置一块较大空间，然后将原内容拷贝过来并插入新元素，释放原空间，最后更新迭代器！！！</p>
+</li>
+<li><p>一旦引起空间重新配置，指向原 vector 的所有迭代器就都失效了。</p>
+</li>
+<li><p><code>at()</code> 函数 比 <code>[]</code> 运算符更加安全, 因为它不会让你去访问到Vector内越界的元素。</p>
+<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">ifdef</span> __STL_THROW_RANGE_ERRORS</span></span><br><span class="line">  <span class="keyword">void</span> _M_range_check(size_type __n) <span class="keyword">const</span> &#123;</span><br><span class="line">    <span class="keyword">if</span> (__n &gt;= <span class="keyword">this</span>-&gt;<span class="built_in">size</span>())</span><br><span class="line">      __stl_throw_range_error(<span class="string">&quot;vector&quot;</span>);</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="function">reference <span class="title">at</span><span class="params">(size_type __n)</span></span></span><br><span class="line"><span class="function">    </span>&#123; _M_range_check(__n); <span class="keyword">return</span> (*<span class="keyword">this</span>)[__n]; &#125;</span><br><span class="line">  <span class="function">const_reference <span class="title">at</span><span class="params">(size_type __n)</span> <span class="keyword">const</span></span></span><br><span class="line"><span class="function">    </span>&#123; _M_range_check(__n); <span class="keyword">return</span> (*<span class="keyword">this</span>)[__n]; &#125;</span><br><span class="line"><span class="meta">#<span class="meta-keyword">endif</span> <span class="comment">/* __STL_THROW_RANGE_ERRORS */</span></span></span><br></pre></td></tr></table></figure>
+
+</li>
+</ul>
+<h2 id="vector动态增加容量原理-M-insert-aux"><a href="#vector动态增加容量原理-M-insert-aux" class="headerlink" title="vector动态增加容量原理_M_insert_aux"></a>vector动态增加容量原理_M_insert_aux</h2><p><strong>过程分析：</strong></p>
+<blockquote>
+<ol>
+<li><p>配置一块更大空间（2倍，初始为0则配置新的空间大小为1）</p>
+</li>
+<li><p>拷贝原数据并插入新元素</p>
+<p>1）拷贝插入位置前的数据</p>
+<p>2）在插入位置插入新元素</p>
+<p>3）拷贝插入位置后的数据</p>
+</li>
+<li><p>释放原空间</p>
+</li>
+<li><p>更新迭代器！！！</p>
+</li>
+</ol>
+</blockquote>
+<p>源码参考：</p>
+<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="keyword">template</span> &lt;<span class="class"><span class="keyword">class</span> _<span class="title">Tp</span>, <span class="title">class</span> _<span class="title">Alloc</span>&gt;</span></span><br><span class="line"><span class="class"><span class="title">void</span> </span></span><br><span class="line"><span class="class"><span class="title">vector</span>&lt;_Tp, _Alloc&gt;:</span>:_M_insert_aux(iterator __position, <span class="keyword">const</span> _Tp&amp; __x)</span><br><span class="line">&#123; <span class="comment">/* 判断是否有备用空间 */</span></span><br><span class="line">  <span class="keyword">if</span> (_M_finish != _M_end_of_storage) &#123;</span><br><span class="line">    construct(_M_finish, *(_M_finish - <span class="number">1</span>));</span><br><span class="line">    ++_M_finish;</span><br><span class="line">    _Tp __x_copy = __x;</span><br><span class="line">    copy_backward(__position, _M_finish - <span class="number">2</span>, _M_finish - <span class="number">1</span>);</span><br><span class="line">    *__position = __x_copy;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">else</span> &#123;</span><br><span class="line">    <span class="keyword">const</span> size_type __old_size = <span class="built_in">size</span>();</span><br><span class="line">    <span class="comment">/* 扩容两倍。 注意：初始时为0，扩容后为1 */</span></span><br><span class="line">    <span class="keyword">const</span> size_type __len = __old_size != <span class="number">0</span> ? <span class="number">2</span> * __old_size : <span class="number">1</span>;</span><br><span class="line">    iterator __new_start = _M_allocate(__len); <span class="comment">/*分配新的连续空间*/</span></span><br><span class="line">    iterator __new_finish = __new_start;</span><br><span class="line">    __STL_TRY &#123;</span><br><span class="line">      <span class="comment">/* 拷贝插入位置前的数据到新空间 [old_start, position) --&gt; [new_start, position) */</span></span><br><span class="line">      __new_finish = uninitialized_copy(_M_start, __position, __new_start);</span><br><span class="line">      <span class="comment">/* 插入新元素 position */</span></span><br><span class="line">      construct(__new_finish, __x);</span><br><span class="line">      ++__new_finish;</span><br><span class="line">      <span class="comment">/* 拷贝插入位置后的数据到新空间 [position, finish) -- [position+1, new_finish) */</span></span><br><span class="line">      __new_finish = uninitialized_copy(__position, _M_finish, __new_finish);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">/* 释放原空间 */</span></span><br><span class="line">    __STL_UNWIND((destroy(__new_start,__new_finish), </span><br><span class="line">                  _M_deallocate(__new_start,__len)));</span><br><span class="line">    destroy(<span class="built_in">begin</span>(), <span class="built_in">end</span>());</span><br><span class="line">    _M_deallocate(_M_start, _M_end_of_storage - _M_start);</span><br><span class="line">    <span class="comment">/* 更新迭代器 */</span></span><br><span class="line">    _M_start = __new_start;</span><br><span class="line">    _M_finish = __new_finish;</span><br><span class="line">    _M_end_of_storage = __new_start + __len;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="vector基本操作"><a href="#vector基本操作" class="headerlink" title="vector基本操作"></a>vector基本操作</h2><p><code>push_back()</code>：插入操作(末尾)</p>
+<p><code>pop_back()</code>：删除操作(末尾)</p>
+<p><code>erase()</code>：清除某范围 <code>[first, last)</code> 元素，或删除某个位置上的元素</p>
+<p><code>insert()</code>：从某个位置，插入 n 个元素，元素初值为x</p>
+<p><code>clear()</code>：清除所有元素</p>
+<p><code>begin()</code>：返回第一个元素的迭代器</p>
+<p><code>end()</code>：返回最末元素的迭代器(译注:实指向最末元素的下一个位置)</p>
+<p>注意：</p>
+<p><code>reserve(size_type __n)</code>：配置vector容量为<code>__n</code>，如果 vector 的容量已经大于或等于<code>__n</code>个元素，那么什么也不做；调用 reserve() 不会影响已存储的元素，也不会生成任何元素。</p>
+<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="built_in">vector</span>&lt;_Tp, _Alloc&gt;&amp; <span class="keyword">operator</span>=(<span class="keyword">const</span> <span class="built_in">vector</span>&lt;_Tp, _Alloc&gt;&amp; __x);</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">reserve</span><span class="params">(size_type __n)</span> </span>&#123;</span><br><span class="line">  <span class="keyword">if</span> (capacity() &lt; __n) &#123;</span><br><span class="line">    <span class="keyword">const</span> size_type __old_size = <span class="built_in">size</span>();</span><br><span class="line">    iterator __tmp = _M_allocate_and_copy(__n, _M_start, _M_finish);</span><br><span class="line">    destroy(_M_start, _M_finish);</span><br><span class="line">    _M_deallocate(_M_start, _M_end_of_storage - _M_start);</span><br><span class="line">    _M_start = __tmp;</span><br><span class="line">    _M_finish = __tmp + __old_size;</span><br><span class="line">    _M_end_of_storage = _M_start + __n;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+]]></content>
+      <categories>
+        <category>笔记</category>
+        <category>STL</category>
+      </categories>
+      <tags>
+        <tag>C++</tag>
+        <tag>STL</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>STL源码剖析概述</title>
+    <url>/STL/STL%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90%E6%A6%82%E8%BF%B0/</url>
+    <content><![CDATA[<blockquote>
+<p><strong>源代码：SGI-STL V3.3</strong></p>
+</blockquote>
+<p><em>注：SGI STL并不是原封不动的被用于GCC，所以在GCC中使用STL可能会和SGI STL有一些微小的区别</em></p>
+<h2 id="STL六大组件"><a href="#STL六大组件" class="headerlink" title="STL六大组件"></a>STL六大组件</h2><ul>
+<li>容器 – <strong>containers</strong></li>
+<li>配置器 – <strong>allocators</strong></li>
+<li>算法 – <strong>algorithms</strong></li>
+<li>迭代器 – <strong>iterators</strong></li>
+<li>适配器 – <strong>adaptors</strong></li>
+<li>仿函数 – <strong>functors</strong></li>
+</ul>
+<h3 id="STL六大组件关系"><a href="#STL六大组件关系" class="headerlink" title="STL六大组件关系"></a>STL六大组件关系</h3><img src="https://i.loli.net/2020/08/04/8O6uUKpjax4o7RP.png" alt="STL六大组件.png" style="zoom: 67%;" />
+
+<h3 id="STL部分组件包含关系"><a href="#STL部分组件包含关系" class="headerlink" title="STL部分组件包含关系"></a>STL部分组件包含关系</h3><img src="https://i.loli.net/2020/08/04/aMjYyL1ktgQx8JN.jpg" alt="STL部分组件包含关系.jpg" style="zoom: 67%;" />
+
+<h2 id="容器"><a href="#容器" class="headerlink" title="容器"></a>容器</h2><img src="https://i.loli.net/2020/08/04/l5AoyGxt6RpfSJ9.png" alt="STL容器结构与分类图.png" style="zoom:67%;" />
+
+<h2 id="GCC-编译器版本"><a href="#GCC-编译器版本" class="headerlink" title="GCC 编译器版本"></a>GCC 编译器版本</h2><p>Ubuntu 16.04下gcc version <kbd>5.4.0</kbd>，源码在目录<kbd>/usr/include/c++/5.4.0/bits</kbd>下 stl_xxxx</p>
+<h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><ul>
+<li>《STL 源码剖析》 侯捷</li>
+</ul>
+]]></content>
+      <categories>
+        <category>笔记</category>
+        <category>STL</category>
+      </categories>
+      <tags>
+        <tag>C++</tag>
+        <tag>STL</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Hexo-Theme-Butterfly(一) 快速开始</title>
+    <url>/hexo/Hexo-Theme-Butterfly(%E4%B8%80)-%E5%BF%AB%E9%80%9F%E5%BC%80%E5%A7%8B/</url>
+    <content><![CDATA[<blockquote>
+<p>感谢原作者 <a href="https://jerryc.me/">JerryC</a> 。</p>
+<p>由于主题更新，此文件中部分配置可能失效。请参考作者博客或文档：<a href="https://demo.jerryc.me/posts/21cfbf15/">Butterfly 安裝文檔(一) 快速開始</a> 。</p>
+</blockquote>
+<h1 id="安装主题"><a href="#安装主题" class="headerlink" title="安装主题"></a>安装主题</h1><p>在hexo博客根目录克隆Butterfly主题到 <code>themes</code> 文件夹下：</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">git clone -b master https://github.com/jerryc127/hexo-theme-butterfly.git themes/butterfly</span><br></pre></td></tr></table></figure>
+
+<h1 id="应用主题"><a href="#应用主题" class="headerlink" title="应用主题"></a>应用主题</h1><p>修改博客更目录配置文件 <code>_config.yml</code> ，将主题改为 <code>butterfly</code> 。</p>
+<figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="comment"># Extensions</span></span><br><span class="line"><span class="comment">## Plugins: https://hexo.io/plugins/</span></span><br><span class="line"><span class="comment">## Themes: https://hexo.io/themes/</span></span><br><span class="line"><span class="attr">theme:</span> <span class="string">butterfly</span></span><br></pre></td></tr></table></figure>
+
+<h1 id="安装插件"><a href="#安装插件" class="headerlink" title="安装插件"></a>安装插件</h1><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">#pug 以及 stylus 的渲染器</span><br><span class="line">npm install hexo-renderer-pug hexo-renderer-stylus --save</span><br><span class="line">npm install cheerio@0.22.0 --save</span><br></pre></td></tr></table></figure>
+
+<h1 id="升级建议"><a href="#升级建议" class="headerlink" title="升级建议"></a>升级建议</h1><p>为了减少升级主题后带来的不便，<code>Butterfly</code> 使用了 <a href="https://hexo.io/docs/data-files.html">data files</a> 特性。推荐把主题默认的配置文件 <code>_config.yml</code> 复製到 Hexo 根目录下的 <code>source/_data/</code> 目录下，然后将文件名改为 <code>butterfly.yml</code>（如果 <code>source/_data/</code> 的目录不存在就创建一个）。</p>
+<blockquote>
+<p>升级：在主题目录下 <code>git pull</code></p>
+</blockquote>
+<p><strong><em>注意</em></strong>：<em>由于主题在添加功能或者修復 Bugs 的情况下，可能会涉及到配置文件的修改。这时候，如果升级主题，需要把新增加的配置添加到 <code>butterfly.yml</code> 去，不然很大机会会出现报错。</em></p>
+]]></content>
+      <categories>
+        <category>教程</category>
+      </categories>
+      <tags>
+        <tag>Butterfly</tag>
+        <tag>Hexo</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>Hexo-Theme-Butterfly(三) 主题配置</title>
-    <url>/Hexo-Theme-Butterfly(%E4%B8%89)-%E4%B8%BB%E9%A2%98%E9%85%8D%E7%BD%AE/</url>
+    <url>/hexo/Hexo-Theme-Butterfly(%E4%B8%89)-%E4%B8%BB%E9%A2%98%E9%85%8D%E7%BD%AE/</url>
     <content><![CDATA[<blockquote>
 <p>感谢原作者 <a href="https://jerryc.me/">JerryC</a> </p>
 <p>由于主题更新，此文件中部分配置可能失效。请参考作者博客或文档：<a href="https://demo.jerryc.me/posts/4aa8abbe/">Butterfly 安裝文档(三) 主题配置-1</a>  <a href="https://demo.jerryc.me/posts/ceeb73f/">Butterfly 安装文档(四) 主题配置-2</a></p>
@@ -165,208 +644,8 @@
       </tags>
   </entry>
   <entry>
-    <title>Hexo-Theme-Butterfly(一) 快速开始</title>
-    <url>/Hexo-Theme-Butterfly(%E4%B8%80)-%E5%BF%AB%E9%80%9F%E5%BC%80%E5%A7%8B/</url>
-    <content><![CDATA[<blockquote>
-<p>感谢原作者 <a href="https://jerryc.me/">JerryC</a> 。</p>
-<p>由于主题更新，此文件中部分配置可能失效。请参考作者博客或文档：<a href="https://demo.jerryc.me/posts/21cfbf15/">Butterfly 安裝文檔(一) 快速開始</a> 。</p>
-</blockquote>
-<h1 id="安装主题"><a href="#安装主题" class="headerlink" title="安装主题"></a>安装主题</h1><p>在hexo博客根目录克隆Butterfly主题到 <code>themes</code> 文件夹下：</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">git clone -b master https://github.com/jerryc127/hexo-theme-butterfly.git themes/butterfly</span><br></pre></td></tr></table></figure>
-
-<h1 id="应用主题"><a href="#应用主题" class="headerlink" title="应用主题"></a>应用主题</h1><p>修改博客更目录配置文件 <code>_config.yml</code> ，将主题改为 <code>butterfly</code> 。</p>
-<figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="comment"># Extensions</span></span><br><span class="line"><span class="comment">## Plugins: https://hexo.io/plugins/</span></span><br><span class="line"><span class="comment">## Themes: https://hexo.io/themes/</span></span><br><span class="line"><span class="attr">theme:</span> <span class="string">butterfly</span></span><br></pre></td></tr></table></figure>
-
-<h1 id="安装插件"><a href="#安装插件" class="headerlink" title="安装插件"></a>安装插件</h1><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">#pug 以及 stylus 的渲染器</span><br><span class="line">npm install hexo-renderer-pug hexo-renderer-stylus --save</span><br><span class="line">npm install cheerio@0.22.0 --save</span><br></pre></td></tr></table></figure>
-
-<h1 id="升级建议"><a href="#升级建议" class="headerlink" title="升级建议"></a>升级建议</h1><p>为了减少升级主题后带来的不便，<code>Butterfly</code> 使用了 <a href="https://hexo.io/docs/data-files.html">data files</a> 特性。推荐把主题默认的配置文件 <code>_config.yml</code> 复製到 Hexo 根目录下的 <code>source/_data/</code> 目录下，然后将文件名改为 <code>butterfly.yml</code>（如果 <code>source/_data/</code> 的目录不存在就创建一个）。</p>
-<blockquote>
-<p>升级：在主题目录下 <code>git pull</code></p>
-</blockquote>
-<p><strong><em>注意</em></strong>：<em>由于主题在添加功能或者修復 Bugs 的情况下，可能会涉及到配置文件的修改。这时候，如果升级主题，需要把新增加的配置添加到 <code>butterfly.yml</code> 去，不然很大机会会出现报错。</em></p>
-]]></content>
-      <categories>
-        <category>教程</category>
-      </categories>
-      <tags>
-        <tag>Butterfly</tag>
-        <tag>Hexo</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Linux进程地址空间（程序内存布局）</title>
-    <url>/Linux%E8%BF%9B%E7%A8%8B%E5%9C%B0%E5%9D%80%E7%A9%BA%E9%97%B4%EF%BC%88%E7%A8%8B%E5%BA%8F%E5%86%85%E5%AD%98%E5%B8%83%E5%B1%80%EF%BC%89/</url>
-    <content><![CDATA[<h1 id="进程地址空间分布图"><a href="#进程地址空间分布图" class="headerlink" title="进程地址空间分布图"></a>进程地址空间分布图</h1><img src="https://i.loli.net/2020/08/05/jxbWsi5ae4q1GfR.png" alt="Linux程序内存布局图.png" style="zoom:67%;" />
-
-<p>由低地址到高地址，依次是：</p>
-<ul>
-<li><p><strong>程序段（text）</strong>：程序代码在内存中的映射，存放函数体的二进制代码，常常是只读的</p>
-</li>
-<li><p><strong>初始化过的数据（data）</strong>：在程序运行初已经对变量进行初始化的数据</p>
-<ul>
-<li><p>只读数据段（RO data，即常量区）：</p>
-<blockquote>
-<p> 这个区域的存在与否，一直是一个争议的地方，但是我们这里认同是存在的，因为我们的程序中的确出现了与其他数据段不同的一块区域，但是往往很多时候大家把只读数据段（RO data）和下面的已初始化读写数据段（RW data）合成为数据段data，但是其实这个是不合适的，因为在执行过程中，这两个区域的读写权限是不同的，顾名思义，只读数据段（RO data）是只读的，而已初始化读写数据段是可读可写的。</p>
-</blockquote>
-</li>
-<li><p>读写数据段（RW data）：需要占用存储器的空间，在程序执行时它们需要位于可读写的内存区域内，并具有初值，以供程序运行时读写</p>
-</li>
-</ul>
-</li>
-<li><p><strong>未初始化过的数据（bss）</strong>：未初始化数据是在程序中声明，但是没有初始化的变量，这些变量在程序运行之前不需要占用存储器的空间。Block Started by Symbol，BSS段的变量只有名称和大小却没有值</p>
-</li>
-<li><p>堆 （heap）<strong>：存储动态内存分配,需要程序员手工分配,手工释放。注意它与数据结构中的堆是两回事，分配方式类似于链表</strong></p>
-</li>
-<li><p><strong>栈（stack）</strong>：存储局部、临时变量，函数调用时，存储函数的返回指针，用于控制函数的调用和返回。在程序块开始时自动分配内存，结束时自动释放内存，其操作方式类似于数据结构中的栈</p>
-</li>
-<li><p><strong>内核空间（kernel）</strong></p>
-</li>
-</ul>
-<h1 id="内核空间"><a href="#内核空间" class="headerlink" title="内核空间"></a>内核空间</h1><p> Linux的<font color=red><strong>虚拟地址空间</strong></font>范围为0～4G，Linux内核将这4G字节的空间分为两部分：</p>
-<p><strong>内核空间</strong>：将高地址的<strong>1G</strong>字节供内核使用，称为“内核空间“</p>
-<p><strong>用户空间</strong>：低地址的<strong>3G</strong>字节（供各个进程使用，称为“用户空间“</p>
-<p>因为每个进程可以通过系统调用进入内核，因此，<font color=red><strong>Linux内核由系统内的所有进程共享</strong></font>。</p>
-<p>Linux使用两级保护机制：</p>
-<ul>
-<li>0级供内核使用</li>
-<li>3级供用户程序使用</li>
-</ul>
-<h1 id="虚拟地址！！！"><a href="#虚拟地址！！！" class="headerlink" title="虚拟地址！！！"></a>虚拟地址！！！</h1><p>进程空间是<strong>虚拟地址</strong>，不管是内核空间还是用户空间，它们都处于虚拟空间中。</p>
-<p>使用虚拟地址可以很好的保护内核空间被用户空间破坏，虚拟地址到物理地址转换过程由操作系统和CPU共同完成(操作系统为CPU设置好页表，CPU通过MMU单元进行地址转换)。</p>
-<h1 id="段区对应数据"><a href="#段区对应数据" class="headerlink" title="段区对应数据"></a>段区对应数据</h1><table>
-<thead>
-<tr>
-<th>进程空间段区域</th>
-<th>地址空间</th>
-<th>存储变量</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>stack</td>
-<td>栈</td>
-<td>局部变量和常量</td>
-</tr>
-<tr>
-<td>heap</td>
-<td>堆</td>
-<td>动态分配的数据</td>
-</tr>
-<tr>
-<td>BSS</td>
-<td>未初始化数据段</td>
-<td>未初始化的全局变量以及静态变量</td>
-</tr>
-<tr>
-<td>RW data</td>
-<td>已初始化读写数据段</td>
-<td>已初始化的全局变量和静态变量</td>
-</tr>
-<tr>
-<td>RO data</td>
-<td>只读文本段中的数据段</td>
-<td>全局常量或者字符串面变量</td>
-</tr>
-<tr>
-<td>text</td>
-<td>只读文本段中的程序代码段</td>
-<td>程序的代码</td>
-</tr>
-</tbody></table>
-<h1 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h1><ul>
-<li><p>《UNIX环境高级编程》</p>
-</li>
-<li><p><a href="https://blog.csdn.net/zhangzhebjut/article/details/39060253">Linux - 进程(一) 进程空间</a></p>
-</li>
-<li><p><a href="https://blog.csdn.net/gatieme/article/details/43567433">C程序的内存布局(Memory Layout)</a></p>
-</li>
-</ul>
-]]></content>
-      <categories>
-        <category>笔记</category>
-        <category>apue</category>
-      </categories>
-      <tags>
-        <tag>linux</tag>
-        <tag>apue</tag>
-        <tag>进程</tag>
-        <tag>操作系统</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Linux下Hexo+GitHub搭建个人博客</title>
-    <url>/Linux%E4%B8%8Bgithub+hexo%E6%90%AD%E5%BB%BA%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2/</url>
-    <content><![CDATA[<h2 id="配置信息"><a href="#配置信息" class="headerlink" title="配置信息"></a>配置信息</h2><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">[root@iZwz9c74ta983j746ynevpZ ~]# uname -a</span><br><span class="line">Linux iZwz9c74ta983j746ynevpZ 3.10.0-1127.10.1.el7.x86_64 #1 SMP Wed Jun 3 14:28:03 UTC 2020 x86_64 x86_64 x86_64 GNU/Linux</span><br></pre></td></tr></table></figure>
-
-<h2 id="更新源（可略过）"><a href="#更新源（可略过）" class="headerlink" title="更新源（可略过）"></a>更新源（可略过）</h2><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"><span class="comment"># 备份原 源文件</span></span></span><br><span class="line">[root@iZwz9c74ta983j746ynevpZ ~]# mv /etc/yum.repos.d /etc/yum.repos.d.bak</span><br><span class="line">[root@iZwz9c74ta983j746ynevpZr ~]# mkdir /etc/yum.repos.d</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"><span class="comment"># 阿里云</span></span></span><br><span class="line">[root@iZwz9c74ta983j746ynevpZ ~]# wget -O /etc/yum.repos.d/CentOS-Base.repo https://mirrors.aliyun.com/repo/Centos-7.repo --no-check-certificate</span><br><span class="line"></span><br><span class="line">[root@iZwz9c74ta983j746ynevpZ ~]# yum clean all</span><br><span class="line"></span><br><span class="line">[root@iZwz9c74ta983j746ynevpZ ~]# yum makecache</span><br><span class="line"></span><br><span class="line">[root@iZwz9c74ta983j746ynevpZ ~]# yum update -y</span><br></pre></td></tr></table></figure>
-
-<h2 id="Hexo搭建"><a href="#Hexo搭建" class="headerlink" title="Hexo搭建"></a>Hexo搭建</h2><h3 id="安装git"><a href="#安装git" class="headerlink" title="安装git"></a>安装git</h3><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">[root@iZwz9c74ta983j746ynevpZ ~]# yum install -y git</span><br></pre></td></tr></table></figure>
-
-<h3 id="node-js安装"><a href="#node-js安装" class="headerlink" title="node.js安装"></a>node.js安装</h3><h4 id="node-js安装包下载"><a href="#node-js安装包下载" class="headerlink" title="node.js安装包下载"></a>node.js安装包下载</h4><p><strong>网址：</strong> <a href="http://nodejs.cn/download/">http://nodejs.cn/download/</a></p>
-<p><strong>阿里云镜像：</strong> <a href="https://npm.taobao.org/mirrors/node">https://npm.taobao.org/mirrors/node</a></p>
-<p>下载对应二进制安装包：</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">[root@iZwz9c74ta983j746ynevpZ ~]# wget https://npm.taobao.org/mirrors/node/v14.6.0/node-v14.6.0-linux-x64.tar.gz --no-check-certificate</span><br></pre></td></tr></table></figure>
-
-<h4 id="node-js安装部署"><a href="#node-js安装部署" class="headerlink" title="node.js安装部署"></a>node.js安装部署</h4><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">[root@iZwz9c74ta983j746ynevpZ ~]# tar -zxf node-v14.6.0-linux-x64.tar.gz </span><br><span class="line">[root@iZwz9c74ta983j746ynevpZ ~]# mv node-v14.6.0-linux-x64 /opt/nodejs</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"> 创建软连接</span></span><br><span class="line">[root@iZwz9c74ta983j746ynevpZ ~]# ln -s /opt/nodejs/bin/node /usr/local/bin/node </span><br><span class="line">[root@iZwz9c74ta983j746ynevpZ ~]# ln -s /opt/nodejs/bin/npm /usr/local/bin/npm </span><br></pre></td></tr></table></figure>
-
-<h3 id="Hexo安装部署"><a href="#Hexo安装部署" class="headerlink" title="Hexo安装部署"></a>Hexo安装部署</h3><h4 id="Hexo安装"><a href="#Hexo安装" class="headerlink" title="Hexo安装"></a>Hexo安装</h4><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">[root@iZwz9c74ta983j746ynevpZ ~]# npm install hexo-cli -g</span><br><span class="line">/opt/nodejs/bin/hexo -&gt; /opt/nodejs/lib/node_modules/hexo-cli/bin/hexo</span><br><span class="line">npm WARN optional SKIPPING OPTIONAL DEPENDENCY: fsevents@~2.1.2 (node_modules/hexo-cli/node_modules/chokidar/node_modules/fsevents):</span><br><span class="line">npm WARN notsup SKIPPING OPTIONAL DEPENDENCY: Unsupported platform for fsevents@2.1.3: wanted &#123;&quot;os&quot;:&quot;darwin&quot;,&quot;arch&quot;:&quot;any&quot;&#125; (current: &#123;&quot;os&quot;:&quot;linux&quot;,&quot;arch&quot;:&quot;x64&quot;&#125;)</span><br><span class="line"></span><br><span class="line">+ hexo-cli@4.0.0</span><br><span class="line">added 61 packages from 315 contributors in 46.255s</span><br></pre></td></tr></table></figure>
-
-<p>若安装hexo报错如下：</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">[root@iZwz9c74ta983j746ynevpZ ~]# npm install hexo-cli -g</span><br><span class="line">npm ERR! code CERT_NOT_YET_VALID</span><br><span class="line">npm ERR! errno CERT_NOT_YET_VALID</span><br><span class="line">npm ERR! request to https://registry.npmjs.org/hexo-cli failed, reason: certificate is not yet valid</span><br><span class="line"></span><br><span class="line">npm ERR! A complete log of this run can be found in:</span><br><span class="line">npm ERR!     /root/.npm/_logs/2010-03-31T20_55_08_156Z-debug.log</span><br><span class="line">[root@iZwz9c74ta983j746ynevpZ ~]# npm install hexo-cli -g --no-check-certificate</span><br><span class="line">npm ERR! code CERT_NOT_YET_VALID</span><br><span class="line">npm ERR! errno CERT_NOT_YET_VALID</span><br><span class="line">npm ERR! request to https://registry.npmjs.org/hexo-cli failed, reason: certificate is not yet valid</span><br><span class="line"></span><br><span class="line">npm ERR! A complete log of this run can be found in:</span><br><span class="line">npm ERR!     /root/.npm/_logs/2010-03-31T20_55_35_518Z-debug.log</span><br></pre></td></tr></table></figure>
-
-<p>原因是https的自签名失败，临时解决办法：关闭ssl</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">[root@iZwz9c74ta983j746ynevpZ ~]# npm config set strict-ssl false</span><br></pre></td></tr></table></figure>
-
-<h4 id="Hexo部署"><a href="#Hexo部署" class="headerlink" title="Hexo部署"></a>Hexo部署</h4><p>将 hexo 命令添加到全局，采用软连接方式。</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">[root@iZwz9c74ta983j746ynevpZ ~]# ln -s /opt/nodejs/lib/node_modules/hexo-cli/bin/hexo /usr/local/bin/hexo</span><br></pre></td></tr></table></figure>
-
-<h2 id="Hexo博客环境部署"><a href="#Hexo博客环境部署" class="headerlink" title="Hexo博客环境部署"></a>Hexo博客环境部署</h2><h3 id="初始化Hexo博客根目录"><a href="#初始化Hexo博客根目录" class="headerlink" title="初始化Hexo博客根目录"></a>初始化Hexo博客根目录</h3><p><strong><em>强烈建议先换npm源！！！见：<a href="#%E6%9B%B4%E6%8D%A2npm%E6%BA%90">更换npm源</a></em></strong></p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">[root@iZwz9c74ta983j746ynevpZ ~]# mkdir /var/hexoblog</span><br><span class="line">[root@iZwz9c74ta983j746ynevpZ ~]# hexo init /var/hexoblog/</span><br><span class="line">INFO  Cloning hexo-starter https://github.com/hexojs/hexo-starter.git</span><br><span class="line">Submodule &#x27;themes/landscape&#x27; (https://github.com/hexojs/hexo-theme-landscape.git) registered for path &#x27;themes/landscape&#x27;</span><br><span class="line">Cloning into &#x27;themes/landscape&#x27;...</span><br><span class="line">remote: Enumerating objects: 8, done.</span><br><span class="line">remote: Counting objects: 100% (8/8), done.</span><br><span class="line">remote: Compressing objects: 100% (6/6), done.</span><br><span class="line">remote: Total 1071 (delta 1), reused 5 (delta 1), pack-reused 1063</span><br><span class="line">Receiving objects: 100% (1071/1071), 3.22 MiB | 12.00 KiB/s, done.</span><br><span class="line">Resolving deltas: 100% (586/586), done.</span><br><span class="line">Submodule path &#x27;themes/landscape&#x27;: checked out &#x27;73a23c51f8487cfcd7c6deec96ccc7543960d350&#x27;</span><br><span class="line">INFO  Install dependencies</span><br><span class="line">[ .................] - fetchMetadata: sill pacote range manifest for kind-of@^3.0.2 fetched in 386ms</span><br><span class="line">[ .................] - fetchMetadata: sill pacote range manifest for kind-of@^3.0.2 fetched in 386ms</span><br><span class="line">[ .................] - fetchMetadata: sill pacote range manifest for kind-of@^3.0.2 fetched in 386ms</span><br><span class="line">[ .................] - fetchMetadata: sill pacote range manifest for kind-of@^3.0.2 fetched in 386ms</span><br><span class="line">[ .................] - fetchMetadata: sill pacote range manifest for kind-of@^3.0.2 fetched in 386ms</span><br><span class="line">[ .................] - fetchMetadata: sill pacote range manifest for kind-of@^3.0.2 fetched in 386ms</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
-<p>卡住在这……，猜测是npm源问题，更换国内源</p>
-<h4 id="更换npm源"><a href="#更换npm源" class="headerlink" title="更换npm源"></a>更换npm源</h4><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"><span class="comment"># 查看 默认源</span></span></span><br><span class="line">[root@iZwz9c74ta983j746ynevpZ hexoblog]# npm config get registry</span><br><span class="line">https://registry.npmjs.org/</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"><span class="comment"># 更换阿里源</span></span></span><br><span class="line">[root@iZwz9c74ta983j746ynevpZ hexoblog]# npm config set registry https://registry.npm.taobao.org</span><br><span class="line">[root@iZwz9c74ta983j746ynevpZ hexoblog]# npm config get registry</span><br><span class="line">https://registry.npm.taobao.org/</span><br></pre></td></tr></table></figure>
-
-<p>若init失败，<strong>须清空文件夹下内容，ls -a 查看还有一个影藏文件</strong>，再次初始化。</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">[root@iZwz9c74ta983j746ynevpZ hexoblog]# rm ./* -rf</span><br><span class="line">[root@iZwz9c74ta983j746ynevpZ hexoblog]# ls -a</span><br><span class="line">.  ..  .gitignore</span><br><span class="line">[root@iZwz9c74ta983j746ynevpZ hexoblog]# rm .gitignore -f</span><br></pre></td></tr></table></figure>
-
-<h3 id="启动环境"><a href="#启动环境" class="headerlink" title="启动环境"></a>启动环境</h3><p>生成静态文件</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">[root@iZwz9c74ta983j746ynevpZ hexoblog]# hexo g</span><br><span class="line">[root@iZwz9c74ta983j746ynevpZ hexoblog]# ls -l </span><br><span class="line">total 132</span><br><span class="line">-rw-r--r--   1 root root  2367 Jul 28 15:54 _config.yml</span><br><span class="line">-rw-r--r--   1 root root 25111 Jul 28 15:59 db.json</span><br><span class="line">drwxr-xr-x 189 root root  4096 Jul 28 15:54 node_modules</span><br><span class="line">-rw-r--r--   1 root root   581 Jul 28 15:59 package.json</span><br><span class="line">-rw-r--r--   1 root root 74694 Jul 28 15:54 package-lock.json</span><br><span class="line">drwxr-xr-x   7 root root  4096 Jul 28 15:59 public        ## 存放生成的静态文件</span><br><span class="line">drwxr-xr-x   2 root root  4096 Jul 28 15:54 scaffolds</span><br><span class="line">drwxr-xr-x   3 root root  4096 Jul 28 15:54 source</span><br><span class="line">drwxr-xr-x   3 root root  4096 Jul 28 15:54 themes</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
-<p>启动服务</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">[root@iZwz9c74ta983j746ynevpZ hexoblog]# hexo s</span><br><span class="line">INFO  Start processing</span><br><span class="line">INFO  Hexo is running at http://localhost:4000 . Press Ctrl+C to stop.</span><br></pre></td></tr></table></figure>
-
-<h3 id="浏览器访问"><a href="#浏览器访问" class="headerlink" title="浏览器访问"></a>浏览器访问</h3><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">http:&#x2F;&#x2F;localhost:4000</span><br><span class="line">或</span><br><span class="line">http:&#x2F;&#x2F;服务器IP地址:4000&#x2F;</span><br></pre></td></tr></table></figure>
-
-<h2 id="GitHub配置"><a href="#GitHub配置" class="headerlink" title="GitHub配置"></a>GitHub配置</h2><h3 id="创建github-io仓储"><a href="#创建github-io仓储" class="headerlink" title="创建github.io仓储"></a>创建github.io仓储</h3><p>新建仓库，仓库名为：<code>your_github_user_name.github.io</code></p>
-<h3 id="GitHub-Pages-默认已开启"><a href="#GitHub-Pages-默认已开启" class="headerlink" title="GitHub Pages(默认已开启)"></a>GitHub Pages(默认已开启)</h3><h3 id="选择主题"><a href="#选择主题" class="headerlink" title="选择主题"></a>选择主题</h3><h3 id="浏览器访问-1"><a href="#浏览器访问-1" class="headerlink" title="浏览器访问"></a>浏览器访问</h3><blockquote>
-<p><code>https://your_github_user_name.github.io</code></p>
-</blockquote>
-<h3 id="添加SSH-keys-已有忽略"><a href="#添加SSH-keys-已有忽略" class="headerlink" title="添加SSH keys(已有忽略)"></a>添加SSH keys(已有忽略)</h3><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> 生成SSH Key，等待输入按下 Enter 回车键三次</span></span><br><span class="line">ssh-keygen -t rsa  </span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"> 复制公钥 添加到 github</span></span><br><span class="line">cat ~/.ssh/id_rsa.pub</span><br></pre></td></tr></table></figure>
-
-<h3 id="测试GitHub连接"><a href="#测试GitHub连接" class="headerlink" title="测试GitHub连接"></a>测试GitHub连接</h3><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">[root@iZwz9c74ta983j746ynevpZ hexoblog]# ssh -T git@github.com</span><br><span class="line">The authenticity of host &#x27;github.com (52.74.223.119)&#x27; can&#x27;t be established.</span><br><span class="line">RSA key fingerprint is SHA256:nThbg6kXUpJWGl7E1IGOCspRomTxdCARLviKw6E5SY8.</span><br><span class="line">RSA key fingerprint is MD5:16:27:ac:a5:76:28:2d:36:63:1b:56:4d:eb:df:a6:48.</span><br><span class="line">Are you sure you want to continue connecting (yes/no)? yes</span><br><span class="line">Hi JakeLin0fly! You&#x27;ve successfully authenticated, but GitHub does not provide shell access.</span><br></pre></td></tr></table></figure>
-
-<h3 id="设置Github账户信息"><a href="#设置Github账户信息" class="headerlink" title="设置Github账户信息"></a>设置Github账户信息</h3><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">git config --global user.name &quot;GitHub用户名&quot; </span><br><span class="line">git config --global user.email &quot;GitHub邮箱&quot;</span><br></pre></td></tr></table></figure>
-
-<h2 id="Hexo部署到GitHub-Pages"><a href="#Hexo部署到GitHub-Pages" class="headerlink" title="Hexo部署到GitHub Pages"></a>Hexo部署到GitHub Pages</h2><h3 id="Hexo-config-yml修改"><a href="#Hexo-config-yml修改" class="headerlink" title="Hexo _config.yml修改"></a>Hexo _config.yml修改</h3><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> Deployment</span></span><br><span class="line"><span class="meta">#</span><span class="bash"><span class="comment"># Docs: https://hexo.io/docs/deployment.html</span></span></span><br><span class="line">deploy:</span><br><span class="line">  type: git</span><br><span class="line">  repo: git仓库地址</span><br><span class="line">  branch: master</span><br></pre></td></tr></table></figure>
-
-<h3 id="同步到GitHub"><a href="#同步到GitHub" class="headerlink" title="同步到GitHub"></a>同步到GitHub</h3><p>需要安装插件 <code>hexo-deployer-git</code></p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">npm install --save hexo-deployer-git</span><br></pre></td></tr></table></figure>
-
-<p>Hexo命令，详细命令参考：<a href="https://hexo.io/docs/commands">https://hexo.io/docs/commands</a></p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">hexo cl    ## 删除 public/  db.json</span><br><span class="line">hexo g    ## 构建项目 主要是生成 public/  db.json</span><br><span class="line">hexo d    ## 部署到配置文件中设置的仓库</span><br></pre></td></tr></table></figure>
-
-]]></content>
-      <categories>
-        <category>教程</category>
-      </categories>
-      <tags>
-        <tag>Hexo</tag>
-        <tag>博客</tag>
-        <tag>github</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>Hexo-Theme-Butterfly(二) 主题页面</title>
-    <url>/Hexo-Theme-Butterfly(%E4%BA%8C)-%E4%B8%BB%E9%A2%98%E9%A1%B5%E9%9D%A2/</url>
+    <url>/hexo/Hexo-Theme-Butterfly(%E4%BA%8C)-%E4%B8%BB%E9%A2%98%E9%A1%B5%E9%9D%A2/</url>
     <content><![CDATA[<blockquote>
 <p>感谢原作者 <a href="https://jerryc.me/">JerryC</a> </p>
 <p>由于主题更新，此文件中部分配置可能失效。请参考作者博客或文档：<a href="https://demo.jerryc.me/posts/dc584b87/">Butterfly 安装文档(二) 主题页面</a> </p>
@@ -507,55 +786,101 @@
       </tags>
   </entry>
   <entry>
-    <title>hexo-theme-next提交给搜索引擎</title>
-    <url>/hexo-theme-next%E6%8F%90%E4%BA%A4%E7%BB%99%E6%90%9C%E7%B4%A2%E5%BC%95%E6%93%8E/</url>
-    <content><![CDATA[<h1 id="站点地图生成"><a href="#站点地图生成" class="headerlink" title="站点地图生成"></a>站点地图生成</h1><ol>
-<li><p>插件安装</p>
-<ul>
-<li><p>Google站点地图插件</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">npm install hexo-generator-sitemap --save</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>百度站点地图插件</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">npm install hexo-generator-baidu-sitemap --save</span><br></pre></td></tr></table></figure>
-</li>
-</ul>
-</li>
-<li><p>修改站点配置文件</p>
+    <title>Linux下Hexo+GitHub搭建个人博客</title>
+    <url>/hexo/Linux%E4%B8%8Bgithub+hexo%E6%90%AD%E5%BB%BA%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2/</url>
+    <content><![CDATA[<h2 id="配置信息"><a href="#配置信息" class="headerlink" title="配置信息"></a>配置信息</h2><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">[root@iZwz9c74ta983j746ynevpZ ~]# uname -a</span><br><span class="line">Linux iZwz9c74ta983j746ynevpZ 3.10.0-1127.10.1.el7.x86_64 #1 SMP Wed Jun 3 14:28:03 UTC 2020 x86_64 x86_64 x86_64 GNU/Linux</span><br></pre></td></tr></table></figure>
+
+<h2 id="更新源（可略过）"><a href="#更新源（可略过）" class="headerlink" title="更新源（可略过）"></a>更新源（可略过）</h2><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"><span class="comment"># 备份原 源文件</span></span></span><br><span class="line">[root@iZwz9c74ta983j746ynevpZ ~]# mv /etc/yum.repos.d /etc/yum.repos.d.bak</span><br><span class="line">[root@iZwz9c74ta983j746ynevpZr ~]# mkdir /etc/yum.repos.d</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"><span class="comment"># 阿里云</span></span></span><br><span class="line">[root@iZwz9c74ta983j746ynevpZ ~]# wget -O /etc/yum.repos.d/CentOS-Base.repo https://mirrors.aliyun.com/repo/Centos-7.repo --no-check-certificate</span><br><span class="line"></span><br><span class="line">[root@iZwz9c74ta983j746ynevpZ ~]# yum clean all</span><br><span class="line"></span><br><span class="line">[root@iZwz9c74ta983j746ynevpZ ~]# yum makecache</span><br><span class="line"></span><br><span class="line">[root@iZwz9c74ta983j746ynevpZ ~]# yum update -y</span><br></pre></td></tr></table></figure>
+
+<h2 id="Hexo搭建"><a href="#Hexo搭建" class="headerlink" title="Hexo搭建"></a>Hexo搭建</h2><h3 id="安装git"><a href="#安装git" class="headerlink" title="安装git"></a>安装git</h3><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">[root@iZwz9c74ta983j746ynevpZ ~]# yum install -y git</span><br></pre></td></tr></table></figure>
+
+<h3 id="node-js安装"><a href="#node-js安装" class="headerlink" title="node.js安装"></a>node.js安装</h3><h4 id="node-js安装包下载"><a href="#node-js安装包下载" class="headerlink" title="node.js安装包下载"></a>node.js安装包下载</h4><p><strong>网址：</strong> <a href="http://nodejs.cn/download/">http://nodejs.cn/download/</a></p>
+<p><strong>阿里云镜像：</strong> <a href="https://npm.taobao.org/mirrors/node">https://npm.taobao.org/mirrors/node</a></p>
+<p>下载对应二进制安装包：</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">[root@iZwz9c74ta983j746ynevpZ ~]# wget https://npm.taobao.org/mirrors/node/v14.6.0/node-v14.6.0-linux-x64.tar.gz --no-check-certificate</span><br></pre></td></tr></table></figure>
+
+<h4 id="node-js安装部署"><a href="#node-js安装部署" class="headerlink" title="node.js安装部署"></a>node.js安装部署</h4><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">[root@iZwz9c74ta983j746ynevpZ ~]# tar -zxf node-v14.6.0-linux-x64.tar.gz </span><br><span class="line">[root@iZwz9c74ta983j746ynevpZ ~]# mv node-v14.6.0-linux-x64 /opt/nodejs</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"> 创建软连接</span></span><br><span class="line">[root@iZwz9c74ta983j746ynevpZ ~]# ln -s /opt/nodejs/bin/node /usr/local/bin/node </span><br><span class="line">[root@iZwz9c74ta983j746ynevpZ ~]# ln -s /opt/nodejs/bin/npm /usr/local/bin/npm </span><br></pre></td></tr></table></figure>
+
+<h3 id="Hexo安装部署"><a href="#Hexo安装部署" class="headerlink" title="Hexo安装部署"></a>Hexo安装部署</h3><h4 id="Hexo安装"><a href="#Hexo安装" class="headerlink" title="Hexo安装"></a>Hexo安装</h4><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">[root@iZwz9c74ta983j746ynevpZ ~]# npm install hexo-cli -g</span><br><span class="line">/opt/nodejs/bin/hexo -&gt; /opt/nodejs/lib/node_modules/hexo-cli/bin/hexo</span><br><span class="line">npm WARN optional SKIPPING OPTIONAL DEPENDENCY: fsevents@~2.1.2 (node_modules/hexo-cli/node_modules/chokidar/node_modules/fsevents):</span><br><span class="line">npm WARN notsup SKIPPING OPTIONAL DEPENDENCY: Unsupported platform for fsevents@2.1.3: wanted &#123;&quot;os&quot;:&quot;darwin&quot;,&quot;arch&quot;:&quot;any&quot;&#125; (current: &#123;&quot;os&quot;:&quot;linux&quot;,&quot;arch&quot;:&quot;x64&quot;&#125;)</span><br><span class="line"></span><br><span class="line">+ hexo-cli@4.0.0</span><br><span class="line">added 61 packages from 315 contributors in 46.255s</span><br></pre></td></tr></table></figure>
+
+<p>若安装hexo报错如下：</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">[root@iZwz9c74ta983j746ynevpZ ~]# npm install hexo-cli -g</span><br><span class="line">npm ERR! code CERT_NOT_YET_VALID</span><br><span class="line">npm ERR! errno CERT_NOT_YET_VALID</span><br><span class="line">npm ERR! request to https://registry.npmjs.org/hexo-cli failed, reason: certificate is not yet valid</span><br><span class="line"></span><br><span class="line">npm ERR! A complete log of this run can be found in:</span><br><span class="line">npm ERR!     /root/.npm/_logs/2010-03-31T20_55_08_156Z-debug.log</span><br><span class="line">[root@iZwz9c74ta983j746ynevpZ ~]# npm install hexo-cli -g --no-check-certificate</span><br><span class="line">npm ERR! code CERT_NOT_YET_VALID</span><br><span class="line">npm ERR! errno CERT_NOT_YET_VALID</span><br><span class="line">npm ERR! request to https://registry.npmjs.org/hexo-cli failed, reason: certificate is not yet valid</span><br><span class="line"></span><br><span class="line">npm ERR! A complete log of this run can be found in:</span><br><span class="line">npm ERR!     /root/.npm/_logs/2010-03-31T20_55_35_518Z-debug.log</span><br></pre></td></tr></table></figure>
+
+<p>原因是https的自签名失败，临时解决办法：关闭ssl</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">[root@iZwz9c74ta983j746ynevpZ ~]# npm config set strict-ssl false</span><br></pre></td></tr></table></figure>
+
+<h4 id="Hexo部署"><a href="#Hexo部署" class="headerlink" title="Hexo部署"></a>Hexo部署</h4><p>将 hexo 命令添加到全局，采用软连接方式。</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">[root@iZwz9c74ta983j746ynevpZ ~]# ln -s /opt/nodejs/lib/node_modules/hexo-cli/bin/hexo /usr/local/bin/hexo</span><br></pre></td></tr></table></figure>
+
+<h2 id="Hexo博客环境部署"><a href="#Hexo博客环境部署" class="headerlink" title="Hexo博客环境部署"></a>Hexo博客环境部署</h2><h3 id="初始化Hexo博客根目录"><a href="#初始化Hexo博客根目录" class="headerlink" title="初始化Hexo博客根目录"></a>初始化Hexo博客根目录</h3><p><strong><em>强烈建议先换npm源！！！见：<a href="#%E6%9B%B4%E6%8D%A2npm%E6%BA%90">更换npm源</a></em></strong></p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">[root@iZwz9c74ta983j746ynevpZ ~]# mkdir /var/hexoblog</span><br><span class="line">[root@iZwz9c74ta983j746ynevpZ ~]# hexo init /var/hexoblog/</span><br><span class="line">INFO  Cloning hexo-starter https://github.com/hexojs/hexo-starter.git</span><br><span class="line">Submodule &#x27;themes/landscape&#x27; (https://github.com/hexojs/hexo-theme-landscape.git) registered for path &#x27;themes/landscape&#x27;</span><br><span class="line">Cloning into &#x27;themes/landscape&#x27;...</span><br><span class="line">remote: Enumerating objects: 8, done.</span><br><span class="line">remote: Counting objects: 100% (8/8), done.</span><br><span class="line">remote: Compressing objects: 100% (6/6), done.</span><br><span class="line">remote: Total 1071 (delta 1), reused 5 (delta 1), pack-reused 1063</span><br><span class="line">Receiving objects: 100% (1071/1071), 3.22 MiB | 12.00 KiB/s, done.</span><br><span class="line">Resolving deltas: 100% (586/586), done.</span><br><span class="line">Submodule path &#x27;themes/landscape&#x27;: checked out &#x27;73a23c51f8487cfcd7c6deec96ccc7543960d350&#x27;</span><br><span class="line">INFO  Install dependencies</span><br><span class="line">[ .................] - fetchMetadata: sill pacote range manifest for kind-of@^3.0.2 fetched in 386ms</span><br><span class="line">[ .................] - fetchMetadata: sill pacote range manifest for kind-of@^3.0.2 fetched in 386ms</span><br><span class="line">[ .................] - fetchMetadata: sill pacote range manifest for kind-of@^3.0.2 fetched in 386ms</span><br><span class="line">[ .................] - fetchMetadata: sill pacote range manifest for kind-of@^3.0.2 fetched in 386ms</span><br><span class="line">[ .................] - fetchMetadata: sill pacote range manifest for kind-of@^3.0.2 fetched in 386ms</span><br><span class="line">[ .................] - fetchMetadata: sill pacote range manifest for kind-of@^3.0.2 fetched in 386ms</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>卡住在这……，猜测是npm源问题，更换国内源</p>
+<h4 id="更换npm源"><a href="#更换npm源" class="headerlink" title="更换npm源"></a>更换npm源</h4><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"><span class="comment"># 查看 默认源</span></span></span><br><span class="line">[root@iZwz9c74ta983j746ynevpZ hexoblog]# npm config get registry</span><br><span class="line">https://registry.npmjs.org/</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"><span class="comment"># 更换阿里源</span></span></span><br><span class="line">[root@iZwz9c74ta983j746ynevpZ hexoblog]# npm config set registry https://registry.npm.taobao.org</span><br><span class="line">[root@iZwz9c74ta983j746ynevpZ hexoblog]# npm config get registry</span><br><span class="line">https://registry.npm.taobao.org/</span><br></pre></td></tr></table></figure>
+
+<p>若init失败，<strong>须清空文件夹下内容，ls -a 查看还有一个影藏文件</strong>，再次初始化。</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">[root@iZwz9c74ta983j746ynevpZ hexoblog]# rm ./* -rf</span><br><span class="line">[root@iZwz9c74ta983j746ynevpZ hexoblog]# ls -a</span><br><span class="line">.  ..  .gitignore</span><br><span class="line">[root@iZwz9c74ta983j746ynevpZ hexoblog]# rm .gitignore -f</span><br></pre></td></tr></table></figure>
+
+<h3 id="启动环境"><a href="#启动环境" class="headerlink" title="启动环境"></a>启动环境</h3><p>生成静态文件</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">[root@iZwz9c74ta983j746ynevpZ hexoblog]# hexo g</span><br><span class="line">[root@iZwz9c74ta983j746ynevpZ hexoblog]# ls -l </span><br><span class="line">total 132</span><br><span class="line">-rw-r--r--   1 root root  2367 Jul 28 15:54 _config.yml</span><br><span class="line">-rw-r--r--   1 root root 25111 Jul 28 15:59 db.json</span><br><span class="line">drwxr-xr-x 189 root root  4096 Jul 28 15:54 node_modules</span><br><span class="line">-rw-r--r--   1 root root   581 Jul 28 15:59 package.json</span><br><span class="line">-rw-r--r--   1 root root 74694 Jul 28 15:54 package-lock.json</span><br><span class="line">drwxr-xr-x   7 root root  4096 Jul 28 15:59 public        ## 存放生成的静态文件</span><br><span class="line">drwxr-xr-x   2 root root  4096 Jul 28 15:54 scaffolds</span><br><span class="line">drwxr-xr-x   3 root root  4096 Jul 28 15:54 source</span><br><span class="line">drwxr-xr-x   3 root root  4096 Jul 28 15:54 themes</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>启动服务</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">[root@iZwz9c74ta983j746ynevpZ hexoblog]# hexo s</span><br><span class="line">INFO  Start processing</span><br><span class="line">INFO  Hexo is running at http://localhost:4000 . Press Ctrl+C to stop.</span><br></pre></td></tr></table></figure>
+
+<h3 id="浏览器访问"><a href="#浏览器访问" class="headerlink" title="浏览器访问"></a>浏览器访问</h3><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">http:&#x2F;&#x2F;localhost:4000</span><br><span class="line">或</span><br><span class="line">http:&#x2F;&#x2F;服务器IP地址:4000&#x2F;</span><br></pre></td></tr></table></figure>
+
+<h2 id="GitHub配置"><a href="#GitHub配置" class="headerlink" title="GitHub配置"></a>GitHub配置</h2><h3 id="创建github-io仓储"><a href="#创建github-io仓储" class="headerlink" title="创建github.io仓储"></a>创建github.io仓储</h3><p>新建仓库，仓库名为：<code>your_github_user_name.github.io</code></p>
+<h3 id="GitHub-Pages-默认已开启"><a href="#GitHub-Pages-默认已开启" class="headerlink" title="GitHub Pages(默认已开启)"></a>GitHub Pages(默认已开启)</h3><h3 id="选择主题"><a href="#选择主题" class="headerlink" title="选择主题"></a>选择主题</h3><h3 id="浏览器访问-1"><a href="#浏览器访问-1" class="headerlink" title="浏览器访问"></a>浏览器访问</h3><blockquote>
+<p><code>https://your_github_user_name.github.io</code></p>
+</blockquote>
+<h3 id="添加SSH-keys-已有忽略"><a href="#添加SSH-keys-已有忽略" class="headerlink" title="添加SSH keys(已有忽略)"></a>添加SSH keys(已有忽略)</h3><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> 生成SSH Key，等待输入按下 Enter 回车键三次</span></span><br><span class="line">ssh-keygen -t rsa  </span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"> 复制公钥 添加到 github</span></span><br><span class="line">cat ~/.ssh/id_rsa.pub</span><br></pre></td></tr></table></figure>
+
+<h3 id="测试GitHub连接"><a href="#测试GitHub连接" class="headerlink" title="测试GitHub连接"></a>测试GitHub连接</h3><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">[root@iZwz9c74ta983j746ynevpZ hexoblog]# ssh -T git@github.com</span><br><span class="line">The authenticity of host &#x27;github.com (52.74.223.119)&#x27; can&#x27;t be established.</span><br><span class="line">RSA key fingerprint is SHA256:nThbg6kXUpJWGl7E1IGOCspRomTxdCARLviKw6E5SY8.</span><br><span class="line">RSA key fingerprint is MD5:16:27:ac:a5:76:28:2d:36:63:1b:56:4d:eb:df:a6:48.</span><br><span class="line">Are you sure you want to continue connecting (yes/no)? yes</span><br><span class="line">Hi JakeLin0fly! You&#x27;ve successfully authenticated, but GitHub does not provide shell access.</span><br></pre></td></tr></table></figure>
+
+<h3 id="设置Github账户信息"><a href="#设置Github账户信息" class="headerlink" title="设置Github账户信息"></a>设置Github账户信息</h3><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">git config --global user.name &quot;GitHub用户名&quot; </span><br><span class="line">git config --global user.email &quot;GitHub邮箱&quot;</span><br></pre></td></tr></table></figure>
+
+<h2 id="Hexo部署到GitHub-Pages"><a href="#Hexo部署到GitHub-Pages" class="headerlink" title="Hexo部署到GitHub Pages"></a>Hexo部署到GitHub Pages</h2><h3 id="Hexo-config-yml修改"><a href="#Hexo-config-yml修改" class="headerlink" title="Hexo _config.yml修改"></a>Hexo _config.yml修改</h3><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> Deployment</span></span><br><span class="line"><span class="meta">#</span><span class="bash"><span class="comment"># Docs: https://hexo.io/docs/deployment.html</span></span></span><br><span class="line">deploy:</span><br><span class="line">  type: git</span><br><span class="line">  repo: git仓库地址</span><br><span class="line">  branch: master</span><br></pre></td></tr></table></figure>
+
+<h3 id="同步到GitHub"><a href="#同步到GitHub" class="headerlink" title="同步到GitHub"></a>同步到GitHub</h3><p>需要安装插件 <code>hexo-deployer-git</code></p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">npm install --save hexo-deployer-git</span><br></pre></td></tr></table></figure>
+
+<p>Hexo命令，详细命令参考：<a href="https://hexo.io/docs/commands">https://hexo.io/docs/commands</a></p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">hexo cl    ## 删除 public/  db.json</span><br><span class="line">hexo g    ## 构建项目 主要是生成 public/  db.json</span><br><span class="line">hexo d    ## 部署到配置文件中设置的仓库</span><br></pre></td></tr></table></figure>
+
+]]></content>
+      <categories>
+        <category>教程</category>
+      </categories>
+      <tags>
+        <tag>Hexo</tag>
+        <tag>博客</tag>
+        <tag>github</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>hexo-theme-next valine评论</title>
+    <url>/hexo/hexo-theme-next%20valine%E8%AF%84%E8%AE%BA/</url>
+    <content><![CDATA[<blockquote>
+<p>站点配置文件 <code>url</code> 地加 <code>http</code> 头，否则文章末尾【本文链接】地址为：<strong>域名/域名/xxxxxxx</strong></p>
+<figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="comment"># URL</span></span><br><span class="line"><span class="comment">## If your site is put in a subdirectory, set url as &#x27;http://yoursite.com/child&#x27; and root as &#x27;/child/&#x27;</span></span><br><span class="line"><span class="attr">url:</span> <span class="string">http://jakelin.cn</span></span><br><span class="line"><span class="attr">root:</span> <span class="string">/</span></span><br></pre></td></tr></table></figure>
+</blockquote>
+<h1 id="绑定域名"><a href="#绑定域名" class="headerlink" title="绑定域名"></a>绑定域名</h1><p>新增域名解析：</p>
+<ol>
+<li><p>记录类型：CNAME</p>
+<ol start="2">
+<li>主机记录：@</li>
+<li>记录值：Github Pages项目域名</li>
+</ol>
 </li>
 </ol>
-<p><code>_config.yml</code> 中加入：</p>
-<figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="attr">sitemap:</span></span><br><span class="line">  <span class="attr">path:</span> <span class="string">sitemap.xml</span> <span class="comment"># 提交给Google</span></span><br><span class="line"><span class="attr">baidusitemap:</span></span><br><span class="line">  <span class="attr">path:</span> <span class="string">baidusitemap.xml</span> <span class="comment"># 提交给百度</span></span><br></pre></td></tr></table></figure>
+<h1 id="Valine"><a href="#Valine" class="headerlink" title="Valine"></a>Valine</h1><h2 id="注册LeanClound，获取APP-ID-和-APP-Key"><a href="#注册LeanClound，获取APP-ID-和-APP-Key" class="headerlink" title="注册LeanClound，获取APP ID 和 APP Key"></a>注册LeanClound，获取APP ID 和 APP Key</h2><p>注册链接： <a href="https://leancloud.cn/dashboard/login.html#/signup">LeanClound注册</a> </p>
+<p>【创建应用】-&gt;【随便起个名】-&gt;【开发版】-&gt;[创建]</p>
+<p><img src="https://i.loli.net/2020/08/03/kNErsH8PezWO1uj.png" alt="LeanClound创建应用.png"></p>
+<p><img src="https://i.loli.net/2020/08/03/uxdiBNf6g4MKwOs.png" alt="获取key.png"></p>
+<h2 id="修改主题配置文件"><a href="#修改主题配置文件" class="headerlink" title="修改主题配置文件"></a>修改主题配置文件</h2><figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="comment"># Valine</span></span><br><span class="line"><span class="comment"># For more information: https://valine.js.org, https://github.com/xCss/Valine</span></span><br><span class="line"><span class="attr">valine:</span></span><br><span class="line">  <span class="attr">enable:</span> <span class="literal">true</span></span><br><span class="line">  <span class="attr">appId:</span> <span class="string">这里填</span> <span class="string">AppID</span>  <span class="comment"># Your leancloud application appid</span></span><br><span class="line">  <span class="attr">appKey:</span> <span class="string">这里填</span> <span class="string">AppKey</span> <span class="comment"># Your leancloud application appkey</span></span><br><span class="line">  <span class="attr">placeholder:</span> <span class="string">&#x27;ヾﾉ≧∀≦)o来啊，快活啊!&#x27;</span> <span class="comment"># Comment box placeholder</span></span><br><span class="line">  <span class="attr">avatar:</span> <span class="string">mm</span> <span class="comment"># Gravatar style</span></span><br><span class="line">  <span class="attr">meta:</span> [<span class="string">nick</span>, <span class="string">mail</span>, <span class="string">link</span>] <span class="comment"># Custom comment header</span></span><br><span class="line">  <span class="attr">pageSize:</span> <span class="number">10</span> <span class="comment"># Pagination size</span></span><br><span class="line">  <span class="attr">language:</span> <span class="string">zh-cn</span> <span class="comment"># Language, available values: en, zh-cn</span></span><br><span class="line">  <span class="attr">visitor:</span> <span class="literal">true</span> <span class="comment"># Article reading statistic</span></span><br><span class="line">  <span class="attr">comment_count:</span> <span class="literal">true</span> <span class="comment"># If false, comment count will only be displayed in post page, not in home page</span></span><br><span class="line">  <span class="attr">recordIP:</span> <span class="literal">false</span> <span class="comment"># Whether to record the commenter IP</span></span><br><span class="line">  <span class="attr">serverURLs:</span> <span class="comment"># When the custom domain name is enabled, fill it in here (it will be detected automatically by default, no need to fill in)</span></span><br><span class="line">  <span class="attr">enableQQ:</span> <span class="literal">false</span> <span class="comment"># Whether to enable the Nickname box to automatically get QQ Nickname and QQ Avatar</span></span><br><span class="line">  <span class="attr">requiredFields:</span> [] <span class="comment"># Set required fields: [&#x27;nick&#x27;] | [&#x27;nick&#x27;,&#x27;mail&#x27;]</span></span><br><span class="line">  <span class="comment">#post_meta_order: 0</span></span><br></pre></td></tr></table></figure>
 
-<ol start="3">
-<li><p>重新构建项目</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">hexo cl&amp;&amp;hexo g</span><br></pre></td></tr></table></figure>
-
-</li>
-</ol>
-<h1 id="提交站点地图"><a href="#提交站点地图" class="headerlink" title="提交站点地图"></a>提交站点地图</h1><p>直接参考：<a href="https://fanandjiu.com/Hexo%E9%97%AE%E9%A2%98-%E6%8F%90%E4%BA%A4%E7%AB%99%E7%82%B9%E7%BB%99%E6%90%9C%E7%B4%A2%E5%BC%95%E6%93%8E%E4%BB%A5%E5%8F%8ASEO/">Hexo问题-提交站点给搜索引擎以及SEO</a> </p>
-<p><strong><em>注意：在Google进行DNS记录验证域名所有权时，因为阿里云域名解析的记录值不允许两个 <code>@</code> ，但将域名记录值 <code>@</code> 用以验证，验证完后再更改记录值是可行的。验证后需要一定的时间才能google搜索到！</em></strong> </p>
-<p><img src="https://i.loli.net/2020/08/06/SBGhud2oF7V4ZKj.png" alt="DNS验证域名所有权-Google.png"></p>
-<h1 id="站点分析"><a href="#站点分析" class="headerlink" title="站点分析"></a>站点分析</h1><p>参考：<a href="https://theme-next.js.org/docs/third-party-services/statistics-and-analytics.html">Statistics and Analytics</a> </p>
-<h2 id="Google-分析"><a href="#Google-分析" class="headerlink" title="Google 分析"></a>Google 分析</h2><ol>
-<li><p>创建一个 <a href="https://analytics.google.com/">Google Analytics</a> 账号</p>
-</li>
-<li><p>得到一个 <code>跟踪ID</code> ：UA-xxxxxx</p>
-</li>
-<li><p>修改Next配置文件</p>
-<figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="comment"># Google Analytics</span></span><br><span class="line"><span class="attr">google_analytics:</span></span><br><span class="line">  <span class="attr">tracking_id:</span> <span class="string">你的跟踪ID</span> <span class="comment"># &lt;app_id&gt;</span></span><br></pre></td></tr></table></figure>
-
-</li>
-</ol>
-<h2 id="百度分析"><a href="#百度分析" class="headerlink" title="百度分析"></a>百度分析</h2><ol>
-<li><p>去<a href="https://tongji.baidu.com/web/welcome/login">百度统计</a>，新增一个网站</p>
-</li>
-<li><p>复制统计代码中的 <code>hm.src = &quot;https://hm.baidu.com/hm.js?[这里的脚本ID]&quot;</code></p>
-</li>
-<li><p>修改Next配置文件</p>
-<figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="comment"># Baidu Analytics</span></span><br><span class="line"><span class="attr">baidu_analytics:</span> <span class="string">脚本ID</span> <span class="comment"># &lt;app_id&gt;</span></span><br></pre></td></tr></table></figure>
-
-</li>
-</ol>
+<h2 id="添加邮件提醒"><a href="#添加邮件提醒" class="headerlink" title="添加邮件提醒"></a>添加邮件提醒</h2><p>见： <a href="https://tding.top/archives/ed8b904f.html">小丁的个人博客–Hexo-NexT 配置 Valine</a> </p>
+<h1 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h1><p><a href="https://valine.js.org/quickstart.html">Valine-快速开始</a></p>
 ]]></content>
       <categories>
         <category>教程</category>
@@ -567,84 +892,8 @@
       </tags>
   </entry>
   <entry>
-    <title>centos-k8s1.16.2集群安装部署</title>
-    <url>/centos7-k8s1.16.2%20%E9%9B%86%E7%BE%A4%E5%AE%89%E8%A3%85%E9%85%8D%E7%BD%AE/</url>
-    <content><![CDATA[<h2 id="1-centos-7-配置"><a href="#1-centos-7-配置" class="headerlink" title="1. centos 7 配置"></a>1. centos 7 配置</h2><p>关闭防火墙、关闭selinux、更新源</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash">防火墙</span></span><br><span class="line">systemctl disable firewalld.service</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash">关闭Selinux</span></span><br><span class="line">    sed -i &#x27;s/SELINUX=enforcing/SELINUX=disabled/&#x27; /etc/selinux/config</span><br><span class="line"><span class="meta">#</span><span class="bash"><span class="comment"># 或者</span></span></span><br><span class="line">    /etc/selinux/config</span><br><span class="line">    #将其中的 SELINUX=*处修改为如下</span><br><span class="line">    SELINUX=disabled</span><br><span class="line"><span class="meta">#</span><span class="bash">重启服务器</span></span><br><span class="line"><span class="meta">#</span><span class="bash">运行命令getenforce 确保 selinux 为<span class="built_in">disable</span></span></span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash">安装wget</span></span><br><span class="line">yum install -y wget</span><br><span class="line">wget -O /etc/yum.repos.d/CentOS-Base.repo http://mirrors.aliyun.com/repo/Centos-7.repo</span><br><span class="line">wget -O /etc/yum.repos.d/epel.repo http://mirrors.aliyun.com/repo/epel-7.repo</span><br><span class="line"><span class="meta">#</span><span class="bash">更新 源</span></span><br><span class="line">yum upgrade</span><br></pre></td></tr></table></figure>
-
-<h2 id="2-host配置"><a href="#2-host配置" class="headerlink" title="2. host配置"></a>2. host配置</h2><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> cat /etc/hosts</span></span><br><span class="line"><span class="meta">#</span><span class="bash">k8s nodes</span></span><br><span class="line">192.169.1.86    k8s-master</span><br><span class="line">192.168.1.87    k8s-node1</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"> cat /etc/hostname</span></span><br><span class="line">结点名称</span><br><span class="line"><span class="meta">#</span><span class="bash"> reboot</span></span><br></pre></td></tr></table></figure>
-
-<h2 id="3-创建-etc-sysctl-d-k8s-conf文件"><a href="#3-创建-etc-sysctl-d-k8s-conf文件" class="headerlink" title="3. 创建/etc/sysctl.d/k8s.conf文件"></a>3. 创建/etc/sysctl.d/k8s.conf文件</h2><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash">修改内核参数</span></span><br><span class="line">cat &lt;&lt;EOF &gt;  /etc/sysctl.d/k8s.conf</span><br><span class="line">net.bridge.bridge-nf-call-ip6tables = 1</span><br><span class="line">net.bridge.bridge-nf-call-iptables = 1</span><br><span class="line">EOF</span><br><span class="line"><span class="meta">#</span><span class="bash">执行sysctl -p /etc/sysctl.d/k8s.conf生效（sysctl --system）</span></span><br><span class="line">sysctl -p /etc/sysctl.d/k8s.conf</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash">如果有如下报错:</span></span><br><span class="line">sysctl: cannot stat /proc/sys/net/bridge/bridge-nf-call-ip6tables: No such file or directory</span><br><span class="line">sysctl: cannot stat /proc/sys/net/bridge/bridge-nf-call-iptables: No such file or directory</span><br><span class="line"><span class="meta">#</span><span class="bash">解决方法：</span></span><br><span class="line"><span class="meta">#</span><span class="bash">安装bridge-util软件，加载bridge模块，加载br_netfilter模块</span></span><br><span class="line">yum install -y bridge-utils.x86_64</span><br><span class="line">modprobe bridge</span><br><span class="line">modprobe br_netfilter</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash">关闭swap</span></span><br><span class="line">swapoff -a</span><br><span class="line">echo &quot;vm.swappiness=0&quot; &gt;&gt; /etc/sysctl.d/k8s.conf</span><br><span class="line"><span class="meta">#</span><span class="bash">使生效</span></span><br><span class="line">sysctl -p /etc/sysctl.d/k8s.conf</span><br></pre></td></tr></table></figure>
-
-<h2 id="4-安装软件源配置"><a href="#4-安装软件源配置" class="headerlink" title="4. 安装软件源配置"></a>4. 安装软件源配置</h2><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash">配置k8s软件源</span></span><br><span class="line">cat &lt;&lt;EOF &gt; /etc/yum.repos.d/kubernetes.repo </span><br><span class="line">[kubernetes]</span><br><span class="line">name=Kubernetes</span><br><span class="line">baseurl=http://mirrors.aliyun.com/kubernetes/yum/repos/kubernetes-el7-x86_64</span><br><span class="line">enabled=1</span><br><span class="line">gpgcheck=0</span><br><span class="line">repo_gpgcheck=0</span><br><span class="line">gpgkey=http://mirrors.aliyun.com/kubernetes/yum/doc/yum-key.gpg</span><br><span class="line">        http://mirrors.aliyun.com/kubernetes/yum/doc/rpm-package-key.gpg</span><br><span class="line">EOF</span><br></pre></td></tr></table></figure>
-
-<h2 id="5-安装docker"><a href="#5-安装docker" class="headerlink" title="5. 安装docker"></a>5. 安装docker</h2><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"><span class="comment">#先校正时间 否则 无法运行docker！！！！</span></span></span><br><span class="line">    # 1.安装ntpdate工具</span><br><span class="line">    sudo yum -y install ntp ntpdate</span><br><span class="line">    # 2.设置系统时间与网络时间同步</span><br><span class="line">    sudo ntpdate cn.pool.ntp.org</span><br><span class="line">    # 3.将系统时间写入硬件时间</span><br><span class="line">    sudo hwclock --systohc</span><br><span class="line">    # 4.查看系统时间</span><br><span class="line">    timedatectl</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash">安装docker</span></span><br><span class="line">yum install -y docker-io</span><br><span class="line"><span class="meta">#</span><span class="bash">启动docker并设置开机启动</span></span><br><span class="line">systemctl enable docker &amp;&amp; systemctl start docker</span><br></pre></td></tr></table></figure>
-
-<h2 id="6-安装kubernetes—-指定版本（1-16-2）"><a href="#6-安装kubernetes—-指定版本（1-16-2）" class="headerlink" title="6. 安装kubernetes—-指定版本（1.16.2）"></a>6. 安装kubernetes—-指定版本（1.16.2）</h2><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"> </span><br><span class="line"><span class="meta">#</span><span class="bash">查看软件包版本</span></span><br><span class="line">yum list --showduplicates | grep &#x27;kubeadm\|kubectl\|kubelet&#x27;</span><br><span class="line"><span class="meta">#</span><span class="bash">安装软件 指定版本</span></span><br><span class="line">yum install -y kubelet-1.16.2 kubeadm-1.16.2 kubectl-1.16.2</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash">启动服务并设置开机自启</span></span><br><span class="line">systemctl start kubelet &amp;&amp; systemctl enable kubelet</span><br></pre></td></tr></table></figure>
-
-<h2 id="7-修改配置"><a href="#7-修改配置" class="headerlink" title="7. 修改配置"></a>7. 修改配置</h2><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash">kubernetes 配置</span></span><br><span class="line"><span class="meta">#</span><span class="bash">/usr/bin 目录下 执行以下操作</span></span><br><span class="line"><span class="meta">#</span><span class="bash"><span class="comment"># kubelet  kubeadm  kubectl更新权限</span></span></span><br><span class="line">cd /usr/bin &amp;&amp; chmod a+x kubelet  kubeadm  kubectl</span><br><span class="line">export KUBECONFIG=/etc/kubernetes/admin.conf</span><br><span class="line">iptables -P FORWARD ACCEPT</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash">docker 配置</span></span><br><span class="line"><span class="meta">#</span><span class="bash"><span class="comment">#编辑 /lib/systemd/system/docker.service 在[Service] 下添加下面一行</span></span></span><br><span class="line">ExecStartPost=/sbin/iptables -P FORWARD ACCEPT</span><br><span class="line"><span class="meta">#</span><span class="bash"><span class="comment">#重启docker</span></span></span><br><span class="line">systemctl daemon-reload</span><br><span class="line">systemctl restart docker</span><br></pre></td></tr></table></figure>
-
-<h2 id="8-拉取镜像并tag"><a href="#8-拉取镜像并tag" class="headerlink" title="8. 拉取镜像并tag"></a>8. 拉取镜像并tag</h2><p>由于镜像默认从国外网站拉取，被墙，故自行从国内云拉取。<br>运行 <kbd>kubeadm config   images  list</kbd> 查看所需要的镜像以及版本号，再从阿里云拉取这些镜像。</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">[root@k8s-master bin]# kubeadm config   images  list</span><br><span class="line">W0108 19:53:17.464386   10103 version.go:101] could not fetch a Kubernetes version from the internet: unable to get URL &quot;https://dl.k8s.io/release/stable-1.txt&quot;: Get https://dl.k8s.io/release/stable-1.txt: net/http: request canceled while waiting for connection (Client.Timeout exceeded while awaiting headers)</span><br><span class="line">W0108 19:53:17.464460   10103 version.go:102] falling back to the local client version: v1.16.2</span><br><span class="line">k8s.gcr.io/kube-apiserver:v1.16.2</span><br><span class="line">k8s.gcr.io/kube-controller-manager:v1.16.2</span><br><span class="line">k8s.gcr.io/kube-scheduler:v1.16.2</span><br><span class="line">k8s.gcr.io/kube-proxy:v1.16.2</span><br><span class="line">k8s.gcr.io/pause:3.1</span><br><span class="line">k8s.gcr.io/etcd:3.3.15-0</span><br><span class="line">k8s.gcr.io/coredns:1.6.2</span><br></pre></td></tr></table></figure>
-
-<p>拉取对应镜像<kbd>docker pull registry.cn-hangzhou.aliyuncs.com/google_containers/镜像名:版本号</kbd></p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"><span class="comment"># 对应上面版本号</span></span></span><br><span class="line">docker pull registry.cn-hangzhou.aliyuncs.com/google_containers/kube-apiserver:v1.16.2</span><br><span class="line">docker pull registry.cn-hangzhou.aliyuncs.com/google_containers/kube-controller-manager:v1.16.2</span><br><span class="line">docker pull registry.cn-hangzhou.aliyuncs.com/google_containers/kube-scheduler:v1.16.2</span><br><span class="line">docker pull registry.cn-hangzhou.aliyuncs.com/google_containers/kube-proxy:v1.16.2</span><br><span class="line">docker pull registry.cn-hangzhou.aliyuncs.com/google_containers/pause:3.1</span><br><span class="line">docker pull registry.cn-hangzhou.aliyuncs.com/google_containers/etcd:3.3.15-0</span><br><span class="line">docker pull registry.cn-hangzhou.aliyuncs.com/google_containers/coredns:1.6.2</span><br></pre></td></tr></table></figure>
-
-<p>tag镜像：</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">docker tag registry.cn-hangzhou.aliyuncs.com/google_containers/kube-apiserver:v1.16.2 k8s.gcr.io/kube-apiserver:v1.16.2</span><br><span class="line">docker tag registry.cn-hangzhou.aliyuncs.com/google_containers/kube-controller-manager:v1.16.2 k8s.gcr.io/kube-controller-manager:v1.16.2</span><br><span class="line">docker tag registry.cn-hangzhou.aliyuncs.com/google_containers/kube-scheduler:v1.16.2 k8s.gcr.io/kube-scheduler:v1.16.2</span><br><span class="line">docker tag registry.cn-hangzhou.aliyuncs.com/google_containers/kube-proxy:v1.16.2 k8s.gcr.io/kube-proxy:v1.16.2</span><br><span class="line">docker tag registry.cn-hangzhou.aliyuncs.com/google_containers/pause:3.1 k8s.gcr.io/pause:3.1</span><br><span class="line">docker tag registry.cn-hangzhou.aliyuncs.com/google_containers/etcd:3.3.15-0 k8s.gcr.io/etcd:3.3.15-0</span><br><span class="line">docker tag registry.cn-hangzhou.aliyuncs.com/google_containers/coredns:1.6.2 k8s.gcr.io/coredns:1.6.2</span><br></pre></td></tr></table></figure>
-
-<h2 id="9-使用kubeadm-init初始化集群（仅master）"><a href="#9-使用kubeadm-init初始化集群（仅master）" class="headerlink" title="9. 使用kubeadm init初始化集群（仅master）"></a>9. 使用kubeadm init初始化集群（仅master）</h2><p><strong><em>详细参数查询地址：</em></strong> <a href="https://kubernetes.io/zh/docs/reference/setup-tools/kubeadm/kubeadm-init/">https://kubernetes.io/zh/docs/reference/setup-tools/kubeadm/kubeadm-init/</a></p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">--apiserver-advertise-address string</span><br><span class="line">API 服务器所公布的其正在监听的 IP 地址。如果未设置，则使用默认网络接口。</span><br><span class="line">--image-repository string     默认值：&quot;k8s.gcr.io&quot;</span><br><span class="line">选择用于拉取控制平面镜像的容器仓库</span><br><span class="line">--kubernetes-version string     默认值：&quot;stable-1&quot;</span><br><span class="line">为控制平面选择一个特定的 Kubernetes 版本。</span><br><span class="line">--service-cidr string     默认值：&quot;10.96.0.0/12&quot;</span><br><span class="line">为服务的虚拟 IP 地址另外指定 IP 地址段</span><br><span class="line">--pod-network-cidr string</span><br><span class="line">指明 pod 网络可以使用的 IP 地址段。如果设置了这个参数，控制平面将会为每一个节点自动分配 CIDRs。</span><br></pre></td></tr></table></figure>
-
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"><span class="comment">#部署Kubernetes Master</span></span></span><br><span class="line"><span class="meta">#</span><span class="bash"><span class="comment">#在192.168.1.86（Master）执行</span></span></span><br><span class="line"><span class="meta">#</span><span class="bash"><span class="comment">#由于默认拉取镜像地址k8s.gcr.io国内无法访问，这里指定阿里云镜像仓库地址</span></span></span><br><span class="line"></span><br><span class="line">kubeadm init \</span><br><span class="line">--apiserver-advertise-address=192.168.1.86 \</span><br><span class="line">--image-repository registry.aliyuncs.com/google_containers \</span><br><span class="line">--kubernetes-version v1.16.2 \</span><br><span class="line">--service-cidr=10.1.0.0/16 \</span><br><span class="line">--pod-network-cidr=10.244.0.0/16</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-<p>初始化成功，显示：</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">Your Kubernetes control-plane has initialized successfully!</span><br><span class="line"></span><br><span class="line">To start using your cluster, you need to run the following as a regular user:</span><br><span class="line"></span><br><span class="line">  mkdir -p $HOME/.kube</span><br><span class="line">  sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config</span><br><span class="line">  sudo chown $(id -u):$(id -g) $HOME/.kube/config</span><br><span class="line"></span><br><span class="line">You should now deploy a pod network to the cluster.</span><br><span class="line">Run &quot;kubectl apply -f [podnetwork].yaml&quot; with one of the options listed at:</span><br><span class="line">  https://kubernetes.io/docs/concepts/cluster-administration/addons/</span><br><span class="line"></span><br><span class="line">Then you can join any number of worker nodes by running the following on each as root:</span><br><span class="line"></span><br><span class="line">kubeadm join 192.168.1.86:6443 --token pwwmps.9cds2s34wlpiyznv \</span><br><span class="line">    --discovery-token-ca-cert-hash sha256:a3220f1d2384fe5230cad2302a4ac1f233b03ea24c19c165adb5824f9c358336</span><br></pre></td></tr></table></figure>
-
-<p>然后在master执行如下命令：</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> 等待命令执行完毕后执行如下命令</span></span><br><span class="line"><span class="meta">#</span><span class="bash"><span class="comment"># 在master上执行以下命令  </span></span></span><br><span class="line">mkdir -p $HOME/.kube  </span><br><span class="line">sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config  </span><br><span class="line">sudo chown $(id -u):$(id -g) $HOME/.kube/config </span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"><span class="comment">#安装flannel网络组件</span></span></span><br><span class="line"><span class="meta">#</span><span class="bash"><span class="comment"># 在master上执行以下命令</span></span></span><br><span class="line">kubectl apply -f  https://raw.githubusercontent.com/coreos/flannel/master/Documentation/kube-flannel.yml</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"><span class="comment"># 若出现无法下载安装flannel组件</span></span></span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"><span class="comment">#查看结点</span></span></span><br><span class="line">kubectl get node</span><br><span class="line"><span class="meta">#</span><span class="bash"><span class="comment">#查看集群状态</span></span></span><br><span class="line">kubectl get cs</span><br><span class="line"><span class="meta">#</span><span class="bash"> 可能会出现node notready的情况 在master执行</span></span><br><span class="line">kubectl get pod --all-namespaces -o wide</span><br></pre></td></tr></table></figure>
-<p><strong><em>Master结点初始化成功，状态可能是NotReady，要等一段时间</em></strong><br>如果初始化不成功，可以参考博文：<a href="https://www.jianshu.com/p/f53650a85131">https://www.jianshu.com/p/f53650a85131</a> 进行修复</p>
-<h3 id="初始化问题"><a href="#初始化问题" class="headerlink" title="初始化问题"></a>初始化问题</h3><ol>
-<li>由于没安装 <strong>flannel</strong> 组件</li>
-</ol>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">[root@k8s-master ~]# kubectl get pod --all-namespaces -o wide</span><br><span class="line">NAMESPACE     NAME                                 READY   STATUS    RESTARTS   AGE   IP             NODE         NOMINATED NODE   READINESS GATES</span><br><span class="line">kube-system   coredns-58cc8c89f4-dwg8r             0/1     Pending   0          24m   &lt;none&gt;         &lt;none&gt;       &lt;none&gt;           &lt;none&gt;</span><br><span class="line">kube-system   coredns-58cc8c89f4-jx7cw             0/1     Pending   0          24m   &lt;none&gt;         &lt;none&gt;       &lt;none&gt;           &lt;none&gt;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
-<ol start="2">
-<li><p>无法直接从官网下载 flannel 组件安装 yml 文件</p>
-<p>参考：<a href="https://blog.csdn.net/fuck487/article/details/102783300">https://blog.csdn.net/fuck487/article/details/102783300</a></p>
-</li>
-</ol>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">[root@k8s-master ~]# kubectl apply -f  https://raw.githubusercontent.com/coreos/flannel/master/Documentation/kube-flannel.yml</span><br><span class="line">The connection to the server raw.githubusercontent.com was refused - did you specify the right host or port?</span><br><span class="line"><span class="meta">#</span><span class="bash"><span class="comment"># 解决方法：自行创建 或 ftp 传输本地 kube-flannel.yml</span></span></span><br><span class="line">vi $HOME/kube-flannel.yml</span><br><span class="line"><span class="meta">#</span><span class="bash"><span class="comment"># </span></span></span><br><span class="line"><span class="meta">    #</span><span class="bash"><span class="comment"># 粘贴内容 kube-flannel.yml </span></span></span><br><span class="line"><span class="meta">#</span><span class="bash"><span class="comment">#</span></span></span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"><span class="comment"># 安装 </span></span></span><br><span class="line">[root@k8s-master ~]# kubectl apply -f ./kube-flannel.yml</span><br><span class="line">podsecuritypolicy.policy/psp.flannel.unprivileged created</span><br><span class="line">clusterrole.rbac.authorization.k8s.io/flannel created</span><br><span class="line">clusterrolebinding.rbac.authorization.k8s.io/flannel created</span><br><span class="line">serviceaccount/flannel created</span><br><span class="line">configmap/kube-flannel-cfg created</span><br><span class="line">daemonset.apps/kube-flannel-ds-amd64 created</span><br><span class="line">daemonset.apps/kube-flannel-ds-arm64 created</span><br><span class="line">daemonset.apps/kube-flannel-ds-arm created</span><br><span class="line">daemonset.apps/kube-flannel-ds-ppc64le created</span><br><span class="line">daemonset.apps/kube-flannel-ds-s390x created</span><br></pre></td></tr></table></figure>
-
-
-
-<h2 id="10-补充命令"><a href="#10-补充命令" class="headerlink" title="10. 补充命令"></a>10. 补充命令</h2><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"><span class="comment"># 然后在 master 和 node 上都执行此命令</span></span></span><br><span class="line">[root@k8s-master bin]# modprobe ip_vs ip_vs_rr ip_vs_wrr ip_vs_sh</span><br><span class="line">modprobe: ERROR: could not insert &#x27;ip_vs&#x27;: Unknown symbol in module, or unknown parameter (see dmesg)</span><br><span class="line"><span class="meta">#</span><span class="bash"><span class="comment"># 删去 ip_vs</span></span></span><br><span class="line">[root@k8s-master bin]# modprobe ip_vs_rr ip_vs_wrr ip_vs_sh</span><br><span class="line">modprobe: ERROR: could not insert &#x27;ip_vs_rr&#x27;: Unknown symbol in module, or unknown parameter (see dmesg)</span><br><span class="line"><span class="meta">#</span><span class="bash"><span class="comment"># 在执行</span></span></span><br><span class="line">[root@k8s-master bin]# modprobe ip_vs ip_vs_rr ip_vs_wrr ip_vs_sh</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"><span class="comment">#查看确保内核开启了ipvs模块</span></span></span><br><span class="line">[root@k8s-master bin]# lsmod|grep ip_vs</span><br><span class="line">ip_vs                 145497  0 </span><br><span class="line">nf_conntrack          139224  7 ip_vs,nf_nat,nf_nat_ipv4,xt_conntrack,nf_nat_masquerade_ipv4,nf_conntrack_netlink,nf_conntrack_ipv4</span><br><span class="line">libcrc32c              12644  4 xfs,ip_vs,nf_nat,nf_conntrack</span><br></pre></td></tr></table></figure>
-
-<h2 id="11-添加节点"><a href="#11-添加节点" class="headerlink" title="11. 添加节点"></a>11. 添加节点</h2><h3 id="获取-kubeadm-join-命令"><a href="#获取-kubeadm-join-命令" class="headerlink" title="获取 kubeadm join 命令"></a>获取 kubeadm join 命令</h3><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> 获得添加结点命令 master上执行  kubeadm token create --<span class="built_in">print</span>-join-command</span></span><br><span class="line">[root@k8s-master ~]# kubeadm token create --print-join-command</span><br><span class="line">kubeadm join 192.168.1.86:6443 --token a1qmdh.d79exiuqbzdr616o     --discovery-token-ca-cert-hash sha256:a3220f1d2384fe5230cad2302a4ac1f233b03ea24c19c165adb5824f9c358336</span><br></pre></td></tr></table></figure>
-
-<h3 id="node节点上执行-join-添加结点"><a href="#node节点上执行-join-添加结点" class="headerlink" title="node节点上执行 join 添加结点"></a>node节点上执行 join 添加结点</h3><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">[root@k8s-node1 bin]# kubeadm join 192.168.1.86:6443 --token otjfah.zta4yo0bexibbj52     --discovery-token-ca-cert-hash sha256:60535ebe96b6a4cceab70d551f2b2b507a3641c3dc421469320b915e01377e5c</span><br><span class="line">[preflight] Running pre-flight checks</span><br><span class="line">[preflight] Reading configuration from the cluster...</span><br><span class="line">[preflight] FYI: You can look at this config file with &#x27;kubectl -n kube-system get cm kubeadm-config -oyaml&#x27;</span><br><span class="line">[kubelet-start] Downloading configuration for the kubelet from the &quot;kubelet-config-1.16&quot; ConfigMap in the kube-system namespace</span><br><span class="line">[kubelet-start] Writing kubelet configuration to file &quot;/var/lib/kubelet/config.yaml&quot;</span><br><span class="line">[kubelet-start] Writing kubelet environment file with flags to file &quot;/var/lib/kubelet/kubeadm-flags.env&quot;</span><br><span class="line">[kubelet-start] Activating the kubelet service</span><br><span class="line">[kubelet-start] Waiting for the kubelet to perform the TLS Bootstrap...</span><br><span class="line"></span><br><span class="line">This node has joined the cluster:</span><br><span class="line">* Certificate signing request was sent to apiserver and a response was received.</span><br><span class="line">* The Kubelet was informed of the new secure connection details.</span><br><span class="line"></span><br><span class="line">Run &#x27;kubectl get nodes&#x27; on the control-plane to see this node join the cluster.</span><br></pre></td></tr></table></figure>
-
-<h2 id="12-删除节点"><a href="#12-删除节点" class="headerlink" title="12. 删除节点"></a>12. 删除节点</h2><p>master节点上：</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">[root@k8s-master ~]# kubectl get nodes</span><br><span class="line">NAME         STATUS   ROLES    AGE    VERSION</span><br><span class="line">k8s-master   Ready    master   3h9m   v1.16.2</span><br><span class="line">k8s-node1    Ready    &lt;none&gt;   116s   v1.16.2</span><br><span class="line">[root@k8s-master ~]# kubectl drain k8s-node1 --delete-local-data --force --ignore-daemonsets</span><br><span class="line">node/k8s-node1 cordoned</span><br><span class="line">WARNING: ignoring DaemonSet-managed Pods: kube-system/kube-flannel-ds-amd64-gmq2b, kube-system/kube-proxy-q9ppx</span><br><span class="line">node/k8s-node1 drained</span><br><span class="line">[root@k8s-master ~]# kubectl get nodes</span><br><span class="line">NAME         STATUS                     ROLES    AGE     VERSION</span><br><span class="line">k8s-master   Ready                      master   3h10m   v1.16.2</span><br><span class="line">k8s-node1    Ready,SchedulingDisabled   &lt;none&gt;   2m43s   v1.16.2</span><br><span class="line">[root@k8s-master ~]# kubectl delete node k8s-node1</span><br><span class="line">node &quot;k8s-node1&quot; deleted</span><br><span class="line">[root@k8s-master ~]# </span><br></pre></td></tr></table></figure>
-
-<p>删除结点(k8s-node1)上：</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">[root@k8s-node1 ~]# kubeadm reset</span><br><span class="line">[reset] WARNING: Changes made to this host by &#x27;kubeadm init&#x27; or &#x27;kubeadm join&#x27; will be reverted.</span><br><span class="line">[reset] Are you sure you want to proceed? [y/N]: y    ## y 确认</span><br><span class="line">[preflight] Running pre-flight checks</span><br><span class="line">W0109 13:39:15.848313   79539 removeetcdmember.go:79] [reset] No kubeadm config, using etcd pod spec to get data directory</span><br><span class="line">[reset] No etcd config found. Assuming external etcd</span><br><span class="line">[reset] Please, manually reset etcd to prevent further issues</span><br><span class="line">[reset] Stopping the kubelet service</span><br><span class="line">[reset] Unmounting mounted directories in &quot;/var/lib/kubelet&quot;</span><br><span class="line">[reset] Deleting contents of config directories: [/etc/kubernetes/manifests /etc/kubernetes/pki]</span><br><span class="line">[reset] Deleting files: [/etc/kubernetes/admin.conf /etc/kubernetes/kubelet.conf /etc/kubernetes/bootstrap-kubelet.conf /etc/kubernetes/controller-manager.conf /etc/kubernetes/scheduler.conf]</span><br><span class="line">[reset] Deleting contents of stateful directories: [/var/lib/kubelet /etc/cni/net.d /var/lib/dockershim /var/run/kubernetes /var/lib/cni]</span><br><span class="line"></span><br><span class="line">The reset process does not reset or clean up iptables rules or IPVS tables.</span><br><span class="line">If you wish to reset iptables, you must do so manually by using the &quot;iptables&quot; command.</span><br><span class="line"></span><br><span class="line">If your cluster was setup to utilize IPVS, run ipvsadm --clear (or similar)</span><br><span class="line">to reset your system&#x27;s IPVS tables.</span><br><span class="line"></span><br><span class="line">The reset process does not clean your kubeconfig files and you must remove them manually.</span><br><span class="line">Please, check the contents of the $HOME/.kube/config file.</span><br></pre></td></tr></table></figure>
-
-
-
-<h2 id="附录：查询命令"><a href="#附录：查询命令" class="headerlink" title="附录：查询命令"></a>附录：查询命令</h2><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"><span class="comment">#查看结点 在master执行</span></span></span><br><span class="line">kubectl get nodes</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"><span class="comment">#查看集群状态 在master执行</span></span></span><br><span class="line">kubectl get cs</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"> 可能会出现node notready的情况 在master执行</span></span><br><span class="line">kubectl get pod --all-namespaces -o wide</span><br></pre></td></tr></table></figure>
-
-]]></content>
-      <categories>
-        <category>教程</category>
-      </categories>
-      <tags>
-        <tag>linux</tag>
-        <tag>k8s</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>hexo-theme-next主题配置</title>
-    <url>/hexo-theme-next%E4%B8%BB%E9%A2%98%E9%85%8D%E7%BD%AE/</url>
+    <url>/hexo/hexo-theme-next%E4%B8%BB%E9%A2%98%E9%85%8D%E7%BD%AE/</url>
     <content><![CDATA[<p>2020-08-02 版本信息</p>
 <blockquote>
 <p>nodejs : v12.18.3</p>
@@ -731,29 +980,55 @@
       </tags>
   </entry>
   <entry>
-    <title>hexo-theme-next valine评论</title>
-    <url>/hexo-theme-next%20valine%E8%AF%84%E8%AE%BA/</url>
-    <content><![CDATA[<blockquote>
-<p>站点配置文件 <code>url</code> 地加 <code>http</code> 头，否则文章末尾【本文链接】地址为：<strong>域名/域名/xxxxxxx</strong></p>
-<figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="comment"># URL</span></span><br><span class="line"><span class="comment">## If your site is put in a subdirectory, set url as &#x27;http://yoursite.com/child&#x27; and root as &#x27;/child/&#x27;</span></span><br><span class="line"><span class="attr">url:</span> <span class="string">http://jakelin.cn</span></span><br><span class="line"><span class="attr">root:</span> <span class="string">/</span></span><br></pre></td></tr></table></figure>
-</blockquote>
-<h1 id="绑定域名"><a href="#绑定域名" class="headerlink" title="绑定域名"></a>绑定域名</h1><p>新增域名解析：</p>
-<ol>
-<li><p>记录类型：CNAME</p>
-<ol start="2">
-<li>主机记录：@</li>
-<li>记录值：Github Pages项目域名</li>
-</ol>
+    <title>hexo-theme-next提交给搜索引擎</title>
+    <url>/hexo/hexo-theme-next%E6%8F%90%E4%BA%A4%E7%BB%99%E6%90%9C%E7%B4%A2%E5%BC%95%E6%93%8E/</url>
+    <content><![CDATA[<h1 id="站点地图生成"><a href="#站点地图生成" class="headerlink" title="站点地图生成"></a>站点地图生成</h1><ol>
+<li><p>插件安装</p>
+<ul>
+<li><p>Google站点地图插件</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">npm install hexo-generator-sitemap --save</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>百度站点地图插件</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">npm install hexo-generator-baidu-sitemap --save</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+<li><p>修改站点配置文件</p>
 </li>
 </ol>
-<h1 id="Valine"><a href="#Valine" class="headerlink" title="Valine"></a>Valine</h1><h2 id="注册LeanClound，获取APP-ID-和-APP-Key"><a href="#注册LeanClound，获取APP-ID-和-APP-Key" class="headerlink" title="注册LeanClound，获取APP ID 和 APP Key"></a>注册LeanClound，获取APP ID 和 APP Key</h2><p>注册链接： <a href="https://leancloud.cn/dashboard/login.html#/signup">LeanClound注册</a> </p>
-<p>【创建应用】-&gt;【随便起个名】-&gt;【开发版】-&gt;[创建]</p>
-<p><img src="https://i.loli.net/2020/08/03/kNErsH8PezWO1uj.png" alt="LeanClound创建应用.png"></p>
-<p><img src="https://i.loli.net/2020/08/03/uxdiBNf6g4MKwOs.png" alt="获取key.png"></p>
-<h2 id="修改主题配置文件"><a href="#修改主题配置文件" class="headerlink" title="修改主题配置文件"></a>修改主题配置文件</h2><figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="comment"># Valine</span></span><br><span class="line"><span class="comment"># For more information: https://valine.js.org, https://github.com/xCss/Valine</span></span><br><span class="line"><span class="attr">valine:</span></span><br><span class="line">  <span class="attr">enable:</span> <span class="literal">true</span></span><br><span class="line">  <span class="attr">appId:</span> <span class="string">这里填</span> <span class="string">AppID</span>  <span class="comment"># Your leancloud application appid</span></span><br><span class="line">  <span class="attr">appKey:</span> <span class="string">这里填</span> <span class="string">AppKey</span> <span class="comment"># Your leancloud application appkey</span></span><br><span class="line">  <span class="attr">placeholder:</span> <span class="string">&#x27;ヾﾉ≧∀≦)o来啊，快活啊!&#x27;</span> <span class="comment"># Comment box placeholder</span></span><br><span class="line">  <span class="attr">avatar:</span> <span class="string">mm</span> <span class="comment"># Gravatar style</span></span><br><span class="line">  <span class="attr">meta:</span> [<span class="string">nick</span>, <span class="string">mail</span>, <span class="string">link</span>] <span class="comment"># Custom comment header</span></span><br><span class="line">  <span class="attr">pageSize:</span> <span class="number">10</span> <span class="comment"># Pagination size</span></span><br><span class="line">  <span class="attr">language:</span> <span class="string">zh-cn</span> <span class="comment"># Language, available values: en, zh-cn</span></span><br><span class="line">  <span class="attr">visitor:</span> <span class="literal">true</span> <span class="comment"># Article reading statistic</span></span><br><span class="line">  <span class="attr">comment_count:</span> <span class="literal">true</span> <span class="comment"># If false, comment count will only be displayed in post page, not in home page</span></span><br><span class="line">  <span class="attr">recordIP:</span> <span class="literal">false</span> <span class="comment"># Whether to record the commenter IP</span></span><br><span class="line">  <span class="attr">serverURLs:</span> <span class="comment"># When the custom domain name is enabled, fill it in here (it will be detected automatically by default, no need to fill in)</span></span><br><span class="line">  <span class="attr">enableQQ:</span> <span class="literal">false</span> <span class="comment"># Whether to enable the Nickname box to automatically get QQ Nickname and QQ Avatar</span></span><br><span class="line">  <span class="attr">requiredFields:</span> [] <span class="comment"># Set required fields: [&#x27;nick&#x27;] | [&#x27;nick&#x27;,&#x27;mail&#x27;]</span></span><br><span class="line">  <span class="comment">#post_meta_order: 0</span></span><br></pre></td></tr></table></figure>
+<p><code>_config.yml</code> 中加入：</p>
+<figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="attr">sitemap:</span></span><br><span class="line">  <span class="attr">path:</span> <span class="string">sitemap.xml</span> <span class="comment"># 提交给Google</span></span><br><span class="line"><span class="attr">baidusitemap:</span></span><br><span class="line">  <span class="attr">path:</span> <span class="string">baidusitemap.xml</span> <span class="comment"># 提交给百度</span></span><br></pre></td></tr></table></figure>
 
-<h2 id="添加邮件提醒"><a href="#添加邮件提醒" class="headerlink" title="添加邮件提醒"></a>添加邮件提醒</h2><p>见： <a href="https://tding.top/archives/ed8b904f.html">小丁的个人博客–Hexo-NexT 配置 Valine</a> </p>
-<h1 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h1><p><a href="https://valine.js.org/quickstart.html">Valine-快速开始</a></p>
+<ol start="3">
+<li><p>重新构建项目</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">hexo cl&amp;&amp;hexo g</span><br></pre></td></tr></table></figure>
+
+</li>
+</ol>
+<h1 id="提交站点地图"><a href="#提交站点地图" class="headerlink" title="提交站点地图"></a>提交站点地图</h1><p>直接参考：<a href="https://fanandjiu.com/Hexo%E9%97%AE%E9%A2%98-%E6%8F%90%E4%BA%A4%E7%AB%99%E7%82%B9%E7%BB%99%E6%90%9C%E7%B4%A2%E5%BC%95%E6%93%8E%E4%BB%A5%E5%8F%8ASEO/">Hexo问题-提交站点给搜索引擎以及SEO</a> </p>
+<p><strong><em>注意：在Google进行DNS记录验证域名所有权时，因为阿里云域名解析的记录值不允许两个 <code>@</code> ，但将域名记录值 <code>@</code> 用以验证，验证完后再更改记录值是可行的。验证后需要一定的时间才能google搜索到！</em></strong> </p>
+<p><img src="https://i.loli.net/2020/08/06/SBGhud2oF7V4ZKj.png" alt="DNS验证域名所有权-Google.png"></p>
+<h1 id="站点分析"><a href="#站点分析" class="headerlink" title="站点分析"></a>站点分析</h1><p>参考：<a href="https://theme-next.js.org/docs/third-party-services/statistics-and-analytics.html">Statistics and Analytics</a> </p>
+<h2 id="Google-分析"><a href="#Google-分析" class="headerlink" title="Google 分析"></a>Google 分析</h2><ol>
+<li><p>创建一个 <a href="https://analytics.google.com/">Google Analytics</a> 账号</p>
+</li>
+<li><p>得到一个 <code>跟踪ID</code> ：UA-xxxxxx</p>
+</li>
+<li><p>修改Next配置文件</p>
+<figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="comment"># Google Analytics</span></span><br><span class="line"><span class="attr">google_analytics:</span></span><br><span class="line">  <span class="attr">tracking_id:</span> <span class="string">你的跟踪ID</span> <span class="comment"># &lt;app_id&gt;</span></span><br></pre></td></tr></table></figure>
+
+</li>
+</ol>
+<h2 id="百度分析"><a href="#百度分析" class="headerlink" title="百度分析"></a>百度分析</h2><ol>
+<li><p>去<a href="https://tongji.baidu.com/web/welcome/login">百度统计</a>，新增一个网站</p>
+</li>
+<li><p>复制统计代码中的 <code>hm.src = &quot;https://hm.baidu.com/hm.js?[这里的脚本ID]&quot;</code></p>
+</li>
+<li><p>修改Next配置文件</p>
+<figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="comment"># Baidu Analytics</span></span><br><span class="line"><span class="attr">baidu_analytics:</span> <span class="string">脚本ID</span> <span class="comment"># &lt;app_id&gt;</span></span><br></pre></td></tr></table></figure>
+
+</li>
+</ol>
 ]]></content>
       <categories>
         <category>教程</category>
@@ -765,8 +1040,84 @@
       </tags>
   </entry>
   <entry>
+    <title>centos-k8s1.16.2集群安装部署</title>
+    <url>/other/centos7-k8s1.16.2%20%E9%9B%86%E7%BE%A4%E5%AE%89%E8%A3%85%E9%85%8D%E7%BD%AE/</url>
+    <content><![CDATA[<h2 id="1-centos-7-配置"><a href="#1-centos-7-配置" class="headerlink" title="1. centos 7 配置"></a>1. centos 7 配置</h2><p>关闭防火墙、关闭selinux、更新源</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash">防火墙</span></span><br><span class="line">systemctl disable firewalld.service</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash">关闭Selinux</span></span><br><span class="line">    sed -i &#x27;s/SELINUX=enforcing/SELINUX=disabled/&#x27; /etc/selinux/config</span><br><span class="line"><span class="meta">#</span><span class="bash"><span class="comment"># 或者</span></span></span><br><span class="line">    /etc/selinux/config</span><br><span class="line">    #将其中的 SELINUX=*处修改为如下</span><br><span class="line">    SELINUX=disabled</span><br><span class="line"><span class="meta">#</span><span class="bash">重启服务器</span></span><br><span class="line"><span class="meta">#</span><span class="bash">运行命令getenforce 确保 selinux 为<span class="built_in">disable</span></span></span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash">安装wget</span></span><br><span class="line">yum install -y wget</span><br><span class="line">wget -O /etc/yum.repos.d/CentOS-Base.repo http://mirrors.aliyun.com/repo/Centos-7.repo</span><br><span class="line">wget -O /etc/yum.repos.d/epel.repo http://mirrors.aliyun.com/repo/epel-7.repo</span><br><span class="line"><span class="meta">#</span><span class="bash">更新 源</span></span><br><span class="line">yum upgrade</span><br></pre></td></tr></table></figure>
+
+<h2 id="2-host配置"><a href="#2-host配置" class="headerlink" title="2. host配置"></a>2. host配置</h2><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> cat /etc/hosts</span></span><br><span class="line"><span class="meta">#</span><span class="bash">k8s nodes</span></span><br><span class="line">192.169.1.86    k8s-master</span><br><span class="line">192.168.1.87    k8s-node1</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"> cat /etc/hostname</span></span><br><span class="line">结点名称</span><br><span class="line"><span class="meta">#</span><span class="bash"> reboot</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="3-创建-etc-sysctl-d-k8s-conf文件"><a href="#3-创建-etc-sysctl-d-k8s-conf文件" class="headerlink" title="3. 创建/etc/sysctl.d/k8s.conf文件"></a>3. 创建/etc/sysctl.d/k8s.conf文件</h2><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash">修改内核参数</span></span><br><span class="line">cat &lt;&lt;EOF &gt;  /etc/sysctl.d/k8s.conf</span><br><span class="line">net.bridge.bridge-nf-call-ip6tables = 1</span><br><span class="line">net.bridge.bridge-nf-call-iptables = 1</span><br><span class="line">EOF</span><br><span class="line"><span class="meta">#</span><span class="bash">执行sysctl -p /etc/sysctl.d/k8s.conf生效（sysctl --system）</span></span><br><span class="line">sysctl -p /etc/sysctl.d/k8s.conf</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash">如果有如下报错:</span></span><br><span class="line">sysctl: cannot stat /proc/sys/net/bridge/bridge-nf-call-ip6tables: No such file or directory</span><br><span class="line">sysctl: cannot stat /proc/sys/net/bridge/bridge-nf-call-iptables: No such file or directory</span><br><span class="line"><span class="meta">#</span><span class="bash">解决方法：</span></span><br><span class="line"><span class="meta">#</span><span class="bash">安装bridge-util软件，加载bridge模块，加载br_netfilter模块</span></span><br><span class="line">yum install -y bridge-utils.x86_64</span><br><span class="line">modprobe bridge</span><br><span class="line">modprobe br_netfilter</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash">关闭swap</span></span><br><span class="line">swapoff -a</span><br><span class="line">echo &quot;vm.swappiness=0&quot; &gt;&gt; /etc/sysctl.d/k8s.conf</span><br><span class="line"><span class="meta">#</span><span class="bash">使生效</span></span><br><span class="line">sysctl -p /etc/sysctl.d/k8s.conf</span><br></pre></td></tr></table></figure>
+
+<h2 id="4-安装软件源配置"><a href="#4-安装软件源配置" class="headerlink" title="4. 安装软件源配置"></a>4. 安装软件源配置</h2><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash">配置k8s软件源</span></span><br><span class="line">cat &lt;&lt;EOF &gt; /etc/yum.repos.d/kubernetes.repo </span><br><span class="line">[kubernetes]</span><br><span class="line">name=Kubernetes</span><br><span class="line">baseurl=http://mirrors.aliyun.com/kubernetes/yum/repos/kubernetes-el7-x86_64</span><br><span class="line">enabled=1</span><br><span class="line">gpgcheck=0</span><br><span class="line">repo_gpgcheck=0</span><br><span class="line">gpgkey=http://mirrors.aliyun.com/kubernetes/yum/doc/yum-key.gpg</span><br><span class="line">        http://mirrors.aliyun.com/kubernetes/yum/doc/rpm-package-key.gpg</span><br><span class="line">EOF</span><br></pre></td></tr></table></figure>
+
+<h2 id="5-安装docker"><a href="#5-安装docker" class="headerlink" title="5. 安装docker"></a>5. 安装docker</h2><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"><span class="comment">#先校正时间 否则 无法运行docker！！！！</span></span></span><br><span class="line">    # 1.安装ntpdate工具</span><br><span class="line">    sudo yum -y install ntp ntpdate</span><br><span class="line">    # 2.设置系统时间与网络时间同步</span><br><span class="line">    sudo ntpdate cn.pool.ntp.org</span><br><span class="line">    # 3.将系统时间写入硬件时间</span><br><span class="line">    sudo hwclock --systohc</span><br><span class="line">    # 4.查看系统时间</span><br><span class="line">    timedatectl</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash">安装docker</span></span><br><span class="line">yum install -y docker-io</span><br><span class="line"><span class="meta">#</span><span class="bash">启动docker并设置开机启动</span></span><br><span class="line">systemctl enable docker &amp;&amp; systemctl start docker</span><br></pre></td></tr></table></figure>
+
+<h2 id="6-安装kubernetes—-指定版本（1-16-2）"><a href="#6-安装kubernetes—-指定版本（1-16-2）" class="headerlink" title="6. 安装kubernetes—-指定版本（1.16.2）"></a>6. 安装kubernetes—-指定版本（1.16.2）</h2><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"> </span><br><span class="line"><span class="meta">#</span><span class="bash">查看软件包版本</span></span><br><span class="line">yum list --showduplicates | grep &#x27;kubeadm\|kubectl\|kubelet&#x27;</span><br><span class="line"><span class="meta">#</span><span class="bash">安装软件 指定版本</span></span><br><span class="line">yum install -y kubelet-1.16.2 kubeadm-1.16.2 kubectl-1.16.2</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash">启动服务并设置开机自启</span></span><br><span class="line">systemctl start kubelet &amp;&amp; systemctl enable kubelet</span><br></pre></td></tr></table></figure>
+
+<h2 id="7-修改配置"><a href="#7-修改配置" class="headerlink" title="7. 修改配置"></a>7. 修改配置</h2><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash">kubernetes 配置</span></span><br><span class="line"><span class="meta">#</span><span class="bash">/usr/bin 目录下 执行以下操作</span></span><br><span class="line"><span class="meta">#</span><span class="bash"><span class="comment"># kubelet  kubeadm  kubectl更新权限</span></span></span><br><span class="line">cd /usr/bin &amp;&amp; chmod a+x kubelet  kubeadm  kubectl</span><br><span class="line">export KUBECONFIG=/etc/kubernetes/admin.conf</span><br><span class="line">iptables -P FORWARD ACCEPT</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash">docker 配置</span></span><br><span class="line"><span class="meta">#</span><span class="bash"><span class="comment">#编辑 /lib/systemd/system/docker.service 在[Service] 下添加下面一行</span></span></span><br><span class="line">ExecStartPost=/sbin/iptables -P FORWARD ACCEPT</span><br><span class="line"><span class="meta">#</span><span class="bash"><span class="comment">#重启docker</span></span></span><br><span class="line">systemctl daemon-reload</span><br><span class="line">systemctl restart docker</span><br></pre></td></tr></table></figure>
+
+<h2 id="8-拉取镜像并tag"><a href="#8-拉取镜像并tag" class="headerlink" title="8. 拉取镜像并tag"></a>8. 拉取镜像并tag</h2><p>由于镜像默认从国外网站拉取，被墙，故自行从国内云拉取。<br>运行 <kbd>kubeadm config   images  list</kbd> 查看所需要的镜像以及版本号，再从阿里云拉取这些镜像。</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">[root@k8s-master bin]# kubeadm config   images  list</span><br><span class="line">W0108 19:53:17.464386   10103 version.go:101] could not fetch a Kubernetes version from the internet: unable to get URL &quot;https://dl.k8s.io/release/stable-1.txt&quot;: Get https://dl.k8s.io/release/stable-1.txt: net/http: request canceled while waiting for connection (Client.Timeout exceeded while awaiting headers)</span><br><span class="line">W0108 19:53:17.464460   10103 version.go:102] falling back to the local client version: v1.16.2</span><br><span class="line">k8s.gcr.io/kube-apiserver:v1.16.2</span><br><span class="line">k8s.gcr.io/kube-controller-manager:v1.16.2</span><br><span class="line">k8s.gcr.io/kube-scheduler:v1.16.2</span><br><span class="line">k8s.gcr.io/kube-proxy:v1.16.2</span><br><span class="line">k8s.gcr.io/pause:3.1</span><br><span class="line">k8s.gcr.io/etcd:3.3.15-0</span><br><span class="line">k8s.gcr.io/coredns:1.6.2</span><br></pre></td></tr></table></figure>
+
+<p>拉取对应镜像<kbd>docker pull registry.cn-hangzhou.aliyuncs.com/google_containers/镜像名:版本号</kbd></p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"><span class="comment"># 对应上面版本号</span></span></span><br><span class="line">docker pull registry.cn-hangzhou.aliyuncs.com/google_containers/kube-apiserver:v1.16.2</span><br><span class="line">docker pull registry.cn-hangzhou.aliyuncs.com/google_containers/kube-controller-manager:v1.16.2</span><br><span class="line">docker pull registry.cn-hangzhou.aliyuncs.com/google_containers/kube-scheduler:v1.16.2</span><br><span class="line">docker pull registry.cn-hangzhou.aliyuncs.com/google_containers/kube-proxy:v1.16.2</span><br><span class="line">docker pull registry.cn-hangzhou.aliyuncs.com/google_containers/pause:3.1</span><br><span class="line">docker pull registry.cn-hangzhou.aliyuncs.com/google_containers/etcd:3.3.15-0</span><br><span class="line">docker pull registry.cn-hangzhou.aliyuncs.com/google_containers/coredns:1.6.2</span><br></pre></td></tr></table></figure>
+
+<p>tag镜像：</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">docker tag registry.cn-hangzhou.aliyuncs.com/google_containers/kube-apiserver:v1.16.2 k8s.gcr.io/kube-apiserver:v1.16.2</span><br><span class="line">docker tag registry.cn-hangzhou.aliyuncs.com/google_containers/kube-controller-manager:v1.16.2 k8s.gcr.io/kube-controller-manager:v1.16.2</span><br><span class="line">docker tag registry.cn-hangzhou.aliyuncs.com/google_containers/kube-scheduler:v1.16.2 k8s.gcr.io/kube-scheduler:v1.16.2</span><br><span class="line">docker tag registry.cn-hangzhou.aliyuncs.com/google_containers/kube-proxy:v1.16.2 k8s.gcr.io/kube-proxy:v1.16.2</span><br><span class="line">docker tag registry.cn-hangzhou.aliyuncs.com/google_containers/pause:3.1 k8s.gcr.io/pause:3.1</span><br><span class="line">docker tag registry.cn-hangzhou.aliyuncs.com/google_containers/etcd:3.3.15-0 k8s.gcr.io/etcd:3.3.15-0</span><br><span class="line">docker tag registry.cn-hangzhou.aliyuncs.com/google_containers/coredns:1.6.2 k8s.gcr.io/coredns:1.6.2</span><br></pre></td></tr></table></figure>
+
+<h2 id="9-使用kubeadm-init初始化集群（仅master）"><a href="#9-使用kubeadm-init初始化集群（仅master）" class="headerlink" title="9. 使用kubeadm init初始化集群（仅master）"></a>9. 使用kubeadm init初始化集群（仅master）</h2><p><strong><em>详细参数查询地址：</em></strong> <a href="https://kubernetes.io/zh/docs/reference/setup-tools/kubeadm/kubeadm-init/">https://kubernetes.io/zh/docs/reference/setup-tools/kubeadm/kubeadm-init/</a></p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">--apiserver-advertise-address string</span><br><span class="line">API 服务器所公布的其正在监听的 IP 地址。如果未设置，则使用默认网络接口。</span><br><span class="line">--image-repository string     默认值：&quot;k8s.gcr.io&quot;</span><br><span class="line">选择用于拉取控制平面镜像的容器仓库</span><br><span class="line">--kubernetes-version string     默认值：&quot;stable-1&quot;</span><br><span class="line">为控制平面选择一个特定的 Kubernetes 版本。</span><br><span class="line">--service-cidr string     默认值：&quot;10.96.0.0/12&quot;</span><br><span class="line">为服务的虚拟 IP 地址另外指定 IP 地址段</span><br><span class="line">--pod-network-cidr string</span><br><span class="line">指明 pod 网络可以使用的 IP 地址段。如果设置了这个参数，控制平面将会为每一个节点自动分配 CIDRs。</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"><span class="comment">#部署Kubernetes Master</span></span></span><br><span class="line"><span class="meta">#</span><span class="bash"><span class="comment">#在192.168.1.86（Master）执行</span></span></span><br><span class="line"><span class="meta">#</span><span class="bash"><span class="comment">#由于默认拉取镜像地址k8s.gcr.io国内无法访问，这里指定阿里云镜像仓库地址</span></span></span><br><span class="line"></span><br><span class="line">kubeadm init \</span><br><span class="line">--apiserver-advertise-address=192.168.1.86 \</span><br><span class="line">--image-repository registry.aliyuncs.com/google_containers \</span><br><span class="line">--kubernetes-version v1.16.2 \</span><br><span class="line">--service-cidr=10.1.0.0/16 \</span><br><span class="line">--pod-network-cidr=10.244.0.0/16</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>初始化成功，显示：</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">Your Kubernetes control-plane has initialized successfully!</span><br><span class="line"></span><br><span class="line">To start using your cluster, you need to run the following as a regular user:</span><br><span class="line"></span><br><span class="line">  mkdir -p $HOME/.kube</span><br><span class="line">  sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config</span><br><span class="line">  sudo chown $(id -u):$(id -g) $HOME/.kube/config</span><br><span class="line"></span><br><span class="line">You should now deploy a pod network to the cluster.</span><br><span class="line">Run &quot;kubectl apply -f [podnetwork].yaml&quot; with one of the options listed at:</span><br><span class="line">  https://kubernetes.io/docs/concepts/cluster-administration/addons/</span><br><span class="line"></span><br><span class="line">Then you can join any number of worker nodes by running the following on each as root:</span><br><span class="line"></span><br><span class="line">kubeadm join 192.168.1.86:6443 --token pwwmps.9cds2s34wlpiyznv \</span><br><span class="line">    --discovery-token-ca-cert-hash sha256:a3220f1d2384fe5230cad2302a4ac1f233b03ea24c19c165adb5824f9c358336</span><br></pre></td></tr></table></figure>
+
+<p>然后在master执行如下命令：</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> 等待命令执行完毕后执行如下命令</span></span><br><span class="line"><span class="meta">#</span><span class="bash"><span class="comment"># 在master上执行以下命令  </span></span></span><br><span class="line">mkdir -p $HOME/.kube  </span><br><span class="line">sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config  </span><br><span class="line">sudo chown $(id -u):$(id -g) $HOME/.kube/config </span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"><span class="comment">#安装flannel网络组件</span></span></span><br><span class="line"><span class="meta">#</span><span class="bash"><span class="comment"># 在master上执行以下命令</span></span></span><br><span class="line">kubectl apply -f  https://raw.githubusercontent.com/coreos/flannel/master/Documentation/kube-flannel.yml</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"><span class="comment"># 若出现无法下载安装flannel组件</span></span></span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"><span class="comment">#查看结点</span></span></span><br><span class="line">kubectl get node</span><br><span class="line"><span class="meta">#</span><span class="bash"><span class="comment">#查看集群状态</span></span></span><br><span class="line">kubectl get cs</span><br><span class="line"><span class="meta">#</span><span class="bash"> 可能会出现node notready的情况 在master执行</span></span><br><span class="line">kubectl get pod --all-namespaces -o wide</span><br></pre></td></tr></table></figure>
+<p><strong><em>Master结点初始化成功，状态可能是NotReady，要等一段时间</em></strong><br>如果初始化不成功，可以参考博文：<a href="https://www.jianshu.com/p/f53650a85131">https://www.jianshu.com/p/f53650a85131</a> 进行修复</p>
+<h3 id="初始化问题"><a href="#初始化问题" class="headerlink" title="初始化问题"></a>初始化问题</h3><ol>
+<li>由于没安装 <strong>flannel</strong> 组件</li>
+</ol>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">[root@k8s-master ~]# kubectl get pod --all-namespaces -o wide</span><br><span class="line">NAMESPACE     NAME                                 READY   STATUS    RESTARTS   AGE   IP             NODE         NOMINATED NODE   READINESS GATES</span><br><span class="line">kube-system   coredns-58cc8c89f4-dwg8r             0/1     Pending   0          24m   &lt;none&gt;         &lt;none&gt;       &lt;none&gt;           &lt;none&gt;</span><br><span class="line">kube-system   coredns-58cc8c89f4-jx7cw             0/1     Pending   0          24m   &lt;none&gt;         &lt;none&gt;       &lt;none&gt;           &lt;none&gt;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<ol start="2">
+<li><p>无法直接从官网下载 flannel 组件安装 yml 文件</p>
+<p>参考：<a href="https://blog.csdn.net/fuck487/article/details/102783300">https://blog.csdn.net/fuck487/article/details/102783300</a></p>
+</li>
+</ol>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">[root@k8s-master ~]# kubectl apply -f  https://raw.githubusercontent.com/coreos/flannel/master/Documentation/kube-flannel.yml</span><br><span class="line">The connection to the server raw.githubusercontent.com was refused - did you specify the right host or port?</span><br><span class="line"><span class="meta">#</span><span class="bash"><span class="comment"># 解决方法：自行创建 或 ftp 传输本地 kube-flannel.yml</span></span></span><br><span class="line">vi $HOME/kube-flannel.yml</span><br><span class="line"><span class="meta">#</span><span class="bash"><span class="comment"># </span></span></span><br><span class="line"><span class="meta">    #</span><span class="bash"><span class="comment"># 粘贴内容 kube-flannel.yml </span></span></span><br><span class="line"><span class="meta">#</span><span class="bash"><span class="comment">#</span></span></span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"><span class="comment"># 安装 </span></span></span><br><span class="line">[root@k8s-master ~]# kubectl apply -f ./kube-flannel.yml</span><br><span class="line">podsecuritypolicy.policy/psp.flannel.unprivileged created</span><br><span class="line">clusterrole.rbac.authorization.k8s.io/flannel created</span><br><span class="line">clusterrolebinding.rbac.authorization.k8s.io/flannel created</span><br><span class="line">serviceaccount/flannel created</span><br><span class="line">configmap/kube-flannel-cfg created</span><br><span class="line">daemonset.apps/kube-flannel-ds-amd64 created</span><br><span class="line">daemonset.apps/kube-flannel-ds-arm64 created</span><br><span class="line">daemonset.apps/kube-flannel-ds-arm created</span><br><span class="line">daemonset.apps/kube-flannel-ds-ppc64le created</span><br><span class="line">daemonset.apps/kube-flannel-ds-s390x created</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="10-补充命令"><a href="#10-补充命令" class="headerlink" title="10. 补充命令"></a>10. 补充命令</h2><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"><span class="comment"># 然后在 master 和 node 上都执行此命令</span></span></span><br><span class="line">[root@k8s-master bin]# modprobe ip_vs ip_vs_rr ip_vs_wrr ip_vs_sh</span><br><span class="line">modprobe: ERROR: could not insert &#x27;ip_vs&#x27;: Unknown symbol in module, or unknown parameter (see dmesg)</span><br><span class="line"><span class="meta">#</span><span class="bash"><span class="comment"># 删去 ip_vs</span></span></span><br><span class="line">[root@k8s-master bin]# modprobe ip_vs_rr ip_vs_wrr ip_vs_sh</span><br><span class="line">modprobe: ERROR: could not insert &#x27;ip_vs_rr&#x27;: Unknown symbol in module, or unknown parameter (see dmesg)</span><br><span class="line"><span class="meta">#</span><span class="bash"><span class="comment"># 在执行</span></span></span><br><span class="line">[root@k8s-master bin]# modprobe ip_vs ip_vs_rr ip_vs_wrr ip_vs_sh</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"><span class="comment">#查看确保内核开启了ipvs模块</span></span></span><br><span class="line">[root@k8s-master bin]# lsmod|grep ip_vs</span><br><span class="line">ip_vs                 145497  0 </span><br><span class="line">nf_conntrack          139224  7 ip_vs,nf_nat,nf_nat_ipv4,xt_conntrack,nf_nat_masquerade_ipv4,nf_conntrack_netlink,nf_conntrack_ipv4</span><br><span class="line">libcrc32c              12644  4 xfs,ip_vs,nf_nat,nf_conntrack</span><br></pre></td></tr></table></figure>
+
+<h2 id="11-添加节点"><a href="#11-添加节点" class="headerlink" title="11. 添加节点"></a>11. 添加节点</h2><h3 id="获取-kubeadm-join-命令"><a href="#获取-kubeadm-join-命令" class="headerlink" title="获取 kubeadm join 命令"></a>获取 kubeadm join 命令</h3><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> 获得添加结点命令 master上执行  kubeadm token create --<span class="built_in">print</span>-join-command</span></span><br><span class="line">[root@k8s-master ~]# kubeadm token create --print-join-command</span><br><span class="line">kubeadm join 192.168.1.86:6443 --token a1qmdh.d79exiuqbzdr616o     --discovery-token-ca-cert-hash sha256:a3220f1d2384fe5230cad2302a4ac1f233b03ea24c19c165adb5824f9c358336</span><br></pre></td></tr></table></figure>
+
+<h3 id="node节点上执行-join-添加结点"><a href="#node节点上执行-join-添加结点" class="headerlink" title="node节点上执行 join 添加结点"></a>node节点上执行 join 添加结点</h3><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">[root@k8s-node1 bin]# kubeadm join 192.168.1.86:6443 --token otjfah.zta4yo0bexibbj52     --discovery-token-ca-cert-hash sha256:60535ebe96b6a4cceab70d551f2b2b507a3641c3dc421469320b915e01377e5c</span><br><span class="line">[preflight] Running pre-flight checks</span><br><span class="line">[preflight] Reading configuration from the cluster...</span><br><span class="line">[preflight] FYI: You can look at this config file with &#x27;kubectl -n kube-system get cm kubeadm-config -oyaml&#x27;</span><br><span class="line">[kubelet-start] Downloading configuration for the kubelet from the &quot;kubelet-config-1.16&quot; ConfigMap in the kube-system namespace</span><br><span class="line">[kubelet-start] Writing kubelet configuration to file &quot;/var/lib/kubelet/config.yaml&quot;</span><br><span class="line">[kubelet-start] Writing kubelet environment file with flags to file &quot;/var/lib/kubelet/kubeadm-flags.env&quot;</span><br><span class="line">[kubelet-start] Activating the kubelet service</span><br><span class="line">[kubelet-start] Waiting for the kubelet to perform the TLS Bootstrap...</span><br><span class="line"></span><br><span class="line">This node has joined the cluster:</span><br><span class="line">* Certificate signing request was sent to apiserver and a response was received.</span><br><span class="line">* The Kubelet was informed of the new secure connection details.</span><br><span class="line"></span><br><span class="line">Run &#x27;kubectl get nodes&#x27; on the control-plane to see this node join the cluster.</span><br></pre></td></tr></table></figure>
+
+<h2 id="12-删除节点"><a href="#12-删除节点" class="headerlink" title="12. 删除节点"></a>12. 删除节点</h2><p>master节点上：</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">[root@k8s-master ~]# kubectl get nodes</span><br><span class="line">NAME         STATUS   ROLES    AGE    VERSION</span><br><span class="line">k8s-master   Ready    master   3h9m   v1.16.2</span><br><span class="line">k8s-node1    Ready    &lt;none&gt;   116s   v1.16.2</span><br><span class="line">[root@k8s-master ~]# kubectl drain k8s-node1 --delete-local-data --force --ignore-daemonsets</span><br><span class="line">node/k8s-node1 cordoned</span><br><span class="line">WARNING: ignoring DaemonSet-managed Pods: kube-system/kube-flannel-ds-amd64-gmq2b, kube-system/kube-proxy-q9ppx</span><br><span class="line">node/k8s-node1 drained</span><br><span class="line">[root@k8s-master ~]# kubectl get nodes</span><br><span class="line">NAME         STATUS                     ROLES    AGE     VERSION</span><br><span class="line">k8s-master   Ready                      master   3h10m   v1.16.2</span><br><span class="line">k8s-node1    Ready,SchedulingDisabled   &lt;none&gt;   2m43s   v1.16.2</span><br><span class="line">[root@k8s-master ~]# kubectl delete node k8s-node1</span><br><span class="line">node &quot;k8s-node1&quot; deleted</span><br><span class="line">[root@k8s-master ~]# </span><br></pre></td></tr></table></figure>
+
+<p>删除结点(k8s-node1)上：</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">[root@k8s-node1 ~]# kubeadm reset</span><br><span class="line">[reset] WARNING: Changes made to this host by &#x27;kubeadm init&#x27; or &#x27;kubeadm join&#x27; will be reverted.</span><br><span class="line">[reset] Are you sure you want to proceed? [y/N]: y    ## y 确认</span><br><span class="line">[preflight] Running pre-flight checks</span><br><span class="line">W0109 13:39:15.848313   79539 removeetcdmember.go:79] [reset] No kubeadm config, using etcd pod spec to get data directory</span><br><span class="line">[reset] No etcd config found. Assuming external etcd</span><br><span class="line">[reset] Please, manually reset etcd to prevent further issues</span><br><span class="line">[reset] Stopping the kubelet service</span><br><span class="line">[reset] Unmounting mounted directories in &quot;/var/lib/kubelet&quot;</span><br><span class="line">[reset] Deleting contents of config directories: [/etc/kubernetes/manifests /etc/kubernetes/pki]</span><br><span class="line">[reset] Deleting files: [/etc/kubernetes/admin.conf /etc/kubernetes/kubelet.conf /etc/kubernetes/bootstrap-kubelet.conf /etc/kubernetes/controller-manager.conf /etc/kubernetes/scheduler.conf]</span><br><span class="line">[reset] Deleting contents of stateful directories: [/var/lib/kubelet /etc/cni/net.d /var/lib/dockershim /var/run/kubernetes /var/lib/cni]</span><br><span class="line"></span><br><span class="line">The reset process does not reset or clean up iptables rules or IPVS tables.</span><br><span class="line">If you wish to reset iptables, you must do so manually by using the &quot;iptables&quot; command.</span><br><span class="line"></span><br><span class="line">If your cluster was setup to utilize IPVS, run ipvsadm --clear (or similar)</span><br><span class="line">to reset your system&#x27;s IPVS tables.</span><br><span class="line"></span><br><span class="line">The reset process does not clean your kubeconfig files and you must remove them manually.</span><br><span class="line">Please, check the contents of the $HOME/.kube/config file.</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="附录：查询命令"><a href="#附录：查询命令" class="headerlink" title="附录：查询命令"></a>附录：查询命令</h2><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"><span class="comment">#查看结点 在master执行</span></span></span><br><span class="line">kubectl get nodes</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"><span class="comment">#查看集群状态 在master执行</span></span></span><br><span class="line">kubectl get cs</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"> 可能会出现node notready的情况 在master执行</span></span><br><span class="line">kubectl get pod --all-namespaces -o wide</span><br></pre></td></tr></table></figure>
+
+]]></content>
+      <categories>
+        <category>教程</category>
+      </categories>
+      <tags>
+        <tag>linux</tag>
+        <tag>k8s</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>k8s Weave Scope 部署配置</title>
-    <url>/k8s%20weave%20scope%20%E5%AE%89%E8%A3%85%E9%85%8D%E7%BD%AE/</url>
+    <url>/other/k8s%20weave%20scope%20%E5%AE%89%E8%A3%85%E9%85%8D%E7%BD%AE/</url>
     <content><![CDATA[<h2 id="1-Weave-Scope-安装"><a href="#1-Weave-Scope-安装" class="headerlink" title="1. Weave Scope 安装"></a>1. Weave Scope 安装</h2><p>在 master 上通过以下命令安装Weave Scope：<br>kubectl apply -f “<a href="https://cloud.weave.works/k8s/scope.yaml?k8s-version=$">https://cloud.weave.works/k8s/scope.yaml?k8s-version=$</a>(kubectl version | base64 | tr -d ‘\n’)”<br>运行后会发现已经起来几个pod:</p>
 <figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">[root@k8s-master ~]# kubectl apply -f &quot;https://cloud.weave.works/k8s/scope.yaml?k8s-version=$(kubectl version | base64 | tr -d &#x27;\n&#x27;)&quot;</span><br><span class="line">namespace/weave created</span><br><span class="line">serviceaccount/weave-scope created</span><br><span class="line">clusterrole.rbac.authorization.k8s.io/weave-scope created</span><br><span class="line">clusterrolebinding.rbac.authorization.k8s.io/weave-scope created</span><br><span class="line">deployment.apps/weave-scope-app created</span><br><span class="line">service/weave-scope-app created</span><br><span class="line">deployment.apps/weave-scope-cluster-agent created</span><br><span class="line">daemonset.apps/weave-scope-agent created</span><br><span class="line">[root@k8s-master ~]# kubectl get pod -n weave  -o wide</span><br><span class="line">NAME                                        READY   STATUS    RESTARTS   AGE   IP              NODE         NOMINATED NODE   READINESS GATES</span><br><span class="line">weave-scope-agent-8zzq5                     1/1     Running   0          11s   192.168.1.92    k8s-master   &lt;none&gt;           &lt;none&gt;</span><br><span class="line">weave-scope-agent-jhcff                     1/1     Running   0          11s   192.168.1.85    k8s-node1    &lt;none&gt;           &lt;none&gt;</span><br><span class="line">weave-scope-agent-qs45b                     1/1     Running   0          11s   192.168.1.133   k8s-node2    &lt;none&gt;           &lt;none&gt;</span><br><span class="line">weave-scope-app-848cd4d8b5-4rlnd            1/1     Running   0          11s   10.244.1.4      k8s-node1    &lt;none&gt;           &lt;none&gt;</span><br><span class="line">weave-scope-cluster-agent-b4f45797c-7srs9   1/1     Running   0          11s   10.244.2.4      k8s-node2    &lt;none&gt;           &lt;none&gt;</span><br><span class="line">[root@k8s-master ~]# kubectl get service -n weave -o wide</span><br><span class="line">NAME              TYPE        CLUSTER-IP    EXTERNAL-IP   PORT(S)   AGE   SELECTOR</span><br><span class="line">weave-scope-app   ClusterIP   10.1.31.163   &lt;none&gt;        80/TCP    57s   app=weave-scope,name=weave-scope-app,weave-cloud-component=scope,weave-scope-component=app</span><br></pre></td></tr></table></figure>
 
@@ -787,39 +1138,8 @@
       </tags>
   </entry>
   <entry>
-    <title>系统I/O函数与C标准库函数</title>
-    <url>/%E7%B3%BB%E7%BB%9FIO%E5%87%BD%E6%95%B0%E4%B8%8EC%E6%A0%87%E5%87%86%E5%BA%93%E5%87%BD%E6%95%B0/</url>
-    <content><![CDATA[<p>先上图</p>
-<img src="https://i.loli.net/2020/08/06/RIMrGxbPWyizjnK.png" alt="库函数与系统调用的层次关系.png" style="zoom: 67%;" />
-
-<img src="https://i.loli.net/2020/08/06/tl8ykNe6wrx7VOd.png" alt="系统IO函数与C标库函数.png" style="zoom:67%;" />
-
-<p><strong><em>read、write函数常常被称为 Unbuffered I/O。指的是无用户输入级缓冲区，但不保证不使用内核缓冲区。</em></strong></p>
-<h2 id="系统I-O与标准库I-O差异"><a href="#系统I-O与标准库I-O差异" class="headerlink" title="系统I/O与标准库I/O差异"></a>系统I/O与标准库I/O差异</h2><p>用户程序在读写文件时既可以调用C标准I/O库函数，也可以直接调用底层的系统I/O函数，有什么区别呢？</p>
-<ul>
-<li>使用系统I/O函数每次读写都需要进入内核，调一个系统调用比调一个用户空间的函数要慢很多。（此时用户有必要维护一个I/O缓冲区，但用C标准I/O库函数就比较方便，省去了自己管理I/O缓冲区的麻烦）</li>
-<li>用C标准I/O库函数要时刻注意I/O缓冲区和实际文件有可能不一致，在必要时需调用<code>fflush</code></li>
-<li>UNIX是Everything is a file，在读写设备文件时通常是不希望有缓冲的，例如网络编程通常直接调用Unbuffered I/O函数。</li>
-</ul>
-<h2 id="标准库缓冲类型"><a href="#标准库缓冲类型" class="headerlink" title="标准库缓冲类型"></a>标准库缓冲类型</h2><p>C标准库的I/O缓冲区有三种类型：全缓冲、行缓冲和无缓冲。</p>
-<h3 id="全缓冲"><a href="#全缓冲" class="headerlink" title="全缓冲"></a>全缓冲</h3><p>如果缓冲区写满了就写回内核。对于驻留在<strong>磁盘</strong>上的文件通常是由标准I/O库实施全缓冲的。在一个流上执行第一次I/O操作时，相关标准I/O函数通常调用malloc获得需使用的缓冲区。</p>
-<h3 id="行缓冲"><a href="#行缓冲" class="headerlink" title="行缓冲"></a>行缓冲</h3><p>如果用户程序写的数据中有<strong>换行符</strong>就把这一行写回内核，或者如果<strong>缓冲区写满</strong>了就写回内核。<font color=red><strong>标准输入</strong></font>和<font color=red><strong>标准输出</strong></font>对应终端设备时通常是行缓冲的。 </p>
-<h3 id="无缓冲"><a href="#无缓冲" class="headerlink" title="无缓冲"></a>无缓冲</h3><p>用户程序每次调库函数做写操作都要通过系统调用写回内核。</p>
-<p><font color=red><strong>标准错误输出</strong></font>通常是无缓冲的，这样用户程序产生的错误信息可以尽快输出到设备。这里的无缓冲，并不是指缓冲区大小为0，其实，还是有缓冲的，大小为1。</p>
-]]></content>
-      <categories>
-        <category>笔记</category>
-        <category>apue</category>
-      </categories>
-      <tags>
-        <tag>linux</tag>
-        <tag>apue</tag>
-        <tag>操作系统</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>select函数-linux内核源码剖析</title>
-    <url>/select%E5%87%BD%E6%95%B0-linux%E5%86%85%E6%A0%B8%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/</url>
+    <url>/UNP/select%E5%87%BD%E6%95%B0-linux%E5%86%85%E6%A0%B8%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/</url>
     <content><![CDATA[<h1 id="用户态下select系统调用"><a href="#用户态下select系统调用" class="headerlink" title="用户态下select系统调用"></a>用户态下select系统调用</h1><h2 id="select函数原型"><a href="#select函数原型" class="headerlink" title="select函数原型"></a>select函数原型</h2><blockquote>
 <p>/usr/include/sys/select.h</p>
 </blockquote>

@@ -1,51 +1,71 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
-    <loc>http://jakelin.cn/select%E5%87%BD%E6%95%B0-linux%E5%86%85%E6%A0%B8%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/</loc>
+    <loc>http://jakelin.cn/STL/STL%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90-%E5%AE%B9%E5%99%A8-deque/</loc>
+    <lastmod>2020-08-08</lastmod>
+  </url>
+  <url>
+    <loc>http://jakelin.cn/STL/STL%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90-%E5%AE%B9%E5%99%A8-list/</loc>
+    <lastmod>2020-08-08</lastmod>
+  </url>
+  <url>
+    <loc>http://jakelin.cn/STL/STL%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90-%E5%AE%B9%E5%99%A8-vector/</loc>
     <lastmod>2020-08-07</lastmod>
   </url>
   <url>
-    <loc>http://jakelin.cn/Linux%E8%BF%9B%E7%A8%8B%E5%9C%B0%E5%9D%80%E7%A9%BA%E9%97%B4%EF%BC%88%E7%A8%8B%E5%BA%8F%E5%86%85%E5%AD%98%E5%B8%83%E5%B1%80%EF%BC%89/</loc>
+    <loc>http://jakelin.cn/STL/STL%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90-%E5%88%86%E9%85%8D%E5%99%A8Allocator/</loc>
+    <lastmod>2020-08-07</lastmod>
+  </url>
+  <url>
+    <loc>http://jakelin.cn/STL/STL%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90%E6%A6%82%E8%BF%B0/</loc>
+    <lastmod>2020-08-07</lastmod>
+  </url>
+  <url>
+    <loc>http://jakelin.cn/UNP/select%E5%87%BD%E6%95%B0-linux%E5%86%85%E6%A0%B8%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/</loc>
+    <lastmod>2020-08-07</lastmod>
+  </url>
+  <url>
+    <loc>http://jakelin.cn/APUE/Linux%E8%BF%9B%E7%A8%8B%E5%9C%B0%E5%9D%80%E7%A9%BA%E9%97%B4%EF%BC%88%E7%A8%8B%E5%BA%8F%E5%86%85%E5%AD%98%E5%B8%83%E5%B1%80%EF%BC%89/</loc>
     <lastmod>2020-08-06</lastmod>
   </url>
   <url>
-    <loc>http://jakelin.cn/%E7%B3%BB%E7%BB%9FIO%E5%87%BD%E6%95%B0%E4%B8%8EC%E6%A0%87%E5%87%86%E5%BA%93%E5%87%BD%E6%95%B0/</loc>
+    <loc>http://jakelin.cn/APUE/%E7%B3%BB%E7%BB%9FIO%E5%87%BD%E6%95%B0%E4%B8%8EC%E6%A0%87%E5%87%86%E5%BA%93%E5%87%BD%E6%95%B0/</loc>
     <lastmod>2020-08-06</lastmod>
   </url>
   <url>
-    <loc>http://jakelin.cn/hexo-theme-next%E6%8F%90%E4%BA%A4%E7%BB%99%E6%90%9C%E7%B4%A2%E5%BC%95%E6%93%8E/</loc>
+    <loc>http://jakelin.cn/hexo/hexo-theme-next%E6%8F%90%E4%BA%A4%E7%BB%99%E6%90%9C%E7%B4%A2%E5%BC%95%E6%93%8E/</loc>
     <lastmod>2020-08-06</lastmod>
   </url>
   <url>
-    <loc>http://jakelin.cn/hexo-theme-next%20valine%E8%AF%84%E8%AE%BA/</loc>
+    <loc>http://jakelin.cn/hexo/hexo-theme-next%20valine%E8%AF%84%E8%AE%BA/</loc>
     <lastmod>2020-08-03</lastmod>
   </url>
   <url>
-    <loc>http://jakelin.cn/Hexo-Theme-Butterfly(%E4%B8%89)-%E4%B8%BB%E9%A2%98%E9%85%8D%E7%BD%AE/</loc>
+    <loc>http://jakelin.cn/hexo/Hexo-Theme-Butterfly(%E4%B8%89)-%E4%B8%BB%E9%A2%98%E9%85%8D%E7%BD%AE/</loc>
     <lastmod>2020-08-03</lastmod>
   </url>
   <url>
-    <loc>http://jakelin.cn/hexo-theme-next%E4%B8%BB%E9%A2%98%E9%85%8D%E7%BD%AE/</loc>
+    <loc>http://jakelin.cn/hexo/hexo-theme-next%E4%B8%BB%E9%A2%98%E9%85%8D%E7%BD%AE/</loc>
     <lastmod>2020-08-03</lastmod>
   </url>
   <url>
-    <loc>http://jakelin.cn/centos7-k8s1.16.2%20%E9%9B%86%E7%BE%A4%E5%AE%89%E8%A3%85%E9%85%8D%E7%BD%AE/</loc>
+    <loc>http://jakelin.cn/other/centos7-k8s1.16.2%20%E9%9B%86%E7%BE%A4%E5%AE%89%E8%A3%85%E9%85%8D%E7%BD%AE/</loc>
     <lastmod>2020-08-03</lastmod>
   </url>
   <url>
-    <loc>http://jakelin.cn/Hexo-Theme-Butterfly(%E4%BA%8C)-%E4%B8%BB%E9%A2%98%E9%A1%B5%E9%9D%A2/</loc>
+    <loc>http://jakelin.cn/hexo/Hexo-Theme-Butterfly(%E4%BA%8C)-%E4%B8%BB%E9%A2%98%E9%A1%B5%E9%9D%A2/</loc>
     <lastmod>2020-08-03</lastmod>
   </url>
   <url>
-    <loc>http://jakelin.cn/Linux%E4%B8%8Bgithub+hexo%E6%90%AD%E5%BB%BA%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2/</loc>
+    <loc>http://jakelin.cn/hexo/Linux%E4%B8%8Bgithub+hexo%E6%90%AD%E5%BB%BA%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2/</loc>
     <lastmod>2020-08-03</lastmod>
   </url>
   <url>
-    <loc>http://jakelin.cn/Hexo-Theme-Butterfly(%E4%B8%80)-%E5%BF%AB%E9%80%9F%E5%BC%80%E5%A7%8B/</loc>
+    <loc>http://jakelin.cn/hexo/Hexo-Theme-Butterfly(%E4%B8%80)-%E5%BF%AB%E9%80%9F%E5%BC%80%E5%A7%8B/</loc>
     <lastmod>2020-08-03</lastmod>
   </url>
   <url>
-    <loc>http://jakelin.cn/k8s%20weave%20scope%20%E5%AE%89%E8%A3%85%E9%85%8D%E7%BD%AE/</loc>
+    <loc>http://jakelin.cn/other/k8s%20weave%20scope%20%E5%AE%89%E8%A3%85%E9%85%8D%E7%BD%AE/</loc>
     <lastmod>2020-08-01</lastmod>
   </url>
 </urlset> 
