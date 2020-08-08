@@ -2,6 +2,13 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>http://jakelin.cn/hexo/hexo-theme-next%20valine%E8%AF%84%E8%AE%BA/</loc>
+    
+    <lastmod>2020-08-08</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>http://jakelin.cn/STL/STL%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90-%E5%AE%B9%E5%99%A8-deque/</loc>
     
     <lastmod>2020-08-08</lastmod>
@@ -61,13 +68,6 @@
     <loc>http://jakelin.cn/hexo/hexo-theme-next%E6%8F%90%E4%BA%A4%E7%BB%99%E6%90%9C%E7%B4%A2%E5%BC%95%E6%93%8E/</loc>
     
     <lastmod>2020-08-06</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://jakelin.cn/hexo/hexo-theme-next%20valine%E8%AF%84%E8%AE%BA/</loc>
-    
-    <lastmod>2020-08-03</lastmod>
     
   </url>
   
