@@ -1,6 +1,30 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
+    <loc>http://jakelin.cn/UNP/select%E5%87%BD%E6%95%B0-linux%E5%86%85%E6%A0%B8%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/</loc>
+    <lastmod>2020-08-12</lastmod>
+  </url>
+  <url>
+    <loc>http://jakelin.cn/doc/Centos%E6%89%A9%E5%AE%B9/</loc>
+    <lastmod>2020-08-11</lastmod>
+  </url>
+  <url>
+    <loc>http://jakelin.cn/STL/STL%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90-%E8%BF%AD%E4%BB%A3%E5%99%A8-iterators/</loc>
+    <lastmod>2020-08-10</lastmod>
+  </url>
+  <url>
+    <loc>http://jakelin.cn/STL/STL%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90-%E5%AE%B9%E5%99%A8-slist/</loc>
+    <lastmod>2020-08-10</lastmod>
+  </url>
+  <url>
+    <loc>http://jakelin.cn/STL/STL%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90-%E5%AE%B9%E5%99%A8priority_queue-heap(%E7%AE%97%E6%B3%95)/</loc>
+    <lastmod>2020-08-09</lastmod>
+  </url>
+  <url>
+    <loc>http://jakelin.cn/STL/STL%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90-%E5%AE%B9%E5%99%A8-stack-queue/</loc>
+    <lastmod>2020-08-09</lastmod>
+  </url>
+  <url>
     <loc>http://jakelin.cn/hexo/hexo-theme-next%20valine%E8%AF%84%E8%AE%BA/</loc>
     <lastmod>2020-08-08</lastmod>
   </url>
@@ -22,10 +46,6 @@
   </url>
   <url>
     <loc>http://jakelin.cn/STL/STL%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90%E6%A6%82%E8%BF%B0/</loc>
-    <lastmod>2020-08-07</lastmod>
-  </url>
-  <url>
-    <loc>http://jakelin.cn/UNP/select%E5%87%BD%E6%95%B0-linux%E5%86%85%E6%A0%B8%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/</loc>
     <lastmod>2020-08-07</lastmod>
   </url>
   <url>

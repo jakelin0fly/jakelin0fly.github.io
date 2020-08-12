@@ -2999,9 +2999,6 @@ body {
 .content {
   opacity: 0.9;
 }
-.sidebar {
-  opacity: 0.85;
-}
 .header-inner {
   background: rgba(255,255,255,0.85);
 }
@@ -3010,4 +3007,17 @@ body {
 }
 .sidebar {
   background-color: transparent;
+  box-shadow: none;
+  background: none;
+  opacity: 0.85;
+}
+.hider_title {
+  cursor: pointer;
+  color: #ef4a05;
+}
+.close:before {
+  content: "▼";
+}
+.open:before {
+  content: "▲";
 }

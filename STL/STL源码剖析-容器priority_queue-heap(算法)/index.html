@@ -1,0 +1,663 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.0.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="https://i.loli.net/2020/07/31/OZl2JxuSRrweIk5.jpg">
+  <link rel="icon" type="image/png" sizes="32x32" href="https://i.loli.net/2020/07/31/OZl2JxuSRrweIk5.jpg">
+  <link rel="icon" type="image/png" sizes="16x16" href="https://i.loli.net/2020/07/31/OZl2JxuSRrweIk5.jpg">
+  <link rel="mask-icon" href="https://i.loli.net/2020/07/31/OZl2JxuSRrweIk5.jpg" color="#222">
+  <meta name="google-site-verification" content="9bq58cqSUyZHa7gbv9RGCymVYlETH5LH8klswJlGmEY">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.14.0/css/all.min.css">
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css">
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css">
+
+<script class="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"jakelin.cn","root":"/","scheme":"Gemini","version":"8.0.0-rc.5","exturl":false,"sidebar":{"position":"left","display":"always","padding":18,"offset":12},"copycode":true,"bookmark":{"enable":true,"color":"#222","save":"auto"},"fancybox":true,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"path":"search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}};
+  </script>
+
+  <meta name="description" content="heap也就是数据结构中的堆，逻辑上可以看成一颗完全二叉树。binary max heap 作为 priority_queue 的底层机制。STL提供的是max-heap。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="STL源码剖析-容器priority_queue-heap(算法)">
+<meta property="og:url" content="http://jakelin.cn/STL/STL%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90-%E5%AE%B9%E5%99%A8priority_queue-heap(%E7%AE%97%E6%B3%95)/index.html">
+<meta property="og:site_name" content="JakeLin&#39;s Blogs">
+<meta property="og:description" content="heap也就是数据结构中的堆，逻辑上可以看成一颗完全二叉树。binary max heap 作为 priority_queue 的底层机制。STL提供的是max-heap。">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://i.loli.net/2020/08/09/KF12cDuCQVkaYmT.png">
+<meta property="og:image" content="https://i.loli.net/2020/08/09/5Dz7RYnrlGKIkmc.png">
+<meta property="og:image" content="https://i.loli.net/2020/08/09/PXJQOjWxi9Scezq.png">
+<meta property="og:image" content="https://i.loli.net/2020/08/09/fnZlGrWJxibYPo2.png">
+<meta property="article:published_time" content="2020-08-08T16:00:00.000Z">
+<meta property="article:modified_time" content="2020-08-09T12:11:04.430Z">
+<meta property="article:author" content="jakelin">
+<meta property="article:tag" content="C++">
+<meta property="article:tag" content="STL">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://i.loli.net/2020/08/09/KF12cDuCQVkaYmT.png">
+
+<link rel="canonical" href="http://jakelin.cn/STL/STL%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90-%E5%AE%B9%E5%99%A8priority_queue-heap(%E7%AE%97%E6%B3%95)/">
+
+
+<script class="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>STL源码剖析-容器priority_queue-heap(算法) | JakeLin's Blogs</title>
+  
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-174281095-1"></script>
+    <script>
+      if (CONFIG.hostname === location.hostname) {
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'UA-174281095-1');
+      }
+    </script>
+
+
+  <script>
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?9d00769a087a509cf354a71d17e57c14";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+  <noscript>
+  <style>
+  body { margin-top: 2rem; }
+
+  .use-motion .menu-item,
+  .use-motion .sidebar,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header {
+    visibility: visible;
+  }
+
+  .use-motion .header,
+  .use-motion .site-brand-container .toggle,
+  .use-motion .footer { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle,
+  .use-motion .custom-logo-image {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line {
+    transform: scaleX(1);
+  }
+
+  .search-pop-overlay, .sidebar-nav { display: none; }
+  .sidebar-panel { display: block; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <main class="main">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+        <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <h1 class="site-title">JakeLin's Blogs</h1>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">世界上有10种人！</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-首页">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-归档">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+        <li class="menu-item menu-item-分类">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-标签">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <section class="post-toc-wrap sidebar-panel">
+          <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#heap"><span class="nav-number">1.</span> <span class="nav-text">heap</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#push-heap"><span class="nav-number">1.1.</span> <span class="nav-text">push_heap</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#pop-heap"><span class="nav-number">1.2.</span> <span class="nav-text">pop_heap</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#sort-heap"><span class="nav-number">1.3.</span> <span class="nav-text">sort_heap</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#make-heap"><span class="nav-number">1.4.</span> <span class="nav-text">make_heap</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#priority-queue"><span class="nav-number">2.</span> <span class="nav-text">priority_queue</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8F%82%E8%80%83"><span class="nav-number">3.</span> <span class="nav-text">参考</span></a></li></ol></div>
+      </section>
+      <!--/noindex-->
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="jakelin"
+      src="https://i.loli.net/2020/07/31/OZl2JxuSRrweIk5.jpg">
+  <p class="site-author-name" itemprop="name">jakelin</p>
+  <div class="site-description" itemprop="description">一个记录、分享学习的地方</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives">
+          <span class="site-state-item-count">22</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+        <span class="site-state-item-count">6</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+        <span class="site-state-item-count">15</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/JakeLin0fly" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;JakeLin0fly" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:jakelin0fly@gmail.com" title="E-Mail → mailto:jakelin0fly@gmail.com" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+  <div class="cc-license animated" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" class="cc-opacity" rel="noopener" target="_blank"><img src="/images/cc-by-nc-sa.svg" alt="Creative Commons"></a>
+  </div>
+
+
+
+      </section>
+        <div class="back-to-top animated">
+          <i class="fa fa-arrow-up"></i>
+          <span>0%</span>
+        </div>
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </header>
+
+      
+  <a role="button" class="book-mark-link book-mark-link-fixed"></a>
+
+  <a href="https://github.com/JakeLin0fly" class="github-corner" title="Follow me on GitHub" aria-label="Follow me on GitHub" rel="noopener" target="_blank"><svg width="80" height="80" viewBox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a>
+
+<noscript>
+  <div id="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+      <div class="main-inner">
+        
+
+        <div class="content post posts-expand">
+          
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://jakelin.cn/STL/STL%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90-%E5%AE%B9%E5%99%A8priority_queue-heap(%E7%AE%97%E6%B3%95)/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://i.loli.net/2020/07/31/OZl2JxuSRrweIk5.jpg">
+      <meta itemprop="name" content="jakelin">
+      <meta itemprop="description" content="一个记录、分享学习的地方">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="JakeLin's Blogs">
+    </span>
+
+    
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          STL源码剖析-容器priority_queue-heap(算法)
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+                发表于
+              </span>
+              <span class="post-meta-item-text">发表于</span>              
+              <time title="创建时间：2020-08-09 00:00:00" itemprop="dateCreated datePublished" datetime="2020-08-09T00:00:00+08:00">2020-08-09</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                  更新于
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-08-09 20:11:04" itemprop="dateModified" datetime="2020-08-09T20:11:04+08:00">2020-08-09</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+                分类于
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E7%AC%94%E8%AE%B0/" itemprop="url" rel="index"><span itemprop="name">笔记</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E7%AC%94%E8%AE%B0/STL/" itemprop="url" rel="index"><span itemprop="name">STL</span></a>
+                </span>
+            </span>
+
+          
+            <span id="/STL/STL%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90-%E5%AE%B9%E5%99%A8priority_queue-heap(%E7%AE%97%E6%B3%95)/" class="post-meta-item leancloud_visitors" data-flag-title="STL源码剖析-容器priority_queue-heap(算法)" title="阅读次数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+                阅读量:
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span class="leancloud-visitors-count"></span>
+            </span>
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Valine：</span>
+    
+    <a title="valine" href="/STL/STL%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90-%E5%AE%B9%E5%99%A8priority_queue-heap(%E7%AE%97%E6%B3%95)/#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/STL/STL%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90-%E5%AE%B9%E5%99%A8priority_queue-heap(%E7%AE%97%E6%B3%95)/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+                字数统计 ≈ 
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>1.9k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+                阅读时长 ≈ 
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>2 分钟</span>
+            </span>
+            <div class="post-description">heap也就是数据结构中的堆，逻辑上可以看成一颗完全二叉树。binary max heap 作为 priority_queue 的底层机制。STL提供的是max-heap。</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <img src="https://i.loli.net/2020/08/09/KF12cDuCQVkaYmT.png" alt="完全二叉树即其array表述式.png" style="zoom: 67%;" />
+
+<h2 id="heap"><a href="#heap" class="headerlink" title="heap"></a>heap</h2><p>heap的实现就是数据结构中的<strong>堆</strong>（大顶堆、小顶堆）。STL提供<code>max-heap</code>。</p>
+<p>STL中并没有把<code>heap</code>作为一种容器组件，heap的实现亦需要更低一层的容器组件，诸如list，array，vector。heap并不属于STL容器，但它是其中一个容器<code>priority queue</code>必不可少的一部分。</p>
+<p><strong>heap没有迭代器，</strong>heap的所有元素都必须遵循特别的排列规则，所以heap不提供遍历功能，也不提供迭代器。</p>
+<h3 id="push-heap"><a href="#push-heap" class="headerlink" title="push_heap"></a>push_heap</h3><blockquote>
+<ol>
+<li><p>最新加入的源放在最下层叶子节点，填补从左至右第一个空闲单元</p>
+</li>
+<li><p>percolate up（上溯）：与父节点比较，调整位置</p>
+<blockquote>
+<p>将新节点与父节点比较，如果其键值比父节点大，就交换父子的位置，如此一直上溯，直到不需要交换或者到根节点为止。</p>
+</blockquote>
+</li>
+</ol>
+</blockquote>
+<img src="https://i.loli.net/2020/08/09/5Dz7RYnrlGKIkmc.png" alt="push_heap演示.png" style="zoom: 67%;" />
+
+<h3 id="pop-heap"><a href="#pop-heap" class="headerlink" title="pop_heap"></a>pop_heap</h3><blockquote>
+<ol>
+<li><p>把原尾端节点的值拿出来放至一临时变量里，然后该位置放根节点的值（最后会被pop_back()给移除）</p>
+</li>
+<li><p>重新构建大顶堆，实施如下调整堆：</p>
+<p>1）<strong>percolate down</strong>（下溯）：从根节点开始将空洞节点（一开始是根节点）和较大子节点交换，并持续向下进行，直到到达叶节点为止。然后将已保存的原容器vector尾端节点赋给这个已到达叶层的空洞节点。</p>
+<p>2）此时可能尚未满足次序特性，再执行一次<strong>percolate up</strong>（上溯）操作</p>
+</li>
+</ol>
+</blockquote>
+<p><strong><em>注意：pop_heap之后，最大元素只是被放置于底部容器的最尾端，尚未被取走。如果要取其值，可使用底部容器的back()函数。如果要移除它，可使用底部容器所提供的pop_back()函数。</em></strong></p>
+<img src="https://i.loli.net/2020/08/09/PXJQOjWxi9Scezq.png" alt="pop_heap演示.png" style="zoom: 67%;" />
+
+<h3 id="sort-heap"><a href="#sort-heap" class="headerlink" title="sort_heap"></a>sort_heap</h3><p><strong>堆排序算法</strong>。执行此操作之后，容器vector中的元素按照从小到大的顺序排列。</p>
+<img src="https://i.loli.net/2020/08/09/fnZlGrWJxibYPo2.png" alt="sort_heap演示.png" style="zoom:67%;" />
+
+<h3 id="make-heap"><a href="#make-heap" class="headerlink" title="make_heap"></a>make_heap</h3><p>构建堆实质是一个不断调整堆的过程—通过不断调整子树，使得子树满足堆的特性来使得整个树满足堆的性质。</p>
+<p>第一个需要执行调整操作的子树的根节点是从后往前的第一个非叶结点。从此节点往前到根节点对每个子树执行调整操作，即可构建堆。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 将 [first,last) 排列为一个 heap。</span></span><br><span class="line"><span class="keyword">template</span> &lt;<span class="class"><span class="keyword">class</span> <span class="title">RandomAccessIterator</span>&gt;</span></span><br><span class="line"><span class="class"><span class="title">inline</span> <span class="title">void</span> <span class="title">make_heap</span>(<span class="title">RandomAccessIterator</span> <span class="title">first</span>, <span class="title">RandomAccessIterator</span> <span class="title">last</span>) &#123;</span></span><br><span class="line">    __make_heap(first, last, value_type(first), distance_type(first));</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">template</span> &lt;<span class="class"><span class="keyword">class</span> <span class="title">RandomAccessIterator</span>, <span class="title">class</span> <span class="title">T</span>, <span class="title">class</span> <span class="title">Distance</span>&gt;</span></span><br><span class="line"><span class="class"><span class="title">void</span> __<span class="title">make_heap</span>(<span class="title">RandomAccessIterator</span> <span class="title">first</span>, <span class="title">RandomAccessIterator</span> <span class="title">last</span>, <span class="title">T</span>*,</span></span><br><span class="line"><span class="class">    <span class="title">Distance</span>*) &#123;</span></span><br><span class="line">    <span class="keyword">if</span> (last - first &lt; ) <span class="keyword">return</span>; <span class="comment">// 如果長度為 0 或 1，不必重新排列。</span></span><br><span class="line">    Distance len = last - first;</span><br><span class="line">    <span class="comment">// 找出第一个需要重排的子树头部，以 parent 标示出。由于任何叶子节点都不需执行</span></span><br><span class="line">        <span class="comment">// perlocate down（下沉），所以有以下计算。</span></span><br><span class="line">        Distance parent = (len - ) / ;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">while</span> (<span class="literal">true</span>) &#123;</span><br><span class="line">        <span class="comment">// 重排以 parent 为首的子树。len 是为了让 __adjust_heap() 判断操作范围</span></span><br><span class="line">        __adjust_heap(first, parent, len, T(*(first + parent)));</span><br><span class="line">        <span class="keyword">if</span> (parent == ) <span class="keyword">return</span>; <span class="comment">// 直至根节点，就结束。</span></span><br><span class="line">        parent--; <span class="comment">// 未到根节点，就将（即将重排的子树的）索引值向前一個节点</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="priority-queue"><a href="#priority-queue" class="headerlink" title="priority_queue"></a>priority_queue</h2><p><code>priority_queue</code> 是一个拥有权值观念的 queue。</p>
+<p>默认情况下以 <code>vector</code> 为底部容器完成其所有工作，再加上 <code>heap</code> 处理规则。</p>
+<p>priority_queue的所有元素，都不一定的进程出规则，只有queue顶端的元素（权值最高）才有机会被外界取用。故<code>priority_queue</code>不提供遍历功能，也不提供迭代器。</p>
+<p>priority_queue 基本操作：</p>
+<p><code>priority_queue()</code>：调用 <code>make_heap()</code>， 使进入的元素后，始终保持一个堆。</p>
+<p><code>top()</code>：队顶元素。</p>
+<p><code>push()</code>：<code>push_back()</code>尾端插入元素，然后调用 <code>push_heap()</code> 重排堆。</p>
+<p><code>pop()</code>：用 <code>pop_heap() </code>将最大元素放到底部容器的最尾端，<strong>并不是真正弹出</strong>，再调用底部容器 vector 所提供的 <code>pop_back()</code> 弹出元素。</p>
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><p><a target="_blank" rel="noopener" href="https://www.shuzhiduo.com/A/E35pRNwRzv/">STL源码剖析——序列式容器#5 heap</a></p>
+
+    </div>
+
+    
+    
+    
+        <div class="reward-container">
+  <div></div>
+  <button onclick="document.getElementById('post-reward').classList.toggle('active');">
+    赞赏
+  </button>
+  <div id="post-reward">
+      
+      <div>
+        <img src="https://i.loli.net/2020/08/01/na8BbXF1ow63OIJ.png" alt="jakelin 微信">
+        <p>微信</p>
+      </div>
+      
+      <div>
+        <img src="https://i.loli.net/2020/08/01/NALchOTe3vM8aYy.jpg" alt="jakelin 支付宝">
+        <p>支付宝</p>
+      </div>
+
+  </div>
+</div>
+
+        
+
+<div>
+<ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者： </strong>jakelin
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="http://jakelin.cn/STL/STL%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90-%E5%AE%B9%E5%99%A8priority_queue-heap(%E7%AE%97%E6%B3%95)/" title="STL源码剖析-容器priority_queue-heap(算法)">http://jakelin.cn/STL/STL源码剖析-容器priority_queue-heap(算法)/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/C/" rel="tag"><i class="fa fa-tag"></i> C++</a>
+              <a href="/tags/STL/" rel="tag"><i class="fa fa-tag"></i> STL</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/UNP/select%E5%87%BD%E6%95%B0-linux%E5%86%85%E6%A0%B8%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/" rel="prev" title="select函数-linux内核源码剖析">
+      <i class="fa fa-chevron-left"></i> select函数-linux内核源码剖析
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/STL/STL%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90-%E5%AE%B9%E5%99%A8-stack-queue/" rel="next" title="STL源码剖析-容器-stack-queue">
+      STL源码剖析-容器-stack-queue <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+        </div>
+        
+    <div class="comments" id="valine-comments"></div>
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+  <div class="beian"><a href="http://www.beian.miit.gov.cn/" rel="noopener" target="_blank">蜀ICP备20024949号-1 </a>
+      <img src="https://i.loli.net/2020/07/31/b1SpDXthuFYemHN.png" style="display: inline-block;">
+  </div>
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">jakelin</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-area"></i>
+    </span>
+      <span class="post-meta-item-text">站点总字数：</span>
+    <span title="站点总字数">66k</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+      <span class="post-meta-item-text">站点阅读时长 &asymp;</span>
+    <span title="站点阅读时长">1:01</span>
+</div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="//cdn.jsdelivr.net/npm/animejs@3.2.0/lib/anime.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+<script src="/js/bookmark.js"></script>
+
+
+  
+  <script>
+    (function(){
+      var bp = document.createElement('script');
+      var curProtocol = window.location.protocol.split(':')[0];
+      bp.src = (curProtocol === 'https') ? 'https://zz.bdstatic.com/linksubmit/push.js' : 'http://push.zhanzhang.baidu.com/push.js';
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(bp, s);
+    })();
+  </script>
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+<script>
+NexT.utils.loadComments('#valine-comments', () => {
+  NexT.utils.getScript('//cdn.jsdelivr.net/npm/valine@1.4.14/dist/Valine.min.js', () => {
+    new Valine(Object.assign({
+      el  : '#valine-comments',
+      path: location.pathname,
+    }, {"enable":true,"appId":"TxCmvgp5BeE2PSBmfaTFCxSL-gzGzoHsz","appKey":"uvLJaDcjcRiFhjux02nOVHLI","placeholder":"ヾﾉ≧∀≦)o来啊，快活啊!","avatar":"mm","meta":["nick","mail","link"],"pageSize":10,"language":"zh-cn","visitor":true,"comment_count":true,"recordIP":false,"serverURLs":null,"enableQQ":false,"requiredFields":[]}
+    ));
+  }, window.Valine);
+});
+</script>
+
+<script type="text/javascript" src="/js/fold_action.js"></script>
+</body>
+</html>

@@ -1,6 +1,37 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>系统I/O函数与C标准库函数</title>
+    <url>/APUE/%E7%B3%BB%E7%BB%9FIO%E5%87%BD%E6%95%B0%E4%B8%8EC%E6%A0%87%E5%87%86%E5%BA%93%E5%87%BD%E6%95%B0/</url>
+    <content><![CDATA[<p>先上图</p>
+<img src="https://i.loli.net/2020/08/06/RIMrGxbPWyizjnK.png" alt="库函数与系统调用的层次关系.png" style="zoom: 67%;" />
+
+<img src="https://i.loli.net/2020/08/06/tl8ykNe6wrx7VOd.png" alt="系统IO函数与C标库函数.png" style="zoom:67%;" />
+
+<p><strong><em>read、write函数常常被称为 Unbuffered I/O。指的是无用户输入级缓冲区，但不保证不使用内核缓冲区。</em></strong></p>
+<h2 id="系统I-O与标准库I-O差异"><a href="#系统I-O与标准库I-O差异" class="headerlink" title="系统I/O与标准库I/O差异"></a>系统I/O与标准库I/O差异</h2><p>用户程序在读写文件时既可以调用C标准I/O库函数，也可以直接调用底层的系统I/O函数，有什么区别呢？</p>
+<ul>
+<li>使用系统I/O函数每次读写都需要进入内核，调一个系统调用比调一个用户空间的函数要慢很多。（此时用户有必要维护一个I/O缓冲区，但用C标准I/O库函数就比较方便，省去了自己管理I/O缓冲区的麻烦）</li>
+<li>用C标准I/O库函数要时刻注意I/O缓冲区和实际文件有可能不一致，在必要时需调用<code>fflush</code></li>
+<li>UNIX是Everything is a file，在读写设备文件时通常是不希望有缓冲的，例如网络编程通常直接调用Unbuffered I/O函数。</li>
+</ul>
+<h2 id="标准库缓冲类型"><a href="#标准库缓冲类型" class="headerlink" title="标准库缓冲类型"></a>标准库缓冲类型</h2><p>C标准库的I/O缓冲区有三种类型：全缓冲、行缓冲和无缓冲。</p>
+<h3 id="全缓冲"><a href="#全缓冲" class="headerlink" title="全缓冲"></a>全缓冲</h3><p>如果缓冲区写满了就写回内核。对于驻留在<strong>磁盘</strong>上的文件通常是由标准I/O库实施全缓冲的。在一个流上执行第一次I/O操作时，相关标准I/O函数通常调用malloc获得需使用的缓冲区。</p>
+<h3 id="行缓冲"><a href="#行缓冲" class="headerlink" title="行缓冲"></a>行缓冲</h3><p>如果用户程序写的数据中有<strong>换行符</strong>就把这一行写回内核，或者如果<strong>缓冲区写满</strong>了就写回内核。<font color=red><strong>标准输入</strong></font>和<font color=red><strong>标准输出</strong></font>对应终端设备时通常是行缓冲的。 </p>
+<h3 id="无缓冲"><a href="#无缓冲" class="headerlink" title="无缓冲"></a>无缓冲</h3><p>用户程序每次调库函数做写操作都要通过系统调用写回内核。</p>
+<p><font color=red><strong>标准错误输出</strong></font>通常是无缓冲的，这样用户程序产生的错误信息可以尽快输出到设备。这里的无缓冲，并不是指缓冲区大小为0，其实，还是有缓冲的，大小为1。</p>
+]]></content>
+      <categories>
+        <category>笔记</category>
+        <category>apue</category>
+      </categories>
+      <tags>
+        <tag>linux</tag>
+        <tag>apue</tag>
+        <tag>操作系统</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>Linux进程地址空间（程序内存布局）</title>
     <url>/APUE/Linux%E8%BF%9B%E7%A8%8B%E5%9C%B0%E5%9D%80%E7%A9%BA%E9%97%B4%EF%BC%88%E7%A8%8B%E5%BA%8F%E5%86%85%E5%AD%98%E5%B8%83%E5%B1%80%EF%BC%89/</url>
     <content><![CDATA[<h1 id="进程地址空间分布图"><a href="#进程地址空间分布图" class="headerlink" title="进程地址空间分布图"></a>进程地址空间分布图</h1><img src="https://i.loli.net/2020/08/05/jxbWsi5ae4q1GfR.png" alt="Linux程序内存布局图.png" style="zoom:67%;" />
@@ -95,39 +126,8 @@
       <tags>
         <tag>linux</tag>
         <tag>apue</tag>
+        <tag>操作系统</tag>
         <tag>进程</tag>
-        <tag>操作系统</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>系统I/O函数与C标准库函数</title>
-    <url>/APUE/%E7%B3%BB%E7%BB%9FIO%E5%87%BD%E6%95%B0%E4%B8%8EC%E6%A0%87%E5%87%86%E5%BA%93%E5%87%BD%E6%95%B0/</url>
-    <content><![CDATA[<p>先上图</p>
-<img src="https://i.loli.net/2020/08/06/RIMrGxbPWyizjnK.png" alt="库函数与系统调用的层次关系.png" style="zoom: 67%;" />
-
-<img src="https://i.loli.net/2020/08/06/tl8ykNe6wrx7VOd.png" alt="系统IO函数与C标库函数.png" style="zoom:67%;" />
-
-<p><strong><em>read、write函数常常被称为 Unbuffered I/O。指的是无用户输入级缓冲区，但不保证不使用内核缓冲区。</em></strong></p>
-<h2 id="系统I-O与标准库I-O差异"><a href="#系统I-O与标准库I-O差异" class="headerlink" title="系统I/O与标准库I/O差异"></a>系统I/O与标准库I/O差异</h2><p>用户程序在读写文件时既可以调用C标准I/O库函数，也可以直接调用底层的系统I/O函数，有什么区别呢？</p>
-<ul>
-<li>使用系统I/O函数每次读写都需要进入内核，调一个系统调用比调一个用户空间的函数要慢很多。（此时用户有必要维护一个I/O缓冲区，但用C标准I/O库函数就比较方便，省去了自己管理I/O缓冲区的麻烦）</li>
-<li>用C标准I/O库函数要时刻注意I/O缓冲区和实际文件有可能不一致，在必要时需调用<code>fflush</code></li>
-<li>UNIX是Everything is a file，在读写设备文件时通常是不希望有缓冲的，例如网络编程通常直接调用Unbuffered I/O函数。</li>
-</ul>
-<h2 id="标准库缓冲类型"><a href="#标准库缓冲类型" class="headerlink" title="标准库缓冲类型"></a>标准库缓冲类型</h2><p>C标准库的I/O缓冲区有三种类型：全缓冲、行缓冲和无缓冲。</p>
-<h3 id="全缓冲"><a href="#全缓冲" class="headerlink" title="全缓冲"></a>全缓冲</h3><p>如果缓冲区写满了就写回内核。对于驻留在<strong>磁盘</strong>上的文件通常是由标准I/O库实施全缓冲的。在一个流上执行第一次I/O操作时，相关标准I/O函数通常调用malloc获得需使用的缓冲区。</p>
-<h3 id="行缓冲"><a href="#行缓冲" class="headerlink" title="行缓冲"></a>行缓冲</h3><p>如果用户程序写的数据中有<strong>换行符</strong>就把这一行写回内核，或者如果<strong>缓冲区写满</strong>了就写回内核。<font color=red><strong>标准输入</strong></font>和<font color=red><strong>标准输出</strong></font>对应终端设备时通常是行缓冲的。 </p>
-<h3 id="无缓冲"><a href="#无缓冲" class="headerlink" title="无缓冲"></a>无缓冲</h3><p>用户程序每次调库函数做写操作都要通过系统调用写回内核。</p>
-<p><font color=red><strong>标准错误输出</strong></font>通常是无缓冲的，这样用户程序产生的错误信息可以尽快输出到设备。这里的无缓冲，并不是指缓冲区大小为0，其实，还是有缓冲的，大小为1。</p>
-]]></content>
-      <categories>
-        <category>笔记</category>
-        <category>apue</category>
-      </categories>
-      <tags>
-        <tag>linux</tag>
-        <tag>apue</tag>
-        <tag>操作系统</tag>
       </tags>
   </entry>
   <entry>
@@ -350,6 +350,72 @@
       </tags>
   </entry>
   <entry>
+    <title>STL源码剖析-容器-slist</title>
+    <url>/STL/STL%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90-%E5%AE%B9%E5%99%A8-slist/</url>
+    <content><![CDATA[<p>STL list是一个双向链表（double linked list）。SGI STL提供了另一个单向链表（single linked list）也就是<code>slist</code>。</p>
+<p><code>slist</code>与<code>list</code>差异：</p>
+<ol>
+<li>slist迭代器是单向的Forward Iterator，list迭代器是双向的Bidirectional Iterator。（slist迭代器没有<code>--</code>操作，因为是单向的Forward Iterator）。</li>
+<li>单向链表所耗空间更小。</li>
+<li>list是<strong>双向环形</strong>链表，slist是<strong>单向</strong>链表。</li>
+<li>slist不提供push_back()，仅提供**push_front()**（头插法）。</li>
+</ol>
+<p><code>slist</code>与<code>list</code>相同点：</p>
+<ol>
+<li>都具有“头节点”，且都不放置元素数据。</li>
+<li>进行插入、删除、接合等操作，均不会导致原迭代器失效（当然，指向被移除的那个节点的迭代器肯定会失效）。</li>
+<li><code>list</code>和<code>slist</code>都不能使用 STL 算法 <code>sort()</code> ，必须使用自己的 <code>sort()</code> 。</li>
+</ol>
+<p>slist基本操作：</p>
+<p><code>push_front()</code>：从头部插入元素</p>
+<p><code>pop_front()</code>：从头部取出元素</p>
+<p><code>front()</code>：取头部元素</p>
+]]></content>
+      <categories>
+        <category>笔记</category>
+        <category>STL</category>
+      </categories>
+      <tags>
+        <tag>C++</tag>
+        <tag>STL</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>STL源码剖析-容器-stack-queue</title>
+    <url>/STL/STL%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90-%E5%AE%B9%E5%99%A8-stack-queue/</url>
+    <content><![CDATA[<h2 id="stack"><a href="#stack" class="headerlink" title="stack"></a>stack</h2><p>stack是一种先进后出(First In Last Out, <strong>FILO</strong>)的数据结构。只有一个出口。</p>
+<p>SGI STL 默认是以<strong>deque</strong>作为缺省情况下的stack底层结构。也可以 <strong>list</strong> 作为 stack 的底层容器。</p>
+<p>STL stack 往往不被归类为 container(容器)，而被归类为 <strong>container adapter</strong>。</p>
+<p>stack所有的元素都必须符合“先进后出”的条件，只有从stack顶端对其进行新增、移除、读取操作，即stack<strong>不允许遍历</strong>行为，stack<strong>不提供迭代器</strong>。</p>
+<img src="https://i.loli.net/2020/08/09/SLDxIahQRYBuc5y.jpg" alt="stack.jpg" style="zoom: 25%;" />
+
+<p>stack基本操作：</p>
+<p><code>push()</code>：顶部入栈</p>
+<p><code>pop()</code>：顶部出栈</p>
+<p><code>top()</code>：：指向栈顶</p>
+<p><code>empty()</code>：判断栈空</p>
+<h2 id="queue"><a href="#queue" class="headerlink" title="queue"></a>queue</h2><p>queue是一种先进先出(First In First Out, FIFO)的数据结构。有两个出口，从最底端加入元素、最顶端取出元素。</p>
+<p>SGI STL 默认是以 <strong>deque</strong> 作为缺省情况下的 queue 底部结构。也可以 <strong>list</strong> 作为 stack 的底层容器。</p>
+<p>STL queue往往不被归类为 container(容器)，而被归类为 <strong>container adapter</strong>。</p>
+<p>stack所有的元素都必须符合“先进先出”的条件，只有从queue尾端增加元素、头端取出元素。queue<strong>不允许遍历</strong>行为，queue<strong>不提供迭代器</strong>。</p>
+<img src="https://i.loli.net/2020/08/09/jFngpJdNtEyoqAm.jpg" alt="queue.jpg" style="zoom:25%;" />
+
+<p>queue基本操作：</p>
+<p><code>push()</code>：尾端入队</p>
+<p><code>pop()</code>：首端出队</p>
+<p><code>front()</code>：返回队首</p>
+<p><code>back()</code>：返回队尾</p>
+]]></content>
+      <categories>
+        <category>笔记</category>
+        <category>STL</category>
+      </categories>
+      <tags>
+        <tag>C++</tag>
+        <tag>STL</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>STL源码剖析-容器-vector</title>
     <url>/STL/STL%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90-%E5%AE%B9%E5%99%A8-vector/</url>
     <content><![CDATA[<p>vector 常被称为向量容器，因为该容器擅长在<strong>尾部</strong>插入或删除元素，在常量时间内就可以完成，时间复杂度为<code>O(1)</code>；而对于在容器<strong>头部或者中部</strong>插入或删除元素，则花费时间要长一些（移动元素需要耗费时间），时间复杂度为线性阶<code>O(n)</code>。</p>
@@ -416,6 +482,99 @@
       </tags>
   </entry>
   <entry>
+    <title>STL源码剖析-容器priority_queue-heap(算法)</title>
+    <url>/STL/STL%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90-%E5%AE%B9%E5%99%A8priority_queue-heap(%E7%AE%97%E6%B3%95)/</url>
+    <content><![CDATA[<img src="https://i.loli.net/2020/08/09/KF12cDuCQVkaYmT.png" alt="完全二叉树即其array表述式.png" style="zoom: 67%;" />
+
+<h2 id="heap"><a href="#heap" class="headerlink" title="heap"></a>heap</h2><p>heap的实现就是数据结构中的<strong>堆</strong>（大顶堆、小顶堆）。STL提供<code>max-heap</code>。</p>
+<p>STL中并没有把<code>heap</code>作为一种容器组件，heap的实现亦需要更低一层的容器组件，诸如list，array，vector。heap并不属于STL容器，但它是其中一个容器<code>priority queue</code>必不可少的一部分。</p>
+<p><strong>heap没有迭代器，</strong>heap的所有元素都必须遵循特别的排列规则，所以heap不提供遍历功能，也不提供迭代器。</p>
+<h3 id="push-heap"><a href="#push-heap" class="headerlink" title="push_heap"></a>push_heap</h3><blockquote>
+<ol>
+<li><p>最新加入的源放在最下层叶子节点，填补从左至右第一个空闲单元</p>
+</li>
+<li><p>percolate up（上溯）：与父节点比较，调整位置</p>
+<blockquote>
+<p>将新节点与父节点比较，如果其键值比父节点大，就交换父子的位置，如此一直上溯，直到不需要交换或者到根节点为止。</p>
+</blockquote>
+</li>
+</ol>
+</blockquote>
+<img src="https://i.loli.net/2020/08/09/5Dz7RYnrlGKIkmc.png" alt="push_heap演示.png" style="zoom: 67%;" />
+
+<h3 id="pop-heap"><a href="#pop-heap" class="headerlink" title="pop_heap"></a>pop_heap</h3><blockquote>
+<ol>
+<li><p>把原尾端节点的值拿出来放至一临时变量里，然后该位置放根节点的值（最后会被pop_back()给移除）</p>
+</li>
+<li><p>重新构建大顶堆，实施如下调整堆：</p>
+<p>1）<strong>percolate down</strong>（下溯）：从根节点开始将空洞节点（一开始是根节点）和较大子节点交换，并持续向下进行，直到到达叶节点为止。然后将已保存的原容器vector尾端节点赋给这个已到达叶层的空洞节点。</p>
+<p>2）此时可能尚未满足次序特性，再执行一次<strong>percolate up</strong>（上溯）操作</p>
+</li>
+</ol>
+</blockquote>
+<p><strong><em>注意：pop_heap之后，最大元素只是被放置于底部容器的最尾端，尚未被取走。如果要取其值，可使用底部容器的back()函数。如果要移除它，可使用底部容器所提供的pop_back()函数。</em></strong></p>
+<img src="https://i.loli.net/2020/08/09/PXJQOjWxi9Scezq.png" alt="pop_heap演示.png" style="zoom: 67%;" />
+
+<h3 id="sort-heap"><a href="#sort-heap" class="headerlink" title="sort_heap"></a>sort_heap</h3><p><strong>堆排序算法</strong>。执行此操作之后，容器vector中的元素按照从小到大的顺序排列。</p>
+<img src="https://i.loli.net/2020/08/09/fnZlGrWJxibYPo2.png" alt="sort_heap演示.png" style="zoom:67%;" />
+
+<h3 id="make-heap"><a href="#make-heap" class="headerlink" title="make_heap"></a>make_heap</h3><p>构建堆实质是一个不断调整堆的过程—通过不断调整子树，使得子树满足堆的特性来使得整个树满足堆的性质。</p>
+<p>第一个需要执行调整操作的子树的根节点是从后往前的第一个非叶结点。从此节点往前到根节点对每个子树执行调整操作，即可构建堆。</p>
+<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 将 [first,last) 排列为一个 heap。</span></span><br><span class="line"><span class="keyword">template</span> &lt;<span class="class"><span class="keyword">class</span> <span class="title">RandomAccessIterator</span>&gt;</span></span><br><span class="line"><span class="class"><span class="title">inline</span> <span class="title">void</span> <span class="title">make_heap</span>(<span class="title">RandomAccessIterator</span> <span class="title">first</span>, <span class="title">RandomAccessIterator</span> <span class="title">last</span>) &#123;</span></span><br><span class="line">    __make_heap(first, last, value_type(first), distance_type(first));</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">template</span> &lt;<span class="class"><span class="keyword">class</span> <span class="title">RandomAccessIterator</span>, <span class="title">class</span> <span class="title">T</span>, <span class="title">class</span> <span class="title">Distance</span>&gt;</span></span><br><span class="line"><span class="class"><span class="title">void</span> __<span class="title">make_heap</span>(<span class="title">RandomAccessIterator</span> <span class="title">first</span>, <span class="title">RandomAccessIterator</span> <span class="title">last</span>, <span class="title">T</span>*,</span></span><br><span class="line"><span class="class">    <span class="title">Distance</span>*) &#123;</span></span><br><span class="line">    <span class="keyword">if</span> (last - first &lt; ) <span class="keyword">return</span>; <span class="comment">// 如果長度為 0 或 1，不必重新排列。</span></span><br><span class="line">    Distance len = last - first;</span><br><span class="line">    <span class="comment">// 找出第一个需要重排的子树头部，以 parent 标示出。由于任何叶子节点都不需执行</span></span><br><span class="line">        <span class="comment">// perlocate down（下沉），所以有以下计算。</span></span><br><span class="line">        Distance parent = (len - ) / ;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">while</span> (<span class="literal">true</span>) &#123;</span><br><span class="line">        <span class="comment">// 重排以 parent 为首的子树。len 是为了让 __adjust_heap() 判断操作范围</span></span><br><span class="line">        __adjust_heap(first, parent, len, T(*(first + parent)));</span><br><span class="line">        <span class="keyword">if</span> (parent == ) <span class="keyword">return</span>; <span class="comment">// 直至根节点，就结束。</span></span><br><span class="line">        parent--; <span class="comment">// 未到根节点，就将（即将重排的子树的）索引值向前一個节点</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="priority-queue"><a href="#priority-queue" class="headerlink" title="priority_queue"></a>priority_queue</h2><p><code>priority_queue</code> 是一个拥有权值观念的 queue。</p>
+<p>默认情况下以 <code>vector</code> 为底部容器完成其所有工作，再加上 <code>heap</code> 处理规则。</p>
+<p>priority_queue的所有元素，都不一定的进程出规则，只有queue顶端的元素（权值最高）才有机会被外界取用。故<code>priority_queue</code>不提供遍历功能，也不提供迭代器。</p>
+<p>priority_queue 基本操作：</p>
+<p><code>priority_queue()</code>：调用 <code>make_heap()</code>， 使进入的元素后，始终保持一个堆。</p>
+<p><code>top()</code>：队顶元素。</p>
+<p><code>push()</code>：<code>push_back()</code>尾端插入元素，然后调用 <code>push_heap()</code> 重排堆。</p>
+<p><code>pop()</code>：用 <code>pop_heap() </code>将最大元素放到底部容器的最尾端，<strong>并不是真正弹出</strong>，再调用底部容器 vector 所提供的 <code>pop_back()</code> 弹出元素。</p>
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><p><a href="https://www.shuzhiduo.com/A/E35pRNwRzv/">STL源码剖析——序列式容器#5 heap</a></p>
+]]></content>
+      <categories>
+        <category>笔记</category>
+        <category>STL</category>
+      </categories>
+      <tags>
+        <tag>C++</tag>
+        <tag>STL</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>STL源码剖析-迭代器-iterators</title>
+    <url>/STL/STL%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90-%E8%BF%AD%E4%BB%A3%E5%99%A8-iterators/</url>
+    <content><![CDATA[<p>迭代器(iterator)是一种抽象的设计理念，通过迭代器可以在不了解容器内部原理的情况下遍历容器。除此之外，STL中迭代器一个最重要的作用就是作为容器(vector,list等)与STL算法的粘结剂，只要容器提供迭代器的接口，同一套算法代码可以利用在完全不同的容器中，这是抽象思想的经典应用。</p>
+<p>从实现的角度来看，迭代器是一种将 <code>operator*</code>，<code>operator-&gt;</code>，<code>operator++</code>，<code>operator--</code> 等指针相关操作予以重载的 class template。 所有 STL 容器都附带有自己专属的迭代器。 native pointer 也是一种迭代器。</p>
+<p>为什么每一种 STL 容器都提供有专属迭代器？主要是暴露太多细节，所以把迭代器的开发工作交给容器去完成，这样所有实现细节可以得到封装，不被使用者看到。</p>
+<h2 id="Traits"><a href="#Traits" class="headerlink" title="Traits"></a>Traits</h2><img src="https://i.loli.net/2020/08/10/MQOyeBwmSgTt8j9.png" alt="iteratortraits.png" style="zoom: 80%;" />
+
+<h2 id="迭代器所指对象类型-associated-types"><a href="#迭代器所指对象类型-associated-types" class="headerlink" title="迭代器所指对象类型(associated types)"></a>迭代器所指对象类型(associated types)</h2><p>迭代器所指的对象类型有五种：</p>
+<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line">tempalte&lt;<span class="keyword">typename</span> I&gt;</span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">iterator_traits</span></span></span><br><span class="line"><span class="class">&#123;</span></span><br><span class="line">    <span class="keyword">typedef</span> <span class="keyword">typename</span> I::iterator_category  iterator_category;    <span class="comment">//迭代器的分类</span></span><br><span class="line">    <span class="keyword">typedef</span> <span class="keyword">typename</span> I::value_type  value_type;                 <span class="comment">//迭代器所指对象的型别</span></span><br><span class="line">    <span class="keyword">typedef</span> <span class="keyword">typename</span> I::difference_type  difference_type;        <span class="comment">//两迭代器之间的距离</span></span><br><span class="line">    <span class="keyword">typedef</span> <span class="keyword">typename</span> I::pointer  pointer;                        <span class="comment">//指针，指向迭代器所指之物</span></span><br><span class="line">    <span class="keyword">typedef</span> <span class="keyword">typename</span> I::reference  reference;                    <span class="comment">//类似引用类型，允许改变“所指对象的值”</span></span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<h2 id="迭代器的分类"><a href="#迭代器的分类" class="headerlink" title="迭代器的分类"></a>迭代器的分类</h2><ol>
+<li>Input Iterator ：能从所指向元素读取的迭代器（<strong>只读</strong>）。仅保证单趟算法的合法性。</li>
+<li>Output Iterator ：能写入所指元素的迭代器（<strong>只写</strong>）。</li>
+<li>Forward Iterator ：一种能从所指向元素读取数据的迭代器 。</li>
+<li>Bidirectional Iterator：能<strong>双向移动</strong>（即自增与自减）的迭代器 。</li>
+<li>Random Access Iterator ：<strong>随机读写</strong>，能在常数时间内移动到指向任何元素的双向迭代器。</li>
+</ol>
+<img src="https://i.loli.net/2020/08/10/NBfOK4GX572eFYL.png" alt="迭代器的分类于从属关系.png" style="zoom:67%;" />
+
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>traits 本质是什么？多一层间接性，换来灵活性。</p>
+<p>iterator_traits 负责萃取迭代器的特性，__type_traits 负责萃取类型的特性。</p>
+<p>STL的中心思想是将数据容器与算法分开，彼此独立设计。迭代器便作为连接两者的“桥梁”，统一访问不同容器时的访问方式，并将实际细节封装，不被使用者看到。</p>
+]]></content>
+      <categories>
+        <category>笔记</category>
+        <category>STL</category>
+      </categories>
+      <tags>
+        <tag>C++</tag>
+        <tag>STL</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>STL源码剖析概述</title>
     <url>/STL/STL%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90%E6%A6%82%E8%BF%B0/</url>
     <content><![CDATA[<blockquote>
@@ -448,6 +607,51 @@
       <tags>
         <tag>C++</tag>
         <tag>STL</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Centos扩容</title>
+    <url>/doc/Centos%E6%89%A9%E5%AE%B9/</url>
+    <content><![CDATA[<p>CVM存储在 <code>/var</code> 下，虽然固态硬盘大部分存储空间，都给了 <code>/var</code> ，但是虚拟机多一点，就担心空间不足。于是便通过以下步骤对 <code>/var</code> 进行扩容。</p>
+<ol>
+<li><p>查看分区</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">[root@localhost ~]# df -hT</span><br><span class="line">Filesystem              Type      Size  Used Avail Use% Mounted on</span><br><span class="line">/dev/mapper/centos-root xfs        40G  3.9G   37G  10% /</span><br><span class="line">devtmpfs                devtmpfs   12G     0   12G   0% /dev</span><br><span class="line">tmpfs                   tmpfs      12G     0   12G   0% /dev/shm</span><br><span class="line">tmpfs                   tmpfs      12G   33M   12G   1% /run</span><br><span class="line">tmpfs                   tmpfs      12G     0   12G   0% /sys/fs/cgroup</span><br><span class="line">/dev/sdc2               xfs       497M  155M  343M  32% /boot</span><br><span class="line">/dev/sdc1               vfat       50M   12M   39M  23% /boot/efi</span><br><span class="line">/dev/mapper/centos-var  xfs       375G  254G  121G  68% /var  # 大小 375G</span><br><span class="line">tmpfs                   tmpfs     2.4G     0  2.4G   0% /run/user/0</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>查看磁盘编号</p>
+<p>也可以使用 <code>fdisk -l</code> 查看磁盘信息。其中 <code>/dev/sdb</code> 是用于扩容的磁盘。</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">[root@localhost ~]# ls /dev/sd*</span><br><span class="line">/dev/sda  /dev/sdb  /dev/sdc  /dev/sdc1  /dev/sdc2  /dev/sdc3</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>创建pv</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">[root@localhost ~]# pvcreate /dev/sdb </span><br><span class="line">  Physical volume &quot;/dev/sdb&quot; successfully created.</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>查看vg组</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">[root@localhost ~]# vgs</span><br><span class="line">  VG     #PV #LV #SN Attr   VSize    VFree</span><br><span class="line">  centos   1   3   0 wz--n- &lt;446.59g    0    # 此时vfree为0</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>扩展vg</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">[root@localhost ~]# vgextend centos /dev/sdb </span><br><span class="line">  Volume group &quot;centos&quot; successfully extended</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>再次查看vg组</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">[root@localhost ~]# vgs</span><br><span class="line">  VG     #PV #LV #SN Attr   VSize  VFree  </span><br><span class="line">  centos   2   3   0 wz--n- &lt;1.35t 931.51g     # 此时vfree为 931.51g</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>扩展lv（+500G）</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">[root@localhost ~]# lvextend -L +500G /dev/mapper/centos-var </span><br><span class="line">  Size of logical volume centos/var changed from &lt;374.59 GiB (95895 extents) to &lt;874.59 GiB (223895 extents).</span><br><span class="line">  Logical volume centos/var successfully resized.</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>系统重新读取大小</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">[root@localhost ~]# xfs_growfs /dev/mapper/centos-var </span><br><span class="line">meta-data=/dev/mapper/centos-var isize=256    agcount=4, agsize=24549120 blks</span><br><span class="line">         =                       sectsz=512   attr=2, projid32bit=1</span><br><span class="line">         =                       crc=0        finobt=0 spinodes=0</span><br><span class="line">data     =                       bsize=4096   blocks=98196480, imaxpct=25</span><br><span class="line">         =                       sunit=0      swidth=0 blks</span><br><span class="line">naming   =version 2              bsize=4096   ascii-ci=0 ftype=0</span><br><span class="line">log      =internal               bsize=4096   blocks=47947, version=2</span><br><span class="line">         =                       sectsz=512   sunit=0 blks, lazy-count=1</span><br><span class="line">realtime =none                   extsz=4096   blocks=0, rtextents=0</span><br><span class="line">data blocks changed from 98196480 to 229268480</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>查看扩容是否成功</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">[root@localhost ~]# df -h</span><br><span class="line">Filesystem               Size  Used Avail Use% Mounted on</span><br><span class="line">/dev/mapper/centos-root   40G  3.9G   37G  10% /</span><br><span class="line">devtmpfs                  12G     0   12G   0% /dev</span><br><span class="line">tmpfs                     12G     0   12G   0% /dev/shm</span><br><span class="line">tmpfs                     12G   33M   12G   1% /run</span><br><span class="line">tmpfs                     12G     0   12G   0% /sys/fs/cgroup</span><br><span class="line">/dev/sdc2                497M  155M  343M  32% /boot</span><br><span class="line">/dev/sdc1                 50M   12M   39M  23% /boot/efi</span><br><span class="line">/dev/mapper/centos-var   875G  254G  621G  30% /var        # 大小 375G + 500G = 875G</span><br><span class="line">tmpfs                    2.4G     0  2.4G   0% /run/user/0</span><br></pre></td></tr></table></figure>
+
+
+
+</li>
+</ol>
+]]></content>
+      <categories>
+        <category>文档</category>
+      </categories>
+      <tags>
+        <tag>linux</tag>
       </tags>
   </entry>
   <entry>
@@ -904,6 +1108,66 @@
       </tags>
   </entry>
   <entry>
+    <title>hexo-theme-next提交给搜索引擎</title>
+    <url>/hexo/hexo-theme-next%E6%8F%90%E4%BA%A4%E7%BB%99%E6%90%9C%E7%B4%A2%E5%BC%95%E6%93%8E/</url>
+    <content><![CDATA[<h1 id="站点地图生成"><a href="#站点地图生成" class="headerlink" title="站点地图生成"></a>站点地图生成</h1><ol>
+<li><p>插件安装</p>
+<ul>
+<li><p>Google站点地图插件</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">npm install hexo-generator-sitemap --save</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>百度站点地图插件</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">npm install hexo-generator-baidu-sitemap --save</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+<li><p>修改站点配置文件</p>
+</li>
+</ol>
+<p><code>_config.yml</code> 中加入：</p>
+<figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="attr">sitemap:</span></span><br><span class="line">  <span class="attr">path:</span> <span class="string">sitemap.xml</span> <span class="comment"># 提交给Google</span></span><br><span class="line"><span class="attr">baidusitemap:</span></span><br><span class="line">  <span class="attr">path:</span> <span class="string">baidusitemap.xml</span> <span class="comment"># 提交给百度</span></span><br></pre></td></tr></table></figure>
+
+<ol start="3">
+<li><p>重新构建项目</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">hexo cl&amp;&amp;hexo g</span><br></pre></td></tr></table></figure>
+
+</li>
+</ol>
+<h1 id="提交站点地图"><a href="#提交站点地图" class="headerlink" title="提交站点地图"></a>提交站点地图</h1><p>直接参考：<a href="https://fanandjiu.com/Hexo%E9%97%AE%E9%A2%98-%E6%8F%90%E4%BA%A4%E7%AB%99%E7%82%B9%E7%BB%99%E6%90%9C%E7%B4%A2%E5%BC%95%E6%93%8E%E4%BB%A5%E5%8F%8ASEO/">Hexo问题-提交站点给搜索引擎以及SEO</a> </p>
+<p><strong><em>注意：在Google进行DNS记录验证域名所有权时，因为阿里云域名解析的记录值不允许两个 <code>@</code> ，但将域名记录值 <code>@</code> 用以验证，验证完后再更改记录值是可行的。验证后需要一定的时间才能google搜索到！</em></strong> </p>
+<p><img src="https://i.loli.net/2020/08/06/SBGhud2oF7V4ZKj.png" alt="DNS验证域名所有权-Google.png"></p>
+<h1 id="站点分析"><a href="#站点分析" class="headerlink" title="站点分析"></a>站点分析</h1><p>参考：<a href="https://theme-next.js.org/docs/third-party-services/statistics-and-analytics.html">Statistics and Analytics</a> </p>
+<h2 id="Google-分析"><a href="#Google-分析" class="headerlink" title="Google 分析"></a>Google 分析</h2><ol>
+<li><p>创建一个 <a href="https://analytics.google.com/">Google Analytics</a> 账号</p>
+</li>
+<li><p>得到一个 <code>跟踪ID</code> ：UA-xxxxxx</p>
+</li>
+<li><p>修改Next配置文件</p>
+<figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="comment"># Google Analytics</span></span><br><span class="line"><span class="attr">google_analytics:</span></span><br><span class="line">  <span class="attr">tracking_id:</span> <span class="string">你的跟踪ID</span> <span class="comment"># &lt;app_id&gt;</span></span><br></pre></td></tr></table></figure>
+
+</li>
+</ol>
+<h2 id="百度分析"><a href="#百度分析" class="headerlink" title="百度分析"></a>百度分析</h2><ol>
+<li><p>去<a href="https://tongji.baidu.com/web/welcome/login">百度统计</a>，新增一个网站</p>
+</li>
+<li><p>复制统计代码中的 <code>hm.src = &quot;https://hm.baidu.com/hm.js?[这里的脚本ID]&quot;</code></p>
+</li>
+<li><p>修改Next配置文件</p>
+<figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="comment"># Baidu Analytics</span></span><br><span class="line"><span class="attr">baidu_analytics:</span> <span class="string">脚本ID</span> <span class="comment"># &lt;app_id&gt;</span></span><br></pre></td></tr></table></figure>
+
+</li>
+</ol>
+]]></content>
+      <categories>
+        <category>教程</category>
+      </categories>
+      <tags>
+        <tag>Hexo</tag>
+        <tag>博客</tag>
+        <tag>Next</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>hexo-theme-next主题配置</title>
     <url>/hexo/hexo-theme-next%E4%B8%BB%E9%A2%98%E9%85%8D%E7%BD%AE/</url>
     <content><![CDATA[<p>2020-08-02 版本信息</p>
@@ -981,66 +1245,6 @@
 <p>创建 <code>source/_data/variables.styl</code> ：</p>
 <figure class="highlight stylus"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 圆角设置</span></span><br><span class="line">$border-radius-inner     = 15px 15px 15px 15px;</span><br><span class="line"><span class="variable">$border</span>-radius       </span><br></pre></td></tr></table></figure>
 
-]]></content>
-      <categories>
-        <category>教程</category>
-      </categories>
-      <tags>
-        <tag>Hexo</tag>
-        <tag>博客</tag>
-        <tag>Next</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>hexo-theme-next提交给搜索引擎</title>
-    <url>/hexo/hexo-theme-next%E6%8F%90%E4%BA%A4%E7%BB%99%E6%90%9C%E7%B4%A2%E5%BC%95%E6%93%8E/</url>
-    <content><![CDATA[<h1 id="站点地图生成"><a href="#站点地图生成" class="headerlink" title="站点地图生成"></a>站点地图生成</h1><ol>
-<li><p>插件安装</p>
-<ul>
-<li><p>Google站点地图插件</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">npm install hexo-generator-sitemap --save</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>百度站点地图插件</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">npm install hexo-generator-baidu-sitemap --save</span><br></pre></td></tr></table></figure>
-</li>
-</ul>
-</li>
-<li><p>修改站点配置文件</p>
-</li>
-</ol>
-<p><code>_config.yml</code> 中加入：</p>
-<figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="attr">sitemap:</span></span><br><span class="line">  <span class="attr">path:</span> <span class="string">sitemap.xml</span> <span class="comment"># 提交给Google</span></span><br><span class="line"><span class="attr">baidusitemap:</span></span><br><span class="line">  <span class="attr">path:</span> <span class="string">baidusitemap.xml</span> <span class="comment"># 提交给百度</span></span><br></pre></td></tr></table></figure>
-
-<ol start="3">
-<li><p>重新构建项目</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">hexo cl&amp;&amp;hexo g</span><br></pre></td></tr></table></figure>
-
-</li>
-</ol>
-<h1 id="提交站点地图"><a href="#提交站点地图" class="headerlink" title="提交站点地图"></a>提交站点地图</h1><p>直接参考：<a href="https://fanandjiu.com/Hexo%E9%97%AE%E9%A2%98-%E6%8F%90%E4%BA%A4%E7%AB%99%E7%82%B9%E7%BB%99%E6%90%9C%E7%B4%A2%E5%BC%95%E6%93%8E%E4%BB%A5%E5%8F%8ASEO/">Hexo问题-提交站点给搜索引擎以及SEO</a> </p>
-<p><strong><em>注意：在Google进行DNS记录验证域名所有权时，因为阿里云域名解析的记录值不允许两个 <code>@</code> ，但将域名记录值 <code>@</code> 用以验证，验证完后再更改记录值是可行的。验证后需要一定的时间才能google搜索到！</em></strong> </p>
-<p><img src="https://i.loli.net/2020/08/06/SBGhud2oF7V4ZKj.png" alt="DNS验证域名所有权-Google.png"></p>
-<h1 id="站点分析"><a href="#站点分析" class="headerlink" title="站点分析"></a>站点分析</h1><p>参考：<a href="https://theme-next.js.org/docs/third-party-services/statistics-and-analytics.html">Statistics and Analytics</a> </p>
-<h2 id="Google-分析"><a href="#Google-分析" class="headerlink" title="Google 分析"></a>Google 分析</h2><ol>
-<li><p>创建一个 <a href="https://analytics.google.com/">Google Analytics</a> 账号</p>
-</li>
-<li><p>得到一个 <code>跟踪ID</code> ：UA-xxxxxx</p>
-</li>
-<li><p>修改Next配置文件</p>
-<figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="comment"># Google Analytics</span></span><br><span class="line"><span class="attr">google_analytics:</span></span><br><span class="line">  <span class="attr">tracking_id:</span> <span class="string">你的跟踪ID</span> <span class="comment"># &lt;app_id&gt;</span></span><br></pre></td></tr></table></figure>
-
-</li>
-</ol>
-<h2 id="百度分析"><a href="#百度分析" class="headerlink" title="百度分析"></a>百度分析</h2><ol>
-<li><p>去<a href="https://tongji.baidu.com/web/welcome/login">百度统计</a>，新增一个网站</p>
-</li>
-<li><p>复制统计代码中的 <code>hm.src = &quot;https://hm.baidu.com/hm.js?[这里的脚本ID]&quot;</code></p>
-</li>
-<li><p>修改Next配置文件</p>
-<figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="comment"># Baidu Analytics</span></span><br><span class="line"><span class="attr">baidu_analytics:</span> <span class="string">脚本ID</span> <span class="comment"># &lt;app_id&gt;</span></span><br></pre></td></tr></table></figure>
-
-</li>
-</ol>
 ]]></content>
       <categories>
         <category>教程</category>
@@ -1152,7 +1356,8 @@
   <entry>
     <title>select函数-linux内核源码剖析</title>
     <url>/UNP/select%E5%87%BD%E6%95%B0-linux%E5%86%85%E6%A0%B8%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/</url>
-    <content><![CDATA[<h1 id="用户态下select系统调用"><a href="#用户态下select系统调用" class="headerlink" title="用户态下select系统调用"></a>用户态下select系统调用</h1><h2 id="select函数原型"><a href="#select函数原型" class="headerlink" title="select函数原型"></a>select函数原型</h2><blockquote>
+    <content><![CDATA[<h1 id="用户态下select系统调用"><a href="#用户态下select系统调用" class="headerlink" title="用户态下select系统调用"></a>用户态下select系统调用</h1><p>select多路I/O转接服务器demo：<a href="https://github.com/JakeLin0fly/unp-code/blob/master/select_concurrent/select_server.c">select_server.c</a> </p>
+<h2 id="select函数原型"><a href="#select函数原型" class="headerlink" title="select函数原型"></a>select函数原型</h2><blockquote>
 <p>/usr/include/sys/select.h</p>
 </blockquote>
 <figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="comment">/* According to POSIX.1-2001 */</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;sys/select.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">select</span><span class="params">(<span class="keyword">int</span> nfds, fd_set *readfds, fd_set *writefds,</span></span></span><br><span class="line"><span class="function"><span class="params">        fd_set *exceptfds, struct timeval *timeout)</span></span>;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">FD_CLR</span><span class="params">(<span class="keyword">int</span> fd, fd_set *<span class="built_in">set</span>)</span></span>;        <span class="comment">//从fdset中删除fd</span></span><br><span class="line"><span class="function"><span class="keyword">int</span>  <span class="title">FD_ISSET</span><span class="params">(<span class="keyword">int</span> fd, fd_set *<span class="built_in">set</span>)</span></span>;        <span class="comment">//判断fd是否已存在fdset</span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">FD_SET</span><span class="params">(<span class="keyword">int</span> fd, fd_set *<span class="built_in">set</span>)</span></span>;        <span class="comment">//将fd添加到fdset</span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">FD_ZERO</span><span class="params">(fd_set *<span class="built_in">set</span>)</span></span>;                <span class="comment">//fdset所有位清0</span></span><br></pre></td></tr></table></figure>
@@ -1211,7 +1416,10 @@
 <li>传出剩余时间差，返回给用户空间</li>
 <li>正常结束，返回满足条件的描述符个数</li>
 </ol>
+<div><div class="fold_hider"><div class="close hider_title">点击显示/隐藏select系统调用</div></div><div class="fold">
 <figure class="highlight c"><table><tr><td class="code"><pre><span class="line">SYSCALL_DEFINE5(select, <span class="keyword">int</span>, n, fd_set __user *, inp, fd_set __user *, outp,</span><br><span class="line">        fd_set __user *, <span class="built_in">exp</span>, struct timeval __user *, tvp)</span><br><span class="line">&#123;</span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">timespec</span> <span class="title">end_time</span>, *<span class="title">to</span> = <span class="title">NULL</span>;</span></span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">timeval</span> <span class="title">tv</span>;</span></span><br><span class="line">    <span class="keyword">int</span> ret;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/* 1. 永久等待      tvp == NULL</span></span><br><span class="line"><span class="comment">     * 2. 不等待         tvp-&gt;tv_sec == 0 &amp;&amp; tvp-&gt;tc_nsec == 0</span></span><br><span class="line"><span class="comment">     * 3. 等待指定时间   tvp-&gt;tv_sec != 0 || tvp-&gt;tc_nsec != 0  */</span></span><br><span class="line">    <span class="keyword">if</span> (tvp) &#123;</span><br><span class="line">        <span class="comment">/** 在设置超时情况下，拷贝用户空间下的相对超时时间（微秒量级）到内核 **/</span></span><br><span class="line">        <span class="keyword">if</span> (copy_from_user(&amp;tv, tvp, <span class="keyword">sizeof</span>(tv))) </span><br><span class="line">            <span class="keyword">return</span> -EFAULT;</span><br><span class="line"></span><br><span class="line">        to = &amp;end_time;</span><br><span class="line">        <span class="comment">/** poll_select_set_timeout 设定成绝对的超时时间（纳秒量级） **/</span></span><br><span class="line">        <span class="keyword">if</span> (poll_select_set_timeout(to,</span><br><span class="line">                tv.tv_sec + (tv.tv_usec / USEC_PER_SEC),</span><br><span class="line">                (tv.tv_usec % USEC_PER_SEC) * NSEC_PER_USEC))</span><br><span class="line">            <span class="keyword">return</span> -EINVAL;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/** select 真正执行入口 **/</span></span><br><span class="line">    ret = core_sys_select(n, inp, outp, <span class="built_in">exp</span>, to);</span><br><span class="line">    <span class="comment">/* 将此次调用完成剩余的时间差值通过 tvp 指向的 timeval 结构返回给用户空间 */</span></span><br><span class="line">    ret = poll_select_copy_remaining(&amp;end_time, tvp, <span class="number">1</span>, ret);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> ret;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+</div></div>
 
 <h2 id="core-sys-select"><a href="#core-sys-select" class="headerlink" title="core_sys_select"></a>core_sys_select</h2><ol>
 <li>先创建一个默认大小栈缓冲区（加快访问，但缓冲区大小可能不够）。</li>
@@ -1222,17 +1430,30 @@
 <li>若无错误，拷贝内核结果集到用户空间</li>
 <li>正常结束，返回满足条件的描述符数</li>
 </ol>
+<div><div class="fold_hider"><div class="close hider_title">点击显示/隐藏core_sys_select</div></div><div class="fold">
 <figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">core_sys_select</span><span class="params">(<span class="keyword">int</span> n, fd_set __user *inp, fd_set __user *outp,</span></span></span><br><span class="line"><span class="function"><span class="params">               fd_set __user *<span class="built_in">exp</span>, struct timespec *end_time)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    fd_set_bits fds;</span><br><span class="line">    <span class="keyword">void</span> *bits;</span><br><span class="line">    <span class="keyword">int</span> ret, max_fds;</span><br><span class="line">    <span class="keyword">unsigned</span> <span class="keyword">int</span> size;</span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">fdtable</span> *<span class="title">fdt</span>;</span></span><br><span class="line">    </span><br><span class="line">    <span class="comment">/* 需要将用户空间传进来的inset、outset、exset拷贝到内核空间，并且</span></span><br><span class="line"><span class="comment">     * 需要等容量的空间来存储结果集，之后会将结果集的内容写回到用户空间。</span></span><br><span class="line"><span class="comment">     * 定义一个SELECT_STACK_ALLOC(256字节)大小的栈上缓冲区，用于缓存输入输出结果集。</span></span><br><span class="line"><span class="comment">     * 如果缓存的空间大小不够，那么再使用kmalloc()动态分配，</span></span><br><span class="line"><span class="comment">     * 优先使用栈缓存而不用动态内存可以加快访问 */</span></span><br><span class="line">    <span class="keyword">long</span> stack_fds[SELECT_STACK_ALLOC/<span class="keyword">sizeof</span>(<span class="keyword">long</span>)];</span><br><span class="line"></span><br><span class="line">    ret = -EINVAL;</span><br><span class="line">    <span class="keyword">if</span> (n &lt; <span class="number">0</span>) </span><br><span class="line">        <span class="keyword">goto</span> out_nofds;</span><br><span class="line"></span><br><span class="line">   <span class="comment">/* rdlock加锁：保护struct files的访问 */</span></span><br><span class="line">    rcu_read_lock();</span><br><span class="line">    fdt = files_fdtable(current-&gt;files);</span><br><span class="line">    max_fds = fdt-&gt;max_fds;</span><br><span class="line">    rcu_read_unlock();</span><br><span class="line">    <span class="comment">/* 基于current宏，检查传入的最大fd对应参数n是否超出当前进程打开的</span></span><br><span class="line"><span class="comment">    * 文件描述符表内所示位图容量的最大数值，超出修正*/</span></span><br><span class="line">    <span class="keyword">if</span> (n &gt; max_fds)</span><br><span class="line">        n = max_fds;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/*</span></span><br><span class="line"><span class="comment">     * n个bits至少需要size个long才能装下（long表示bits段），</span></span><br><span class="line"><span class="comment">     * 为了存储输入输出集，我们需要6*size个long的存储空间</span></span><br><span class="line"><span class="comment">     * 栈上数组空间不足以存放本次select要处理的fd集合所需总计内存，</span></span><br><span class="line"><span class="comment">     * 则使用kmalloc从内核空间分配所需的连续物理内存 </span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    size = FDS_BYTES(n);</span><br><span class="line">    bits = stack_fds;</span><br><span class="line">    <span class="keyword">if</span> (size &gt; <span class="keyword">sizeof</span>(stack_fds) / <span class="number">6</span>) &#123;</span><br><span class="line">        <span class="comment">/* Not enough space in on-stack array; must use kmalloc */</span></span><br><span class="line">        ret = -ENOMEM;</span><br><span class="line">        bits = kmalloc(<span class="number">6</span> * size, GFP_KERNEL);</span><br><span class="line">        <span class="keyword">if</span> (!bits)</span><br><span class="line">            <span class="keyword">goto</span> out_nofds;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">/* 将数组分成6段 */</span></span><br><span class="line">    fds.in      = bits;</span><br><span class="line">    fds.out     = bits +   size;</span><br><span class="line">    fds.ex      = bits + <span class="number">2</span>*size;</span><br><span class="line">    fds.res_in  = bits + <span class="number">3</span>*size;</span><br><span class="line">    fds.res_out = bits + <span class="number">4</span>*size;</span><br><span class="line">    fds.res_ex  = bits + <span class="number">5</span>*size;</span><br><span class="line">    <span class="comment">/* 依次从用户空间拷贝输入集数据 */</span></span><br><span class="line">    <span class="keyword">if</span> ((ret = get_fd_set(n, inp, fds.in)) ||</span><br><span class="line">        (ret = get_fd_set(n, outp, fds.out)) ||</span><br><span class="line">        (ret = get_fd_set(n, <span class="built_in">exp</span>, fds.ex)))</span><br><span class="line">        <span class="keyword">goto</span> out;</span><br><span class="line">    <span class="comment">/* 将输出集清0 */</span></span><br><span class="line">    zero_fd_set(n, fds.res_in);</span><br><span class="line">    zero_fd_set(n, fds.res_out);</span><br><span class="line">    zero_fd_set(n, fds.res_ex);</span><br><span class="line">    <span class="comment">/* 主线 核心 */</span></span><br><span class="line">    ret = do_select(n, &amp;fds, end_time);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (ret &lt; <span class="number">0</span>)</span><br><span class="line">        <span class="keyword">goto</span> out;</span><br><span class="line">    <span class="keyword">if</span> (!ret) &#123;</span><br><span class="line">        ret = -ERESTARTNOHAND;</span><br><span class="line">        <span class="keyword">if</span> (signal_pending(current))</span><br><span class="line">            <span class="keyword">goto</span> out;</span><br><span class="line">        ret = <span class="number">0</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">/* 最后 将结果集返回用户空间 */</span></span><br><span class="line">    <span class="keyword">if</span> (set_fd_set(n, inp, fds.res_in) ||</span><br><span class="line">        set_fd_set(n, outp, fds.res_out) ||</span><br><span class="line">        set_fd_set(n, <span class="built_in">exp</span>, fds.res_ex))</span><br><span class="line">        ret = -EFAULT;</span><br><span class="line"></span><br><span class="line">out:</span><br><span class="line">    <span class="keyword">if</span> (bits != stack_fds)</span><br><span class="line">        kfree(bits);</span><br><span class="line">out_nofds:</span><br><span class="line">    <span class="keyword">return</span> ret;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
-<h2 id="do-select（最核心）"><a href="#do-select（最核心）" class="headerlink" title="do_select（最核心）"></a>do_select（最核心）</h2><h3 id="相关结构体"><a href="#相关结构体" class="headerlink" title="相关结构体"></a>相关结构体</h3><h4 id="struct-poll-table-entry"><a href="#struct-poll-table-entry" class="headerlink" title="struct poll_table_entry"></a>struct poll_table_entry</h4><figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">poll_table_entry</span> &#123;</span></span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">file</span> *<span class="title">filp</span>;</span></span><br><span class="line">    <span class="keyword">unsigned</span> <span class="keyword">long</span> key;</span><br><span class="line">    <span class="keyword">wait_queue_t</span> wait;                  <span class="comment">//wait等待队列项</span></span><br><span class="line">    <span class="keyword">wait_queue_head_t</span> *wait_address;     <span class="comment">//wait的等待队列头</span></span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+</div></div>
 
-<h4 id="struct-poll-table-page"><a href="#struct-poll-table-page" class="headerlink" title="struct poll_table_page"></a>struct poll_table_page</h4><figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">poll_table_page</span> &#123;</span></span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">poll_table_page</span> * <span class="title">next</span>;</span></span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">poll_table_entry</span> * <span class="title">entry</span>;</span></span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">poll_table_entry</span> <span class="title">entries</span>[0];</span></span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<h2 id="do-select（最核心）"><a href="#do-select（最核心）" class="headerlink" title="do_select（最核心）"></a>do_select（最核心）</h2><h3 id="相关结构体"><a href="#相关结构体" class="headerlink" title="相关结构体"></a>相关结构体</h3><h4 id="poll-table-entry"><a href="#poll-table-entry" class="headerlink" title="poll_table_entry"></a>poll_table_entry</h4><figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">poll_table_entry</span> &#123;</span></span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">file</span> *<span class="title">filp</span>;</span></span><br><span class="line">    <span class="keyword">unsigned</span> <span class="keyword">long</span> key;</span><br><span class="line">    <span class="keyword">wait_queue_t</span> wait;                  <span class="comment">//wait等待队列项</span></span><br><span class="line">    <span class="keyword">wait_queue_head_t</span> *wait_address;     <span class="comment">//wait的等待队列头</span></span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
 
-<h4 id="struct-poll-table"><a href="#struct-poll-table" class="headerlink" title="struct poll_table"></a>struct poll_table</h4><figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> <span class="title">poll_table_struct</span> &#123;</span></span><br><span class="line">    poll_queue_proc _qproc;</span><br><span class="line">    <span class="keyword">unsigned</span> <span class="keyword">long</span> _key;</span><br><span class="line">&#125; poll_table;</span><br></pre></td></tr></table></figure>
+<h4 id="poll-table-page"><a href="#poll-table-page" class="headerlink" title="poll_table_page"></a>poll_table_page</h4><figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">poll_table_page</span> &#123;</span></span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">poll_table_page</span> * <span class="title">next</span>;</span></span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">poll_table_entry</span> * <span class="title">entry</span>;</span></span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">poll_table_entry</span> <span class="title">entries</span>[0];</span></span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
 
-<h4 id="struct-poll-wqueues"><a href="#struct-poll-wqueues" class="headerlink" title="struct poll_wqueues"></a>struct poll_wqueues</h4><figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">poll_wqueues</span> &#123;</span></span><br><span class="line">    poll_table pt;                      <span class="comment">//</span></span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">poll_table_page</span> *<span class="title">table</span>;</span>      <span class="comment">//</span></span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">task_struct</span> *<span class="title">polling_task</span>;</span>   <span class="comment">//正在轮询的进程</span></span><br><span class="line">    <span class="keyword">int</span> triggered;</span><br><span class="line">    <span class="keyword">int</span> error;</span><br><span class="line">    <span class="keyword">int</span> inline_index;</span><br><span class="line">    <span class="comment">//记录poll信息的数组 </span></span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">poll_table_entry</span> <span class="title">inline_entries</span>[<span class="title">N_INLINE_POLL_ENTRIES</span>];</span></span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<h4 id="poll-table"><a href="#poll-table" class="headerlink" title="poll_table"></a>poll_table</h4><figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> <span class="title">poll_table_struct</span> &#123;</span></span><br><span class="line">    poll_queue_proc _qproc;</span><br><span class="line">    <span class="keyword">unsigned</span> <span class="keyword">long</span> _key;</span><br><span class="line">&#125; poll_table;</span><br></pre></td></tr></table></figure>
 
-<h3 id="正题do-select剖析"><a href="#正题do-select剖析" class="headerlink" title="正题do_select剖析"></a>正题do_select剖析</h3><figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">do_select</span><span class="params">(<span class="keyword">int</span> n, fd_set_bits *fds, struct timespec *end_time)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">ktime_t</span> expire, *to = <span class="literal">NULL</span>;</span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">poll_wqueues</span> <span class="title">table</span>;</span></span><br><span class="line">    poll_table *wait;</span><br><span class="line">    <span class="keyword">int</span> retval, i, timed_out = <span class="number">0</span>; <span class="comment">/* timed_out指示是否已经超时，超时1，未超时0 */</span></span><br><span class="line">    <span class="keyword">unsigned</span> <span class="keyword">long</span> slack = <span class="number">0</span>;</span><br><span class="line">     <span class="comment">/* 借助当前进程已打开的文件描述符表检查传入且合法的已打开最大fd，并修正传入的n */</span></span><br><span class="line">    rcu_read_lock();</span><br><span class="line">    retval = max_select_fd(n, fds);</span><br><span class="line">    rcu_read_unlock();</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (retval &lt; <span class="number">0</span>)</span><br><span class="line">        <span class="keyword">return</span> retval;</span><br><span class="line">    n = retval;</span><br><span class="line">    <span class="comment">/* poll_initwait初始化poll_wqueues结构体table，这一结构体用于本次select调用</span></span><br><span class="line"><span class="comment">     * 对所有传入的待监听fd进行【轮询工作】，每个fd对应一个poll_table_entry。</span></span><br><span class="line"><span class="comment">     * 初始化poll_wqueues：</span></span><br><span class="line"><span class="comment">     * 1. 初始化poll_wqueues中的poll_table：</span></span><br><span class="line"><span class="comment">     *      * 设置监听注册函数为 __pollwait</span></span><br><span class="line"><span class="comment">     * 2. 设置polling_task指向当前进程PCB。*/</span></span><br><span class="line">    poll_initwait(&amp;table);</span><br><span class="line">    wait = &amp;table.pt;</span><br><span class="line">    <span class="comment">/* 根本不等待情况处理 */</span></span><br><span class="line">    <span class="keyword">if</span> (end_time &amp;&amp; !end_time-&gt;tv_sec &amp;&amp; !end_time-&gt;tv_nsec) &#123;</span><br><span class="line">        wait-&gt;_qproc = <span class="literal">NULL</span>; <span class="comment">/* 注意：设为NULL了！！！ */</span></span><br><span class="line">        timed_out = <span class="number">1</span>;  <span class="comment">/* 还没开始就已经超时，这样就实现了根本不等待... */</span></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">/* 重新估算相对超时时间... */</span></span><br><span class="line">    <span class="keyword">if</span> (end_time &amp;&amp; !timed_out)</span><br><span class="line">        slack = select_estimate_accuracy(end_time);</span><br><span class="line"></span><br><span class="line">    retval = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">for</span> (;;) &#123; <span class="comment">/* 无穷循环开始轮询事件监测 */</span></span><br><span class="line">        <span class="keyword">unsigned</span> <span class="keyword">long</span> *rinp, *routp, *rexp, *inp, *outp, *<span class="built_in">exp</span>;</span><br><span class="line"></span><br><span class="line">        inp = fds-&gt;in; outp = fds-&gt;out; <span class="built_in">exp</span> = fds-&gt;ex;</span><br><span class="line">        rinp = fds-&gt;res_in; routp = fds-&gt;res_out; rexp = fds-&gt;res_ex;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">for</span> (i = <span class="number">0</span>; i &lt; n; ++rinp, ++routp, ++rexp) &#123;</span><br><span class="line">            <span class="keyword">unsigned</span> <span class="keyword">long</span> in, out, ex, all_bits, bit = <span class="number">1</span>, mask, j;</span><br><span class="line">            <span class="keyword">unsigned</span> <span class="keyword">long</span> res_in = <span class="number">0</span>, res_out = <span class="number">0</span>, res_ex = <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line">            in = *inp++; out = *outp++; ex = *<span class="built_in">exp</span>++;</span><br><span class="line">            all_bits = in | out | ex;</span><br><span class="line">            <span class="keyword">if</span> (all_bits == <span class="number">0</span>) &#123;  <span class="comment">/* 跳过我们不关心的bits段 */</span></span><br><span class="line">                i += BITS_PER_LONG;</span><br><span class="line">                <span class="keyword">continue</span>;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="comment">/* 以BITS_PER_LONG个为一组依次挂载到等待队列，并对事件进行检测，</span></span><br><span class="line"><span class="comment">             * 如果没有事件到来，仅有第一次循环完成挂载，后续循环只监测事件。*/</span></span><br><span class="line">            <span class="keyword">for</span> (j = <span class="number">0</span>; j &lt; BITS_PER_LONG; ++j, ++i, bit &lt;&lt;= <span class="number">1</span>) &#123;</span><br><span class="line">                <span class="class"><span class="keyword">struct</span> <span class="title">fd</span> <span class="title">f</span>;</span></span><br><span class="line">                <span class="keyword">if</span> (i &gt;= n)  <span class="comment">/* 超出了关心的文件描述符范围[0, n)，那么跳出... */</span></span><br><span class="line">                    <span class="keyword">break</span>;</span><br><span class="line">                <span class="keyword">if</span> (!(bit &amp; all_bits)) <span class="comment">/* 跳过我们不关心的bit */</span></span><br><span class="line">                    <span class="keyword">continue</span>;</span><br><span class="line">                f = fdget(i);</span><br><span class="line">                <span class="comment">/* 因为没有rdlock加锁，因此当前进程中描述符i对应的文件可能已经</span></span><br><span class="line"><span class="comment">                 * 被异步关闭。这就是为什么需要判断file是否为空的原因 */</span></span><br><span class="line">                <span class="keyword">if</span> (f.file) &#123;</span><br><span class="line">                    <span class="keyword">const</span> <span class="class"><span class="keyword">struct</span> <span class="title">file_operations</span> *<span class="title">f_op</span>;</span></span><br><span class="line">                    f_op = f.file-&gt;f_op;</span><br><span class="line">                    <span class="comment">/* 注意：mask = POLLIN | POLLOUT | POLLRDNORM | POLLWRNORM; */</span></span><br><span class="line">                    mask = DEFAULT_POLLMASK; </span><br><span class="line">                    <span class="comment">/* 如果这个文件支持poll()，那么我们就向这个文件注册监听函数；</span></span><br><span class="line"><span class="comment">                     * 如果不支持，那么我们就忽略掉这个文件描述符 */</span></span><br><span class="line">                    <span class="keyword">if</span> (f_op &amp;&amp; f_op-&gt;poll) &#123;</span><br><span class="line">                        wait_key_set(wait, in, out, bit); <span class="comment">/* 设置poll_table中想要监听的事件 */</span></span><br><span class="line"><span class="comment">/* #核心调用#</span></span><br><span class="line"><span class="comment">* 在这里会根据fd的不同创建类别调用真正的poll函数，</span></span><br><span class="line"><span class="comment">* socket下对应是sock_poll，如ipv4/tcp下会继续调用tcp_poll，</span></span><br><span class="line"><span class="comment">* 在这里完成调用poll_table注册的函数指针__poll_wait挂载等待队列操作（实际借助poll_wait封装调用）</span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line">                        mask = (*f_op-&gt;poll)(f.file, wait); <span class="comment">/* 对文件注册监听函数，并返回资源的当前状态 */</span></span><br><span class="line">                    &#125;</span><br><span class="line">                    fdput(f);</span><br><span class="line">                    <span class="comment">/* 完成检测操作获取事件mask结果。events验证，其中retval表示就绪的资源数 */</span></span><br><span class="line">                    <span class="keyword">if</span> ((mask &amp; POLLIN_SET) &amp;&amp; (in &amp; bit)) &#123;</span><br><span class="line">                        res_in |= bit;</span><br><span class="line">                        retval++;</span><br><span class="line">                        <span class="comment">/* 保证仅在第一次循环时，完成本次fd对应挂载等待队列，</span></span><br><span class="line"><span class="comment">                         * 不论是否收到设备事件通知，本次调用仅挂载一次，因此置空poll_table注册的poll */</span></span><br><span class="line">                        wait-&gt;_qproc = <span class="literal">NULL</span>;  <span class="comment">//</span></span><br><span class="line">                    &#125;</span><br><span class="line">                    <span class="keyword">if</span> ((mask &amp; POLLOUT_SET) &amp;&amp; (out &amp; bit)) &#123;</span><br><span class="line">                        res_out |= bit;</span><br><span class="line">                        retval++;</span><br><span class="line">                        wait-&gt;_qproc = <span class="literal">NULL</span>; <span class="comment">//</span></span><br><span class="line">                    &#125;</span><br><span class="line">                    <span class="keyword">if</span> ((mask &amp; POLLEX_SET) &amp;&amp; (ex &amp; bit)) &#123;</span><br><span class="line">                        res_ex |= bit;</span><br><span class="line">                        retval++;</span><br><span class="line">                        wait-&gt;_qproc = <span class="literal">NULL</span>; <span class="comment">//</span></span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="comment">/* 结果写入内核空间的结果集 */</span></span><br><span class="line">            <span class="keyword">if</span> (res_in)</span><br><span class="line">                *rinp = res_in;</span><br><span class="line">            <span class="keyword">if</span> (res_out)</span><br><span class="line">                *routp = res_out;</span><br><span class="line">            <span class="keyword">if</span> (res_ex)</span><br><span class="line">                *rexp = res_ex;</span><br><span class="line">            cond_resched();</span><br><span class="line">        &#125;</span><br><span class="line">        wait-&gt;_qproc = <span class="literal">NULL</span>;  <span class="comment">/* 将wait-&gt;_qproc设为NULL，表示我们不希望再进行监听注册 */</span></span><br><span class="line">        <span class="comment">/* 事件发生、超时、中断，跳出死循环 */</span></span><br><span class="line">        <span class="keyword">if</span> (retval || timed_out || signal_pending(current))</span><br><span class="line">            <span class="keyword">break</span>;</span><br><span class="line">        <span class="keyword">if</span> (table.error) &#123;  <span class="comment">/* 发生了错误，我们也跳出死循环 */</span></span><br><span class="line">            retval = table.error;</span><br><span class="line">            <span class="keyword">break</span>;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="comment">/*</span></span><br><span class="line"><span class="comment">         * If this is the first loop and we have a timeout</span></span><br><span class="line"><span class="comment">         * given, then we convert to ktime_t and set the to</span></span><br><span class="line"><span class="comment">         * pointer to the expiry value.</span></span><br><span class="line"><span class="comment">         */</span></span><br><span class="line">        <span class="keyword">if</span> (end_time &amp;&amp; !to) &#123;</span><br><span class="line">            expire = timespec_to_ktime(*end_time);</span><br><span class="line">            to = &amp;expire;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">/* 能够到达这一步就说明没有发生就绪、中断以及超时 */</span></span><br><span class="line">        <span class="comment">/* </span></span><br><span class="line"><span class="comment">         * 判断poll_wqueues是否已触发，如果还没有触发，那就</span></span><br><span class="line"><span class="comment">           设置当前运行状态为可中断阻塞并进行睡眠，等待被唤醒。</span></span><br><span class="line"><span class="comment">         * 被唤醒之后重新进行迭代，获取资源就绪情况。</span></span><br><span class="line"><span class="comment">         * 在向资源注册监听与判断poll_wqueues是否已触发在这段时间内，可能资源异步就绪了，</span></span><br><span class="line"><span class="comment">           如果没有触发标志，那么可能就会丢失资源就绪这个事件，可能导致select()永久沉睡。</span></span><br><span class="line"><span class="comment">         * 这就是为什么需要poll_wqueues.triggered字段的原因。  */</span></span><br><span class="line">        <span class="keyword">if</span> (!poll_schedule_timeout(&amp;table, TASK_INTERRUPTIBLE,</span><br><span class="line">                       to, slack))</span><br><span class="line">            timed_out = <span class="number">1</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">/* 1. 卸载安装到资源监听队列上的poll_table_entry</span></span><br><span class="line"><span class="comment">     * 2. 释放poll_wqueues占用的资源  */</span></span><br><span class="line">    poll_freewait(&amp;table);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> retval;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="poll-wqueues"><a href="#poll-wqueues" class="headerlink" title="poll_wqueues"></a>poll_wqueues</h4><figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">poll_wqueues</span> &#123;</span></span><br><span class="line">    poll_table pt;                      <span class="comment">//</span></span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">poll_table_page</span> *<span class="title">table</span>;</span>      <span class="comment">//</span></span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">task_struct</span> *<span class="title">polling_task</span>;</span>   <span class="comment">//正在轮询的进程</span></span><br><span class="line">    <span class="keyword">int</span> triggered;</span><br><span class="line">    <span class="keyword">int</span> error;</span><br><span class="line">    <span class="keyword">int</span> inline_index;</span><br><span class="line">    <span class="comment">//记录poll信息的数组 </span></span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">poll_table_entry</span> <span class="title">inline_entries</span>[<span class="title">N_INLINE_POLL_ENTRIES</span>];</span></span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<h3 id="do-select源码剖析"><a href="#do-select源码剖析" class="headerlink" title="do_select源码剖析"></a>do_select源码剖析</h3><ol>
+<li>初始化内核数据，再次检查并修正最大文件描述符</li>
+<li>等待队列构建，并初始化等待队列</li>
+<li>无穷循环开始轮询事件监测，核心调用转poll</li>
+<li>结果写入内核空间的结果集</li>
+<li>释放内核相应数据结构空间</li>
+</ol>
+<div><div class="fold_hider"><div class="close hider_title">点击显示/隐藏do_select</div></div><div class="fold">
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">do_select</span><span class="params">(<span class="keyword">int</span> n, fd_set_bits *fds, struct timespec *end_time)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">ktime_t</span> expire, *to = <span class="literal">NULL</span>;</span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">poll_wqueues</span> <span class="title">table</span>;</span></span><br><span class="line">    poll_table *wait;</span><br><span class="line">    <span class="keyword">int</span> retval, i, timed_out = <span class="number">0</span>; <span class="comment">/* timed_out指示是否已经超时，超时1，未超时0 */</span></span><br><span class="line">    <span class="keyword">unsigned</span> <span class="keyword">long</span> slack = <span class="number">0</span>;</span><br><span class="line">     <span class="comment">/* 借助当前进程已打开的文件描述符表检查传入且合法的已打开最大fd，并修正传入的n */</span></span><br><span class="line">    rcu_read_lock();</span><br><span class="line">    retval = max_select_fd(n, fds);</span><br><span class="line">    rcu_read_unlock();</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (retval &lt; <span class="number">0</span>)</span><br><span class="line">        <span class="keyword">return</span> retval;</span><br><span class="line">    n = retval;</span><br><span class="line">    <span class="comment">/* poll_initwait初始化poll_wqueues结构体table，这一结构体用于本次select调用</span></span><br><span class="line"><span class="comment">     * 对所有传入的待监听fd进行【轮询工作】，每个fd对应一个poll_table_entry。</span></span><br><span class="line"><span class="comment">     * 初始化poll_wqueues：</span></span><br><span class="line"><span class="comment">     * 1. 初始化poll_wqueues中的poll_table：</span></span><br><span class="line"><span class="comment">     *      * 设置监听注册函数为 __pollwait</span></span><br><span class="line"><span class="comment">     * 2. 设置polling_task指向当前进程PCB。*/</span></span><br><span class="line">    poll_initwait(&amp;table);</span><br><span class="line">    wait = &amp;table.pt;</span><br><span class="line">    <span class="comment">/* 根本不等待情况处理 */</span></span><br><span class="line">    <span class="keyword">if</span> (end_time &amp;&amp; !end_time-&gt;tv_sec &amp;&amp; !end_time-&gt;tv_nsec) &#123;</span><br><span class="line">        wait-&gt;_qproc = <span class="literal">NULL</span>; <span class="comment">/* 注意：设为NULL了！！！ */</span></span><br><span class="line">        timed_out = <span class="number">1</span>;  <span class="comment">/* 还没开始就已经超时，这样就实现了根本不等待... */</span></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">/* 重新估算相对超时时间... */</span></span><br><span class="line">    <span class="keyword">if</span> (end_time &amp;&amp; !timed_out)</span><br><span class="line">        slack = select_estimate_accuracy(end_time);</span><br><span class="line"></span><br><span class="line">    retval = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">for</span> (;;) &#123; <span class="comment">/* 无穷循环开始轮询事件监测 */</span></span><br><span class="line">        <span class="keyword">unsigned</span> <span class="keyword">long</span> *rinp, *routp, *rexp, *inp, *outp, *<span class="built_in">exp</span>;</span><br><span class="line"></span><br><span class="line">        inp = fds-&gt;in; outp = fds-&gt;out; <span class="built_in">exp</span> = fds-&gt;ex;</span><br><span class="line">        rinp = fds-&gt;res_in; routp = fds-&gt;res_out; rexp = fds-&gt;res_ex;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">for</span> (i = <span class="number">0</span>; i &lt; n; ++rinp, ++routp, ++rexp) &#123;</span><br><span class="line">            <span class="keyword">unsigned</span> <span class="keyword">long</span> in, out, ex, all_bits, bit = <span class="number">1</span>, mask, j;</span><br><span class="line">            <span class="keyword">unsigned</span> <span class="keyword">long</span> res_in = <span class="number">0</span>, res_out = <span class="number">0</span>, res_ex = <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line">            in = *inp++; out = *outp++; ex = *<span class="built_in">exp</span>++;</span><br><span class="line">            all_bits = in | out | ex;</span><br><span class="line">            <span class="keyword">if</span> (all_bits == <span class="number">0</span>) &#123;  <span class="comment">/* 跳过我们不关心的bits段 */</span></span><br><span class="line">                i += BITS_PER_LONG;</span><br><span class="line">                <span class="keyword">continue</span>;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="comment">/* 以BITS_PER_LONG个为一组依次挂载到等待队列，并对事件进行检测，</span></span><br><span class="line"><span class="comment">             * 如果没有事件到来，仅有第一次循环完成挂载，后续循环只监测事件。*/</span></span><br><span class="line">            <span class="keyword">for</span> (j = <span class="number">0</span>; j &lt; BITS_PER_LONG; ++j, ++i, bit &lt;&lt;= <span class="number">1</span>) &#123;</span><br><span class="line">                <span class="class"><span class="keyword">struct</span> <span class="title">fd</span> <span class="title">f</span>;</span></span><br><span class="line">                <span class="keyword">if</span> (i &gt;= n)  <span class="comment">/* 超出了关心的文件描述符范围[0, n)，那么跳出... */</span></span><br><span class="line">                    <span class="keyword">break</span>;</span><br><span class="line">                <span class="keyword">if</span> (!(bit &amp; all_bits)) <span class="comment">/* 跳过我们不关心的bit */</span></span><br><span class="line">                    <span class="keyword">continue</span>;</span><br><span class="line">                f = fdget(i);</span><br><span class="line">                <span class="comment">/* 因为没有rdlock加锁，因此当前进程中描述符i对应的文件可能已经</span></span><br><span class="line"><span class="comment">                 * 被异步关闭。这就是为什么需要判断file是否为空的原因 */</span></span><br><span class="line">                <span class="keyword">if</span> (f.file) &#123;</span><br><span class="line">                    <span class="keyword">const</span> <span class="class"><span class="keyword">struct</span> <span class="title">file_operations</span> *<span class="title">f_op</span>;</span></span><br><span class="line">                    f_op = f.file-&gt;f_op;</span><br><span class="line">                    <span class="comment">/* 注意：mask = POLLIN | POLLOUT | POLLRDNORM | POLLWRNORM; */</span></span><br><span class="line">                    mask = DEFAULT_POLLMASK; </span><br><span class="line">                    <span class="comment">/* 如果这个文件支持poll()，那么我们就向这个文件注册监听函数；</span></span><br><span class="line"><span class="comment">                     * 如果不支持，那么我们就忽略掉这个文件描述符 */</span></span><br><span class="line">                    <span class="keyword">if</span> (f_op &amp;&amp; f_op-&gt;poll) &#123;</span><br><span class="line">                        wait_key_set(wait, in, out, bit); <span class="comment">/* 设置poll_table中想要监听的事件 */</span></span><br><span class="line"><span class="comment">/* #核心调用#</span></span><br><span class="line"><span class="comment">* 在这里会根据fd的不同创建类别调用真正的poll函数，</span></span><br><span class="line"><span class="comment">* socket下对应是sock_poll，如ipv4/tcp下会继续调用tcp_poll，</span></span><br><span class="line"><span class="comment">* 在这里完成调用poll_table注册的函数指针__poll_wait挂载等待队列操作（实际借助poll_wait封装调用）</span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line">                        mask = (*f_op-&gt;poll)(f.file, wait); <span class="comment">/* 对文件注册监听函数，并返回资源的当前状态 */</span></span><br><span class="line">                    &#125;</span><br><span class="line">                    fdput(f);</span><br><span class="line">                    <span class="comment">/* 完成检测操作获取事件mask结果。events验证，其中retval表示就绪的资源数 */</span></span><br><span class="line">                    <span class="keyword">if</span> ((mask &amp; POLLIN_SET) &amp;&amp; (in &amp; bit)) &#123;</span><br><span class="line">                        res_in |= bit;</span><br><span class="line">                        retval++;</span><br><span class="line">                        <span class="comment">/* 保证仅在第一次循环时，完成本次fd对应挂载等待队列，</span></span><br><span class="line"><span class="comment">                         * 不论是否收到设备事件通知，本次调用仅挂载一次，因此置空poll_table注册的poll */</span></span><br><span class="line">                        wait-&gt;_qproc = <span class="literal">NULL</span>;  <span class="comment">//</span></span><br><span class="line">                    &#125;</span><br><span class="line">                    <span class="keyword">if</span> ((mask &amp; POLLOUT_SET) &amp;&amp; (out &amp; bit)) &#123;</span><br><span class="line">                        res_out |= bit;</span><br><span class="line">                        retval++;</span><br><span class="line">                        wait-&gt;_qproc = <span class="literal">NULL</span>; <span class="comment">//</span></span><br><span class="line">                    &#125;</span><br><span class="line">                    <span class="keyword">if</span> ((mask &amp; POLLEX_SET) &amp;&amp; (ex &amp; bit)) &#123;</span><br><span class="line">                        res_ex |= bit;</span><br><span class="line">                        retval++;</span><br><span class="line">                        wait-&gt;_qproc = <span class="literal">NULL</span>; <span class="comment">//</span></span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="comment">/* 结果写入内核空间的结果集 */</span></span><br><span class="line">            <span class="keyword">if</span> (res_in)</span><br><span class="line">                *rinp = res_in;</span><br><span class="line">            <span class="keyword">if</span> (res_out)</span><br><span class="line">                *routp = res_out;</span><br><span class="line">            <span class="keyword">if</span> (res_ex)</span><br><span class="line">                *rexp = res_ex;</span><br><span class="line">            cond_resched();</span><br><span class="line">        &#125;</span><br><span class="line">        wait-&gt;_qproc = <span class="literal">NULL</span>;  <span class="comment">/* 将wait-&gt;_qproc设为NULL，表示我们不希望再进行监听注册 */</span></span><br><span class="line">        <span class="comment">/* 事件发生、超时、中断，跳出死循环 */</span></span><br><span class="line">        <span class="keyword">if</span> (retval || timed_out || signal_pending(current))</span><br><span class="line">            <span class="keyword">break</span>;</span><br><span class="line">        <span class="keyword">if</span> (table.error) &#123;  <span class="comment">/* 发生了错误，我们也跳出死循环 */</span></span><br><span class="line">            retval = table.error;</span><br><span class="line">            <span class="keyword">break</span>;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="comment">/*</span></span><br><span class="line"><span class="comment">         * If this is the first loop and we have a timeout</span></span><br><span class="line"><span class="comment">         * given, then we convert to ktime_t and set the to</span></span><br><span class="line"><span class="comment">         * pointer to the expiry value.</span></span><br><span class="line"><span class="comment">         */</span></span><br><span class="line">        <span class="keyword">if</span> (end_time &amp;&amp; !to) &#123;</span><br><span class="line">            expire = timespec_to_ktime(*end_time);</span><br><span class="line">            to = &amp;expire;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">/* 能够到达这一步就说明没有发生就绪、中断以及超时 */</span></span><br><span class="line">        <span class="comment">/* </span></span><br><span class="line"><span class="comment">         * 判断poll_wqueues是否已触发，如果还没有触发，那就</span></span><br><span class="line"><span class="comment">           设置当前运行状态为可中断阻塞并进行睡眠，等待被唤醒。</span></span><br><span class="line"><span class="comment">         * 被唤醒之后重新进行迭代，获取资源就绪情况。</span></span><br><span class="line"><span class="comment">         * 在向资源注册监听与判断poll_wqueues是否已触发在这段时间内，可能资源异步就绪了，</span></span><br><span class="line"><span class="comment">           如果没有触发标志，那么可能就会丢失资源就绪这个事件，可能导致select()永久沉睡。</span></span><br><span class="line"><span class="comment">         * 这就是为什么需要poll_wqueues.triggered字段的原因。  */</span></span><br><span class="line">        <span class="keyword">if</span> (!poll_schedule_timeout(&amp;table, TASK_INTERRUPTIBLE,</span><br><span class="line">                       to, slack))</span><br><span class="line">            timed_out = <span class="number">1</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">/* 1. 卸载安装到资源监听队列上的poll_table_entry</span></span><br><span class="line"><span class="comment">     * 2. 释放poll_wqueues占用的资源  */</span></span><br><span class="line">    poll_freewait(&amp;table);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> retval;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+</div></div>
 
 <h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><p>select负责将超时时间从用户空间（微秒级）拷贝到内核空间（纳秒级），接着转真正入口<code>core_sys_select</code>。</p>
 <p><code>core_sys_select</code>函数调用树如下（图片来源网络）：</p>
@@ -1261,7 +1482,7 @@
         <tag>linux</tag>
         <tag>unp</tag>
         <tag>I/O复用</tag>
-        <tag>linux内核</tag>
+        <tag>kernel</tag>
       </tags>
   </entry>
 </search>
