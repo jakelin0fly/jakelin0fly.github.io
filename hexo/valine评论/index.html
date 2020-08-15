@@ -26,16 +26,18 @@
 
   <meta name="description" content="博客绑定域名，并配置Valine评论">
 <meta property="og:type" content="article">
-<meta property="og:title" content="hexo-theme-next valine评论">
-<meta property="og:url" content="http://jakelin.cn/hexo/hexo-theme-next%20valine%E8%AF%84%E8%AE%BA/index.html">
+<meta property="og:title" content="valine评论">
+<meta property="og:url" content="http://jakelin.cn/hexo/valine%E8%AF%84%E8%AE%BA/index.html">
 <meta property="og:site_name" content="JakeLin&#39;s Blogs">
 <meta property="og:description" content="博客绑定域名，并配置Valine评论">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://i.loli.net/2020/08/03/kNErsH8PezWO1uj.png">
 <meta property="og:image" content="https://i.loli.net/2020/08/03/uxdiBNf6g4MKwOs.png">
-<meta property="og:image" content="https://i.loli.net/2020/08/08/JAIvGRZPhqtwSFW.png">
+<meta property="og:image" content="https://i.loli.net/2020/08/15/cqtrpWxbSQRDkgG.png">
+<meta property="og:image" content="https://i.loli.net/2020/08/15/ZlauFhVYMsoykgE.png">
+<meta property="og:image" content="https://i.loli.net/2020/08/15/rF6YfotjdZgXxSm.png">
 <meta property="article:published_time" content="2020-08-01T16:00:00.000Z">
-<meta property="article:modified_time" content="2020-08-08T07:27:13.035Z">
+<meta property="article:modified_time" content="2020-08-15T07:57:50.332Z">
 <meta property="article:author" content="jakelin">
 <meta property="article:tag" content="Hexo">
 <meta property="article:tag" content="博客">
@@ -43,7 +45,7 @@
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="https://i.loli.net/2020/08/03/kNErsH8PezWO1uj.png">
 
-<link rel="canonical" href="http://jakelin.cn/hexo/hexo-theme-next%20valine%E8%AF%84%E8%AE%BA/">
+<link rel="canonical" href="http://jakelin.cn/hexo/valine%E8%AF%84%E8%AE%BA/">
 
 
 <script class="page-configurations">
@@ -56,7 +58,7 @@
   };
 </script>
 
-  <title>hexo-theme-next valine评论 | JakeLin's Blogs</title>
+  <title>valine评论 | JakeLin's Blogs</title>
   
     <script async src="https://www.googletagmanager.com/gtag/js?id=UA-174281095-1"></script>
     <script>
@@ -231,7 +233,7 @@
 
       <!--noindex-->
       <section class="post-toc-wrap sidebar-panel">
-          <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%BB%91%E5%AE%9A%E5%9F%9F%E5%90%8D"><span class="nav-number">1.</span> <span class="nav-text">绑定域名</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Valine"><span class="nav-number">2.</span> <span class="nav-text">Valine</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%B3%A8%E5%86%8CLeanClound%EF%BC%8C%E8%8E%B7%E5%8F%96APP-ID-%E5%92%8C-APP-Key"><span class="nav-number">2.1.</span> <span class="nav-text">注册LeanClound，获取APP ID 和 APP Key</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BF%AE%E6%94%B9%E4%B8%BB%E9%A2%98%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6"><span class="nav-number">2.2.</span> <span class="nav-text">修改主题配置文件</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%B7%BB%E5%8A%A0%E9%82%AE%E4%BB%B6%E6%8F%90%E9%86%92"><span class="nav-number">2.3.</span> <span class="nav-text">添加邮件提醒</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BC%91%E7%9C%A0%E7%AD%96%E7%95%A5"><span class="nav-number">2.4.</span> <span class="nav-text">休眠策略</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%8F%82%E8%80%83"><span class="nav-number">3.</span> <span class="nav-text">参考</span></a></li></ol></div>
+          <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%B3%A8%E5%86%8CLeanClound%EF%BC%8C%E8%8E%B7%E5%8F%96APP-ID-%E5%92%8C-APP-Key"><span class="nav-number">1.</span> <span class="nav-text">注册LeanClound，获取APP ID 和 APP Key</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BF%AE%E6%94%B9%E4%B8%BB%E9%A2%98%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6"><span class="nav-number">2.</span> <span class="nav-text">修改主题配置文件</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%B7%BB%E5%8A%A0%E9%82%AE%E4%BB%B6%E6%8F%90%E9%86%92"><span class="nav-number">3.</span> <span class="nav-text">添加邮件提醒</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%91%E5%BC%95%E6%93%8E%E7%BB%91%E5%AE%9A%E5%9F%9F%E5%90%8D"><span class="nav-number">4.</span> <span class="nav-text">云引擎绑定域名</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BC%91%E7%9C%A0%E7%AD%96%E7%95%A5"><span class="nav-number">5.</span> <span class="nav-text">休眠策略</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8F%82%E8%80%83"><span class="nav-number">6.</span> <span class="nav-text">参考</span></a></li></ol></div>
       </section>
       <!--/noindex-->
 
@@ -308,7 +310,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://jakelin.cn/hexo/hexo-theme-next%20valine%E8%AF%84%E8%AE%BA/">
+    <link itemprop="mainEntityOfPage" href="http://jakelin.cn/hexo/valine%E8%AF%84%E8%AE%BA/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="https://i.loli.net/2020/07/31/OZl2JxuSRrweIk5.jpg">
@@ -323,7 +325,7 @@
     
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          hexo-theme-next valine评论
+          valine评论
         </h1>
 
         <div class="post-meta">
@@ -341,7 +343,7 @@
                   更新于
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2020-08-08 15:27:13" itemprop="dateModified" datetime="2020-08-08T15:27:13+08:00">2020-08-08</time>
+                <time title="修改时间：2020-08-15 15:57:50" itemprop="dateModified" datetime="2020-08-15T15:57:50+08:00">2020-08-15</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -355,7 +357,7 @@
             </span>
 
           
-            <span id="/hexo/hexo-theme-next%20valine%E8%AF%84%E8%AE%BA/" class="post-meta-item leancloud_visitors" data-flag-title="hexo-theme-next valine评论" title="阅读次数">
+            <span id="/hexo/valine%E8%AF%84%E8%AE%BA/" class="post-meta-item leancloud_visitors" data-flag-title="valine评论" title="阅读次数">
               <span class="post-meta-item-icon">
                 <i class="fa fa-eye"></i>
                 阅读量:
@@ -371,8 +373,8 @@
       </span>
       <span class="post-meta-item-text">Valine：</span>
     
-    <a title="valine" href="/hexo/hexo-theme-next%20valine%E8%AF%84%E8%AE%BA/#valine-comments" itemprop="discussionUrl">
-      <span class="post-comments-count valine-comment-count" data-xid="/hexo/hexo-theme-next%20valine%E8%AF%84%E8%AE%BA/" itemprop="commentCount"></span>
+    <a title="valine" href="/hexo/valine%E8%AF%84%E8%AE%BA/#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/hexo/valine%E8%AF%84%E8%AE%BA/" itemprop="commentCount"></span>
     </a>
   </span>
   
@@ -382,16 +384,14 @@
                 <i class="far fa-file-word"></i>
                 字数统计 ≈ 
               </span>
-                <span class="post-meta-item-text">本文字数：</span>
-              <span>1.5k</span>
+              <span>1.9k</span>
             </span>
             <span class="post-meta-item" title="阅读时长">
               <span class="post-meta-item-icon">
                 <i class="far fa-clock"></i>
                 阅读时长 ≈ 
               </span>
-                <span class="post-meta-item-text">阅读时长 &asymp;</span>
-              <span>1 分钟</span>
+              <span>2 分钟</span>
             </span>
             <div class="post-description">博客绑定域名，并配置Valine评论</div>
 
@@ -406,7 +406,6 @@
 <p>站点配置文件 <code>url</code> 地加 <code>http</code> 头，否则文章末尾【本文链接】地址为：<strong>域名/域名/xxxxxxx</strong></p>
 <figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># URL</span></span><br><span class="line"><span class="comment">## If your site is put in a subdirectory, set url as &#x27;http://yoursite.com/child&#x27; and root as &#x27;/child/&#x27;</span></span><br><span class="line"><span class="attr">url:</span> <span class="string">http://jakelin.cn</span></span><br><span class="line"><span class="attr">root:</span> <span class="string">/</span></span><br></pre></td></tr></table></figure>
 </blockquote>
-<h1 id="绑定域名"><a href="#绑定域名" class="headerlink" title="绑定域名"></a>绑定域名</h1><p>新增域名解析：</p>
 <ol>
 <li><p>记录类型：CNAME</p>
 <ol start="2">
@@ -415,25 +414,63 @@
 </ol>
 </li>
 </ol>
-<h1 id="Valine"><a href="#Valine" class="headerlink" title="Valine"></a>Valine</h1><h2 id="注册LeanClound，获取APP-ID-和-APP-Key"><a href="#注册LeanClound，获取APP-ID-和-APP-Key" class="headerlink" title="注册LeanClound，获取APP ID 和 APP Key"></a>注册LeanClound，获取APP ID 和 APP Key</h2><p>注册链接： <a target="_blank" rel="noopener" href="https://leancloud.cn/dashboard/login.html#/signup">LeanClound注册</a> </p>
+<h2 id="注册LeanClound，获取APP-ID-和-APP-Key"><a href="#注册LeanClound，获取APP-ID-和-APP-Key" class="headerlink" title="注册LeanClound，获取APP ID 和 APP Key"></a>注册LeanClound，获取APP ID 和 APP Key</h2><p>注册链接： <a target="_blank" rel="noopener" href="https://leancloud.cn/dashboard/login.html#/signup">LeanClound注册</a> </p>
 <p>【创建应用】-&gt;【随便起个名】-&gt;【开发版】-&gt;[创建]</p>
 <p><img src="https://i.loli.net/2020/08/03/kNErsH8PezWO1uj.png" alt="LeanClound创建应用.png"></p>
 <p><img src="https://i.loli.net/2020/08/03/uxdiBNf6g4MKwOs.png" alt="获取key.png"></p>
 <h2 id="修改主题配置文件"><a href="#修改主题配置文件" class="headerlink" title="修改主题配置文件"></a>修改主题配置文件</h2><figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># Valine</span></span><br><span class="line"><span class="comment"># For more information: https://valine.js.org, https://github.com/xCss/Valine</span></span><br><span class="line"><span class="attr">valine:</span></span><br><span class="line">  <span class="attr">enable:</span> <span class="literal">true</span></span><br><span class="line">  <span class="attr">appId:</span> <span class="string">这里填</span> <span class="string">AppID</span>  <span class="comment"># Your leancloud application appid</span></span><br><span class="line">  <span class="attr">appKey:</span> <span class="string">这里填</span> <span class="string">AppKey</span> <span class="comment"># Your leancloud application appkey</span></span><br><span class="line">  <span class="attr">placeholder:</span> <span class="string">&#x27;ヾﾉ≧∀≦)o来啊，快活啊!&#x27;</span> <span class="comment"># Comment box placeholder</span></span><br><span class="line">  <span class="attr">avatar:</span> <span class="string">mm</span> <span class="comment"># Gravatar style</span></span><br><span class="line">  <span class="attr">meta:</span> [<span class="string">nick</span>, <span class="string">mail</span>, <span class="string">link</span>] <span class="comment"># Custom comment header</span></span><br><span class="line">  <span class="attr">pageSize:</span> <span class="number">10</span> <span class="comment"># Pagination size</span></span><br><span class="line">  <span class="attr">language:</span> <span class="string">zh-cn</span> <span class="comment"># Language, available values: en, zh-cn</span></span><br><span class="line">  <span class="attr">visitor:</span> <span class="literal">true</span> <span class="comment"># Article reading statistic</span></span><br><span class="line">  <span class="attr">comment_count:</span> <span class="literal">true</span> <span class="comment"># If false, comment count will only be displayed in post page, not in home page</span></span><br><span class="line">  <span class="attr">recordIP:</span> <span class="literal">false</span> <span class="comment"># Whether to record the commenter IP</span></span><br><span class="line">  <span class="attr">serverURLs:</span> <span class="comment"># When the custom domain name is enabled, fill it in here (it will be detected automatically by default, no need to fill in)</span></span><br><span class="line">  <span class="attr">enableQQ:</span> <span class="literal">false</span> <span class="comment"># Whether to enable the Nickname box to automatically get QQ Nickname and QQ Avatar</span></span><br><span class="line">  <span class="attr">requiredFields:</span> [] <span class="comment"># Set required fields: [&#x27;nick&#x27;] | [&#x27;nick&#x27;,&#x27;mail&#x27;]</span></span><br><span class="line">  <span class="comment">#post_meta_order: 0</span></span><br></pre></td></tr></table></figure>
 
 <h2 id="添加邮件提醒"><a href="#添加邮件提醒" class="headerlink" title="添加邮件提醒"></a>添加邮件提醒</h2><p>见： <a target="_blank" rel="noopener" href="https://tding.top/archives/ed8b904f.html">小丁的个人博客–Hexo-NexT 配置 Valine</a> </p>
+<h2 id="云引擎绑定域名"><a href="#云引擎绑定域名" class="headerlink" title="云引擎绑定域名"></a>云引擎绑定域名</h2><p><font color=red><strong>强调：需要先备案！！！</strong></font></p>
+<ol>
+<li><p>环境变量设置</p>
+<p>【云引擎】–&gt;【设置】–&gt;【添加环境变量】</p>
+<blockquote>
+<p>变量名：<code>ADMIN_URL</code></p>
+<p>变量值：<code>http://你的leancloud域名主机记录.主域名</code>    如：<a target="_blank" rel="noopener" href="http://leancloud.jakelin.cn/">http://leancloud.jakelin.cn</a></p>
+</blockquote>
+</li>
+<li><p>云引擎域名绑定</p>
+<p>【设置】–&gt;【域名绑定】–&gt;【云引擎、ClientEngine 域名】–&gt;【绑定新域名】</p>
+<p>就上面环境变量的值，即是你需要绑定的域名</p>
+<blockquote>
+<p><code>http://你的leancloud域名主机记录.主域名</code></p>
+</blockquote>
+</li>
+<li><p>域名解析</p>
+<p>到域名所在提供商添加域名解析</p>
+<blockquote>
+<p>主机记录：<code>你的leancloud域名主机记录</code>（注：和上面的一致）</p>
+<p>记录类型：<code>CNAME</code></p>
+<p>记录值：上一步绑定新域名产生的记录值</p>
+</blockquote>
+<p><img src="https://i.loli.net/2020/08/15/cqtrpWxbSQRDkgG.png" alt="leancloud-域名解析记录值.png"></p>
+</li>
+<li><p>添加用户</p>
+<p>添加leancloud评论管理用户。</p>
+<p>【存储】–&gt;【结构化数据】–&gt;【_User】–&gt;【添加行】</p>
+<p><strong><em>注：没有使用用户名成功登录，仅添加了邮箱后通过邮箱成功登录</em></strong></p>
+</li>
+<li><p>重新部署</p>
+<p>修改了环境变量，须重新部署才能生效。</p>
+<p>【云引擎】–&gt;【部署】–&gt;[重启]</p>
+</li>
+<li><p>登录评论管理</p>
+<p>地址：<code>http://你的leancloud域名主机记录.主域名</code></p>
+</li>
+</ol>
 <h2 id="休眠策略"><a href="#休眠策略" class="headerlink" title="休眠策略"></a>休眠策略</h2><p><strong>免费版</strong>的 LeanCloud 容器，是有<strong>强制性休眠策略</strong>的，不能 24 小时运行：</p>
 <ul>
 <li>每天必须休眠 6 个小时</li>
 <li>30 分钟内没有外部请求，则休眠。</li>
 <li>休眠后如果有新的外部请求实例则马上启动（但激活时此次发送邮件会失败）。</li>
 </ul>
-<p>分析了一下上方的策略，如果不想付费的话，最佳使用方案就设置定时器。</p>
-<p>每半小时检查漏发的通知邮件并补发，生产环境选择<code>resend-mails</code>云函数，Cron表达式填入<code>0 0/30 * * *</code>。</p>
-<img src="https://i.loli.net/2020/08/08/JAIvGRZPhqtwSFW.png" alt="定时任务-每30分钟检查漏发的通知邮件并补发.png" style="zoom:67%;" />
-
-<h1 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h1><p><a target="_blank" rel="noopener" href="https://valine.js.org/quickstart.html">Valine-快速开始</a></p>
-<p><a target="_blank" rel="noopener" href="https://tding.top/archives/ed8b904f.html">小丁的个人博客–Hexo-NexT 配置 Valine</a> </p>
+<p>我设置的是定时任务，一个<strong>定时唤醒</strong>，一个<strong>定时检测</strong>过去24小时是否有漏发邮件。</p>
+<p><strong><em>注意：还是可能出现问题，遇到了定时唤醒失败的情况，参考过GitHub Action，但是貌似就运行了一下就没了。。。</em></strong></p>
+<p><img src="https://i.loli.net/2020/08/15/ZlauFhVYMsoykgE.png" alt="leancloud-定时任务.png"></p>
+<p><img src="https://i.loli.net/2020/08/15/rF6YfotjdZgXxSm.png" alt="leancloud-定时任务resend-mails__.png"></p>
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><p><a target="_blank" rel="noopener" href="https://valine.js.org/quickstart.html">Valine-快速开始</a></p>
+<p><a target="_blank" rel="noopener" href="https://www.antmoe.com/posts/ff6aef7b/index.html#%E5%BC%80%E5%A7%8B%E5%B0%9D%E8%AF%95">优雅解决LeanCloud流控问题</a></p>
 <p><a target="_blank" rel="noopener" href="https://www.cnblogs.com/huanhao/p/emailvaline.html">Valine评论系统邮件提醒</a></p>
 
     </div>
@@ -441,6 +478,20 @@
     
     
     
+      
+  <div class="popular-posts-header">相关文章推荐</div>
+  <ul class="popular-posts">
+    <li class="popular-posts-item">
+      <div class="popular-posts-title"><a href="\hexo\hexo-theme-next主题配置\" rel="bookmark">hexo-theme-next主题配置</a></div>
+    </li>
+    <li class="popular-posts-item">
+      <div class="popular-posts-title"><a href="\hexo\hexo-theme-next提交给搜索引擎\" rel="bookmark">hexo-theme-next提交给搜索引擎</a></div>
+    </li>
+    <li class="popular-posts-item">
+      <div class="popular-posts-title"><a href="\hexo\Linux下github+hexo搭建个人博客\" rel="bookmark">Linux下Hexo+GitHub搭建个人博客</a></div>
+    </li>
+  </ul>
+
         <div class="reward-container">
   <div></div>
   <button onclick="document.getElementById('post-reward').classList.toggle('active');">
@@ -470,7 +521,7 @@
   </li>
   <li class="post-copyright-link">
     <strong>本文链接：</strong>
-    <a href="http://jakelin.cn/hexo/hexo-theme-next%20valine%E8%AF%84%E8%AE%BA/" title="hexo-theme-next valine评论">http://jakelin.cn/hexo/hexo-theme-next valine评论/</a>
+    <a href="http://jakelin.cn/hexo/valine%E8%AF%84%E8%AE%BA/" title="valine评论">http://jakelin.cn/hexo/valine评论/</a>
   </li>
   <li class="post-copyright-license">
     <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
@@ -492,12 +543,12 @@
         
     <div class="post-nav">
       <div class="post-nav-item">
-    <a href="/hexo/hexo-theme-next%E6%8F%90%E4%BA%A4%E7%BB%99%E6%90%9C%E7%B4%A2%E5%BC%95%E6%93%8E/" rel="prev" title="hexo-theme-next提交给搜索引擎">
-      <i class="fa fa-chevron-left"></i> hexo-theme-next提交给搜索引擎
+    <a href="/hexo/Hexo-Theme-Butterfly(%E4%B8%89)-%E4%B8%BB%E9%A2%98%E9%85%8D%E7%BD%AE/" rel="prev" title="Hexo-Theme-Butterfly(三) 主题配置">
+      <i class="fa fa-chevron-left"></i> Hexo-Theme-Butterfly(三) 主题配置
     </a></div>
       <div class="post-nav-item">
-    <a href="/APUE/Linux%E8%BF%9B%E7%A8%8B%E5%9C%B0%E5%9D%80%E7%A9%BA%E9%97%B4%EF%BC%88%E7%A8%8B%E5%BA%8F%E5%86%85%E5%AD%98%E5%B8%83%E5%B1%80%EF%BC%89/" rel="next" title="Linux进程地址空间（程序内存布局）">
-      Linux进程地址空间（程序内存布局） <i class="fa fa-chevron-right"></i>
+    <a href="/hexo/hexo-theme-next%E6%8F%90%E4%BA%A4%E7%BB%99%E6%90%9C%E7%B4%A2%E5%BC%95%E6%93%8E/" rel="next" title="hexo-theme-next提交给搜索引擎">
+      hexo-theme-next提交给搜索引擎 <i class="fa fa-chevron-right"></i>
     </a></div>
     </div>
       </footer>
