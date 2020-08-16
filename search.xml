@@ -162,101 +162,6 @@
       </tags>
   </entry>
   <entry>
-    <title>STL源码剖析-容器-deque</title>
-    <url>/STL/STL%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90-%E5%AE%B9%E5%99%A8-deque/</url>
-    <content><![CDATA[<img src="https://i.loli.net/2020/08/08/wGu91Lk2fCWIN5U.jpg" alt="deque示意图.jpg" style="zoom: 10%;" />
-
-<h2 id="deque概述"><a href="#deque概述" class="headerlink" title="deque概述"></a>deque概述</h2><ul>
-<li>deque 是一种<strong>双向开口</strong>的<strong>连续线性</strong>空间。可以在头尾两端分别做元素的插入和删除操作。</li>
-<li>deque是有一段一段的定量连续空间构成，是<strong>动态分段连续</strong>。</li>
-<li>deque 和 vector 的差异：<ul>
-<li>deque 允许于常数时间内对两端进行元素的插入或移除操作。</li>
-<li>deque 没有容量，它是动态地以分段连续空间组合而成。</li>
-</ul>
-</li>
-<li>deque 采用一块所谓的 <code>map</code> 作为主控。这个 map 是一小块连续空间（默认初值大小<strong>8个节点</strong>），其中每个节点都是指针，指向另一段（较大的）连续线性空间，称为缓冲区。缓冲区才是deque的存储空间主体。</li>
-<li>deque 是分段连续空间，迭代器维持其“整体连续”的<strong>假象</strong>，并提供随机存取的接口。</li>
-<li>一旦<code>map</code>提供的节点不足，就必须重新配置一个更大的一块<code>map</code>（<strong>至少两倍+2</strong>）。并将原来的数据放在<strong>中央</strong>，以使头尾两端的扩充能量一样大。</li>
-<li>插入数据时，deque会根据插入位置与两端的距离判断向前还是向后。</li>
-</ul>
-<img src="https://i.loli.net/2020/08/08/nl75O1bUu9TzIQ4.png" alt="deque分段连续示意图.png" style="zoom:80%;" />
-
-<h2 id="deque-的中控器map"><a href="#deque-的中控器map" class="headerlink" title="deque 的中控器map"></a>deque 的中控器map</h2><p>deque 采用一块所谓的 <code>map</code> 作为主控。这个 map 是一小块连续空间，其中每个节点都是指针，指向另一段（较大的）连续线性空间，称为缓冲区。缓冲区才是deque的存储空间主体。</p>
-<h3 id="map默认初始大小为8"><a href="#map默认初始大小为8" class="headerlink" title="map默认初始大小为8"></a>map默认初始大小为8</h3><figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="keyword">enum</span> &#123; _S_initial_map_size = <span class="number">8</span> &#125;; <span class="comment">// map默认初始大小 8</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// _M_initialize_map(size_t __num_elements)中</span></span><br><span class="line"><span class="comment">// map最少8个节点，最多“所需节点数+2”（前后各预留一个，扩容时可以用）</span></span><br><span class="line"><span class="keyword">this</span>-&gt;_M_impl._M_map_size = <span class="built_in">std</span>::<span class="built_in">max</span>((<span class="keyword">size_t</span>)_S_initial_map_size, <span class="keyword">size_t</span>(__num_nodes + <span class="number">2</span>));</span><br></pre></td></tr></table></figure>
-
-<h3 id="map空间重新配置"><a href="#map空间重新配置" class="headerlink" title="map空间重新配置"></a>map空间重新配置</h3><p>扩容一次至<strong>至少两倍+2</strong>。</p>
-<blockquote>
-<p>size_type __new_map_size = _M_map_size + max(_M_map_size, __nodes_to_add) + 2;</p>
-</blockquote>
-<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="keyword">void</span> _M_reserve_map_at_back (size_type __nodes_to_add = <span class="number">1</span>) &#123; <span class="comment">/*默认新增节点数=1*/</span></span><br><span class="line">  <span class="keyword">if</span> (__nodes_to_add + <span class="number">1</span> &gt; _M_map_size - (_M_finish._M_node - _M_map))</span><br><span class="line">    _M_reallocate_map(__nodes_to_add, <span class="literal">false</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">void</span> _M_reserve_map_at_front (size_type __nodes_to_add = <span class="number">1</span>) &#123; <span class="comment">/*默认新增节点数=1*/</span></span><br><span class="line">  <span class="keyword">if</span> (__nodes_to_add &gt; size_type(_M_start._M_node - _M_map))</span><br><span class="line">    _M_reallocate_map(__nodes_to_add, <span class="literal">true</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">template</span> &lt;<span class="class"><span class="keyword">class</span> _<span class="title">Tp</span>, <span class="title">class</span> _<span class="title">Alloc</span>&gt;</span></span><br><span class="line"><span class="class"><span class="title">void</span> <span class="title">deque</span>&lt;_Tp,_Alloc&gt;:</span>:_M_reallocate_map(size_type __nodes_to_add,</span><br><span class="line">                                          <span class="keyword">bool</span> __add_at_front)</span><br><span class="line">&#123;</span><br><span class="line">  size_type __old_num_nodes = _M_finish._M_node - _M_start._M_node + <span class="number">1</span>;</span><br><span class="line">  size_type __new_num_nodes = __old_num_nodes + __nodes_to_add;</span><br><span class="line"></span><br><span class="line">  _Map_pointer __new_nstart;</span><br><span class="line">   <span class="comment">/* map节点总数 &gt; 2倍新需节点数，则移动调整节点到中央 */</span></span><br><span class="line">  <span class="keyword">if</span> (_M_map_size &gt; <span class="number">2</span> * __new_num_nodes) &#123;</span><br><span class="line">    __new_nstart = _M_map + (_M_map_size - __new_num_nodes) / <span class="number">2</span> </span><br><span class="line">                     + (__add_at_front ? __nodes_to_add : <span class="number">0</span>);</span><br><span class="line">    <span class="keyword">if</span> (__new_nstart &lt; _M_start._M_node)</span><br><span class="line">      copy(_M_start._M_node, _M_finish._M_node + <span class="number">1</span>, __new_nstart);</span><br><span class="line">    <span class="keyword">else</span></span><br><span class="line">      copy_backward(_M_start._M_node, _M_finish._M_node + <span class="number">1</span>, </span><br><span class="line">                    __new_nstart + __old_num_nodes);</span><br><span class="line">  &#125;</span><br><span class="line">   <span class="comment">/* map节点总数不足2倍新需节点数，从新配置 */</span></span><br><span class="line">  <span class="keyword">else</span> &#123;</span><br><span class="line">    <span class="comment">/* 重点!!!  现有map节点数 + max(现有map节点数, 新增节点数) +2  !!! */</span></span><br><span class="line">    size_type __new_map_size = </span><br><span class="line">      _M_map_size + <span class="built_in">max</span>(_M_map_size, __nodes_to_add) + <span class="number">2</span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/* 拷贝原map节点数据到新map中央 */</span></span><br><span class="line">    _Map_pointer __new_map = _M_allocate_map(__new_map_size);</span><br><span class="line">    __new_nstart = __new_map + (__new_map_size - __new_num_nodes) / <span class="number">2</span></span><br><span class="line">                         + (__add_at_front ? __nodes_to_add : <span class="number">0</span>);</span><br><span class="line">    copy(_M_start._M_node, _M_finish._M_node + <span class="number">1</span>, __new_nstart);</span><br><span class="line">    _M_deallocate_map(_M_map, _M_map_size); <span class="comment">/* 释放原map空间 */</span></span><br><span class="line">    </span><br><span class="line">    _M_map = __new_map;</span><br><span class="line">    _M_map_size = __new_map_size;</span><br><span class="line">  &#125;</span><br><span class="line">    <span class="comment">/* 设置新的map的start、finish迭代器 */</span></span><br><span class="line">  _M_start._M_set_node(__new_nstart);</span><br><span class="line">  _M_finish._M_set_node(__new_nstart + __old_num_nodes - <span class="number">1</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-
-
-<h2 id="deque迭代器"><a href="#deque迭代器" class="headerlink" title="deque迭代器"></a>deque迭代器</h2><ul>
-<li>指向连续空间</li>
-<li>能判断空间边界，在边界上移动能指向正确的下一个连线空间</li>
-<li>随机存取</li>
-</ul>
-<p><strong>_Deque_iterator</strong>:</p>
-<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line">_Tp* _M_cur;        <span class="comment">//此迭代器所指的缓冲区的当前元素位置</span></span><br><span class="line">_Tp* _M_first;        <span class="comment">//此迭代器所指的缓冲区的头</span></span><br><span class="line">_Tp* _M_last;        <span class="comment">//此迭代器所指的缓冲区的尾</span></span><br><span class="line">_Map_pointer _M_node;    <span class="comment">//指向管控中心 map</span></span><br></pre></td></tr></table></figure>
-
-<h2 id="deque插入数据"><a href="#deque插入数据" class="headerlink" title="deque插入数据"></a>deque插入数据</h2><ol>
-<li><p>若头部插入：<code>push_front</code></p>
-</li>
-<li><p>若尾部插入： <code>push_back</code></p>
-</li>
-<li><p>中间位置插入：</p>
-<p>1）判断距离哪端近</p>
-<p>2）移动元素</p>
-<p>3）插入新元素</p>
-</li>
-</ol>
-<h2 id="deque基本操作"><a href="#deque基本操作" class="headerlink" title="deque基本操作"></a>deque基本操作</h2><p><code>push_back()</code>：尾端插入</p>
-<p><code>push_front()</code>：头端插入</p>
-<p><code>pop_back()</code>：尾端取出</p>
-<p><code>pop_front()</code>：头端取出</p>
-]]></content>
-      <categories>
-        <category>笔记</category>
-        <category>STL</category>
-      </categories>
-      <tags>
-        <tag>C++</tag>
-        <tag>STL</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>STL源码剖析-容器-slist</title>
-    <url>/STL/STL%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90-%E5%AE%B9%E5%99%A8-slist/</url>
-    <content><![CDATA[<p>STL list是一个双向链表（double linked list）。SGI STL提供了另一个单向链表（single linked list）也就是<code>slist</code>。</p>
-<p><code>slist</code>与<code>list</code>差异：</p>
-<ol>
-<li>slist迭代器是单向的Forward Iterator，list迭代器是双向的Bidirectional Iterator。（slist迭代器没有<code>--</code>操作，因为是单向的Forward Iterator）。</li>
-<li>单向链表所耗空间更小。</li>
-<li>list是<strong>双向环形</strong>链表，slist是<strong>单向</strong>链表。</li>
-<li>slist不提供push_back()，仅提供**push_front()**（头插法）。</li>
-</ol>
-<p><code>slist</code>与<code>list</code>相同点：</p>
-<ol>
-<li>都具有“头节点”，且都不放置元素数据。</li>
-<li>进行插入、删除、接合等操作，均不会导致原迭代器失效（当然，指向被移除的那个节点的迭代器肯定会失效）。</li>
-<li><code>list</code>和<code>slist</code>都不能使用 STL 算法 <code>sort()</code> ，必须使用自己的 <code>sort()</code> 。</li>
-</ol>
-<p>slist基本操作：</p>
-<p><code>push_front()</code>：从头部插入元素</p>
-<p><code>pop_front()</code>：从头部取出元素</p>
-<p><code>front()</code>：取头部元素</p>
-]]></content>
-      <categories>
-        <category>笔记</category>
-        <category>STL</category>
-      </categories>
-      <tags>
-        <tag>C++</tag>
-        <tag>STL</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>STL源码剖析-容器-list</title>
     <url>/STL/STL%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90-%E5%AE%B9%E5%99%A8-list/</url>
     <content><![CDATA[<p>STL list 容器，又称<strong>双向链表容器</strong>，即该容器的底层是以双向链表的形式实现的。这意味着，list 容器中的元素可以分散存储在内存空间里，而不是必须存储在一整块连续的内存空间中。</p>
@@ -370,6 +275,101 @@
 </tbody></table>
 <h1 id="注意"><a href="#注意" class="headerlink" title="注意"></a>注意</h1><p><code>list</code> 不能使用 STL 算法 <code>sort()</code> ，必须使用自己的 <code>sort()</code> 。</p>
 <p>因为STL算法sort()只能接受 <code>RamdonAccessIterator</code> 。</p>
+]]></content>
+      <categories>
+        <category>笔记</category>
+        <category>STL</category>
+      </categories>
+      <tags>
+        <tag>C++</tag>
+        <tag>STL</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>STL源码剖析-容器-deque</title>
+    <url>/STL/STL%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90-%E5%AE%B9%E5%99%A8-deque/</url>
+    <content><![CDATA[<img src="https://i.loli.net/2020/08/08/wGu91Lk2fCWIN5U.jpg" alt="deque示意图.jpg" style="zoom: 10%;" />
+
+<h2 id="deque概述"><a href="#deque概述" class="headerlink" title="deque概述"></a>deque概述</h2><ul>
+<li>deque 是一种<strong>双向开口</strong>的<strong>连续线性</strong>空间。可以在头尾两端分别做元素的插入和删除操作。</li>
+<li>deque是有一段一段的定量连续空间构成，是<strong>动态分段连续</strong>。</li>
+<li>deque 和 vector 的差异：<ul>
+<li>deque 允许于常数时间内对两端进行元素的插入或移除操作。</li>
+<li>deque 没有容量，它是动态地以分段连续空间组合而成。</li>
+</ul>
+</li>
+<li>deque 采用一块所谓的 <code>map</code> 作为主控。这个 map 是一小块连续空间（默认初值大小<strong>8个节点</strong>），其中每个节点都是指针，指向另一段（较大的）连续线性空间，称为缓冲区。缓冲区才是deque的存储空间主体。</li>
+<li>deque 是分段连续空间，迭代器维持其“整体连续”的<strong>假象</strong>，并提供随机存取的接口。</li>
+<li>一旦<code>map</code>提供的节点不足，就必须重新配置一个更大的一块<code>map</code>（<strong>至少两倍+2</strong>）。并将原来的数据放在<strong>中央</strong>，以使头尾两端的扩充能量一样大。</li>
+<li>插入数据时，deque会根据插入位置与两端的距离判断向前还是向后。</li>
+</ul>
+<img src="https://i.loli.net/2020/08/08/nl75O1bUu9TzIQ4.png" alt="deque分段连续示意图.png" style="zoom:80%;" />
+
+<h2 id="deque-的中控器map"><a href="#deque-的中控器map" class="headerlink" title="deque 的中控器map"></a>deque 的中控器map</h2><p>deque 采用一块所谓的 <code>map</code> 作为主控。这个 map 是一小块连续空间，其中每个节点都是指针，指向另一段（较大的）连续线性空间，称为缓冲区。缓冲区才是deque的存储空间主体。</p>
+<h3 id="map默认初始大小为8"><a href="#map默认初始大小为8" class="headerlink" title="map默认初始大小为8"></a>map默认初始大小为8</h3><figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="keyword">enum</span> &#123; _S_initial_map_size = <span class="number">8</span> &#125;; <span class="comment">// map默认初始大小 8</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// _M_initialize_map(size_t __num_elements)中</span></span><br><span class="line"><span class="comment">// map最少8个节点，最多“所需节点数+2”（前后各预留一个，扩容时可以用）</span></span><br><span class="line"><span class="keyword">this</span>-&gt;_M_impl._M_map_size = <span class="built_in">std</span>::<span class="built_in">max</span>((<span class="keyword">size_t</span>)_S_initial_map_size, <span class="keyword">size_t</span>(__num_nodes + <span class="number">2</span>));</span><br></pre></td></tr></table></figure>
+
+<h3 id="map空间重新配置"><a href="#map空间重新配置" class="headerlink" title="map空间重新配置"></a>map空间重新配置</h3><p>扩容一次至<strong>至少两倍+2</strong>。</p>
+<blockquote>
+<p>size_type __new_map_size = _M_map_size + max(_M_map_size, __nodes_to_add) + 2;</p>
+</blockquote>
+<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="keyword">void</span> _M_reserve_map_at_back (size_type __nodes_to_add = <span class="number">1</span>) &#123; <span class="comment">/*默认新增节点数=1*/</span></span><br><span class="line">  <span class="keyword">if</span> (__nodes_to_add + <span class="number">1</span> &gt; _M_map_size - (_M_finish._M_node - _M_map))</span><br><span class="line">    _M_reallocate_map(__nodes_to_add, <span class="literal">false</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">void</span> _M_reserve_map_at_front (size_type __nodes_to_add = <span class="number">1</span>) &#123; <span class="comment">/*默认新增节点数=1*/</span></span><br><span class="line">  <span class="keyword">if</span> (__nodes_to_add &gt; size_type(_M_start._M_node - _M_map))</span><br><span class="line">    _M_reallocate_map(__nodes_to_add, <span class="literal">true</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">template</span> &lt;<span class="class"><span class="keyword">class</span> _<span class="title">Tp</span>, <span class="title">class</span> _<span class="title">Alloc</span>&gt;</span></span><br><span class="line"><span class="class"><span class="title">void</span> <span class="title">deque</span>&lt;_Tp,_Alloc&gt;:</span>:_M_reallocate_map(size_type __nodes_to_add,</span><br><span class="line">                                          <span class="keyword">bool</span> __add_at_front)</span><br><span class="line">&#123;</span><br><span class="line">  size_type __old_num_nodes = _M_finish._M_node - _M_start._M_node + <span class="number">1</span>;</span><br><span class="line">  size_type __new_num_nodes = __old_num_nodes + __nodes_to_add;</span><br><span class="line"></span><br><span class="line">  _Map_pointer __new_nstart;</span><br><span class="line">   <span class="comment">/* map节点总数 &gt; 2倍新需节点数，则移动调整节点到中央 */</span></span><br><span class="line">  <span class="keyword">if</span> (_M_map_size &gt; <span class="number">2</span> * __new_num_nodes) &#123;</span><br><span class="line">    __new_nstart = _M_map + (_M_map_size - __new_num_nodes) / <span class="number">2</span> </span><br><span class="line">                     + (__add_at_front ? __nodes_to_add : <span class="number">0</span>);</span><br><span class="line">    <span class="keyword">if</span> (__new_nstart &lt; _M_start._M_node)</span><br><span class="line">      copy(_M_start._M_node, _M_finish._M_node + <span class="number">1</span>, __new_nstart);</span><br><span class="line">    <span class="keyword">else</span></span><br><span class="line">      copy_backward(_M_start._M_node, _M_finish._M_node + <span class="number">1</span>, </span><br><span class="line">                    __new_nstart + __old_num_nodes);</span><br><span class="line">  &#125;</span><br><span class="line">   <span class="comment">/* map节点总数不足2倍新需节点数，从新配置 */</span></span><br><span class="line">  <span class="keyword">else</span> &#123;</span><br><span class="line">    <span class="comment">/* 重点!!!  现有map节点数 + max(现有map节点数, 新增节点数) +2  !!! */</span></span><br><span class="line">    size_type __new_map_size = </span><br><span class="line">      _M_map_size + <span class="built_in">max</span>(_M_map_size, __nodes_to_add) + <span class="number">2</span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/* 拷贝原map节点数据到新map中央 */</span></span><br><span class="line">    _Map_pointer __new_map = _M_allocate_map(__new_map_size);</span><br><span class="line">    __new_nstart = __new_map + (__new_map_size - __new_num_nodes) / <span class="number">2</span></span><br><span class="line">                         + (__add_at_front ? __nodes_to_add : <span class="number">0</span>);</span><br><span class="line">    copy(_M_start._M_node, _M_finish._M_node + <span class="number">1</span>, __new_nstart);</span><br><span class="line">    _M_deallocate_map(_M_map, _M_map_size); <span class="comment">/* 释放原map空间 */</span></span><br><span class="line">    </span><br><span class="line">    _M_map = __new_map;</span><br><span class="line">    _M_map_size = __new_map_size;</span><br><span class="line">  &#125;</span><br><span class="line">    <span class="comment">/* 设置新的map的start、finish迭代器 */</span></span><br><span class="line">  _M_start._M_set_node(__new_nstart);</span><br><span class="line">  _M_finish._M_set_node(__new_nstart + __old_num_nodes - <span class="number">1</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="deque迭代器"><a href="#deque迭代器" class="headerlink" title="deque迭代器"></a>deque迭代器</h2><ul>
+<li>指向连续空间</li>
+<li>能判断空间边界，在边界上移动能指向正确的下一个连线空间</li>
+<li>随机存取</li>
+</ul>
+<p><strong>_Deque_iterator</strong>:</p>
+<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line">_Tp* _M_cur;        <span class="comment">//此迭代器所指的缓冲区的当前元素位置</span></span><br><span class="line">_Tp* _M_first;        <span class="comment">//此迭代器所指的缓冲区的头</span></span><br><span class="line">_Tp* _M_last;        <span class="comment">//此迭代器所指的缓冲区的尾</span></span><br><span class="line">_Map_pointer _M_node;    <span class="comment">//指向管控中心 map</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="deque插入数据"><a href="#deque插入数据" class="headerlink" title="deque插入数据"></a>deque插入数据</h2><ol>
+<li><p>若头部插入：<code>push_front</code></p>
+</li>
+<li><p>若尾部插入： <code>push_back</code></p>
+</li>
+<li><p>中间位置插入：</p>
+<p>1）判断距离哪端近</p>
+<p>2）移动元素</p>
+<p>3）插入新元素</p>
+</li>
+</ol>
+<h2 id="deque基本操作"><a href="#deque基本操作" class="headerlink" title="deque基本操作"></a>deque基本操作</h2><p><code>push_back()</code>：尾端插入</p>
+<p><code>push_front()</code>：头端插入</p>
+<p><code>pop_back()</code>：尾端取出</p>
+<p><code>pop_front()</code>：头端取出</p>
+]]></content>
+      <categories>
+        <category>笔记</category>
+        <category>STL</category>
+      </categories>
+      <tags>
+        <tag>C++</tag>
+        <tag>STL</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>STL源码剖析-容器-slist</title>
+    <url>/STL/STL%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90-%E5%AE%B9%E5%99%A8-slist/</url>
+    <content><![CDATA[<p>STL list是一个双向链表（double linked list）。SGI STL提供了另一个单向链表（single linked list）也就是<code>slist</code>。</p>
+<p><code>slist</code>与<code>list</code>差异：</p>
+<ol>
+<li>slist迭代器是单向的Forward Iterator，list迭代器是双向的Bidirectional Iterator。（slist迭代器没有<code>--</code>操作，因为是单向的Forward Iterator）。</li>
+<li>单向链表所耗空间更小。</li>
+<li>list是<strong>双向环形</strong>链表，slist是<strong>单向</strong>链表。</li>
+<li>slist不提供push_back()，仅提供**push_front()**（头插法）。</li>
+</ol>
+<p><code>slist</code>与<code>list</code>相同点：</p>
+<ol>
+<li>都具有“头节点”，且都不放置元素数据。</li>
+<li>进行插入、删除、接合等操作，均不会导致原迭代器失效（当然，指向被移除的那个节点的迭代器肯定会失效）。</li>
+<li><code>list</code>和<code>slist</code>都不能使用 STL 算法 <code>sort()</code> ，必须使用自己的 <code>sort()</code> 。</li>
+</ol>
+<p>slist基本操作：</p>
+<p><code>push_front()</code>：从头部插入元素</p>
+<p><code>pop_front()</code>：从头部取出元素</p>
+<p><code>front()</code>：取头部元素</p>
 ]]></content>
       <categories>
         <category>笔记</category>
@@ -607,270 +607,6 @@
       <tags>
         <tag>C++</tag>
         <tag>STL</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Centos扩容</title>
-    <url>/doc/Centos%E6%89%A9%E5%AE%B9/</url>
-    <content><![CDATA[<p>CVM存储在 <code>/var</code> 下，虽然固态硬盘大部分存储空间，都给了 <code>/var</code> ，但是虚拟机多一点，就担心空间不足。于是便通过以下步骤对 <code>/var</code> 进行扩容。</p>
-<ol>
-<li><p>查看分区</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">[root@localhost ~]# df -hT</span><br><span class="line">Filesystem              Type      Size  Used Avail Use% Mounted on</span><br><span class="line">/dev/mapper/centos-root xfs        40G  3.9G   37G  10% /</span><br><span class="line">devtmpfs                devtmpfs   12G     0   12G   0% /dev</span><br><span class="line">tmpfs                   tmpfs      12G     0   12G   0% /dev/shm</span><br><span class="line">tmpfs                   tmpfs      12G   33M   12G   1% /run</span><br><span class="line">tmpfs                   tmpfs      12G     0   12G   0% /sys/fs/cgroup</span><br><span class="line">/dev/sdc2               xfs       497M  155M  343M  32% /boot</span><br><span class="line">/dev/sdc1               vfat       50M   12M   39M  23% /boot/efi</span><br><span class="line">/dev/mapper/centos-var  xfs       375G  254G  121G  68% /var  # 大小 375G</span><br><span class="line">tmpfs                   tmpfs     2.4G     0  2.4G   0% /run/user/0</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>查看磁盘编号</p>
-<p>也可以使用 <code>fdisk -l</code> 查看磁盘信息。其中 <code>/dev/sdb</code> 是用于扩容的磁盘。</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">[root@localhost ~]# ls /dev/sd*</span><br><span class="line">/dev/sda  /dev/sdb  /dev/sdc  /dev/sdc1  /dev/sdc2  /dev/sdc3</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>创建pv</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">[root@localhost ~]# pvcreate /dev/sdb </span><br><span class="line">  Physical volume &quot;/dev/sdb&quot; successfully created.</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>查看vg组</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">[root@localhost ~]# vgs</span><br><span class="line">  VG     #PV #LV #SN Attr   VSize    VFree</span><br><span class="line">  centos   1   3   0 wz--n- &lt;446.59g    0    # 此时vfree为0</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>扩展vg</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">[root@localhost ~]# vgextend centos /dev/sdb </span><br><span class="line">  Volume group &quot;centos&quot; successfully extended</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>再次查看vg组</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">[root@localhost ~]# vgs</span><br><span class="line">  VG     #PV #LV #SN Attr   VSize  VFree  </span><br><span class="line">  centos   2   3   0 wz--n- &lt;1.35t 931.51g     # 此时vfree为 931.51g</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>扩展lv（+500G）</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">[root@localhost ~]# lvextend -L +500G /dev/mapper/centos-var </span><br><span class="line">  Size of logical volume centos/var changed from &lt;374.59 GiB (95895 extents) to &lt;874.59 GiB (223895 extents).</span><br><span class="line">  Logical volume centos/var successfully resized.</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>系统重新读取大小</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">[root@localhost ~]# xfs_growfs /dev/mapper/centos-var </span><br><span class="line">meta-data=/dev/mapper/centos-var isize=256    agcount=4, agsize=24549120 blks</span><br><span class="line">         =                       sectsz=512   attr=2, projid32bit=1</span><br><span class="line">         =                       crc=0        finobt=0 spinodes=0</span><br><span class="line">data     =                       bsize=4096   blocks=98196480, imaxpct=25</span><br><span class="line">         =                       sunit=0      swidth=0 blks</span><br><span class="line">naming   =version 2              bsize=4096   ascii-ci=0 ftype=0</span><br><span class="line">log      =internal               bsize=4096   blocks=47947, version=2</span><br><span class="line">         =                       sectsz=512   sunit=0 blks, lazy-count=1</span><br><span class="line">realtime =none                   extsz=4096   blocks=0, rtextents=0</span><br><span class="line">data blocks changed from 98196480 to 229268480</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>查看扩容是否成功</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">[root@localhost ~]# df -h</span><br><span class="line">Filesystem               Size  Used Avail Use% Mounted on</span><br><span class="line">/dev/mapper/centos-root   40G  3.9G   37G  10% /</span><br><span class="line">devtmpfs                  12G     0   12G   0% /dev</span><br><span class="line">tmpfs                     12G     0   12G   0% /dev/shm</span><br><span class="line">tmpfs                     12G   33M   12G   1% /run</span><br><span class="line">tmpfs                     12G     0   12G   0% /sys/fs/cgroup</span><br><span class="line">/dev/sdc2                497M  155M  343M  32% /boot</span><br><span class="line">/dev/sdc1                 50M   12M   39M  23% /boot/efi</span><br><span class="line">/dev/mapper/centos-var   875G  254G  621G  30% /var        # 大小 375G + 500G = 875G</span><br><span class="line">tmpfs                    2.4G     0  2.4G   0% /run/user/0</span><br></pre></td></tr></table></figure>
-
-
-
-</li>
-</ol>
-]]></content>
-      <categories>
-        <category>文档</category>
-      </categories>
-      <tags>
-        <tag>linux</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>MarkDown学习总结笔记</title>
-    <url>/doc/Markdown%E5%AD%A6%E4%B9%A0%E6%80%BB%E7%BB%93%E7%AC%94%E8%AE%B0/</url>
-    <content><![CDATA[<h1 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h1><p>Markdown 是一种轻量级标记语言，它允许人们使用易读易写的纯文本格式编写文档。<br>Markdown 编写的文档可以导出 HTML 、Word、图像、PDF等多种格式的文档。<br>Markdown 编写的文档后缀为 <strong>.md</strong>, <strong>.markdown</strong>。</p>
-<h1 id="编辑器"><a href="#编辑器" class="headerlink" title="编辑器"></a>编辑器</h1><p>Typora 官网：<a href="https://typora.io/">https://typora.io/</a><br>吐槽点：换行会自动加入空行，难受…</p>
-<h1 id="语法"><a href="#语法" class="headerlink" title="语法"></a>语法</h1><h2 id="1-标题"><a href="#1-标题" class="headerlink" title="1. 标题"></a>1. 标题</h2><p>标题使用<kbd>#</kbd>表示，可分为1-6级标题，几级标题使用几个<kbd>#</kbd>，并以空格分隔标题名，如下所示：</p>
-<figure class="highlight markdown"><table><tr><td class="code"><pre><span class="line"><span class="section"># 一级标题</span></span><br><span class="line"><span class="section">## 二级标题</span></span><br><span class="line"><span class="section">### 三级标题</span></span><br><span class="line"><span class="section">#### 四级标题</span></span><br><span class="line"><span class="section">##### 五级标题</span></span><br><span class="line"><span class="section">###### 六级标题</span></span><br></pre></td></tr></table></figure>
-
-<h2 id="2-文本格式"><a href="#2-文本格式" class="headerlink" title="2. 文本格式"></a>2. 文本格式</h2><h3 id="2-1-字体"><a href="#2-1-字体" class="headerlink" title="2.1  字体"></a>2.1  字体</h3><figure class="highlight markdown"><table><tr><td class="code"><pre><span class="line"><span class="emphasis">*斜体文本*</span></span><br><span class="line"><span class="emphasis">_斜体文本_</span></span><br><span class="line"></span><br><span class="line"><span class="strong">**粗体文本**</span></span><br><span class="line"><span class="strong">__粗体文本__</span></span><br><span class="line"></span><br><span class="line"><span class="strong">**<span class="emphasis">*粗斜体文本<span class="strong">**<span class="emphasis">*</span></span></span></span></span><br><span class="line"><span class="strong"><span class="emphasis"><span class="strong"><span class="emphasis"><span class="strong">__<span class="emphasis">_粗斜体文本<span class="strong">__<span class="emphasis">_</span></span></span></span></span></span></span></span></span><br></pre></td></tr></table></figure>
-
-<h3 id="2-2-分隔线"><a href="#2-2-分隔线" class="headerlink" title="2.2 分隔线"></a>2.2 分隔线</h3><p>使用三个及以上<kbd>*</kbd>、<kbd>-</kbd>可建立分隔线，字符间不许其他符号，格式如下</p>
-<figure class="highlight markdown"><table><tr><td class="code"><pre><span class="line">---</span><br><span class="line">--------------</span><br><span class="line"></span><br><span class="line"><span class="strong">**<span class="emphasis">*</span></span></span><br><span class="line"><span class="strong"><span class="emphasis"><span class="strong">****</span><span class="strong">****</span><span class="strong">****</span></span></span></span><br></pre></td></tr></table></figure>
-
-<h3 id="2-3-删除线"><a href="#2-3-删除线" class="headerlink" title="2.3 删除线"></a>2.3 删除线</h3><p>若要对文本内容添加删除线，如<del>删除线内容</del>，只需要在文字的两端加上两个波浪线 <kbd>~~</kbd> 即可格式如下：</p>
-<figure class="highlight markdown"><table><tr><td class="code"><pre><span class="line">~~删除线内容~~</span><br></pre></td></tr></table></figure>
-
-<h3 id="2-4-下划线"><a href="#2-4-下划线" class="headerlink" title="2.4 下划线"></a>2.4 下划线</h3><p>下划线通过HTML标签<kbd><u></kbd>实现，如下</p>
-<p><u>下划线文本</u></p>
-<figure class="highlight markdown"><table><tr><td class="code"><pre><span class="line"><span class="xml"><span class="tag">&lt;<span class="name">u</span>&gt;</span></span>下划线文本<span class="xml"><span class="tag">&lt;/<span class="name">u</span>&gt;</span></span></span><br></pre></td></tr></table></figure>
-
-<h3 id="2-5-脚注"><a href="#2-5-脚注" class="headerlink" title="2.5 脚注"></a>2.5 脚注</h3><p>脚注是对文本内容的补充说明，样式如下：<br>文本内容文本内容[^Markdown]。<br>[^Markdown]: Markdown是一种轻量级标记语言，它允许人们使用易读易写的纯文本格式编写文档。</p>
-<p>书写格式如下：</p>
-<figure class="highlight markdown"><table><tr><td class="code"><pre><span class="line">文本内容文本内容[^Markdown]。</span><br><span class="line">[<span class="symbol">^Markdown</span>]: <span class="link">Markdown是一种轻量级标记语言，它允许人们使用易读易写的纯文本格式编写文档。</span></span><br></pre></td></tr></table></figure>
-
-<h2 id="3-列表格式"><a href="#3-列表格式" class="headerlink" title="3. 列表格式"></a>3. 列表格式</h2><p>Markdown中列表可分为无序列表和有序列表。<br><strong>无序列表</strong>：使用<kbd>* </kbd>、<kbd>+ </kbd> 、<kbd>- </kbd>作为标记符。样式如下：</p>
-<ul>
-<li>*第一项</li>
-<li>*第二项</li>
-</ul>
-<ul>
-<li>-第一项</li>
-<li>-第二项</li>
-</ul>
-<ul>
-<li>+第一项</li>
-<li>+第二项</li>
-</ul>
-<p>markdown书写格式如下：</p>
-<figure class="highlight markdown"><table><tr><td class="code"><pre><span class="line"><span class="bullet">*</span> <span class="emphasis">*第一项</span></span><br><span class="line"><span class="emphasis">*</span> <span class="emphasis">*第二项</span></span><br><span class="line"><span class="emphasis"></span></span><br><span class="line"><span class="emphasis">- -第一项</span></span><br><span class="line"><span class="emphasis">- -第二项</span></span><br><span class="line"><span class="emphasis"></span></span><br><span class="line"><span class="emphasis">+ +第一项</span></span><br><span class="line"><span class="emphasis">+ +第二项</span></span><br></pre></td></tr></table></figure>
-
-<p><strong>有序列表</strong>：有序列表使用数字并加上<kbd>. </kbd>来表示，样式如下：</p>
-<ol>
-<li>第一项</li>
-<li>第二项</li>
-</ol>
-<p>书写格式如下：</p>
-<figure class="highlight markdown"><table><tr><td class="code"><pre><span class="line"><span class="bullet">1.</span> 第一项</span><br><span class="line"><span class="bullet">2.</span> 第二项</span><br></pre></td></tr></table></figure>
-
-<p><strong>列表嵌套</strong>：多层列表嵌套，子列表添加一个<kbd>tab</kbd>或者四个空格缩进即可，样式如下：</p>
-<ol>
-<li>第一项<ul>
-<li>第一项嵌套（可有序）</li>
-<li>第二项嵌套（可有序）</li>
-</ul>
-</li>
-<li>第二项</li>
-</ol>
-<p>书写格式如下：</p>
-<figure class="highlight markdown"><table><tr><td class="code"><pre><span class="line"><span class="bullet">1.</span> 第一项</span><br><span class="line"><span class="bullet">   *</span> 第一项嵌套（可有序）</span><br><span class="line"><span class="bullet">   *</span> 第二项嵌套（可有序）</span><br><span class="line"><span class="bullet">2.</span> 第二项</span><br></pre></td></tr></table></figure>
-
-<h2 id="4-区块"><a href="#4-区块" class="headerlink" title="4. 区块"></a>4. 区块</h2><p>Markdown 区块引用是在段落开头使用 <kbd>></kbd> 符号 ，然后后面紧跟一个<strong>空格</strong>符号。样式如下：</p>
-<blockquote>
-<p>Markdown区块演示<br>Markdown区块演示</p>
-</blockquote>
-<p>书写格式如下：</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&gt; Markdown区块演示</span><br><span class="line">&gt; Markdown区块演示</span><br></pre></td></tr></table></figure>
-
-<p>区块可嵌套使用，如下：</p>
-<blockquote>
-<p>外层区块</p>
-<blockquote>
-<p>内层区块</p>
-</blockquote>
-</blockquote>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&gt; 外层区块</span><br><span class="line">&gt; &gt; 内层区块</span><br></pre></td></tr></table></figure>
-
-<h2 id="5-代码"><a href="#5-代码" class="headerlink" title="5. 代码"></a>5. 代码</h2><p>段落上的函数或代码片段可用反引号<kbd>`</kbd>包起来，如：</p>
-<p><code>cout</code><br><code>cout &lt;&lt; &quot;ans = &quot; &lt;&lt; ans &lt;&lt; endl;</code></p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&#96;cout&#96;</span><br><span class="line">&#96;cout &lt;&lt; &quot;ans &#x3D; &quot; &lt;&lt; ans &lt;&lt; endl;&#96;</span><br></pre></td></tr></table></figure>
-
-<p><strong>代码块</strong>使用<kbd>```</kbd><strong>独占一行</strong>包起来，代码高亮设置可加上语言标记前如下：</p>
-<figure class="highlight markdown"><table><tr><td class="code"><pre><span class="line">​<span class="code">```markdown</span></span><br><span class="line"><span class="code">Markdown代码块</span></span><br><span class="line"><span class="code">​```</span></span><br></pre></td></tr></table></figure>
-
-<h2 id="6-链接"><a href="#6-链接" class="headerlink" title="6. 链接"></a>6. 链接</h2><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">[]() 格式:</span><br><span class="line">[Google](www.google.com)</span><br><span class="line"></span><br><span class="line">&lt;&gt; 格式:</span><br><span class="line">&lt;www.google.com&gt;</span><br><span class="line"></span><br><span class="line">变量替代格式：</span><br><span class="line">[Google][google-link]</span><br><span class="line">[google-link]:www.google.com</span><br></pre></td></tr></table></figure>
-<p><a href=""></a> 格式:<br><a href="www.google.com">Google</a></p>
-<p>&lt;&gt; 格式:<br>&lt;<a href="http://www.google.com&gt;/">www.google.com&gt;</a></p>
-<p>变量替代格式：<br>[Google][google-link]<br>[google-link]:<a href="http://www.google.com/">www.google.com</a></p>
-<h2 id="7-图片"><a href="#7-图片" class="headerlink" title="7. 图片"></a>7. 图片</h2><p>Markdown中图片以<kbd><img src="%E5%9B%BE%E7%89%87%E5%9C%B0%E5%9D%80" alt="图片标签 属性"></kbd>格式或以<kbd><img src="图片地址" 属性></kbd>书写。图片地址可分为：</p>
-<ol>
-<li><p>绝对地址，即一个完整的链接，可以是本地文件目录绝对地址，也可以是网络图片链接。</p>
-<figure class="highlight markdown"><table><tr><td class="code"><pre><span class="line">![<span class="string">picture</span>](<span class="link">绝对地址</span>)</span><br><span class="line"><span class="xml"><span class="tag">&lt;<span class="name">img</span> <span class="attr">src</span>=<span class="string">&quot;绝对地址&quot;</span> <span class="attr">width</span>=<span class="string">&quot;50%&quot;</span>&gt;</span></span></span><br></pre></td></tr></table></figure>
-</li>
-<li><p>相对地址，相对地址建议使用Linux地址格式，Windows格式的地址是以<kbd>\</kbd>分隔文件目录，使用这种地址格式在<strong>git上无法显示</strong>。</p>
-<figure class="highlight markdown"><table><tr><td class="code"><pre><span class="line">![<span class="string">picture</span>](<span class="link">相对地址</span>)</span><br><span class="line"><span class="xml"><span class="tag">&lt;<span class="name">img</span> <span class="attr">src</span>=<span class="string">&quot;相对地址&quot;</span> <span class="attr">width</span>=<span class="string">&quot;50%&quot;</span>&gt;</span></span></span><br></pre></td></tr></table></figure>
-</li>
-<li><p>地址变量，不在图片出直接填写图片地址，通过变量，在文档结尾统一给出变量值。如下：</p>
-<figure class="highlight markdown"><table><tr><td class="code"><pre><span class="line">![<span class="string">picture</span>][<span class="symbol">picture-link</span>]</span><br><span class="line"></span><br><span class="line">[<span class="symbol">picture-link</span>]:<span class="link">图片地址</span></span><br></pre></td></tr></table></figure>
-
-</li>
-</ol>
-<h2 id="8-表格"><a href="#8-表格" class="headerlink" title="8. 表格"></a>8. 表格</h2><p>Markdown使用<kbd>|</kbd>分隔不同的单元格，使用<kbd>-</kbd>分隔表头，该两种符号两侧至少一个空格（最左或最右除外）。<br>对齐方式：</p>
-<ul>
-<li><kbd>:-</kbd>代表左对齐</li>
-<li><kbd>:-:</kbd>代表居中对齐</li>
-<li><kbd>-:</kbd>代表右对齐</li>
-</ul>
-<figure class="highlight markdown"><table><tr><td class="code"><pre><span class="line">| 左对齐 | 居中对齐 | 右对齐 |</span><br><span class="line">| :--- | :----: | ----: |</span><br><span class="line">| aaaa | bbbbbb | ccccc |</span><br><span class="line">| a    | b      | c     |</span><br></pre></td></tr></table></figure>
-
-<table>
-<thead>
-<tr>
-<th align="left">左对齐</th>
-<th align="center">居中对齐</th>
-<th align="right">右对齐</th>
-</tr>
-</thead>
-<tbody><tr>
-<td align="left">aaaa</td>
-<td align="center">bbbbbb</td>
-<td align="right">ccccc</td>
-</tr>
-<tr>
-<td align="left">a</td>
-<td align="center">b</td>
-<td align="right">c</td>
-</tr>
-</tbody></table>
-<h2 id="9-其他"><a href="#9-其他" class="headerlink" title="9. 其他"></a>9. 其他</h2><p>支持HTML元素，不在Markdown 涵盖范围之内的标签，都可以直接在文档里面用HTML撰写。<br>目前支持的 HTML 元素有：<code>&lt;kbd&gt; &lt;b&gt; &lt;i&gt; &lt;em&gt; &lt;sup&gt; &lt;sub&gt; &lt;br&gt;</code>等</p>
-<p>此外，Markdown还支持数学公式，画流程图、时序图、甘特图等。</p>
-]]></content>
-      <categories>
-        <category>文档</category>
-      </categories>
-      <tags>
-        <tag>笔记</tag>
-        <tag>MarkDown</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Nginx服务器安装配置</title>
-    <url>/doc/Nginx%E6%9C%8D%E5%8A%A1%E5%99%A8%E5%AE%89%E8%A3%85%E9%85%8D%E7%BD%AE/</url>
-    <content><![CDATA[<p><strong>环境：</strong></p>
-<blockquote>
-<p>Linux CentOS 7</p>
-<p>3.10.0-1062.9.1.el7.x86_64</p>
-</blockquote>
-<p><font color=red><strong><em>强调：server{} 包含在http{}内部，每一个server{}都是一个虚拟主机（站点）！！！</em></strong></font></p>
-<h2 id="Nginx服务器安装配置"><a href="#Nginx服务器安装配置" class="headerlink" title="Nginx服务器安装配置"></a>Nginx服务器安装配置</h2><h3 id="安装依赖"><a href="#安装依赖" class="headerlink" title="安装依赖"></a>安装依赖</h3><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">yum install pcre* -y</span><br><span class="line">yum install openssl* -y</span><br></pre></td></tr></table></figure>
-
-<h3 id="Nginx安装"><a href="#Nginx安装" class="headerlink" title="Nginx安装"></a>Nginx安装</h3><ol>
-<li><p>Nginx下载</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">wget http://nginx.org/download/nginx-1.19.0.tar.gz</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>解压安装包</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">tar -zxf nginx-1.19.0.tar.gz</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>检查配置文件是否生效</p>
-<p>进入解压目录，根据提示安装依赖</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">.&#x2F;configure</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>编译安装</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">make -j4 &amp;&amp; make install</span><br></pre></td></tr></table></figure>
-
-</li>
-</ol>
-<h2 id="Nginx服务器配置"><a href="#Nginx服务器配置" class="headerlink" title="Nginx服务器配置"></a>Nginx服务器配置</h2><h3 id="nginx命令添加"><a href="#nginx命令添加" class="headerlink" title="nginx命令添加"></a>nginx命令添加</h3><p>创建软连接</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">ln -s &#x2F;usr&#x2F;local&#x2F;nginx&#x2F;sbin&#x2F;nginx &#x2F;usr&#x2F;bin&#x2F;nginx</span><br></pre></td></tr></table></figure>
-
-<h3 id="启动Nginx"><a href="#启动Nginx" class="headerlink" title="启动Nginx"></a>启动Nginx</h3><p>启动nginx服务器，查看进程状态，通过ip访问测试</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">nginx # 启动nginx服务器</span><br><span class="line"></span><br><span class="line">ps -aux|grep nginx # 查看nginx进程</span><br></pre></td></tr></table></figure>
-
-<h3 id="配置服务器主配置文件"><a href="#配置服务器主配置文件" class="headerlink" title="配置服务器主配置文件"></a>配置服务器主配置文件</h3><ol>
-<li><p>文件第一行添加：</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">user    root;</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>删除<strong>server部分</strong></p>
-</li>
-<li><p>在http括号内添加一行</p>
-<p><strong>这是自定义nginx sever配置文件</strong></p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">include /root/nginx/*.conf;</span><br></pre></td></tr></table></figure>
-
-</li>
-</ol>
-<h3 id="自定义服务器配置"><a href="#自定义服务器配置" class="headerlink" title="自定义服务器配置"></a>自定义服务器配置</h3><p>编辑自定义nginx sever配置文件</p>
-<blockquote>
-<p>vim /root/nginx/nginx-server.conf</p>
-</blockquote>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">server &#123;</span><br><span class="line">    listen 80; <span class="comment">#监听IP端口 </span></span><br><span class="line">    server_name localhost; <span class="comment">#主机名</span></span><br><span class="line">    location /&#123;</span><br><span class="line">        root /root/nginx/html;</span><br><span class="line">        index  index.html index.htm; <span class="comment">#定义首页索引文件的名称</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h3 id="检查配置文件"><a href="#检查配置文件" class="headerlink" title="检查配置文件"></a>检查配置文件</h3><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">nginx -t</span><br></pre></td></tr></table></figure>
-
-<p>提示如下：成功</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">[root@k8s-master nginx]# nginx -t</span><br><span class="line">nginx: the configuration file /usr/local/nginx/conf/nginx.conf syntax is ok</span><br><span class="line">nginx: configuration file /usr/local/nginx/conf/nginx.conf test is successful</span><br></pre></td></tr></table></figure>
-
-<h3 id="重启服务器"><a href="#重启服务器" class="headerlink" title="重启服务器"></a>重启服务器</h3><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">nginx -s reload </span><br></pre></td></tr></table></figure>
-
-<h3 id="测试"><a href="#测试" class="headerlink" title="测试"></a>测试</h3><p>在配置文件中的根目录创建 index.html，随便输几个字母（eg: Nginx test…），保存退出。浏览器访问测试。</p>
-<blockquote>
-<p>vim /root/nginx/html/index.html</p>
-</blockquote>
-<h2 id="Nginx配置文件注释"><a href="#Nginx配置文件注释" class="headerlink" title="Nginx配置文件注释"></a>Nginx配置文件注释</h2><p>&lt;% fold 点击显示/隐藏Nginx主配置文件 %&gt;</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment">#user  nobody; </span></span><br><span class="line">user    root</span><br><span class="line"><span class="comment">#开启进程数 &lt;=CPU数 </span></span><br><span class="line">worker_processes 1; </span><br><span class="line">  </span><br><span class="line"><span class="comment">#错误日志保存位置 </span></span><br><span class="line"><span class="comment">#error_log logs/error.log; </span></span><br><span class="line"><span class="comment">#error_log logs/error.log notice; </span></span><br><span class="line"><span class="comment">#error_log logs/error.log info; </span></span><br><span class="line">  </span><br><span class="line"><span class="comment">#进程号保存文件 </span></span><br><span class="line"><span class="comment">#pid logs/nginx.pid; </span></span><br><span class="line">  </span><br><span class="line"><span class="comment">#等待事件 </span></span><br><span class="line">events &#123; </span><br><span class="line">  <span class="comment">#每个进程最大连接数（最大连接=连接数x进程数）  </span></span><br><span class="line">  worker_connections 1024; </span><br><span class="line">&#125;</span><br><span class="line"> </span><br><span class="line">http &#123; </span><br><span class="line">  <span class="comment">#文件扩展名与文件类型映射表 </span></span><br><span class="line">  include mime.types;</span><br><span class="line">    </span><br><span class="line">  <span class="comment">#默认文件类型 </span></span><br><span class="line">  default_type application/octet-stream; </span><br><span class="line">    </span><br><span class="line">  <span class="comment">#日志文件输出格式 这个位置相于全局设置 </span></span><br><span class="line">  <span class="comment">#log_format main &#x27;$remote_addr - $remote_user [$time_local] &quot;$request&quot; &#x27; </span></span><br><span class="line">  <span class="comment"># &#x27;$status $body_bytes_sent &quot;$http_referer&quot; &#x27; </span></span><br><span class="line">  <span class="comment"># &#x27;&quot;$http_user_agent&quot; &quot;$http_x_forwarded_for&quot;&#x27;; </span></span><br><span class="line">    </span><br><span class="line">  <span class="comment">#请求日志保存位置 </span></span><br><span class="line">  <span class="comment">#access_log logs/access.log main; </span></span><br><span class="line">    </span><br><span class="line">  <span class="comment">#打开发送文件 </span></span><br><span class="line">  sendfile on; </span><br><span class="line">  <span class="comment">#tcp_nopush on; </span></span><br><span class="line">    </span><br><span class="line">  <span class="comment">#连接超时时间 </span></span><br><span class="line">  <span class="comment">#keepalive_timeout 0; </span></span><br><span class="line">  keepalive_timeout 65; </span><br><span class="line">    </span><br><span class="line">  <span class="comment">#打开gzip压缩 </span></span><br><span class="line">  <span class="comment">#gzip on; </span></span><br><span class="line">    </span><br><span class="line">  <span class="comment">#设定请求缓冲 </span></span><br><span class="line">  client_header_buffer_size 1k; </span><br><span class="line">  large_client_header_buffers 4 4k; </span><br><span class="line">    </span><br><span class="line">  <span class="comment">#设定负载均衡的服务器列表 </span></span><br><span class="line">  upstream tomcat-servers &#123;</span><br><span class="line">    <span class="comment">#weigth参数表示权值，权值越高被分配到的几率越大 </span></span><br><span class="line">    <span class="comment">#max_fails 当有#max_fails个请求失败，就表示后端的服务器不可用，默认为1，将其设置为0可以关闭检查 </span></span><br><span class="line">    <span class="comment">#fail_timeout 在以后的#fail_timeout时间内nginx不会再把请求发往已检查出标记为不可用的服务器 </span></span><br><span class="line">    <span class="comment">#这里指定多个源服务器，ip:端口,80端口的话可写可不写 </span></span><br><span class="line">    server 127.0.0.1:8080 weight=5 max_fails=2 fail_timeout=600s; </span><br><span class="line">    <span class="comment">#server 127.0.0.2:8080 weight=3 max_fails=2 fail_timeout=600s;  </span></span><br><span class="line">  &#125; </span><br><span class="line">    </span><br><span class="line">    include /root/nginx/*conf;    <span class="comment"># 添加自定义的配置文件！！！！</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>&lt;% endfold %&gt;</p>
-<p>&lt;% fold 点击显示/隐藏 Nginx自定义虚拟主机配置 %&gt;</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">server &#123;</span><br><span class="line">    listen       80;  //监听端口为80，可以自定义其他端口，也可以加上IP地址，如，listen 127.0.0.1:8080;</span><br><span class="line">    server_name  localhost; //定义网站域名，可以写多个，用空格分隔</span><br><span class="line">    <span class="comment">#charset koi8-r; //定义网站的字符集，一般不设置，而是在网页代码中设置</span></span><br><span class="line">    <span class="comment">#access_log  logs/host.access.log  main; //定义访问日志，相当于局部变量 ,可以针对每一个server（即每一个站点）设置它们自己的访问日志</span></span><br><span class="line">    <span class="comment">##在server&#123;&#125;里有很多location配置段</span></span><br><span class="line">    <span class="comment">#对本server&quot;/&quot;启用负载均衡</span></span><br><span class="line">    location / &#123;</span><br><span class="line">        root   html;  //定义网站根目录，目录可以是相对路径也可以是绝对路径</span><br><span class="line">        index  index.html index.htm; <span class="comment">#定义首页索引文件的名称</span></span><br><span class="line">        </span><br><span class="line">        <span class="comment">#以下是一些反向代理的配置可删除. </span></span><br><span class="line">        <span class="comment"># proxy_redirect off;  </span></span><br><span class="line">        <span class="comment"># proxy_set_header Host $host;  </span></span><br><span class="line">        <span class="comment"># proxy_set_header X-Real-IP $remote_addr;  </span></span><br><span class="line">        <span class="comment"># proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;  </span></span><br><span class="line">        <span class="comment"># client_max_body_size 10m; #允许客户端请求的最大单文件字节数  </span></span><br><span class="line">        <span class="comment"># client_body_buffer_size 128k; #缓冲区代理缓冲用户端请求的最大字节数，  </span></span><br><span class="line">        <span class="comment"># proxy_connect_timeout 90; #nginx跟后端服务器连接超时时间(代理连接超时)  </span></span><br><span class="line">        <span class="comment"># proxy_send_timeout 90; #后端服务器数据回传时间(代理发送超时)  </span></span><br><span class="line">        <span class="comment"># proxy_read_timeout 90; #连接成功后，后端服务器响应时间(代理接收超时)  </span></span><br><span class="line">        <span class="comment"># proxy_buffer_size 4k; #设置代理服务器（nginx）保存用户头信息的缓冲区大小  </span></span><br><span class="line">        <span class="comment"># proxy_buffers 4 32k; #proxy_buffers缓冲区，网页平均在32k以下的话，这样设置  </span></span><br><span class="line">        <span class="comment"># proxy_busy_buffers_size 64k; #高负荷下缓冲大小（proxy_buffers*2）  </span></span><br><span class="line">        <span class="comment"># proxy_temp_file_write_size 64k; #设定缓存文件夹大小，大于这个值，将从upstream服务器传 </span></span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">#设定查看Nginx状态的地址  </span></span><br><span class="line">    location /NginxStatus &#123;  </span><br><span class="line">        stub_status on;  </span><br><span class="line">        access_log off;  </span><br><span class="line">        <span class="comment">#allow 192.168.1.88; </span></span><br><span class="line">        <span class="comment">#deny all; </span></span><br><span class="line">        <span class="comment">#auth_basic &quot;NginxStatus&quot;;  </span></span><br><span class="line">        <span class="comment">#auth_basic_user_file conf/htpasswd;  </span></span><br><span class="line">    &#125;</span><br><span class="line">  </span><br><span class="line">    <span class="comment">#error_page  404              /404.html;  //定义404页面</span></span><br><span class="line">    <span class="comment"># redirect server error pages to the static page /50x.html</span></span><br><span class="line">    <span class="comment">#</span></span><br><span class="line">    error_page   500 502 503 504  /50x.html;  //当状态码为500、502、503、504时，则访问50x.html</span><br><span class="line">    location = /50x.html &#123;</span><br><span class="line">        root   html;  //定义50x.html所在路径</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment"># proxy the PHP scripts to Apache listening on 127.0.0.1:80</span></span><br><span class="line">    <span class="comment">#</span></span><br><span class="line">    <span class="comment">#定义访问php脚本时，将会执行本location&#123;&#125;部分指令</span></span><br><span class="line">    <span class="comment">#location ~ \.php$ &#123;</span></span><br><span class="line">    <span class="comment">#    proxy_pass   http://127.0.0.1;  //proxy_pass后面指定要访问的url链接，用proxy_pass实现代理。</span></span><br><span class="line">    <span class="comment">#&#125;</span></span><br><span class="line">    <span class="comment"># pass the PHP scripts to FastCGI server listening on 127.0.0.1:9000</span></span><br><span class="line">    <span class="comment">#</span></span><br><span class="line">    <span class="comment">#location ~ \.php$ &#123;</span></span><br><span class="line">    <span class="comment">#    root           html;</span></span><br><span class="line">    <span class="comment">#    fastcgi_pass   127.0.0.1:9000;  //定义FastCGI服务器监听端口与地址，支持两种形式，1 IP:Port， 2 unix:/path/to/sockt</span></span><br><span class="line">    <span class="comment">#    fastcgi_index  index.php;</span></span><br><span class="line">    <span class="comment">#    fastcgi_param  SCRIPT_FILENAME  /scripts$fastcgi_script_name;  //定义SCRIPT_FILENAME变量，后面的路径/scripts为上面的root指定的目录</span></span><br><span class="line">    <span class="comment">#    include        fastcgi_params; //引用prefix/conf/fastcgi_params文件，该文件定义了fastcgi相关的变量</span></span><br><span class="line">    <span class="comment">#&#125;</span></span><br><span class="line">    <span class="comment"># deny access to .htaccess files, if Apache&#x27;s document root</span></span><br><span class="line">    <span class="comment"># concurs with nginx&#x27;s one</span></span><br><span class="line">    <span class="comment"># </span></span><br><span class="line">    <span class="comment">#location ~ /\.ht &#123;   //访问的url中，以/.ht开头的，如，www.example.com/.htaccess，会被拒绝，返回403状态码。</span></span><br><span class="line">    <span class="comment">#    deny  all;  //这里的all指的是所有的请求。</span></span><br><span class="line">    <span class="comment">#&#125;</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>&lt;% endfold %&gt;</p>
-<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><p><a href="https://www.cnblogs.com/zhoulifeng/p/10236116.html">nginx服务器搭建以及配置</a></p>
-]]></content>
-      <categories>
-        <category>文档</category>
-      </categories>
-      <tags>
-        <tag>linux</tag>
-        <tag>Nginx</tag>
-        <tag>博客</tag>
       </tags>
   </entry>
   <entry>
@@ -1275,8 +1011,8 @@
         <category>教程</category>
       </categories>
       <tags>
-        <tag>博客</tag>
         <tag>Hexo</tag>
+        <tag>博客</tag>
         <tag>github</tag>
       </tags>
   </entry>
@@ -1363,8 +1099,8 @@
         <category>教程</category>
       </categories>
       <tags>
-        <tag>博客</tag>
         <tag>Hexo</tag>
+        <tag>博客</tag>
         <tag>Next</tag>
       </tags>
   </entry>
@@ -1423,8 +1159,8 @@
         <category>教程</category>
       </categories>
       <tags>
-        <tag>博客</tag>
         <tag>Hexo</tag>
+        <tag>博客</tag>
         <tag>Next</tag>
       </tags>
   </entry>
@@ -1506,31 +1242,278 @@
         <category>教程</category>
       </categories>
       <tags>
-        <tag>博客</tag>
         <tag>Hexo</tag>
+        <tag>博客</tag>
         <tag>Next</tag>
       </tags>
   </entry>
   <entry>
-    <title>k8s Weave Scope 部署配置</title>
-    <url>/other/k8s%20weave%20scope%20%E5%AE%89%E8%A3%85%E9%85%8D%E7%BD%AE/</url>
-    <content><![CDATA[<h2 id="1-Weave-Scope-安装"><a href="#1-Weave-Scope-安装" class="headerlink" title="1. Weave Scope 安装"></a>1. Weave Scope 安装</h2><p>在 master 上通过以下命令安装Weave Scope：<br>kubectl apply -f “<a href="https://cloud.weave.works/k8s/scope.yaml?k8s-version=$">https://cloud.weave.works/k8s/scope.yaml?k8s-version=$</a>(kubectl version | base64 | tr -d ‘\n’)”<br>运行后会发现已经起来几个pod:</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">[root@k8s-master ~]# kubectl apply -f &quot;https://cloud.weave.works/k8s/scope.yaml?k8s-version=$(kubectl version | base64 | tr -d &#x27;\n&#x27;)&quot;</span><br><span class="line">namespace/weave created</span><br><span class="line">serviceaccount/weave-scope created</span><br><span class="line">clusterrole.rbac.authorization.k8s.io/weave-scope created</span><br><span class="line">clusterrolebinding.rbac.authorization.k8s.io/weave-scope created</span><br><span class="line">deployment.apps/weave-scope-app created</span><br><span class="line">service/weave-scope-app created</span><br><span class="line">deployment.apps/weave-scope-cluster-agent created</span><br><span class="line">daemonset.apps/weave-scope-agent created</span><br><span class="line">[root@k8s-master ~]# kubectl get pod -n weave  -o wide</span><br><span class="line">NAME                                        READY   STATUS    RESTARTS   AGE   IP              NODE         NOMINATED NODE   READINESS GATES</span><br><span class="line">weave-scope-agent-8zzq5                     1/1     Running   0          11s   192.168.1.92    k8s-master   &lt;none&gt;           &lt;none&gt;</span><br><span class="line">weave-scope-agent-jhcff                     1/1     Running   0          11s   192.168.1.85    k8s-node1    &lt;none&gt;           &lt;none&gt;</span><br><span class="line">weave-scope-agent-qs45b                     1/1     Running   0          11s   192.168.1.133   k8s-node2    &lt;none&gt;           &lt;none&gt;</span><br><span class="line">weave-scope-app-848cd4d8b5-4rlnd            1/1     Running   0          11s   10.244.1.4      k8s-node1    &lt;none&gt;           &lt;none&gt;</span><br><span class="line">weave-scope-cluster-agent-b4f45797c-7srs9   1/1     Running   0          11s   10.244.2.4      k8s-node2    &lt;none&gt;           &lt;none&gt;</span><br><span class="line">[root@k8s-master ~]# kubectl get service -n weave -o wide</span><br><span class="line">NAME              TYPE        CLUSTER-IP    EXTERNAL-IP   PORT(S)   AGE   SELECTOR</span><br><span class="line">weave-scope-app   ClusterIP   10.1.31.163   &lt;none&gt;        80/TCP    57s   app=weave-scope,name=weave-scope-app,weave-cloud-component=scope,weave-scope-component=app</span><br></pre></td></tr></table></figure>
+    <title>Centos扩容</title>
+    <url>/doc/Centos%E6%89%A9%E5%AE%B9/</url>
+    <content><![CDATA[<p>CVM存储在 <code>/var</code> 下，虽然固态硬盘大部分存储空间，都给了 <code>/var</code> ，但是虚拟机多一点，就担心空间不足。于是便通过以下步骤对 <code>/var</code> 进行扩容。</p>
+<ol>
+<li><p>查看分区</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">[root@localhost ~]# df -hT</span><br><span class="line">Filesystem              Type      Size  Used Avail Use% Mounted on</span><br><span class="line">/dev/mapper/centos-root xfs        40G  3.9G   37G  10% /</span><br><span class="line">devtmpfs                devtmpfs   12G     0   12G   0% /dev</span><br><span class="line">tmpfs                   tmpfs      12G     0   12G   0% /dev/shm</span><br><span class="line">tmpfs                   tmpfs      12G   33M   12G   1% /run</span><br><span class="line">tmpfs                   tmpfs      12G     0   12G   0% /sys/fs/cgroup</span><br><span class="line">/dev/sdc2               xfs       497M  155M  343M  32% /boot</span><br><span class="line">/dev/sdc1               vfat       50M   12M   39M  23% /boot/efi</span><br><span class="line">/dev/mapper/centos-var  xfs       375G  254G  121G  68% /var  # 大小 375G</span><br><span class="line">tmpfs                   tmpfs     2.4G     0  2.4G   0% /run/user/0</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>查看磁盘编号</p>
+<p>也可以使用 <code>fdisk -l</code> 查看磁盘信息。其中 <code>/dev/sdb</code> 是用于扩容的磁盘。</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">[root@localhost ~]# ls /dev/sd*</span><br><span class="line">/dev/sda  /dev/sdb  /dev/sdc  /dev/sdc1  /dev/sdc2  /dev/sdc3</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>创建pv</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">[root@localhost ~]# pvcreate /dev/sdb </span><br><span class="line">  Physical volume &quot;/dev/sdb&quot; successfully created.</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>查看vg组</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">[root@localhost ~]# vgs</span><br><span class="line">  VG     #PV #LV #SN Attr   VSize    VFree</span><br><span class="line">  centos   1   3   0 wz--n- &lt;446.59g    0    # 此时vfree为0</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>扩展vg</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">[root@localhost ~]# vgextend centos /dev/sdb </span><br><span class="line">  Volume group &quot;centos&quot; successfully extended</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>再次查看vg组</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">[root@localhost ~]# vgs</span><br><span class="line">  VG     #PV #LV #SN Attr   VSize  VFree  </span><br><span class="line">  centos   2   3   0 wz--n- &lt;1.35t 931.51g     # 此时vfree为 931.51g</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>扩展lv（+500G）</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">[root@localhost ~]# lvextend -L +500G /dev/mapper/centos-var </span><br><span class="line">  Size of logical volume centos/var changed from &lt;374.59 GiB (95895 extents) to &lt;874.59 GiB (223895 extents).</span><br><span class="line">  Logical volume centos/var successfully resized.</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>系统重新读取大小</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">[root@localhost ~]# xfs_growfs /dev/mapper/centos-var </span><br><span class="line">meta-data=/dev/mapper/centos-var isize=256    agcount=4, agsize=24549120 blks</span><br><span class="line">         =                       sectsz=512   attr=2, projid32bit=1</span><br><span class="line">         =                       crc=0        finobt=0 spinodes=0</span><br><span class="line">data     =                       bsize=4096   blocks=98196480, imaxpct=25</span><br><span class="line">         =                       sunit=0      swidth=0 blks</span><br><span class="line">naming   =version 2              bsize=4096   ascii-ci=0 ftype=0</span><br><span class="line">log      =internal               bsize=4096   blocks=47947, version=2</span><br><span class="line">         =                       sectsz=512   sunit=0 blks, lazy-count=1</span><br><span class="line">realtime =none                   extsz=4096   blocks=0, rtextents=0</span><br><span class="line">data blocks changed from 98196480 to 229268480</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>查看扩容是否成功</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">[root@localhost ~]# df -h</span><br><span class="line">Filesystem               Size  Used Avail Use% Mounted on</span><br><span class="line">/dev/mapper/centos-root   40G  3.9G   37G  10% /</span><br><span class="line">devtmpfs                  12G     0   12G   0% /dev</span><br><span class="line">tmpfs                     12G     0   12G   0% /dev/shm</span><br><span class="line">tmpfs                     12G   33M   12G   1% /run</span><br><span class="line">tmpfs                     12G     0   12G   0% /sys/fs/cgroup</span><br><span class="line">/dev/sdc2                497M  155M  343M  32% /boot</span><br><span class="line">/dev/sdc1                 50M   12M   39M  23% /boot/efi</span><br><span class="line">/dev/mapper/centos-var   875G  254G  621G  30% /var        # 大小 375G + 500G = 875G</span><br><span class="line">tmpfs                    2.4G     0  2.4G   0% /run/user/0</span><br></pre></td></tr></table></figure>
 
-<h2 id="2-访问配置"><a href="#2-访问配置" class="headerlink" title="2. 访问配置"></a>2. 访问配置</h2><p><code>k8s-service-type</code>-Kubernetes服务类型（用于以独立模式运行Scope），可以是 <code>LoadBalancer</code>或<code>NodePort</code>，默认情况下未指定（仅内部访问）<br>使用<kbd>kubectl edit</kbd> 方式修改 nodeport 的端口</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"><span class="comment"># 首先 get svc 查看服务</span></span></span><br><span class="line">[root@k8s-master ~]# kubectl get svc --all-namespaces</span><br><span class="line">NAMESPACE     NAME              TYPE        CLUSTER-IP    EXTERNAL-IP   PORT(S)                  AGE</span><br><span class="line">default       kubernetes        ClusterIP   10.1.0.1      &lt;none&gt;        443/TCP                  28h</span><br><span class="line">kube-system   kube-dns          ClusterIP   10.1.0.10     &lt;none&gt;        53/UDP,53/TCP,9153/TCP   28h</span><br><span class="line">weave         weave-scope-app   ClusterIP   10.1.31.163   &lt;none&gt;        80/TCP                   4m4s</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"><span class="comment"># 修改 weave 服务</span></span></span><br><span class="line">[root@k8s-master ~]# kubectl edit svc/weave-scope-app -n weave</span><br></pre></td></tr></table></figure>
 
-<blockquote>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">&gt;</span><span class="bash"><span class="comment">## 以下修改标记</span></span></span><br><span class="line"><span class="meta">&gt;</span><span class="bash">spec:</span></span><br><span class="line"> clusterIP: 10.1.31.163</span><br><span class="line"> ports:</span><br><span class="line"> - name: app</span><br><span class="line">   nodePort: 30001        ## 新增 映射外网访问端口 30000-327627</span><br><span class="line">   port: 80        ## 默认 80 不能修改，修改后无法获取节点信息</span><br><span class="line">   protocol: TCP</span><br><span class="line">   targetPort: 4040</span><br><span class="line"> selector:</span><br><span class="line">   app: weave-scope</span><br><span class="line">   name: weave-scope-app</span><br><span class="line">   weave-cloud-component: scope</span><br><span class="line">   weave-scope-component: app</span><br><span class="line"> sessionAffinity: None</span><br><span class="line"> type: NodePort        ## 修改为 NodePort</span><br><span class="line"><span class="meta">&gt;</span><span class="bash">status:</span></span><br><span class="line"> loadBalancer: &#123;&#125;</span><br></pre></td></tr></table></figure>
-</blockquote>
-<h2 id="3-web-浏览"><a href="#3-web-浏览" class="headerlink" title="3. web 浏览"></a>3. web 浏览</h2><p>在能访问 master 主机网络的主机上浏览器访问 <font color=red>master ip:nodePort</font>，如：<a href="http://192.168.1.86:30001/">http://192.168.1.86:30001/</a></p>
+
+</li>
+</ol>
 ]]></content>
       <categories>
-        <category>教程</category>
+        <category>文档</category>
       </categories>
       <tags>
         <tag>linux</tag>
-        <tag>k8s</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>MarkDown学习总结笔记</title>
+    <url>/doc/Markdown%E5%AD%A6%E4%B9%A0%E6%80%BB%E7%BB%93%E7%AC%94%E8%AE%B0/</url>
+    <content><![CDATA[<h1 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h1><p>Markdown 是一种轻量级标记语言，它允许人们使用易读易写的纯文本格式编写文档。<br>Markdown 编写的文档可以导出 HTML 、Word、图像、PDF等多种格式的文档。<br>Markdown 编写的文档后缀为 <strong>.md</strong>, <strong>.markdown</strong>。</p>
+<h1 id="编辑器"><a href="#编辑器" class="headerlink" title="编辑器"></a>编辑器</h1><p>Typora 官网：<a href="https://typora.io/">https://typora.io/</a><br>吐槽点：换行会自动加入空行，难受…</p>
+<h1 id="语法"><a href="#语法" class="headerlink" title="语法"></a>语法</h1><h2 id="1-标题"><a href="#1-标题" class="headerlink" title="1. 标题"></a>1. 标题</h2><p>标题使用<kbd>#</kbd>表示，可分为1-6级标题，几级标题使用几个<kbd>#</kbd>，并以空格分隔标题名，如下所示：</p>
+<figure class="highlight markdown"><table><tr><td class="code"><pre><span class="line"><span class="section"># 一级标题</span></span><br><span class="line"><span class="section">## 二级标题</span></span><br><span class="line"><span class="section">### 三级标题</span></span><br><span class="line"><span class="section">#### 四级标题</span></span><br><span class="line"><span class="section">##### 五级标题</span></span><br><span class="line"><span class="section">###### 六级标题</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="2-文本格式"><a href="#2-文本格式" class="headerlink" title="2. 文本格式"></a>2. 文本格式</h2><h3 id="2-1-字体"><a href="#2-1-字体" class="headerlink" title="2.1  字体"></a>2.1  字体</h3><figure class="highlight markdown"><table><tr><td class="code"><pre><span class="line"><span class="emphasis">*斜体文本*</span></span><br><span class="line"><span class="emphasis">_斜体文本_</span></span><br><span class="line"></span><br><span class="line"><span class="strong">**粗体文本**</span></span><br><span class="line"><span class="strong">__粗体文本__</span></span><br><span class="line"></span><br><span class="line"><span class="strong">**<span class="emphasis">*粗斜体文本<span class="strong">**<span class="emphasis">*</span></span></span></span></span><br><span class="line"><span class="strong"><span class="emphasis"><span class="strong"><span class="emphasis"><span class="strong">__<span class="emphasis">_粗斜体文本<span class="strong">__<span class="emphasis">_</span></span></span></span></span></span></span></span></span><br></pre></td></tr></table></figure>
+
+<h3 id="2-2-分隔线"><a href="#2-2-分隔线" class="headerlink" title="2.2 分隔线"></a>2.2 分隔线</h3><p>使用三个及以上<kbd>*</kbd>、<kbd>-</kbd>可建立分隔线，字符间不许其他符号，格式如下</p>
+<figure class="highlight markdown"><table><tr><td class="code"><pre><span class="line">---</span><br><span class="line">--------------</span><br><span class="line"></span><br><span class="line"><span class="strong">**<span class="emphasis">*</span></span></span><br><span class="line"><span class="strong"><span class="emphasis"><span class="strong">****</span><span class="strong">****</span><span class="strong">****</span></span></span></span><br></pre></td></tr></table></figure>
+
+<h3 id="2-3-删除线"><a href="#2-3-删除线" class="headerlink" title="2.3 删除线"></a>2.3 删除线</h3><p>若要对文本内容添加删除线，如<del>删除线内容</del>，只需要在文字的两端加上两个波浪线 <kbd>~~</kbd> 即可格式如下：</p>
+<figure class="highlight markdown"><table><tr><td class="code"><pre><span class="line">~~删除线内容~~</span><br></pre></td></tr></table></figure>
+
+<h3 id="2-4-下划线"><a href="#2-4-下划线" class="headerlink" title="2.4 下划线"></a>2.4 下划线</h3><p>下划线通过HTML标签<kbd><u></kbd>实现，如下</p>
+<p><u>下划线文本</u></p>
+<figure class="highlight markdown"><table><tr><td class="code"><pre><span class="line"><span class="xml"><span class="tag">&lt;<span class="name">u</span>&gt;</span></span>下划线文本<span class="xml"><span class="tag">&lt;/<span class="name">u</span>&gt;</span></span></span><br></pre></td></tr></table></figure>
+
+<h3 id="2-5-脚注"><a href="#2-5-脚注" class="headerlink" title="2.5 脚注"></a>2.5 脚注</h3><p>脚注是对文本内容的补充说明，样式如下：<br>文本内容文本内容[^Markdown]。<br>[^Markdown]: Markdown是一种轻量级标记语言，它允许人们使用易读易写的纯文本格式编写文档。</p>
+<p>书写格式如下：</p>
+<figure class="highlight markdown"><table><tr><td class="code"><pre><span class="line">文本内容文本内容[^Markdown]。</span><br><span class="line">[<span class="symbol">^Markdown</span>]: <span class="link">Markdown是一种轻量级标记语言，它允许人们使用易读易写的纯文本格式编写文档。</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="3-列表格式"><a href="#3-列表格式" class="headerlink" title="3. 列表格式"></a>3. 列表格式</h2><p>Markdown中列表可分为无序列表和有序列表。<br><strong>无序列表</strong>：使用<kbd>* </kbd>、<kbd>+ </kbd> 、<kbd>- </kbd>作为标记符。样式如下：</p>
+<ul>
+<li>*第一项</li>
+<li>*第二项</li>
+</ul>
+<ul>
+<li>-第一项</li>
+<li>-第二项</li>
+</ul>
+<ul>
+<li>+第一项</li>
+<li>+第二项</li>
+</ul>
+<p>markdown书写格式如下：</p>
+<figure class="highlight markdown"><table><tr><td class="code"><pre><span class="line"><span class="bullet">*</span> <span class="emphasis">*第一项</span></span><br><span class="line"><span class="emphasis">*</span> <span class="emphasis">*第二项</span></span><br><span class="line"><span class="emphasis"></span></span><br><span class="line"><span class="emphasis">- -第一项</span></span><br><span class="line"><span class="emphasis">- -第二项</span></span><br><span class="line"><span class="emphasis"></span></span><br><span class="line"><span class="emphasis">+ +第一项</span></span><br><span class="line"><span class="emphasis">+ +第二项</span></span><br></pre></td></tr></table></figure>
+
+<p><strong>有序列表</strong>：有序列表使用数字并加上<kbd>. </kbd>来表示，样式如下：</p>
+<ol>
+<li>第一项</li>
+<li>第二项</li>
+</ol>
+<p>书写格式如下：</p>
+<figure class="highlight markdown"><table><tr><td class="code"><pre><span class="line"><span class="bullet">1.</span> 第一项</span><br><span class="line"><span class="bullet">2.</span> 第二项</span><br></pre></td></tr></table></figure>
+
+<p><strong>列表嵌套</strong>：多层列表嵌套，子列表添加一个<kbd>tab</kbd>或者四个空格缩进即可，样式如下：</p>
+<ol>
+<li>第一项<ul>
+<li>第一项嵌套（可有序）</li>
+<li>第二项嵌套（可有序）</li>
+</ul>
+</li>
+<li>第二项</li>
+</ol>
+<p>书写格式如下：</p>
+<figure class="highlight markdown"><table><tr><td class="code"><pre><span class="line"><span class="bullet">1.</span> 第一项</span><br><span class="line"><span class="bullet">   *</span> 第一项嵌套（可有序）</span><br><span class="line"><span class="bullet">   *</span> 第二项嵌套（可有序）</span><br><span class="line"><span class="bullet">2.</span> 第二项</span><br></pre></td></tr></table></figure>
+
+<h2 id="4-区块"><a href="#4-区块" class="headerlink" title="4. 区块"></a>4. 区块</h2><p>Markdown 区块引用是在段落开头使用 <kbd>></kbd> 符号 ，然后后面紧跟一个<strong>空格</strong>符号。样式如下：</p>
+<blockquote>
+<p>Markdown区块演示<br>Markdown区块演示</p>
+</blockquote>
+<p>书写格式如下：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&gt; Markdown区块演示</span><br><span class="line">&gt; Markdown区块演示</span><br></pre></td></tr></table></figure>
+
+<p>区块可嵌套使用，如下：</p>
+<blockquote>
+<p>外层区块</p>
+<blockquote>
+<p>内层区块</p>
+</blockquote>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&gt; 外层区块</span><br><span class="line">&gt; &gt; 内层区块</span><br></pre></td></tr></table></figure>
+
+<h2 id="5-代码"><a href="#5-代码" class="headerlink" title="5. 代码"></a>5. 代码</h2><p>段落上的函数或代码片段可用反引号<kbd>`</kbd>包起来，如：</p>
+<p><code>cout</code><br><code>cout &lt;&lt; &quot;ans = &quot; &lt;&lt; ans &lt;&lt; endl;</code></p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&#96;cout&#96;</span><br><span class="line">&#96;cout &lt;&lt; &quot;ans &#x3D; &quot; &lt;&lt; ans &lt;&lt; endl;&#96;</span><br></pre></td></tr></table></figure>
+
+<p><strong>代码块</strong>使用<kbd>```</kbd><strong>独占一行</strong>包起来，代码高亮设置可加上语言标记前如下：</p>
+<figure class="highlight markdown"><table><tr><td class="code"><pre><span class="line">​<span class="code">```markdown</span></span><br><span class="line"><span class="code">Markdown代码块</span></span><br><span class="line"><span class="code">​```</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="6-链接"><a href="#6-链接" class="headerlink" title="6. 链接"></a>6. 链接</h2><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">[]() 格式:</span><br><span class="line">[Google](www.google.com)</span><br><span class="line"></span><br><span class="line">&lt;&gt; 格式:</span><br><span class="line">&lt;www.google.com&gt;</span><br><span class="line"></span><br><span class="line">变量替代格式：</span><br><span class="line">[Google][google-link]</span><br><span class="line">[google-link]:www.google.com</span><br></pre></td></tr></table></figure>
+<p><a href=""></a> 格式:<br><a href="www.google.com">Google</a></p>
+<p>&lt;&gt; 格式:<br>&lt;<a href="http://www.google.com&gt;/">www.google.com&gt;</a></p>
+<p>变量替代格式：<br>[Google][google-link]<br>[google-link]:<a href="http://www.google.com/">www.google.com</a></p>
+<h2 id="7-图片"><a href="#7-图片" class="headerlink" title="7. 图片"></a>7. 图片</h2><p>Markdown中图片以<kbd><img src="%E5%9B%BE%E7%89%87%E5%9C%B0%E5%9D%80" alt="图片标签 属性"></kbd>格式或以<kbd><img src="图片地址" 属性></kbd>书写。图片地址可分为：</p>
+<ol>
+<li><p>绝对地址，即一个完整的链接，可以是本地文件目录绝对地址，也可以是网络图片链接。</p>
+<figure class="highlight markdown"><table><tr><td class="code"><pre><span class="line">![<span class="string">picture</span>](<span class="link">绝对地址</span>)</span><br><span class="line"><span class="xml"><span class="tag">&lt;<span class="name">img</span> <span class="attr">src</span>=<span class="string">&quot;绝对地址&quot;</span> <span class="attr">width</span>=<span class="string">&quot;50%&quot;</span>&gt;</span></span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>相对地址，相对地址建议使用Linux地址格式，Windows格式的地址是以<kbd>\</kbd>分隔文件目录，使用这种地址格式在<strong>git上无法显示</strong>。</p>
+<figure class="highlight markdown"><table><tr><td class="code"><pre><span class="line">![<span class="string">picture</span>](<span class="link">相对地址</span>)</span><br><span class="line"><span class="xml"><span class="tag">&lt;<span class="name">img</span> <span class="attr">src</span>=<span class="string">&quot;相对地址&quot;</span> <span class="attr">width</span>=<span class="string">&quot;50%&quot;</span>&gt;</span></span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>地址变量，不在图片出直接填写图片地址，通过变量，在文档结尾统一给出变量值。如下：</p>
+<figure class="highlight markdown"><table><tr><td class="code"><pre><span class="line">![<span class="string">picture</span>][<span class="symbol">picture-link</span>]</span><br><span class="line"></span><br><span class="line">[<span class="symbol">picture-link</span>]:<span class="link">图片地址</span></span><br></pre></td></tr></table></figure>
+
+</li>
+</ol>
+<h2 id="8-表格"><a href="#8-表格" class="headerlink" title="8. 表格"></a>8. 表格</h2><p>Markdown使用<kbd>|</kbd>分隔不同的单元格，使用<kbd>-</kbd>分隔表头，该两种符号两侧至少一个空格（最左或最右除外）。<br>对齐方式：</p>
+<ul>
+<li><kbd>:-</kbd>代表左对齐</li>
+<li><kbd>:-:</kbd>代表居中对齐</li>
+<li><kbd>-:</kbd>代表右对齐</li>
+</ul>
+<figure class="highlight markdown"><table><tr><td class="code"><pre><span class="line">| 左对齐 | 居中对齐 | 右对齐 |</span><br><span class="line">| :--- | :----: | ----: |</span><br><span class="line">| aaaa | bbbbbb | ccccc |</span><br><span class="line">| a    | b      | c     |</span><br></pre></td></tr></table></figure>
+
+<table>
+<thead>
+<tr>
+<th align="left">左对齐</th>
+<th align="center">居中对齐</th>
+<th align="right">右对齐</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">aaaa</td>
+<td align="center">bbbbbb</td>
+<td align="right">ccccc</td>
+</tr>
+<tr>
+<td align="left">a</td>
+<td align="center">b</td>
+<td align="right">c</td>
+</tr>
+</tbody></table>
+<h2 id="9-其他"><a href="#9-其他" class="headerlink" title="9. 其他"></a>9. 其他</h2><p>支持HTML元素，不在Markdown 涵盖范围之内的标签，都可以直接在文档里面用HTML撰写。<br>目前支持的 HTML 元素有：<code>&lt;kbd&gt; &lt;b&gt; &lt;i&gt; &lt;em&gt; &lt;sup&gt; &lt;sub&gt; &lt;br&gt;</code>等</p>
+<p>此外，Markdown还支持数学公式，画流程图、时序图、甘特图等。</p>
+]]></content>
+      <categories>
+        <category>文档</category>
+      </categories>
+      <tags>
+        <tag>笔记</tag>
+        <tag>MarkDown</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Nginx服务器安装配置</title>
+    <url>/doc/Nginx%E6%9C%8D%E5%8A%A1%E5%99%A8%E5%AE%89%E8%A3%85%E9%85%8D%E7%BD%AE/</url>
+    <content><![CDATA[<p><strong>环境：</strong></p>
+<blockquote>
+<p>Linux CentOS 7</p>
+<p>3.10.0-1062.9.1.el7.x86_64</p>
+</blockquote>
+<p><font color=red><strong><em>强调：server{} 包含在http{}内部，每一个server{}都是一个虚拟主机（站点）！！！</em></strong></font></p>
+<h2 id="Nginx服务器安装配置"><a href="#Nginx服务器安装配置" class="headerlink" title="Nginx服务器安装配置"></a>Nginx服务器安装配置</h2><h3 id="安装依赖"><a href="#安装依赖" class="headerlink" title="安装依赖"></a>安装依赖</h3><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">yum install pcre* -y</span><br><span class="line">yum install openssl* -y</span><br></pre></td></tr></table></figure>
+
+<h3 id="Nginx安装"><a href="#Nginx安装" class="headerlink" title="Nginx安装"></a>Nginx安装</h3><ol>
+<li><p>Nginx下载</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">wget http://nginx.org/download/nginx-1.19.0.tar.gz</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>解压安装包</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">tar -zxf nginx-1.19.0.tar.gz</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>检查配置文件是否生效</p>
+<p>进入解压目录，根据提示安装依赖</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">.&#x2F;configure</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>编译安装</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">make -j4 &amp;&amp; make install</span><br></pre></td></tr></table></figure>
+
+</li>
+</ol>
+<h2 id="Nginx服务器配置"><a href="#Nginx服务器配置" class="headerlink" title="Nginx服务器配置"></a>Nginx服务器配置</h2><h3 id="nginx命令添加"><a href="#nginx命令添加" class="headerlink" title="nginx命令添加"></a>nginx命令添加</h3><p>创建软连接</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">ln -s &#x2F;usr&#x2F;local&#x2F;nginx&#x2F;sbin&#x2F;nginx &#x2F;usr&#x2F;bin&#x2F;nginx</span><br></pre></td></tr></table></figure>
+
+<h3 id="启动Nginx"><a href="#启动Nginx" class="headerlink" title="启动Nginx"></a>启动Nginx</h3><p>启动nginx服务器，查看进程状态，通过ip访问测试</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">nginx # 启动nginx服务器</span><br><span class="line"></span><br><span class="line">ps -aux|grep nginx # 查看nginx进程</span><br></pre></td></tr></table></figure>
+
+<h3 id="配置服务器主配置文件"><a href="#配置服务器主配置文件" class="headerlink" title="配置服务器主配置文件"></a>配置服务器主配置文件</h3><blockquote>
+<p>vi /usr/local/nginx/conf/nginx.conf</p>
+</blockquote>
+<ol>
+<li><p>文件第一行添加：</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">user    root;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>删除<strong>server部分</strong></p>
+</li>
+<li><p>在http括号内添加一行</p>
+<p><strong>这是自定义nginx sever配置文件</strong></p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">include /root/nginx/*.conf;</span><br></pre></td></tr></table></figure>
+
+</li>
+</ol>
+<h3 id="自定义服务器配置"><a href="#自定义服务器配置" class="headerlink" title="自定义服务器配置"></a>自定义服务器配置</h3><p>编辑自定义nginx sever配置文件</p>
+<blockquote>
+<p>vim /root/nginx/nginx-server.conf</p>
+</blockquote>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">server &#123;</span><br><span class="line">    listen 80; <span class="comment">#监听IP端口 </span></span><br><span class="line">    server_name localhost; <span class="comment">#主机名</span></span><br><span class="line">    location /&#123;</span><br><span class="line">        root /root/nginx/html;</span><br><span class="line">        index  index.html index.htm; <span class="comment">#定义首页索引文件的名称</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="检查配置文件"><a href="#检查配置文件" class="headerlink" title="检查配置文件"></a>检查配置文件</h3><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">nginx -t</span><br></pre></td></tr></table></figure>
+
+<p>提示如下：成功</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">[root@k8s-master nginx]# nginx -t</span><br><span class="line">nginx: the configuration file /usr/local/nginx/conf/nginx.conf syntax is ok</span><br><span class="line">nginx: configuration file /usr/local/nginx/conf/nginx.conf test is successful</span><br></pre></td></tr></table></figure>
+
+<h3 id="重启服务器"><a href="#重启服务器" class="headerlink" title="重启服务器"></a>重启服务器</h3><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">nginx -s reload </span><br></pre></td></tr></table></figure>
+
+<h3 id="测试"><a href="#测试" class="headerlink" title="测试"></a>测试</h3><p>在配置文件中的根目录创建 index.html，随便输几个字母（eg: Nginx test…），保存退出。浏览器访问测试。</p>
+<blockquote>
+<p>vim /root/nginx/html/index.html</p>
+</blockquote>
+<h2 id="Nginx配置文件注释"><a href="#Nginx配置文件注释" class="headerlink" title="Nginx配置文件注释"></a>Nginx配置文件注释</h2><h3 id="Nginx主配置"><a href="#Nginx主配置" class="headerlink" title="Nginx主配置"></a>Nginx主配置</h3><div><div class="fold_hider"><div class="close hider_title">点击显示/隐藏Nginx主配置文件</div></div><div class="fold">
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment">#user  nobody; </span></span><br><span class="line">user    root</span><br><span class="line"><span class="comment">#开启进程数 &lt;=CPU数 </span></span><br><span class="line">worker_processes 1; </span><br><span class="line">  </span><br><span class="line"><span class="comment">#错误日志保存位置 </span></span><br><span class="line"><span class="comment">#error_log logs/error.log; </span></span><br><span class="line"><span class="comment">#error_log logs/error.log notice; </span></span><br><span class="line"><span class="comment">#error_log logs/error.log info; </span></span><br><span class="line">  </span><br><span class="line"><span class="comment">#进程号保存文件 </span></span><br><span class="line"><span class="comment">#pid logs/nginx.pid; </span></span><br><span class="line">  </span><br><span class="line"><span class="comment">#等待事件 </span></span><br><span class="line">events &#123; </span><br><span class="line">  <span class="comment">#每个进程最大连接数（最大连接=连接数x进程数）  </span></span><br><span class="line">  worker_connections 1024; </span><br><span class="line">&#125;</span><br><span class="line"> </span><br><span class="line">http &#123; </span><br><span class="line">  <span class="comment">#文件扩展名与文件类型映射表 </span></span><br><span class="line">  include mime.types;</span><br><span class="line">    </span><br><span class="line">  <span class="comment">#默认文件类型 </span></span><br><span class="line">  default_type application/octet-stream; </span><br><span class="line">    </span><br><span class="line">  <span class="comment">#日志文件输出格式 这个位置相于全局设置 </span></span><br><span class="line">  <span class="comment">#log_format main &#x27;$remote_addr - $remote_user [$time_local] &quot;$request&quot; &#x27; </span></span><br><span class="line">  <span class="comment"># &#x27;$status $body_bytes_sent &quot;$http_referer&quot; &#x27; </span></span><br><span class="line">  <span class="comment"># &#x27;&quot;$http_user_agent&quot; &quot;$http_x_forwarded_for&quot;&#x27;; </span></span><br><span class="line">    </span><br><span class="line">  <span class="comment">#请求日志保存位置 </span></span><br><span class="line">  <span class="comment">#access_log logs/access.log main; </span></span><br><span class="line">    </span><br><span class="line">  <span class="comment">#打开发送文件 </span></span><br><span class="line">  sendfile on; </span><br><span class="line">  <span class="comment">#tcp_nopush on; </span></span><br><span class="line">    </span><br><span class="line">  <span class="comment">#连接超时时间 </span></span><br><span class="line">  <span class="comment">#keepalive_timeout 0; </span></span><br><span class="line">  keepalive_timeout 65; </span><br><span class="line">    </span><br><span class="line">  <span class="comment">#打开gzip压缩 </span></span><br><span class="line">  <span class="comment">#gzip on; </span></span><br><span class="line">    </span><br><span class="line">  <span class="comment">#设定请求缓冲 </span></span><br><span class="line">  client_header_buffer_size 1k; </span><br><span class="line">  large_client_header_buffers 4 4k; </span><br><span class="line">    </span><br><span class="line">  <span class="comment">#设定负载均衡的服务器列表 </span></span><br><span class="line">  upstream tomcat-servers &#123;</span><br><span class="line">    <span class="comment">#weigth参数表示权值，权值越高被分配到的几率越大 </span></span><br><span class="line">    <span class="comment">#max_fails 当有#max_fails个请求失败，就表示后端的服务器不可用，默认为1，将其设置为0可以关闭检查 </span></span><br><span class="line">    <span class="comment">#fail_timeout 在以后的#fail_timeout时间内nginx不会再把请求发往已检查出标记为不可用的服务器 </span></span><br><span class="line">    <span class="comment">#这里指定多个源服务器，ip:端口,80端口的话可写可不写 </span></span><br><span class="line">    server 127.0.0.1:8080 weight=5 max_fails=2 fail_timeout=600s; </span><br><span class="line">    <span class="comment">#server 127.0.0.2:8080 weight=3 max_fails=2 fail_timeout=600s;  </span></span><br><span class="line">  &#125; </span><br><span class="line">    </span><br><span class="line">    include /root/nginx/*conf;    <span class="comment"># 添加自定义的配置文件！！！！</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+</div></div>
+
+<h3 id="Nginx虚拟主机配置"><a href="#Nginx虚拟主机配置" class="headerlink" title="Nginx虚拟主机配置"></a>Nginx虚拟主机配置</h3><div><div class="fold_hider"><div class="close hider_title">点击显示/隐藏</div></div><div class="fold">
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">server &#123;</span><br><span class="line">    listen       80;  //监听端口为80，可以自定义其他端口，也可以加上IP地址，如，listen 127.0.0.1:8080;</span><br><span class="line">    server_name  localhost; //定义网站域名，可以写多个，用空格分隔</span><br><span class="line">    <span class="comment">#charset koi8-r; //定义网站的字符集，一般不设置，而是在网页代码中设置</span></span><br><span class="line">    <span class="comment">#access_log  logs/host.access.log  main; //定义访问日志，相当于局部变量 ,可以针对每一个server（即每一个站点）设置它们自己的访问日志</span></span><br><span class="line">    <span class="comment">##在server&#123;&#125;里有很多location配置段</span></span><br><span class="line">    <span class="comment">#对本server&quot;/&quot;启用负载均衡</span></span><br><span class="line">    location / &#123;</span><br><span class="line">        root   html;  //定义网站根目录，目录可以是相对路径也可以是绝对路径</span><br><span class="line">        index  index.html index.htm; <span class="comment">#定义首页索引文件的名称</span></span><br><span class="line">        </span><br><span class="line">        <span class="comment">#以下是一些反向代理的配置可删除. </span></span><br><span class="line">        <span class="comment"># proxy_redirect off;  </span></span><br><span class="line">        <span class="comment"># proxy_set_header Host $host;  </span></span><br><span class="line">        <span class="comment"># proxy_set_header X-Real-IP $remote_addr;  </span></span><br><span class="line">        <span class="comment"># proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;  </span></span><br><span class="line">        <span class="comment"># client_max_body_size 10m; #允许客户端请求的最大单文件字节数  </span></span><br><span class="line">        <span class="comment"># client_body_buffer_size 128k; #缓冲区代理缓冲用户端请求的最大字节数，  </span></span><br><span class="line">        <span class="comment"># proxy_connect_timeout 90; #nginx跟后端服务器连接超时时间(代理连接超时)  </span></span><br><span class="line">        <span class="comment"># proxy_send_timeout 90; #后端服务器数据回传时间(代理发送超时)  </span></span><br><span class="line">        <span class="comment"># proxy_read_timeout 90; #连接成功后，后端服务器响应时间(代理接收超时)  </span></span><br><span class="line">        <span class="comment"># proxy_buffer_size 4k; #设置代理服务器（nginx）保存用户头信息的缓冲区大小  </span></span><br><span class="line">        <span class="comment"># proxy_buffers 4 32k; #proxy_buffers缓冲区，网页平均在32k以下的话，这样设置  </span></span><br><span class="line">        <span class="comment"># proxy_busy_buffers_size 64k; #高负荷下缓冲大小（proxy_buffers*2）  </span></span><br><span class="line">        <span class="comment"># proxy_temp_file_write_size 64k; #设定缓存文件夹大小，大于这个值，将从upstream服务器传 </span></span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">#设定查看Nginx状态的地址  </span></span><br><span class="line">    location /NginxStatus &#123;  </span><br><span class="line">        stub_status on;  </span><br><span class="line">        access_log off;  </span><br><span class="line">        <span class="comment">#allow 192.168.1.88; </span></span><br><span class="line">        <span class="comment">#deny all; </span></span><br><span class="line">        <span class="comment">#auth_basic &quot;NginxStatus&quot;;  </span></span><br><span class="line">        <span class="comment">#auth_basic_user_file conf/htpasswd;  </span></span><br><span class="line">    &#125;</span><br><span class="line">  </span><br><span class="line">    <span class="comment">#error_page  404              /404.html;  //定义404页面</span></span><br><span class="line">    <span class="comment"># redirect server error pages to the static page /50x.html</span></span><br><span class="line">    <span class="comment">#</span></span><br><span class="line">    error_page   500 502 503 504  /50x.html;  //当状态码为500、502、503、504时，则访问50x.html</span><br><span class="line">    location = /50x.html &#123;</span><br><span class="line">        root   html;  //定义50x.html所在路径</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment"># proxy the PHP scripts to Apache listening on 127.0.0.1:80</span></span><br><span class="line">    <span class="comment">#</span></span><br><span class="line">    <span class="comment">#定义访问php脚本时，将会执行本location&#123;&#125;部分指令</span></span><br><span class="line">    <span class="comment">#location ~ \.php$ &#123;</span></span><br><span class="line">    <span class="comment">#    proxy_pass   http://127.0.0.1;  //proxy_pass后面指定要访问的url链接，用proxy_pass实现代理。</span></span><br><span class="line">    <span class="comment">#&#125;</span></span><br><span class="line">    <span class="comment"># pass the PHP scripts to FastCGI server listening on 127.0.0.1:9000</span></span><br><span class="line">    <span class="comment">#</span></span><br><span class="line">    <span class="comment">#location ~ \.php$ &#123;</span></span><br><span class="line">    <span class="comment">#    root           html;</span></span><br><span class="line">    <span class="comment">#    fastcgi_pass   127.0.0.1:9000;  //定义FastCGI服务器监听端口与地址，支持两种形式，1 IP:Port， 2 unix:/path/to/sockt</span></span><br><span class="line">    <span class="comment">#    fastcgi_index  index.php;</span></span><br><span class="line">    <span class="comment">#    fastcgi_param  SCRIPT_FILENAME  /scripts$fastcgi_script_name;  //定义SCRIPT_FILENAME变量，后面的路径/scripts为上面的root指定的目录</span></span><br><span class="line">    <span class="comment">#    include        fastcgi_params; //引用prefix/conf/fastcgi_params文件，该文件定义了fastcgi相关的变量</span></span><br><span class="line">    <span class="comment">#&#125;</span></span><br><span class="line">    <span class="comment"># deny access to .htaccess files, if Apache&#x27;s document root</span></span><br><span class="line">    <span class="comment"># concurs with nginx&#x27;s one</span></span><br><span class="line">    <span class="comment"># </span></span><br><span class="line">    <span class="comment">#location ~ /\.ht &#123;   //访问的url中，以/.ht开头的，如，www.example.com/.htaccess，会被拒绝，返回403状态码。</span></span><br><span class="line">    <span class="comment">#    deny  all;  //这里的all指的是所有的请求。</span></span><br><span class="line">    <span class="comment">#&#125;</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+</div></div>
+
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><p><a href="https://www.cnblogs.com/zhoulifeng/p/10236116.html">nginx服务器搭建以及配置</a></p>
+]]></content>
+      <categories>
+        <category>文档</category>
+      </categories>
+      <tags>
+        <tag>linux</tag>
+        <tag>博客</tag>
+        <tag>Nginx</tag>
       </tags>
   </entry>
   <entry>
@@ -1600,6 +1583,28 @@
 
 <h2 id="附录：查询命令"><a href="#附录：查询命令" class="headerlink" title="附录：查询命令"></a>附录：查询命令</h2><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"><span class="comment">#查看结点 在master执行</span></span></span><br><span class="line">kubectl get nodes</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"><span class="comment">#查看集群状态 在master执行</span></span></span><br><span class="line">kubectl get cs</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"> 可能会出现node notready的情况 在master执行</span></span><br><span class="line">kubectl get pod --all-namespaces -o wide</span><br></pre></td></tr></table></figure>
 
+]]></content>
+      <categories>
+        <category>教程</category>
+      </categories>
+      <tags>
+        <tag>linux</tag>
+        <tag>k8s</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>k8s Weave Scope 部署配置</title>
+    <url>/other/k8s%20weave%20scope%20%E5%AE%89%E8%A3%85%E9%85%8D%E7%BD%AE/</url>
+    <content><![CDATA[<h2 id="1-Weave-Scope-安装"><a href="#1-Weave-Scope-安装" class="headerlink" title="1. Weave Scope 安装"></a>1. Weave Scope 安装</h2><p>在 master 上通过以下命令安装Weave Scope：<br>kubectl apply -f “<a href="https://cloud.weave.works/k8s/scope.yaml?k8s-version=$">https://cloud.weave.works/k8s/scope.yaml?k8s-version=$</a>(kubectl version | base64 | tr -d ‘\n’)”<br>运行后会发现已经起来几个pod:</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">[root@k8s-master ~]# kubectl apply -f &quot;https://cloud.weave.works/k8s/scope.yaml?k8s-version=$(kubectl version | base64 | tr -d &#x27;\n&#x27;)&quot;</span><br><span class="line">namespace/weave created</span><br><span class="line">serviceaccount/weave-scope created</span><br><span class="line">clusterrole.rbac.authorization.k8s.io/weave-scope created</span><br><span class="line">clusterrolebinding.rbac.authorization.k8s.io/weave-scope created</span><br><span class="line">deployment.apps/weave-scope-app created</span><br><span class="line">service/weave-scope-app created</span><br><span class="line">deployment.apps/weave-scope-cluster-agent created</span><br><span class="line">daemonset.apps/weave-scope-agent created</span><br><span class="line">[root@k8s-master ~]# kubectl get pod -n weave  -o wide</span><br><span class="line">NAME                                        READY   STATUS    RESTARTS   AGE   IP              NODE         NOMINATED NODE   READINESS GATES</span><br><span class="line">weave-scope-agent-8zzq5                     1/1     Running   0          11s   192.168.1.92    k8s-master   &lt;none&gt;           &lt;none&gt;</span><br><span class="line">weave-scope-agent-jhcff                     1/1     Running   0          11s   192.168.1.85    k8s-node1    &lt;none&gt;           &lt;none&gt;</span><br><span class="line">weave-scope-agent-qs45b                     1/1     Running   0          11s   192.168.1.133   k8s-node2    &lt;none&gt;           &lt;none&gt;</span><br><span class="line">weave-scope-app-848cd4d8b5-4rlnd            1/1     Running   0          11s   10.244.1.4      k8s-node1    &lt;none&gt;           &lt;none&gt;</span><br><span class="line">weave-scope-cluster-agent-b4f45797c-7srs9   1/1     Running   0          11s   10.244.2.4      k8s-node2    &lt;none&gt;           &lt;none&gt;</span><br><span class="line">[root@k8s-master ~]# kubectl get service -n weave -o wide</span><br><span class="line">NAME              TYPE        CLUSTER-IP    EXTERNAL-IP   PORT(S)   AGE   SELECTOR</span><br><span class="line">weave-scope-app   ClusterIP   10.1.31.163   &lt;none&gt;        80/TCP    57s   app=weave-scope,name=weave-scope-app,weave-cloud-component=scope,weave-scope-component=app</span><br></pre></td></tr></table></figure>
+
+<h2 id="2-访问配置"><a href="#2-访问配置" class="headerlink" title="2. 访问配置"></a>2. 访问配置</h2><p><code>k8s-service-type</code>-Kubernetes服务类型（用于以独立模式运行Scope），可以是 <code>LoadBalancer</code>或<code>NodePort</code>，默认情况下未指定（仅内部访问）<br>使用<kbd>kubectl edit</kbd> 方式修改 nodeport 的端口</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"><span class="comment"># 首先 get svc 查看服务</span></span></span><br><span class="line">[root@k8s-master ~]# kubectl get svc --all-namespaces</span><br><span class="line">NAMESPACE     NAME              TYPE        CLUSTER-IP    EXTERNAL-IP   PORT(S)                  AGE</span><br><span class="line">default       kubernetes        ClusterIP   10.1.0.1      &lt;none&gt;        443/TCP                  28h</span><br><span class="line">kube-system   kube-dns          ClusterIP   10.1.0.10     &lt;none&gt;        53/UDP,53/TCP,9153/TCP   28h</span><br><span class="line">weave         weave-scope-app   ClusterIP   10.1.31.163   &lt;none&gt;        80/TCP                   4m4s</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"><span class="comment"># 修改 weave 服务</span></span></span><br><span class="line">[root@k8s-master ~]# kubectl edit svc/weave-scope-app -n weave</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">&gt;</span><span class="bash"><span class="comment">## 以下修改标记</span></span></span><br><span class="line"><span class="meta">&gt;</span><span class="bash">spec:</span></span><br><span class="line"> clusterIP: 10.1.31.163</span><br><span class="line"> ports:</span><br><span class="line"> - name: app</span><br><span class="line">   nodePort: 30001        ## 新增 映射外网访问端口 30000-327627</span><br><span class="line">   port: 80        ## 默认 80 不能修改，修改后无法获取节点信息</span><br><span class="line">   protocol: TCP</span><br><span class="line">   targetPort: 4040</span><br><span class="line"> selector:</span><br><span class="line">   app: weave-scope</span><br><span class="line">   name: weave-scope-app</span><br><span class="line">   weave-cloud-component: scope</span><br><span class="line">   weave-scope-component: app</span><br><span class="line"> sessionAffinity: None</span><br><span class="line"> type: NodePort        ## 修改为 NodePort</span><br><span class="line"><span class="meta">&gt;</span><span class="bash">status:</span></span><br><span class="line"> loadBalancer: &#123;&#125;</span><br></pre></td></tr></table></figure>
+</blockquote>
+<h2 id="3-web-浏览"><a href="#3-web-浏览" class="headerlink" title="3. web 浏览"></a>3. web 浏览</h2><p>在能访问 master 主机网络的主机上浏览器访问 <font color=red>master ip:nodePort</font>，如：<a href="http://192.168.1.86:30001/">http://192.168.1.86:30001/</a></p>
 ]]></content>
       <categories>
         <category>教程</category>
