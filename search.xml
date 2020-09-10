@@ -1495,12 +1495,12 @@
 <blockquote>
 <p>vim /root/nginx/html/index.html</p>
 </blockquote>
-<h2 id="Nginx配置文件注释"><a href="#Nginx配置文件注释" class="headerlink" title="Nginx配置文件注释"></a>Nginx配置文件注释</h2><h3 id="Nginx主配置"><a href="#Nginx主配置" class="headerlink" title="Nginx主配置"></a>Nginx主配置</h3><div><div class="fold_hider"><div class="close hider_title">点击显示/隐藏Nginx主配置文件</div></div><div class="fold">
+<h2 id="Nginx配置文件注释"><a href="#Nginx配置文件注释" class="headerlink" title="Nginx配置文件注释"></a>Nginx配置文件注释</h2><h3 id="Nginx主配置"><a href="#Nginx主配置" class="headerlink" title="Nginx主配置"></a>Nginx主配置</h3><div><div class="fold_hider"><div class="close hider_title">点击显示/隐藏-Nginx主配置文件</div></div><div class="fold">
 <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment">#user  nobody; </span></span><br><span class="line">user    root</span><br><span class="line"><span class="comment">#开启进程数 &lt;=CPU数 </span></span><br><span class="line">worker_processes 1; </span><br><span class="line">  </span><br><span class="line"><span class="comment">#错误日志保存位置 </span></span><br><span class="line"><span class="comment">#error_log logs/error.log; </span></span><br><span class="line"><span class="comment">#error_log logs/error.log notice; </span></span><br><span class="line"><span class="comment">#error_log logs/error.log info; </span></span><br><span class="line">  </span><br><span class="line"><span class="comment">#进程号保存文件 </span></span><br><span class="line"><span class="comment">#pid logs/nginx.pid; </span></span><br><span class="line">  </span><br><span class="line"><span class="comment">#等待事件 </span></span><br><span class="line">events &#123; </span><br><span class="line">  <span class="comment">#每个进程最大连接数（最大连接=连接数x进程数）  </span></span><br><span class="line">  worker_connections 1024; </span><br><span class="line">&#125;</span><br><span class="line"> </span><br><span class="line">http &#123; </span><br><span class="line">  <span class="comment">#文件扩展名与文件类型映射表 </span></span><br><span class="line">  include mime.types;</span><br><span class="line">    </span><br><span class="line">  <span class="comment">#默认文件类型 </span></span><br><span class="line">  default_type application/octet-stream; </span><br><span class="line">    </span><br><span class="line">  <span class="comment">#日志文件输出格式 这个位置相于全局设置 </span></span><br><span class="line">  <span class="comment">#log_format main &#x27;$remote_addr - $remote_user [$time_local] &quot;$request&quot; &#x27; </span></span><br><span class="line">  <span class="comment"># &#x27;$status $body_bytes_sent &quot;$http_referer&quot; &#x27; </span></span><br><span class="line">  <span class="comment"># &#x27;&quot;$http_user_agent&quot; &quot;$http_x_forwarded_for&quot;&#x27;; </span></span><br><span class="line">    </span><br><span class="line">  <span class="comment">#请求日志保存位置 </span></span><br><span class="line">  <span class="comment">#access_log logs/access.log main; </span></span><br><span class="line">    </span><br><span class="line">  <span class="comment">#打开发送文件 </span></span><br><span class="line">  sendfile on; </span><br><span class="line">  <span class="comment">#tcp_nopush on; </span></span><br><span class="line">    </span><br><span class="line">  <span class="comment">#连接超时时间 </span></span><br><span class="line">  <span class="comment">#keepalive_timeout 0; </span></span><br><span class="line">  keepalive_timeout 65; </span><br><span class="line">    </span><br><span class="line">  <span class="comment">#打开gzip压缩 </span></span><br><span class="line">  <span class="comment">#gzip on; </span></span><br><span class="line">    </span><br><span class="line">  <span class="comment">#设定请求缓冲 </span></span><br><span class="line">  client_header_buffer_size 1k; </span><br><span class="line">  large_client_header_buffers 4 4k; </span><br><span class="line">    </span><br><span class="line">  <span class="comment">#设定负载均衡的服务器列表 </span></span><br><span class="line">  upstream tomcat-servers &#123;</span><br><span class="line">    <span class="comment">#weigth参数表示权值，权值越高被分配到的几率越大 </span></span><br><span class="line">    <span class="comment">#max_fails 当有#max_fails个请求失败，就表示后端的服务器不可用，默认为1，将其设置为0可以关闭检查 </span></span><br><span class="line">    <span class="comment">#fail_timeout 在以后的#fail_timeout时间内nginx不会再把请求发往已检查出标记为不可用的服务器 </span></span><br><span class="line">    <span class="comment">#这里指定多个源服务器，ip:端口,80端口的话可写可不写 </span></span><br><span class="line">    server 127.0.0.1:8080 weight=5 max_fails=2 fail_timeout=600s; </span><br><span class="line">    <span class="comment">#server 127.0.0.2:8080 weight=3 max_fails=2 fail_timeout=600s;  </span></span><br><span class="line">  &#125; </span><br><span class="line">    </span><br><span class="line">    include /root/nginx/*conf;    <span class="comment"># 添加自定义的配置文件！！！！</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
 </div></div>
 
-<h3 id="Nginx虚拟主机配置"><a href="#Nginx虚拟主机配置" class="headerlink" title="Nginx虚拟主机配置"></a>Nginx虚拟主机配置</h3><div><div class="fold_hider"><div class="close hider_title">点击显示/隐藏</div></div><div class="fold">
+<h3 id="Nginx虚拟主机配置"><a href="#Nginx虚拟主机配置" class="headerlink" title="Nginx虚拟主机配置"></a>Nginx虚拟主机配置</h3><div><div class="fold_hider"><div class="close hider_title">点击显示/隐藏-Nginx自定义虚拟主机配置</div></div><div class="fold">
 <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">server &#123;</span><br><span class="line">    listen       80;  //监听端口为80，可以自定义其他端口，也可以加上IP地址，如，listen 127.0.0.1:8080;</span><br><span class="line">    server_name  localhost; //定义网站域名，可以写多个，用空格分隔</span><br><span class="line">    <span class="comment">#charset koi8-r; //定义网站的字符集，一般不设置，而是在网页代码中设置</span></span><br><span class="line">    <span class="comment">#access_log  logs/host.access.log  main; //定义访问日志，相当于局部变量 ,可以针对每一个server（即每一个站点）设置它们自己的访问日志</span></span><br><span class="line">    <span class="comment">##在server&#123;&#125;里有很多location配置段</span></span><br><span class="line">    <span class="comment">#对本server&quot;/&quot;启用负载均衡</span></span><br><span class="line">    location / &#123;</span><br><span class="line">        root   html;  //定义网站根目录，目录可以是相对路径也可以是绝对路径</span><br><span class="line">        index  index.html index.htm; <span class="comment">#定义首页索引文件的名称</span></span><br><span class="line">        </span><br><span class="line">        <span class="comment">#以下是一些反向代理的配置可删除. </span></span><br><span class="line">        <span class="comment"># proxy_redirect off;  </span></span><br><span class="line">        <span class="comment"># proxy_set_header Host $host;  </span></span><br><span class="line">        <span class="comment"># proxy_set_header X-Real-IP $remote_addr;  </span></span><br><span class="line">        <span class="comment"># proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;  </span></span><br><span class="line">        <span class="comment"># client_max_body_size 10m; #允许客户端请求的最大单文件字节数  </span></span><br><span class="line">        <span class="comment"># client_body_buffer_size 128k; #缓冲区代理缓冲用户端请求的最大字节数，  </span></span><br><span class="line">        <span class="comment"># proxy_connect_timeout 90; #nginx跟后端服务器连接超时时间(代理连接超时)  </span></span><br><span class="line">        <span class="comment"># proxy_send_timeout 90; #后端服务器数据回传时间(代理发送超时)  </span></span><br><span class="line">        <span class="comment"># proxy_read_timeout 90; #连接成功后，后端服务器响应时间(代理接收超时)  </span></span><br><span class="line">        <span class="comment"># proxy_buffer_size 4k; #设置代理服务器（nginx）保存用户头信息的缓冲区大小  </span></span><br><span class="line">        <span class="comment"># proxy_buffers 4 32k; #proxy_buffers缓冲区，网页平均在32k以下的话，这样设置  </span></span><br><span class="line">        <span class="comment"># proxy_busy_buffers_size 64k; #高负荷下缓冲大小（proxy_buffers*2）  </span></span><br><span class="line">        <span class="comment"># proxy_temp_file_write_size 64k; #设定缓存文件夹大小，大于这个值，将从upstream服务器传 </span></span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">#设定查看Nginx状态的地址  </span></span><br><span class="line">    location /NginxStatus &#123;  </span><br><span class="line">        stub_status on;  </span><br><span class="line">        access_log off;  </span><br><span class="line">        <span class="comment">#allow 192.168.1.88; </span></span><br><span class="line">        <span class="comment">#deny all; </span></span><br><span class="line">        <span class="comment">#auth_basic &quot;NginxStatus&quot;;  </span></span><br><span class="line">        <span class="comment">#auth_basic_user_file conf/htpasswd;  </span></span><br><span class="line">    &#125;</span><br><span class="line">  </span><br><span class="line">    <span class="comment">#error_page  404              /404.html;  //定义404页面</span></span><br><span class="line">    <span class="comment"># redirect server error pages to the static page /50x.html</span></span><br><span class="line">    <span class="comment">#</span></span><br><span class="line">    error_page   500 502 503 504  /50x.html;  //当状态码为500、502、503、504时，则访问50x.html</span><br><span class="line">    location = /50x.html &#123;</span><br><span class="line">        root   html;  //定义50x.html所在路径</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment"># proxy the PHP scripts to Apache listening on 127.0.0.1:80</span></span><br><span class="line">    <span class="comment">#</span></span><br><span class="line">    <span class="comment">#定义访问php脚本时，将会执行本location&#123;&#125;部分指令</span></span><br><span class="line">    <span class="comment">#location ~ \.php$ &#123;</span></span><br><span class="line">    <span class="comment">#    proxy_pass   http://127.0.0.1;  //proxy_pass后面指定要访问的url链接，用proxy_pass实现代理。</span></span><br><span class="line">    <span class="comment">#&#125;</span></span><br><span class="line">    <span class="comment"># pass the PHP scripts to FastCGI server listening on 127.0.0.1:9000</span></span><br><span class="line">    <span class="comment">#</span></span><br><span class="line">    <span class="comment">#location ~ \.php$ &#123;</span></span><br><span class="line">    <span class="comment">#    root           html;</span></span><br><span class="line">    <span class="comment">#    fastcgi_pass   127.0.0.1:9000;  //定义FastCGI服务器监听端口与地址，支持两种形式，1 IP:Port， 2 unix:/path/to/sockt</span></span><br><span class="line">    <span class="comment">#    fastcgi_index  index.php;</span></span><br><span class="line">    <span class="comment">#    fastcgi_param  SCRIPT_FILENAME  /scripts$fastcgi_script_name;  //定义SCRIPT_FILENAME变量，后面的路径/scripts为上面的root指定的目录</span></span><br><span class="line">    <span class="comment">#    include        fastcgi_params; //引用prefix/conf/fastcgi_params文件，该文件定义了fastcgi相关的变量</span></span><br><span class="line">    <span class="comment">#&#125;</span></span><br><span class="line">    <span class="comment"># deny access to .htaccess files, if Apache&#x27;s document root</span></span><br><span class="line">    <span class="comment"># concurs with nginx&#x27;s one</span></span><br><span class="line">    <span class="comment"># </span></span><br><span class="line">    <span class="comment">#location ~ /\.ht &#123;   //访问的url中，以/.ht开头的，如，www.example.com/.htaccess，会被拒绝，返回403状态码。</span></span><br><span class="line">    <span class="comment">#    deny  all;  //这里的all指的是所有的请求。</span></span><br><span class="line">    <span class="comment">#&#125;</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
 </div></div>
@@ -1744,6 +1744,171 @@
         <tag>unp</tag>
         <tag>I/O复用</tag>
         <tag>kernel</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>STL源码剖析-容器-RB-tree</title>
+    <url>/STL/STL%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90-%E5%AE%B9%E5%99%A8-RB-tree/</url>
+    <content><![CDATA[<p><strong>在线演示：</strong><a href="https://www.cs.usfca.edu/~galles/visualization/RedBlack.html">红黑树在线操作演示</a></p>
+<h2 id="红黑树概念"><a href="#红黑树概念" class="headerlink" title="红黑树概念"></a>红黑树概念</h2><p><strong>RB Tree</strong>，全称是Red-Black Tree，又称为“红黑树”。红黑树本质上是一种<strong>二叉查找树</strong>，但它在二叉查找树的基础上额外添加了一个标记（颜色），同时具有一定的规则。这些规则使红黑树保证了一种平衡，插入、删除、查找的最坏时间复杂度都为 <code>O(logn)</code>。</p>
+<h2 id="红黑树的性质-重点"><a href="#红黑树的性质-重点" class="headerlink" title="红黑树的性质(重点)"></a>红黑树的性质(重点)</h2><ol>
+<li>每个节点不是<font color=red><strong>红色</strong></font>就是<strong>黑色</strong></li>
+<li><strong>根结点</strong>永远都是<strong>黑色</strong></li>
+<li>所有<strong>叶节点</strong>都是<strong>黑色</strong>（注意这里说叶子节点其实是上图中的 <code>NIL</code> 节点）</li>
+<li>父子节点不同为<font color=red><strong>红色</strong></font></li>
+<li>从任一节点到其子树中每个叶子节点的r任一路径都包含<strong>相同数量</strong>的<strong>黑色</strong>节点</li>
+</ol>
+<p><strong>注意</strong>：</p>
+<blockquote>
+<p>性质(3)中的叶子节点，是只为空(NIL或null)的节点。</p>
+<p>性质(5)，确保没有一条路径会比其他路径长出俩倍。因而，红黑树是相对是接近平衡的二叉树。</p>
+</blockquote>
+<p><img src="https://i.loli.net/2020/08/10/vfWSnHY2ZmdX3D6.jpg" alt="红黑树.jpg"></p>
+<h2 id="树的旋转操作"><a href="#树的旋转操作" class="headerlink" title="树的旋转操作"></a>树的旋转操作</h2><h3 id="左旋"><a href="#左旋" class="headerlink" title="左旋"></a>左旋</h3><p>简略记忆：<font color=red size=5><strong>“右子变老子”</strong></font>，<strong>左旋中的“左”，意味着“被旋转的节点将变成一个左节点”</strong>。如图所示</p>
+<ol>
+<li>旋转点右孩子的左子树(B)变成旋转点的右子树</li>
+<li>旋转点右孩子顶替旋转点位置</li>
+<li>修改旋转点与右孩子关系</li>
+</ol>
+<img src="https://i.loli.net/2020/09/07/7JhabscBD6kIler.png" alt="左旋.png" style="zoom: 80%;" />
+
+<div><div class="fold_hider"><div class="close hider_title">点击显示/隐藏-左旋代码</div></div><div class="fold">
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment"> * 左旋 右子节点变为父节点（原父节点变为右子节点的左节点）</span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line"><span class="keyword">inline</span> <span class="keyword">void</span> </span><br><span class="line">_Rb_tree_rotate_left(_Rb_tree_node_base* __x, _Rb_tree_node_base*&amp; __root)</span><br><span class="line">&#123;</span><br><span class="line">  _Rb_tree_node_base* __y = __x-&gt;_M_right;</span><br><span class="line">  __x-&gt;_M_right = __y-&gt;_M_left; <span class="comment">// 右子节点</span></span><br><span class="line">    <span class="comment">/* Step 1: right_child 的左子树 B 变成 p 的右子树 */</span></span><br><span class="line">  <span class="keyword">if</span> (__y-&gt;_M_left !=<span class="number">0</span>)</span><br><span class="line">    __y-&gt;_M_left-&gt;_M_parent = __x; <span class="comment">// B 的父节点修改</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">/* Step 2: right_child 顶替 p 的位置 */</span></span><br><span class="line">  __y-&gt;_M_parent = __x-&gt;_M_parent;</span><br><span class="line">  <span class="keyword">if</span> (__x == __root)<span class="comment">// right_child 的父节点修改 </span></span><br><span class="line">    __root = __y;</span><br><span class="line">  <span class="keyword">else</span> <span class="keyword">if</span> (__x == __x-&gt;_M_parent-&gt;_M_left) <span class="comment">// p 为父节点的左孩子</span></span><br><span class="line">    __x-&gt;_M_parent-&gt;_M_left = __y; </span><br><span class="line">  <span class="keyword">else</span>                                     <span class="comment">// p 为父节点的右孩子</span></span><br><span class="line">    __x-&gt;_M_parent-&gt;_M_right = __y;</span><br><span class="line"></span><br><span class="line">  <span class="comment">/* Step 3: 修改 p 和 right_child 关系 */</span></span><br><span class="line">  __y-&gt;_M_left = __x;</span><br><span class="line">  __x-&gt;_M_parent = __y;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+</div></div>
+
+<h3 id="右旋"><a href="#右旋" class="headerlink" title="右旋"></a>右旋</h3><p>简略记忆：<font color=red size=5><strong>“左子变老子”</strong></font>，<strong>右旋中的“右”，意味着“被旋转的节点将变成一个右节点”</strong>。如图所示</p>
+<ol>
+<li>旋转点左孩子的右子树(B)变成旋转点的左子树</li>
+<li>旋转点左孩子顶替旋转点位置</li>
+<li>修改旋转点与右孩子关系</li>
+</ol>
+<img src="https://i.loli.net/2020/09/07/VOxf3ajq8hH7ETd.png" alt="右旋.png" style="zoom: 80%;" />
+
+<div><div class="fold_hider"><div class="close hider_title">点击显示/隐藏-右旋代码</div></div><div class="fold">
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment"> * 右旋 左子节点变为父节点（原父节点变为左孩子的右孩子）</span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line"><span class="keyword">inline</span> <span class="keyword">void</span> </span><br><span class="line">_Rb_tree_rotate_right(_Rb_tree_node_base* __x, _Rb_tree_node_base*&amp; __root)</span><br><span class="line">&#123;</span><br><span class="line">  _Rb_tree_node_base* __y = __x-&gt;_M_left; <span class="comment">// 左孩子</span></span><br><span class="line">  <span class="comment">/* Step 1: left_child 的右子树 B 变成 p 的左子树 */</span></span><br><span class="line">  __x-&gt;_M_left = __y-&gt;_M_right; </span><br><span class="line">  <span class="keyword">if</span> (__y-&gt;_M_right != <span class="number">0</span>)</span><br><span class="line">    __y-&gt;_M_right-&gt;_M_parent = __x; <span class="comment">// B 的父节点修改</span></span><br><span class="line"></span><br><span class="line">  <span class="comment">/* Step 2: left_child 顶替 p 的位置 */</span></span><br><span class="line">  __y-&gt;_M_parent = __x-&gt;_M_parent; <span class="comment">// left_child 的父节点修改</span></span><br><span class="line">  <span class="keyword">if</span> (__x == __root) <span class="comment">// p 为根节点</span></span><br><span class="line">    __root = __y;</span><br><span class="line">  <span class="keyword">else</span> <span class="keyword">if</span> (__x == __x-&gt;_M_parent-&gt;_M_right) <span class="comment">// p 为父节点的左孩子</span></span><br><span class="line">    __x-&gt;_M_parent-&gt;_M_right = __y;</span><br><span class="line">  <span class="keyword">else</span>                                      <span class="comment">// p 为父节点的右孩子</span></span><br><span class="line">    __x-&gt;_M_parent-&gt;_M_left = __y;</span><br><span class="line">   </span><br><span class="line">   <span class="comment">/* Step 3: 修改 p 和 left_child 关系 */</span></span><br><span class="line">  __y-&gt;_M_right = __x;</span><br><span class="line">  __x-&gt;_M_parent = __y;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+</div></div>
+
+<h2 id="STL红黑树插入节点"><a href="#STL红黑树插入节点" class="headerlink" title="STL红黑树插入节点"></a>STL红黑树插入节点</h2><p>红黑树的插入操作主要步骤如下：</p>
+<ul>
+<li>插入节点，和<strong>二叉查找树</strong>一样</li>
+<li>调整结构，保证满足红黑树状态<ul>
+<li>旋转操作</li>
+<li>重新着色（新插入节点初始为<font color=red><strong>红色</strong></font>）</li>
+</ul>
+</li>
+</ul>
+<p><strong>假设：</strong></p>
+<blockquote>
+<p><strong>X</strong>：新节点（默认<font color=red><strong>红色</strong></font>）</p>
+<p><strong>P</strong>：父节点</p>
+<p><strong>S</strong>：伯父节点（父节点的兄弟节点）</p>
+<p><strong>G</strong>：祖父节点</p>
+<p><strong>GG</strong>：曾祖父节点</p>
+</blockquote>
+<table><tr><td bgcolor=yellow><b>强调：只有当父节点P为<font color=red >红色</font>时需要调整树形!!!</b></td></tr></table>
+
+<p><strong>插入节点分为以下情况：</strong></p>
+<ul>
+<li><p><strong>状况1：无父</strong></p>
+<blockquote>
+<p>没有父节点（即插入后为根节点）</p>
+</blockquote>
+<p>直接着色新节点为<strong>黑色</strong>。</p>
+</li>
+<li><p><strong>状况2：父黑</strong></p>
+<blockquote>
+<p>父节点为黑色</p>
+</blockquote>
+<p>不用变色，新节点为<font color=red><strong>红色</strong></font>。</p>
+</li>
+<li><p><strong>状况3：父红，伯黑（或NIL），父子同侧</strong></p>
+</li>
+<li><p><strong>状况4：父红，伯黑（或NIL），父子异侧</strong></p>
+</li>
+<li><p><strong>状况5：父红，伯红</strong></p>
+</li>
+</ul>
+<h3 id="状况3：父红，伯黑（或NIL），父子同侧"><a href="#状况3：父红，伯黑（或NIL），父子同侧" class="headerlink" title="状况3：父红，伯黑（或NIL），父子同侧"></a>状况3：父红，伯黑（或NIL），父子同侧</h3><blockquote>
+<p>父节点是红色，伯父节点也是黑色（或NIL），祖父节点必定是黑色。</p>
+<p>父子节点同侧，即，子节点、父节点、以及祖父节点是直线型。</p>
+</blockquote>
+<ol start="2">
+<li>父节点、祖父节点<strong>变色</strong>（父节点变为黑色，祖父节点变为红色）</li>
+<li>单旋，以<strong>祖父节点</strong>为旋转点<ul>
+<li>父节点在左侧——右旋</li>
+<li>父节点在右侧——左旋</li>
+</ul>
+</li>
+</ol>
+<img src="https://i.loli.net/2020/09/10/nSV3irRho1fXECK.png" alt="红黑树-父红-伯黑_或NIL_-父子同侧.png" />
+
+<h3 id="状况4：父红，伯黑（或NIL），父子异侧"><a href="#状况4：父红，伯黑（或NIL），父子异侧" class="headerlink" title="状况4：父红，伯黑（或NIL），父子异侧"></a>状况4：父红，伯黑（或NIL），父子异侧</h3><blockquote>
+<p>父节点是红色，伯父节点也是黑色（或NIL），祖父节点必定是黑色。</p>
+<p>父子节点异侧，即，子节点、父节点、以及祖父节点是非直线型。</p>
+</blockquote>
+<ol>
+<li>单旋，以父节点为旋转点<ul>
+<li>子节点在左侧——右旋</li>
+<li>子节点在右侧——左旋</li>
+</ul>
+</li>
+<li>把<strong>父节点</strong>作为<strong>“新节点”</strong></li>
+<li>按 <strong>状况3：父红，伯黑（或NIL），父子同侧</strong> 继续处理</li>
+</ol>
+<img src="https://i.loli.net/2020/09/10/WaumZbHoJGAKRU4.png" alt="红黑树-父红-伯黑_或NIL_-父子异侧.png" style="zoom:67%;" />
+
+<h3 id="状况5：父红，伯红"><a href="#状况5：父红，伯红" class="headerlink" title="状况5：父红，伯红"></a>状况5：父红，伯红</h3><blockquote>
+<p>父节点是红色，伯父节点也是红色，祖父节点必定是黑色。</p>
+</blockquote>
+<ol>
+<li><p>变色</p>
+<ul>
+<li>父节点变<strong>黑色</strong></li>
+<li>伯父节点变<strong>黑色</strong></li>
+<li>祖父节点变<font color=red><strong>红色</strong></font></li>
+</ul>
+</li>
+<li><p>把<strong>祖父节点</strong>作为<strong>“新节点”</strong></p>
+</li>
+<li><p>向上继续调整：</p>
+<p>3.1 曾祖父节点为<strong>黑色</strong>，结束</p>
+<p>3.2 当前新节点为<strong>根</strong>，直接设置成<strong>黑色</strong>，结束</p>
+<p>3.3 曾祖父节点为<font color=red><strong>红色</strong></font>，所属状况，继续调整树形</p>
+</li>
+</ol>
+<img src="https://i.loli.net/2020/09/10/Xzra3KJARyQPIWB.png" alt="红黑树-父红-伯红.png" style="zoom:67%;" />
+
+<h3 id="STL红黑树调整平衡源码"><a href="#STL红黑树调整平衡源码" class="headerlink" title="STL红黑树调整平衡源码"></a>STL红黑树调整平衡源码</h3><div><div class="fold_hider"><div class="close hider_title">点击显示/隐藏-STL红黑树调整平衡</div></div><div class="fold">
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="keyword">inline</span> <span class="keyword">void</span> </span><br><span class="line">_Rb_tree_rebalance(_Rb_tree_node_base* __x, _Rb_tree_node_base*&amp; __root)</span><br><span class="line">&#123;</span><br><span class="line">  __x-&gt;_M_color = _S_rb_tree_red; <span class="comment">// 新节点 设置为红</span></span><br><span class="line">  <span class="comment">/* 当前新节点不是根节点，并且其父节点为红色 */</span></span><br><span class="line">  <span class="keyword">while</span> (__x != __root &amp;&amp; __x-&gt;_M_parent-&gt;_M_color == _S_rb_tree_red) &#123;</span><br><span class="line">    <span class="comment">/* 父红，父节点为祖父节点的左孩子 */</span></span><br><span class="line">    <span class="keyword">if</span> (__x-&gt;_M_parent == __x-&gt;_M_parent-&gt;_M_parent-&gt;_M_left) &#123;</span><br><span class="line">      _Rb_tree_node_base* __y = __x-&gt;_M_parent-&gt;_M_parent-&gt;_M_right; <span class="comment">// 伯父节点</span></span><br><span class="line">      <span class="comment">/* 状况5：父(左)红，伯(右)红 */</span></span><br><span class="line">      <span class="keyword">if</span> (__y &amp;&amp; __y-&gt;_M_color == _S_rb_tree_red) &#123; </span><br><span class="line">        __x-&gt;_M_parent-&gt;_M_color = _S_rb_tree_black; <span class="comment">//父变黑</span></span><br><span class="line">        __y-&gt;_M_color = _S_rb_tree_black; <span class="comment">//伯变黑</span></span><br><span class="line">        __x-&gt;_M_parent-&gt;_M_parent-&gt;_M_color = _S_rb_tree_red; <span class="comment">//祖父变红</span></span><br><span class="line">        __x = __x-&gt;_M_parent-&gt;_M_parent; <span class="comment">//设置祖父为 当前新节点</span></span><br><span class="line">      &#125;</span><br><span class="line">      <span class="keyword">else</span> &#123; <span class="comment">// 伯父节点为黑色（或NIL）</span></span><br><span class="line">      <span class="comment">/* 状况4：父(左)红，伯(右)黑(或NIL)，新节点为右子 #附加# */</span></span><br><span class="line">        <span class="keyword">if</span> (__x == __x-&gt;_M_parent-&gt;_M_right) &#123;</span><br><span class="line">          __x = __x-&gt;_M_parent;</span><br><span class="line">          _Rb_tree_rotate_left(__x, __root);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">/* 状况3：父(左)红，伯(右)黑(或NIL)，新节点为左子 */</span></span><br><span class="line">        __x-&gt;_M_parent-&gt;_M_color = _S_rb_tree_black;</span><br><span class="line">        __x-&gt;_M_parent-&gt;_M_parent-&gt;_M_color = _S_rb_tree_red;</span><br><span class="line">        _Rb_tree_rotate_right(__x-&gt;_M_parent-&gt;_M_parent, __root);</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">else</span> &#123;</span><br><span class="line">      _Rb_tree_node_base* __y = __x-&gt;_M_parent-&gt;_M_parent-&gt;_M_left; <span class="comment">// 伯父节点</span></span><br><span class="line">      <span class="comment">/* 状况5：父(右)红，伯(左)红 */</span></span><br><span class="line">      <span class="keyword">if</span> (__y &amp;&amp; __y-&gt;_M_color == _S_rb_tree_red) &#123;</span><br><span class="line">        __x-&gt;_M_parent-&gt;_M_color = _S_rb_tree_black; <span class="comment">//父变黑</span></span><br><span class="line">        __y-&gt;_M_color = _S_rb_tree_black; <span class="comment">//伯父变黑</span></span><br><span class="line">        __x-&gt;_M_parent-&gt;_M_parent-&gt;_M_color = _S_rb_tree_red; <span class="comment">//祖父变红</span></span><br><span class="line">        __x = __x-&gt;_M_parent-&gt;_M_parent; <span class="comment">//祖父为 新节点</span></span><br><span class="line">      &#125;</span><br><span class="line">      <span class="keyword">else</span> &#123;</span><br><span class="line">        <span class="comment">/* 状况4：父(右)红，伯(左)黑(或NIL)，新节点为左子 */</span></span><br><span class="line">        <span class="keyword">if</span> (__x == __x-&gt;_M_parent-&gt;_M_left) &#123;</span><br><span class="line">          __x = __x-&gt;_M_parent;</span><br><span class="line">          _Rb_tree_rotate_right(__x, __root);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">/* 状况3：父(右)红，伯(左)黑(或NIL)，新节点为右子 */</span></span><br><span class="line">        __x-&gt;_M_parent-&gt;_M_color = _S_rb_tree_black;</span><br><span class="line">        __x-&gt;_M_parent-&gt;_M_parent-&gt;_M_color = _S_rb_tree_red;</span><br><span class="line">        _Rb_tree_rotate_left(__x-&gt;_M_parent-&gt;_M_parent, __root);</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">  __root-&gt;_M_color = _S_rb_tree_black; <span class="comment">// 根节点设置为黑色</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+</div></div>
+
+<h2 id="STL红黑树删除节点"><a href="#STL红黑树删除节点" class="headerlink" title="STL红黑树删除节点"></a>STL红黑树删除节点</h2><p>红黑树可以看成是具有特殊性质的二叉查找树，因此红黑树的删除过程可分为两步：</p>
+<ul>
+<li><strong>第一步：二叉树的删除过程</strong></li>
+<li><strong>第二步：红黑树的调整过程</strong></li>
+</ul>
+<h3 id="二叉查找树的删除"><a href="#二叉查找树的删除" class="headerlink" title="二叉查找树的删除"></a>二叉查找树的删除</h3><p>二叉查找树的删除分为以下情况：</p>
+<ol>
+<li>删除节点是叶子节点，直接删除；</li>
+<li>删除节点只有左孩子（或右孩子），孩子节点替代删除节点位置；</li>
+<li>删除节点有两个孩子，选择一个合适的<strong>子孙节点</strong>替代删除节点位置，该节点称为<strong>继承节点</strong>。</li>
+</ol>
+<h3 id="红黑树的调整过程"><a href="#红黑树的调整过程" class="headerlink" title="红黑树的调整过程"></a>红黑树的调整过程</h3><p>按照二叉查找树的规则删除节点后，还需要检查是非满足红黑树的性质。</p>
+<p>根据红黑树的性质，主要是性质4）父子节点不同为<font color=red><strong>红色</strong></font>，性质5）从任一节点到其子树中每个叶子节点的r任一路径都包含<strong>相同数量</strong>的<strong>黑色</strong>节点。</p>
+<p>待补充。。。</p>
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><p><a href="https://blog.csdn.net/u011240877/article/details/53329023">重温数据结构：深入理解红黑树</a> </p>
+<p><a href="https://www.cnblogs.com/skywang12345/p/3245399.html">红黑树(一)之 原理和算法详细介绍</a></p>
+]]></content>
+      <categories>
+        <category>笔记</category>
+        <category>STL</category>
+      </categories>
+      <tags>
+        <tag>C++</tag>
+        <tag>STL</tag>
       </tags>
   </entry>
 </search>
