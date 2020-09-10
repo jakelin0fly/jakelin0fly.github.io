@@ -24,23 +24,21 @@
     var CONFIG = {"hostname":"jakelin.cn","root":"/","scheme":"Gemini","version":"8.0.0-rc.5","exturl":false,"sidebar":{"position":"left","display":"always","padding":18,"offset":12},"copycode":true,"bookmark":{"enable":true,"color":"#222","save":"auto"},"fancybox":true,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"path":"search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}};
   </script>
 
-  <meta name="description" content="STL容器vector与array非常相似，唯一区别在于空间的运用的灵活性。array是静态空间，vector是动态空间。值得注意的是vector是以两倍增长的方式进行自行扩容空间容纳新元素。">
+  <meta name="description" content="《剑指Offer》上的部分题">
 <meta property="og:type" content="article">
-<meta property="og:title" content="STL源码剖析-容器-vector">
-<meta property="og:url" content="http://jakelin.cn/STL/STL%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90-%E5%AE%B9%E5%99%A8-vector/index.html">
+<meta property="og:title" content="剑指Offer刷题记录">
+<meta property="og:url" content="http://jakelin.cn/Algorithm/%E5%89%91%E6%8C%87Offer%E5%88%B7%E9%A2%98%E8%AE%B0%E5%BD%95/index.html">
 <meta property="og:site_name" content="JakeLin&#39;s Blogs">
-<meta property="og:description" content="STL容器vector与array非常相似，唯一区别在于空间的运用的灵活性。array是静态空间，vector是动态空间。值得注意的是vector是以两倍增长的方式进行自行扩容空间容纳新元素。">
+<meta property="og:description" content="《剑指Offer》上的部分题">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="https://i.loli.net/2020/08/07/5KPtrc42gBWpMnz.png">
-<meta property="article:published_time" content="2020-04-09T16:00:00.000Z">
-<meta property="article:modified_time" content="2020-08-07T13:56:07.322Z">
+<meta property="article:published_time" content="2020-09-09T16:00:00.000Z">
+<meta property="article:modified_time" content="2020-09-10T14:19:35.349Z">
 <meta property="article:author" content="jakelin">
 <meta property="article:tag" content="C++">
-<meta property="article:tag" content="STL">
+<meta property="article:tag" content="算法">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://i.loli.net/2020/08/07/5KPtrc42gBWpMnz.png">
 
-<link rel="canonical" href="http://jakelin.cn/STL/STL%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90-%E5%AE%B9%E5%99%A8-vector/">
+<link rel="canonical" href="http://jakelin.cn/Algorithm/%E5%89%91%E6%8C%87Offer%E5%88%B7%E9%A2%98%E8%AE%B0%E5%BD%95/">
 
 
 <script class="page-configurations">
@@ -53,7 +51,7 @@
   };
 </script>
 
-  <title>STL源码剖析-容器-vector | JakeLin's Blogs</title>
+  <title>剑指Offer刷题记录 | JakeLin's Blogs</title>
   
     <script async src="https://www.googletagmanager.com/gtag/js?id=UA-174281095-1"></script>
     <script>
@@ -228,7 +226,7 @@
 
       <!--noindex-->
       <section class="post-toc-wrap sidebar-panel">
-          <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#vector"><span class="nav-number">1.</span> <span class="nav-text">vector</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#vector%E5%8A%A8%E6%80%81%E5%A2%9E%E5%8A%A0%E5%AE%B9%E9%87%8F%E5%8E%9F%E7%90%86-M-insert-aux"><span class="nav-number">2.</span> <span class="nav-text">vector动态增加容量原理_M_insert_aux</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#vector%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C"><span class="nav-number">3.</span> <span class="nav-text">vector基本操作</span></a></li></ol></div>
+          <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#1%EF%BD%9En%E6%95%B4%E6%95%B0%E4%B8%AD1%E5%87%BA%E7%8E%B0%E7%9A%84%E6%AC%A1%E6%95%B0"><span class="nav-number">1.</span> <span class="nav-text">1～n整数中1出现的次数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%91%E6%95%B0"><span class="nav-number">2.</span> <span class="nav-text">丑数</span></a></li></ol></div>
       </section>
       <!--/noindex-->
 
@@ -305,7 +303,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://jakelin.cn/STL/STL%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90-%E5%AE%B9%E5%99%A8-vector/">
+    <link itemprop="mainEntityOfPage" href="http://jakelin.cn/Algorithm/%E5%89%91%E6%8C%87Offer%E5%88%B7%E9%A2%98%E8%AE%B0%E5%BD%95/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="https://i.loli.net/2020/07/31/OZl2JxuSRrweIk5.jpg">
@@ -320,7 +318,7 @@
     
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          STL源码剖析-容器-vector
+          剑指Offer刷题记录
         </h1>
 
         <div class="post-meta">
@@ -330,7 +328,7 @@
                 发表于
               </span>
               <span class="post-meta-item-text">发表于</span>              
-              <time title="创建时间：2020-04-10 00:00:00" itemprop="dateCreated datePublished" datetime="2020-04-10T00:00:00+08:00">2020-04-10</time>
+              <time title="创建时间：2020-09-10 00:00:00" itemprop="dateCreated datePublished" datetime="2020-09-10T00:00:00+08:00">2020-09-10</time>
             </span>
               <span class="post-meta-item">
                 <span class="post-meta-item-icon">
@@ -338,7 +336,7 @@
                   更新于
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2020-08-07 21:56:07" itemprop="dateModified" datetime="2020-08-07T21:56:07+08:00">2020-08-07</time>
+                <time title="修改时间：2020-09-10 22:19:35" itemprop="dateModified" datetime="2020-09-10T22:19:35+08:00">2020-09-10</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -351,12 +349,16 @@
                 </span>
                   ，
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E7%AC%94%E8%AE%B0/STL/" itemprop="url" rel="index"><span itemprop="name">STL</span></a>
+                  <a href="/categories/%E7%AC%94%E8%AE%B0/%E5%88%B7%E9%A2%98/" itemprop="url" rel="index"><span itemprop="name">刷题</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E7%AC%94%E8%AE%B0/%E5%88%B7%E9%A2%98/%E5%89%91%E6%8C%87Offer/" itemprop="url" rel="index"><span itemprop="name">剑指Offer</span></a>
                 </span>
             </span>
 
           
-            <span id="/STL/STL%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90-%E5%AE%B9%E5%99%A8-vector/" class="post-meta-item leancloud_visitors" data-flag-title="STL源码剖析-容器-vector" title="阅读次数">
+            <span id="/Algorithm/%E5%89%91%E6%8C%87Offer%E5%88%B7%E9%A2%98%E8%AE%B0%E5%BD%95/" class="post-meta-item leancloud_visitors" data-flag-title="剑指Offer刷题记录" title="阅读次数">
               <span class="post-meta-item-icon">
                 <i class="fa fa-eye"></i>
                 阅读量:
@@ -372,8 +374,8 @@
       </span>
       <span class="post-meta-item-text">Valine：</span>
     
-    <a title="valine" href="/STL/STL%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90-%E5%AE%B9%E5%99%A8-vector/#valine-comments" itemprop="discussionUrl">
-      <span class="post-comments-count valine-comment-count" data-xid="/STL/STL%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90-%E5%AE%B9%E5%99%A8-vector/" itemprop="commentCount"></span>
+    <a title="valine" href="/Algorithm/%E5%89%91%E6%8C%87Offer%E5%88%B7%E9%A2%98%E8%AE%B0%E5%BD%95/#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/Algorithm/%E5%89%91%E6%8C%87Offer%E5%88%B7%E9%A2%98%E8%AE%B0%E5%BD%95/" itemprop="commentCount"></span>
     </a>
   </span>
   
@@ -383,16 +385,16 @@
                 <i class="far fa-file-word"></i>
                 字数统计 ≈ 
               </span>
-              <span>2.8k</span>
+              <span>1.9k</span>
             </span>
             <span class="post-meta-item" title="阅读时长">
               <span class="post-meta-item-icon">
                 <i class="far fa-clock"></i>
                 阅读时长 ≈ 
               </span>
-              <span>3 分钟</span>
+              <span>2 分钟</span>
             </span>
-            <div class="post-description">STL容器vector与array非常相似，唯一区别在于空间的运用的灵活性。array是静态空间，vector是动态空间。值得注意的是vector是以两倍增长的方式进行自行扩容空间容纳新元素。</div>
+            <div class="post-description">《剑指Offer》上的部分题</div>
 
         </div>
       </header>
@@ -401,58 +403,44 @@
     
     
     <div class="post-body" itemprop="articleBody">
-        <p>vector 常被称为向量容器，因为该容器擅长在<strong>尾部</strong>插入或删除元素，在常量时间内就可以完成，时间复杂度为<code>O(1)</code>；而对于在容器<strong>头部或者中部</strong>插入或删除元素，则花费时间要长一些（移动元素需要耗费时间），时间复杂度为线性阶<code>O(n)</code>。</p>
-<p>vector实现的关键在于其对<strong>大小的控制</strong>以及<strong>重新配置时的数据移动效率</strong>。</p>
-<h2 id="vector"><a href="#vector" class="headerlink" title="vector"></a>vector</h2><ul>
-<li>vector 与 array 唯一区别是空间的运用的灵活性。<ul>
-<li>array 是<strong>静态空间</strong>，一旦配置了就不能改变。</li>
-<li>vector是<strong>动态空间</strong>。</li>
-</ul>
-</li>
-<li>vector 维护的是一个<strong>连续线性空间</strong>，所以不论其元素类型为何，普通指针都可以作为 vector 的迭代器而满足所有必要条件。</li>
-<li>增加新元素时，如果超过当时的容量，则容量会扩大至<strong>两倍</strong>。</li>
-</ul>
-<img src="https://i.loli.net/2020/08/07/5KPtrc42gBWpMnz.png" alt="vector-两倍增长示意图.png" style="zoom:67%;" />
-
-<ul>
-<li><p>所谓动态增加大小，并不是在原空间之后接续新空间(因为无法保证原空间之后尚有可供配置的空间)，而是以原空间的两倍大小另外配置一块较大空间，然后将原内容拷贝过来并插入新元素，释放原空间，最后更新迭代器！！！</p>
-</li>
-<li><p>一旦引起空间重新配置，指向原 vector 的所有迭代器就都失效了。</p>
-</li>
-<li><p><code>at()</code> 函数 比 <code>[]</code> 运算符更加安全, 因为它不会让你去访问到Vector内越界的元素。</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">ifdef</span> __STL_THROW_RANGE_ERRORS</span></span><br><span class="line">  <span class="keyword">void</span> _M_range_check(size_type __n) <span class="keyword">const</span> &#123;</span><br><span class="line">    <span class="keyword">if</span> (__n &gt;= <span class="keyword">this</span>-&gt;<span class="built_in">size</span>())</span><br><span class="line">      __stl_throw_range_error(<span class="string">&quot;vector&quot;</span>);</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="function">reference <span class="title">at</span><span class="params">(size_type __n)</span></span></span><br><span class="line"><span class="function">    </span>&#123; _M_range_check(__n); <span class="keyword">return</span> (*<span class="keyword">this</span>)[__n]; &#125;</span><br><span class="line">  <span class="function">const_reference <span class="title">at</span><span class="params">(size_type __n)</span> <span class="keyword">const</span></span></span><br><span class="line"><span class="function">    </span>&#123; _M_range_check(__n); <span class="keyword">return</span> (*<span class="keyword">this</span>)[__n]; &#125;</span><br><span class="line"><span class="meta">#<span class="meta-keyword">endif</span> <span class="comment">/* __STL_THROW_RANGE_ERRORS */</span></span></span><br></pre></td></tr></table></figure>
-
-</li>
-</ul>
-<h2 id="vector动态增加容量原理-M-insert-aux"><a href="#vector动态增加容量原理-M-insert-aux" class="headerlink" title="vector动态增加容量原理_M_insert_aux"></a>vector动态增加容量原理_M_insert_aux</h2><p><strong>过程分析：</strong></p>
+        <h2 id="1～n整数中1出现的次数"><a href="#1～n整数中1出现的次数" class="headerlink" title="1～n整数中1出现的次数"></a>1～n整数中1出现的次数</h2><p>【题目描述】</p>
 <blockquote>
-<ol>
-<li><p>配置一块更大空间（2倍，初始为0则配置新的空间大小为1）</p>
-</li>
-<li><p>拷贝原数据并插入新元素</p>
-<p>1）拷贝插入位置前的数据</p>
-<p>2）在插入位置插入新元素</p>
-<p>3）拷贝插入位置后的数据</p>
-</li>
-<li><p>释放原空间</p>
-</li>
-<li><p>更新迭代器！！！</p>
-</li>
-</ol>
+<p>输入一个整数 n ，求1～n这n个整数的十进制表示中1出现的次数。</p>
+<p>例如，输入12，1～12这些整数中包含1 的数字有1、10、11和12，1一共出现了5次。</p>
 </blockquote>
-<p>源码参考：</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">template</span> &lt;<span class="class"><span class="keyword">class</span> _<span class="title">Tp</span>, <span class="title">class</span> _<span class="title">Alloc</span>&gt;</span></span><br><span class="line"><span class="class"><span class="title">void</span> </span></span><br><span class="line"><span class="class"><span class="title">vector</span>&lt;_Tp, _Alloc&gt;:</span>:_M_insert_aux(iterator __position, <span class="keyword">const</span> _Tp&amp; __x)</span><br><span class="line">&#123; <span class="comment">/* 判断是否有备用空间 */</span></span><br><span class="line">  <span class="keyword">if</span> (_M_finish != _M_end_of_storage) &#123;</span><br><span class="line">    construct(_M_finish, *(_M_finish - <span class="number">1</span>));</span><br><span class="line">    ++_M_finish;</span><br><span class="line">    _Tp __x_copy = __x;</span><br><span class="line">    copy_backward(__position, _M_finish - <span class="number">2</span>, _M_finish - <span class="number">1</span>);</span><br><span class="line">    *__position = __x_copy;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">else</span> &#123;</span><br><span class="line">    <span class="keyword">const</span> size_type __old_size = <span class="built_in">size</span>();</span><br><span class="line">    <span class="comment">/* 扩容两倍。 注意：初始时为0，扩容后为1 */</span></span><br><span class="line">    <span class="keyword">const</span> size_type __len = __old_size != <span class="number">0</span> ? <span class="number">2</span> * __old_size : <span class="number">1</span>;</span><br><span class="line">    iterator __new_start = _M_allocate(__len); <span class="comment">/*分配新的连续空间*/</span></span><br><span class="line">    iterator __new_finish = __new_start;</span><br><span class="line">    __STL_TRY &#123;</span><br><span class="line">      <span class="comment">/* 拷贝插入位置前的数据到新空间 [old_start, position) --&gt; [new_start, position) */</span></span><br><span class="line">      __new_finish = uninitialized_copy(_M_start, __position, __new_start);</span><br><span class="line">      <span class="comment">/* 插入新元素 position */</span></span><br><span class="line">      construct(__new_finish, __x);</span><br><span class="line">      ++__new_finish;</span><br><span class="line">      <span class="comment">/* 拷贝插入位置后的数据到新空间 [position, finish) -- [position+1, new_finish) */</span></span><br><span class="line">      __new_finish = uninitialized_copy(__position, _M_finish, __new_finish);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">/* 释放原空间 */</span></span><br><span class="line">    __STL_UNWIND((destroy(__new_start,__new_finish), </span><br><span class="line">                  _M_deallocate(__new_start,__len)));</span><br><span class="line">    destroy(<span class="built_in">begin</span>(), <span class="built_in">end</span>());</span><br><span class="line">    _M_deallocate(_M_start, _M_end_of_storage - _M_start);</span><br><span class="line">    <span class="comment">/* 更新迭代器 */</span></span><br><span class="line">    _M_start = __new_start;</span><br><span class="line">    _M_finish = __new_finish;</span><br><span class="line">    _M_end_of_storage = __new_start + __len;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><a target="_blank" rel="noopener" href="https://leetcode-cn.com/problems/1nzheng-shu-zhong-1chu-xian-de-ci-shu-lcof"> leetcode</a>  、 <a target="_blank" rel="noopener" href="https://www.nowcoder.com/practice/bd7f978302044eee894445e244c7eee6?tpId=13&&tqId=11184&rp=1&ru=/ta/coding-interviews&qru=/ta/coding-interviews/question-ranking">牛客</a></p>
+<p>暴力解法：对于区间内的每个数的每一位进行判断。显然不太友好。</p>
+<p><strong>有意思的解法</strong>（<a target="_blank" rel="noopener" href="https://blog.csdn.net/yi_Afly/article/details/52012593">参考链接</a>）：</p>
+<p>考虑将n的十进制的每一位单独拿出讨论，给定一个n，其最后一位（个位）记为<code>last_bit</code>。<code>last_bit</code>从0到9记为一个周期。一个周期中1出现的次数为1次。</p>
+<p>从1到n，总共有<strong>round = n/10</strong>个完整的周期。再看<code>last_bit</code>值，当值大于0时，1又出现了一次。</p>
+<p> [1, n]中个位出现1的次数 = round + (last_bit &gt; 0)?1 : 0</p>
+<blockquote>
+<p>将n的各个位分为两类：个位与其它位。</p>
+<p>对个位来说：</p>
+<ul>
+<li>若个位大于0，1出现的次数为<code>round*1+1</code></li>
+<li>若个位等于0，1出现的次数为<code>round*1</code></li>
+</ul>
+<p>对其它位来说，记每一位的权值为base，位值为weight，该位之前的数是former，则：</p>
+<ul>
+<li>若weight为0，则1出现次数为<code>round*base</code></li>
+<li>若weight为1，则1出现次数为<code>round*base+former+1</code></li>
+<li>若weight大于1，则1出现次数为<code>rount*base+base</code></li>
+</ul>
+</blockquote>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">NumberOf1Between1AndN_Solution</span><span class="params">(<span class="keyword">int</span> n)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">long</span> count = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">int</span> last_bit, round;</span><br><span class="line">    <span class="keyword">long</span> base; <span class="comment">// 防止溢出</span></span><br><span class="line">    round = n;</span><br><span class="line">    base = <span class="number">1</span>;</span><br><span class="line">    <span class="keyword">while</span>(round)&#123;</span><br><span class="line">        last_bit = round % <span class="number">10</span>; <span class="comment">//round 最后数值</span></span><br><span class="line">        round = round / <span class="number">10</span>;  <span class="comment">// round 最后数值从 0~9 有多少个完整的周期</span></span><br><span class="line">        <span class="keyword">if</span>(<span class="number">0</span> == last_bit)</span><br><span class="line">            count += round * base;</span><br><span class="line">        <span class="keyword">else</span> <span class="keyword">if</span>(<span class="number">1</span> == last_bit)</span><br><span class="line">            count += round * base + n % base + <span class="number">1</span>;</span><br><span class="line">        <span class="keyword">else</span></span><br><span class="line">            count += round * base + base;</span><br><span class="line">        base *= <span class="number">10</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> count;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
-<h2 id="vector基本操作"><a href="#vector基本操作" class="headerlink" title="vector基本操作"></a>vector基本操作</h2><p><code>push_back()</code>：插入操作(末尾)</p>
-<p><code>pop_back()</code>：删除操作(末尾)</p>
-<p><code>erase()</code>：清除某范围 <code>[first, last)</code> 元素，或删除某个位置上的元素</p>
-<p><code>insert()</code>：从某个位置，插入 n 个元素，元素初值为x</p>
-<p><code>clear()</code>：清除所有元素</p>
-<p><code>begin()</code>：返回第一个元素的迭代器</p>
-<p><code>end()</code>：返回最末元素的迭代器(译注:实指向最末元素的下一个位置)</p>
-<p>注意：</p>
-<p><code>reserve(size_type __n)</code>：配置vector容量为<code>__n</code>，如果 vector 的容量已经大于或等于<code>__n</code>个元素，那么什么也不做；调用 reserve() 不会影响已存储的元素，也不会生成任何元素。</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">vector</span>&lt;_Tp, _Alloc&gt;&amp; <span class="keyword">operator</span>=(<span class="keyword">const</span> <span class="built_in">vector</span>&lt;_Tp, _Alloc&gt;&amp; __x);</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">reserve</span><span class="params">(size_type __n)</span> </span>&#123;</span><br><span class="line">  <span class="keyword">if</span> (capacity() &lt; __n) &#123;</span><br><span class="line">    <span class="keyword">const</span> size_type __old_size = <span class="built_in">size</span>();</span><br><span class="line">    iterator __tmp = _M_allocate_and_copy(__n, _M_start, _M_finish);</span><br><span class="line">    destroy(_M_start, _M_finish);</span><br><span class="line">    _M_deallocate(_M_start, _M_end_of_storage - _M_start);</span><br><span class="line">    _M_start = __tmp;</span><br><span class="line">    _M_finish = __tmp + __old_size;</span><br><span class="line">    _M_end_of_storage = _M_start + __n;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="丑数"><a href="#丑数" class="headerlink" title="丑数"></a>丑数</h2><p>【题目描述】</p>
+<blockquote>
+<p>把只包含质因子2、3和5的数称作丑数（Ugly Number）。例如6、8都是丑数，但14不是，因为它包含质因子7。 习惯上我们把1当做是第一个丑数。求按从小到大的顺序的第N个丑数。</p>
+</blockquote>
+<p><a target="_blank" rel="noopener" href="https://leetcode-cn.com/problems/chou-shu-lcof/"> leetcode</a>  、 <a target="_blank" rel="noopener" href="https://www.nowcoder.com/practice/6aa9e04fc3794f68acf8778237ba065b?tpId=13&&tqId=11186&rp=1&ru=/ta/coding-interviews&qru=/ta/coding-interviews/question-ranking">牛客</a></p>
+<p><strong>判断丑数的方法</strong>：首先除2，直到不能整除为止，然后除5到不能整除为止，然后除3直到不能整除为止。最终判断剩余的数字是否为1，如果是1则为丑数，否则不是丑数。</p>
+<p><strong>查找第N大的丑数</strong>：根据丑数的性质，仅含有2、3、5质因子，除1以外，后面的某个丑数一定是前面某个丑数乘以2或3或5的结果。因此可以以空间换时间，维护一个从小到大的丑数列表。</p>
+<p><strong><em>疑问：使用空间存储备选的三个丑数，感觉是减少了计算次数，但是LeetCode上提交的时间效率居然更低？？？</em></strong></p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">nthUglyNumber</span><span class="params">(<span class="keyword">int</span> n)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span>(n &lt; <span class="number">1</span>)</span><br><span class="line">            <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">        <span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; ugly_number_list;</span><br><span class="line">        <span class="keyword">int</span> mult_2_index, mult_3_index, mult_5_index; <span class="comment">// 当前乘2、3、5的丑数列表中值的下标</span></span><br><span class="line">        ugly_number_list.push_back(<span class="number">1</span>);</span><br><span class="line">        mult_2_index = mult_3_index = mult_5_index = <span class="number">0</span>;</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">while</span>(--n)&#123;</span><br><span class="line">            <span class="keyword">int</span> min_num = min(ugly_number_list[mult_2_index]*<span class="number">2</span>,</span><br><span class="line">                 min(ugly_number_list[mult_3_index]*<span class="number">3</span>, ugly_number_list[mult_5_index]*<span class="number">5</span>));</span><br><span class="line">            ugly_number_list.push_back(min_num); <span class="comment">// 第 k 大丑数</span></span><br><span class="line">            <span class="keyword">if</span>(min_num == ugly_number_list[mult_2_index]*<span class="number">2</span>)&#123;</span><br><span class="line">                ++mult_2_index;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">if</span>(min_num == ugly_number_list[mult_3_index]*<span class="number">3</span>)&#123;</span><br><span class="line">                ++mult_3_index;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">if</span>(min_num == ugly_number_list[mult_5_index]*<span class="number">5</span>)&#123;</span><br><span class="line">                ++mult_5_index;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> ugly_number_list.back();</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+
+
 
 
     </div>
@@ -503,7 +491,7 @@
   </li>
   <li class="post-copyright-link">
     <strong>本文链接：</strong>
-    <a href="http://jakelin.cn/STL/STL%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90-%E5%AE%B9%E5%99%A8-vector/" title="STL源码剖析-容器-vector">http://jakelin.cn/STL/STL源码剖析-容器-vector/</a>
+    <a href="http://jakelin.cn/Algorithm/%E5%89%91%E6%8C%87Offer%E5%88%B7%E9%A2%98%E8%AE%B0%E5%BD%95/" title="剑指Offer刷题记录">http://jakelin.cn/Algorithm/剑指Offer刷题记录/</a>
   </li>
   <li class="post-copyright-license">
     <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
@@ -515,7 +503,7 @@
       <footer class="post-footer">
           <div class="post-tags">
               <a href="/tags/C/" rel="tag"><i class="fa fa-tag"></i> C++</a>
-              <a href="/tags/STL/" rel="tag"><i class="fa fa-tag"></i> STL</a>
+              <a href="/tags/%E7%AE%97%E6%B3%95/" rel="tag"><i class="fa fa-tag"></i> 算法</a>
           </div>
 
         
@@ -524,13 +512,10 @@
         
     <div class="post-nav">
       <div class="post-nav-item">
-    <a href="/STL/STL%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90-%E8%BF%AD%E4%BB%A3%E5%99%A8-iterators/" rel="prev" title="STL源码剖析-迭代器-iterators">
-      <i class="fa fa-chevron-left"></i> STL源码剖析-迭代器-iterators
+    <a href="/STL/STL%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90-%E5%AE%B9%E5%99%A8-RB-tree/" rel="prev" title="STL源码剖析-容器-RB-tree">
+      <i class="fa fa-chevron-left"></i> STL源码剖析-容器-RB-tree
     </a></div>
-      <div class="post-nav-item">
-    <a href="/STL/STL%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90-%E5%AE%B9%E5%99%A8-deque/" rel="next" title="STL源码剖析-容器-deque">
-      STL源码剖析-容器-deque <i class="fa fa-chevron-right"></i>
-    </a></div>
+      <div class="post-nav-item"></div>
     </div>
       </footer>
     

@@ -2,6 +2,13 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>http://jakelin.cn/Algorithm/%E5%89%91%E6%8C%87Offer%E5%88%B7%E9%A2%98%E8%AE%B0%E5%BD%95/</loc>
+    
+    <lastmod>2020-09-10</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>http://jakelin.cn/STL/STL%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90-%E5%AE%B9%E5%99%A8-RB-tree/</loc>
     
     <lastmod>2020-09-10</lastmod>
@@ -325,6 +332,13 @@
     <priority>0.6</priority>
   </url>
   
+  <url>
+    <loc>http://jakelin.cn/tags/%E7%AE%97%E6%B3%95/</loc>
+    <lastmod>2020-09-10</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
 
   
   <url>
@@ -364,6 +378,20 @@
   
   <url>
     <loc>http://jakelin.cn/categories/%E7%AC%94%E8%AE%B0/unp/</loc>
+    <lastmod>2020-09-10</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>http://jakelin.cn/categories/%E7%AC%94%E8%AE%B0/%E5%88%B7%E9%A2%98/</loc>
+    <lastmod>2020-09-10</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>http://jakelin.cn/categories/%E7%AC%94%E8%AE%B0/%E5%88%B7%E9%A2%98/%E5%89%91%E6%8C%87Offer/</loc>
     <lastmod>2020-09-10</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
