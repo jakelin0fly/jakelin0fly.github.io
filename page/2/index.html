@@ -236,18 +236,18 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
           <a href="/archives">
-          <span class="site-state-item-count">27</span>
+          <span class="site-state-item-count">30</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
-        <span class="site-state-item-count">10</span>
+        <span class="site-state-item-count">12</span>
         <span class="site-state-item-name">分类</span></a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
-        <span class="site-state-item-count">19</span>
+        <span class="site-state-item-count">20</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
@@ -293,6 +293,375 @@
 
         <div class="content index posts-expand">
           
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://jakelin.cn/UNP/select%E5%87%BD%E6%95%B0-linux%E5%86%85%E6%A0%B8%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://i.loli.net/2020/07/31/OZl2JxuSRrweIk5.jpg">
+      <meta itemprop="name" content="jakelin">
+      <meta itemprop="description" content="一个记录、分享学习的地方">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="JakeLin's Blogs">
+    </span>
+
+    
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/UNP/select%E5%87%BD%E6%95%B0-linux%E5%86%85%E6%A0%B8%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/" class="post-title-link" itemprop="url">select函数-linux内核源码剖析</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+                发表于
+              </span>
+              <span class="post-meta-item-text">发表于</span>              
+              <time title="创建时间：2020-08-07 00:00:00" itemprop="dateCreated datePublished" datetime="2020-08-07T00:00:00+08:00">2020-08-07</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                  更新于
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-08-12 16:54:18" itemprop="dateModified" datetime="2020-08-12T16:54:18+08:00">2020-08-12</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+                分类于
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E7%AC%94%E8%AE%B0/" itemprop="url" rel="index"><span itemprop="name">笔记</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E7%AC%94%E8%AE%B0/unp/" itemprop="url" rel="index"><span itemprop="name">unp</span></a>
+                </span>
+            </span>
+
+          
+            <span id="/UNP/select%E5%87%BD%E6%95%B0-linux%E5%86%85%E6%A0%B8%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/" class="post-meta-item leancloud_visitors" data-flag-title="select函数-linux内核源码剖析" title="阅读次数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+                阅读量:
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span class="leancloud-visitors-count"></span>
+            </span>
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Valine：</span>
+    
+    <a title="valine" href="/UNP/select%E5%87%BD%E6%95%B0-linux%E5%86%85%E6%A0%B8%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/UNP/select%E5%87%BD%E6%95%B0-linux%E5%86%85%E6%A0%B8%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+                字数统计 ≈ 
+              </span>
+              <span>10k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+                阅读时长 ≈ 
+              </span>
+              <span>9 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <p>前两天与师兄讨论到I/O复用，I/O复用在UNIX网络编程中，提供了三个系统调用，分别是select、poll、epoll。对于这三个系统调用的使用我已有coding，但是追其原理还有点捋不完整，这一篇博客记录通过源码阅读剖析select底层实现。</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/UNP/select%E5%87%BD%E6%95%B0-linux%E5%86%85%E6%A0%B8%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://jakelin.cn/APUE/%E7%B3%BB%E7%BB%9FIO%E5%87%BD%E6%95%B0%E4%B8%8EC%E6%A0%87%E5%87%86%E5%BA%93%E5%87%BD%E6%95%B0/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://i.loli.net/2020/07/31/OZl2JxuSRrweIk5.jpg">
+      <meta itemprop="name" content="jakelin">
+      <meta itemprop="description" content="一个记录、分享学习的地方">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="JakeLin's Blogs">
+    </span>
+
+    
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/APUE/%E7%B3%BB%E7%BB%9FIO%E5%87%BD%E6%95%B0%E4%B8%8EC%E6%A0%87%E5%87%86%E5%BA%93%E5%87%BD%E6%95%B0/" class="post-title-link" itemprop="url">系统I/O函数与C标准库函数</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+                发表于
+              </span>
+              <span class="post-meta-item-text">发表于</span>              
+              <time title="创建时间：2020-08-06 00:00:00" itemprop="dateCreated datePublished" datetime="2020-08-06T00:00:00+08:00">2020-08-06</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                  更新于
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-08-06 10:29:46" itemprop="dateModified" datetime="2020-08-06T10:29:46+08:00">2020-08-06</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+                分类于
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E7%AC%94%E8%AE%B0/" itemprop="url" rel="index"><span itemprop="name">笔记</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E7%AC%94%E8%AE%B0/apue/" itemprop="url" rel="index"><span itemprop="name">apue</span></a>
+                </span>
+            </span>
+
+          
+            <span id="/APUE/%E7%B3%BB%E7%BB%9FIO%E5%87%BD%E6%95%B0%E4%B8%8EC%E6%A0%87%E5%87%86%E5%BA%93%E5%87%BD%E6%95%B0/" class="post-meta-item leancloud_visitors" data-flag-title="系统I/O函数与C标准库函数" title="阅读次数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+                阅读量:
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span class="leancloud-visitors-count"></span>
+            </span>
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Valine：</span>
+    
+    <a title="valine" href="/APUE/%E7%B3%BB%E7%BB%9FIO%E5%87%BD%E6%95%B0%E4%B8%8EC%E6%A0%87%E5%87%86%E5%BA%93%E5%87%BD%E6%95%B0/#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/APUE/%E7%B3%BB%E7%BB%9FIO%E5%87%BD%E6%95%B0%E4%B8%8EC%E6%A0%87%E5%87%86%E5%BA%93%E5%87%BD%E6%95%B0/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+                字数统计 ≈ 
+              </span>
+              <span>633</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+                阅读时长 ≈ 
+              </span>
+              <span>1 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <p>系统I/O函数（read、write）与C标准库函数的关系及差异，有待补充</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/APUE/%E7%B3%BB%E7%BB%9FIO%E5%87%BD%E6%95%B0%E4%B8%8EC%E6%A0%87%E5%87%86%E5%BA%93%E5%87%BD%E6%95%B0/">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://jakelin.cn/APUE/Linux%E8%BF%9B%E7%A8%8B%E5%9C%B0%E5%9D%80%E7%A9%BA%E9%97%B4%EF%BC%88%E7%A8%8B%E5%BA%8F%E5%86%85%E5%AD%98%E5%B8%83%E5%B1%80%EF%BC%89/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://i.loli.net/2020/07/31/OZl2JxuSRrweIk5.jpg">
+      <meta itemprop="name" content="jakelin">
+      <meta itemprop="description" content="一个记录、分享学习的地方">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="JakeLin's Blogs">
+    </span>
+
+    
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/APUE/Linux%E8%BF%9B%E7%A8%8B%E5%9C%B0%E5%9D%80%E7%A9%BA%E9%97%B4%EF%BC%88%E7%A8%8B%E5%BA%8F%E5%86%85%E5%AD%98%E5%B8%83%E5%B1%80%EF%BC%89/" class="post-title-link" itemprop="url">Linux进程地址空间（程序内存布局）</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+                发表于
+              </span>
+              <span class="post-meta-item-text">发表于</span>              
+              <time title="创建时间：2020-08-05 00:00:00" itemprop="dateCreated datePublished" datetime="2020-08-05T00:00:00+08:00">2020-08-05</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                  更新于
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-08-06 10:30:13" itemprop="dateModified" datetime="2020-08-06T10:30:13+08:00">2020-08-06</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+                分类于
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E7%AC%94%E8%AE%B0/" itemprop="url" rel="index"><span itemprop="name">笔记</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E7%AC%94%E8%AE%B0/apue/" itemprop="url" rel="index"><span itemprop="name">apue</span></a>
+                </span>
+            </span>
+
+          
+            <span id="/APUE/Linux%E8%BF%9B%E7%A8%8B%E5%9C%B0%E5%9D%80%E7%A9%BA%E9%97%B4%EF%BC%88%E7%A8%8B%E5%BA%8F%E5%86%85%E5%AD%98%E5%B8%83%E5%B1%80%EF%BC%89/" class="post-meta-item leancloud_visitors" data-flag-title="Linux进程地址空间（程序内存布局）" title="阅读次数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+                阅读量:
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span class="leancloud-visitors-count"></span>
+            </span>
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Valine：</span>
+    
+    <a title="valine" href="/APUE/Linux%E8%BF%9B%E7%A8%8B%E5%9C%B0%E5%9D%80%E7%A9%BA%E9%97%B4%EF%BC%88%E7%A8%8B%E5%BA%8F%E5%86%85%E5%AD%98%E5%B8%83%E5%B1%80%EF%BC%89/#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/APUE/Linux%E8%BF%9B%E7%A8%8B%E5%9C%B0%E5%9D%80%E7%A9%BA%E9%97%B4%EF%BC%88%E7%A8%8B%E5%BA%8F%E5%86%85%E5%AD%98%E5%B8%83%E5%B1%80%EF%BC%89/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+                字数统计 ≈ 
+              </span>
+              <span>1.1k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+                阅读时长 ≈ 
+              </span>
+              <span>1 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <p>Linux进程内存地址空间分布，记录各部分所存储的数据，4G的地址空间为虚拟地址，最大支持地址空间大小</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/APUE/Linux%E8%BF%9B%E7%A8%8B%E5%9C%B0%E5%9D%80%E7%A9%BA%E9%97%B4%EF%BC%88%E7%A8%8B%E5%BA%8F%E5%86%85%E5%AD%98%E5%B8%83%E5%B1%80%EF%BC%89/">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
       
   
   
@@ -1126,375 +1495,6 @@
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://jakelin.cn/STL/STL%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90-%E5%AE%B9%E5%99%A8-slist/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="https://i.loli.net/2020/07/31/OZl2JxuSRrweIk5.jpg">
-      <meta itemprop="name" content="jakelin">
-      <meta itemprop="description" content="一个记录、分享学习的地方">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="JakeLin's Blogs">
-    </span>
-
-    
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/STL/STL%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90-%E5%AE%B9%E5%99%A8-slist/" class="post-title-link" itemprop="url">STL源码剖析-容器-slist</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-                发表于
-              </span>
-              <span class="post-meta-item-text">发表于</span>              
-              <time title="创建时间：2020-04-12 00:00:00" itemprop="dateCreated datePublished" datetime="2020-04-12T00:00:00+08:00">2020-04-12</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                  更新于
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2020-08-10 19:44:34" itemprop="dateModified" datetime="2020-08-10T19:44:34+08:00">2020-08-10</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-                分类于
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E7%AC%94%E8%AE%B0/" itemprop="url" rel="index"><span itemprop="name">笔记</span></a>
-                </span>
-                  ，
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E7%AC%94%E8%AE%B0/STL/" itemprop="url" rel="index"><span itemprop="name">STL</span></a>
-                </span>
-            </span>
-
-          
-            <span id="/STL/STL%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90-%E5%AE%B9%E5%99%A8-slist/" class="post-meta-item leancloud_visitors" data-flag-title="STL源码剖析-容器-slist" title="阅读次数">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-eye"></i>
-                阅读量:
-              </span>
-              <span class="post-meta-item-text">阅读次数：</span>
-              <span class="leancloud-visitors-count"></span>
-            </span>
-  
-  <span class="post-meta-item">
-    
-      <span class="post-meta-item-icon">
-        <i class="far fa-comment"></i>
-      </span>
-      <span class="post-meta-item-text">Valine：</span>
-    
-    <a title="valine" href="/STL/STL%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90-%E5%AE%B9%E5%99%A8-slist/#valine-comments" itemprop="discussionUrl">
-      <span class="post-comments-count valine-comment-count" data-xid="/STL/STL%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90-%E5%AE%B9%E5%99%A8-slist/" itemprop="commentCount"></span>
-    </a>
-  </span>
-  
-  <br>
-            <span class="post-meta-item" title="本文字数">
-              <span class="post-meta-item-icon">
-                <i class="far fa-file-word"></i>
-                字数统计 ≈ 
-              </span>
-              <span>454</span>
-            </span>
-            <span class="post-meta-item" title="阅读时长">
-              <span class="post-meta-item-icon">
-                <i class="far fa-clock"></i>
-                阅读时长 ≈ 
-              </span>
-              <span>1 分钟</span>
-            </span>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <p>slist也就是single linked list（单向链表）。</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/STL/STL%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90-%E5%AE%B9%E5%99%A8-slist/">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://jakelin.cn/STL/STL%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90-%E5%AE%B9%E5%99%A8-deque/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="https://i.loli.net/2020/07/31/OZl2JxuSRrweIk5.jpg">
-      <meta itemprop="name" content="jakelin">
-      <meta itemprop="description" content="一个记录、分享学习的地方">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="JakeLin's Blogs">
-    </span>
-
-    
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/STL/STL%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90-%E5%AE%B9%E5%99%A8-deque/" class="post-title-link" itemprop="url">STL源码剖析-容器-deque</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-                发表于
-              </span>
-              <span class="post-meta-item-text">发表于</span>              
-              <time title="创建时间：2020-04-11 00:00:00" itemprop="dateCreated datePublished" datetime="2020-04-11T00:00:00+08:00">2020-04-11</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                  更新于
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2020-08-08 13:03:07" itemprop="dateModified" datetime="2020-08-08T13:03:07+08:00">2020-08-08</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-                分类于
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E7%AC%94%E8%AE%B0/" itemprop="url" rel="index"><span itemprop="name">笔记</span></a>
-                </span>
-                  ，
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E7%AC%94%E8%AE%B0/STL/" itemprop="url" rel="index"><span itemprop="name">STL</span></a>
-                </span>
-            </span>
-
-          
-            <span id="/STL/STL%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90-%E5%AE%B9%E5%99%A8-deque/" class="post-meta-item leancloud_visitors" data-flag-title="STL源码剖析-容器-deque" title="阅读次数">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-eye"></i>
-                阅读量:
-              </span>
-              <span class="post-meta-item-text">阅读次数：</span>
-              <span class="leancloud-visitors-count"></span>
-            </span>
-  
-  <span class="post-meta-item">
-    
-      <span class="post-meta-item-icon">
-        <i class="far fa-comment"></i>
-      </span>
-      <span class="post-meta-item-text">Valine：</span>
-    
-    <a title="valine" href="/STL/STL%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90-%E5%AE%B9%E5%99%A8-deque/#valine-comments" itemprop="discussionUrl">
-      <span class="post-comments-count valine-comment-count" data-xid="/STL/STL%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90-%E5%AE%B9%E5%99%A8-deque/" itemprop="commentCount"></span>
-    </a>
-  </span>
-  
-  <br>
-            <span class="post-meta-item" title="本文字数">
-              <span class="post-meta-item-icon">
-                <i class="far fa-file-word"></i>
-                字数统计 ≈ 
-              </span>
-              <span>2.8k</span>
-            </span>
-            <span class="post-meta-item" title="阅读时长">
-              <span class="post-meta-item-icon">
-                <i class="far fa-clock"></i>
-                阅读时长 ≈ 
-              </span>
-              <span>3 分钟</span>
-            </span>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <p>STL容器deque是一种双向开口的连续线性空间。双向开口，即可以在头尾两端进行插入和删除。deque是动态的以分段连续空间组合而成，维护整体连续的假象，提供随机存取接口。</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/STL/STL%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90-%E5%AE%B9%E5%99%A8-deque/">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://jakelin.cn/STL/STL%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90-%E5%AE%B9%E5%99%A8-vector/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="https://i.loli.net/2020/07/31/OZl2JxuSRrweIk5.jpg">
-      <meta itemprop="name" content="jakelin">
-      <meta itemprop="description" content="一个记录、分享学习的地方">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="JakeLin's Blogs">
-    </span>
-
-    
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/STL/STL%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90-%E5%AE%B9%E5%99%A8-vector/" class="post-title-link" itemprop="url">STL源码剖析-容器-vector</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-                发表于
-              </span>
-              <span class="post-meta-item-text">发表于</span>              
-              <time title="创建时间：2020-04-10 00:00:00" itemprop="dateCreated datePublished" datetime="2020-04-10T00:00:00+08:00">2020-04-10</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                  更新于
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2020-08-07 21:56:07" itemprop="dateModified" datetime="2020-08-07T21:56:07+08:00">2020-08-07</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-                分类于
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E7%AC%94%E8%AE%B0/" itemprop="url" rel="index"><span itemprop="name">笔记</span></a>
-                </span>
-                  ，
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E7%AC%94%E8%AE%B0/STL/" itemprop="url" rel="index"><span itemprop="name">STL</span></a>
-                </span>
-            </span>
-
-          
-            <span id="/STL/STL%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90-%E5%AE%B9%E5%99%A8-vector/" class="post-meta-item leancloud_visitors" data-flag-title="STL源码剖析-容器-vector" title="阅读次数">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-eye"></i>
-                阅读量:
-              </span>
-              <span class="post-meta-item-text">阅读次数：</span>
-              <span class="leancloud-visitors-count"></span>
-            </span>
-  
-  <span class="post-meta-item">
-    
-      <span class="post-meta-item-icon">
-        <i class="far fa-comment"></i>
-      </span>
-      <span class="post-meta-item-text">Valine：</span>
-    
-    <a title="valine" href="/STL/STL%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90-%E5%AE%B9%E5%99%A8-vector/#valine-comments" itemprop="discussionUrl">
-      <span class="post-comments-count valine-comment-count" data-xid="/STL/STL%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90-%E5%AE%B9%E5%99%A8-vector/" itemprop="commentCount"></span>
-    </a>
-  </span>
-  
-  <br>
-            <span class="post-meta-item" title="本文字数">
-              <span class="post-meta-item-icon">
-                <i class="far fa-file-word"></i>
-                字数统计 ≈ 
-              </span>
-              <span>2.8k</span>
-            </span>
-            <span class="post-meta-item" title="阅读时长">
-              <span class="post-meta-item-icon">
-                <i class="far fa-clock"></i>
-                阅读时长 ≈ 
-              </span>
-              <span>3 分钟</span>
-            </span>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <p>STL容器vector与array非常相似，唯一区别在于空间的运用的灵活性。array是静态空间，vector是动态空间。值得注意的是vector是以两倍增长的方式进行自行扩容空间容纳新元素。</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/STL/STL%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90-%E5%AE%B9%E5%99%A8-vector/">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -1553,13 +1553,13 @@
       <i class="fa fa-chart-area"></i>
     </span>
       <span class="post-meta-item-text">站点总字数：</span>
-    <span title="站点总字数">89k</span>
+    <span title="站点总字数">95k</span>
     <span class="post-meta-divider">|</span>
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
       <span class="post-meta-item-text">站点阅读时长 &asymp;</span>
-    <span title="站点阅读时长">1:21</span>
+    <span title="站点阅读时长">1:27</span>
 </div>
 
         
@@ -1634,6 +1634,26 @@ NexT.utils.loadComments('#valine-comments', () => {
 });
 </script>
 
-<script type="text/javascript" src="/js/fold_action.js"></script>
+<script type="text/javascript" src="/js/fold_action.js"></script><div class="moon-menu">
+  <div class="moon-menu-items">
+    
+    <div class="moon-menu-item" onclick="back2bottom()">
+      <i class='fas fa-chevron-down'></i>    </div>
+    
+    <div class="moon-menu-item" onclick="back2top()">
+      <i class='fas fa-chevron-up'></i>    </div>
+    
+  </div>
+  <div class="moon-menu-button">
+    <svg class="moon-menu-bg">
+      <circle class="moon-menu-cricle" cx="50%" cy="50%" r="44%"></circle>
+      <circle class="moon-menu-border" cx="50%" cy="50%" r="48%"></circle>
+    </svg>
+    <div class="moon-menu-content">
+      <div class="moon-menu-icon"><i class='fas fa-ellipsis-v'></i></div>
+      <div class="moon-menu-text"></div>
+    </div>
+  </div>
+</div><script src="/js/injector.js"></script>
 </body>
 </html>
