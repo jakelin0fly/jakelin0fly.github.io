@@ -1830,7 +1830,11 @@
 <p>地址：<code>http://你的leancloud域名主机记录.主域名</code></p>
 </li>
 </ol>
-<h2 id="休眠策略"><a href="#休眠策略" class="headerlink" title="休眠策略"></a>休眠策略</h2><p><strong>免费版</strong>的 LeanCloud 容器，是有<strong>强制性休眠策略</strong>的，不能 24 小时运行：</p>
+<h2 id="休眠策略"><a href="#休眠策略" class="headerlink" title="休眠策略"></a>休眠策略</h2><p><strong>【写前面】</strong><font color=red><strong><em>定时任务每天早上不能唤醒，然后一天都在休眠。也就是早上唤醒一次后，定时任务才能正常执行！！！</em></strong></font>通过浏览器访问评论管理系统，会唤醒leanCloud。因此，我直接使用<strong>linux定时任务</strong>每天第一次唤醒leanCloud，然后<strong>leanCloud的定时任务</strong>负责一天的间隔时间唤醒。</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> 测试 curl</span></span><br><span class="line">/usr/bin/curl 你的leancloud评论管理地址</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"> 编辑定时任务</span></span><br><span class="line">crontab -e</span><br><span class="line"><span class="meta">#</span><span class="bash"> 写入 每天7:59执行 访问网址</span></span><br><span class="line">59 7 * * * /usr/bin/curl 你的leancloud评论管理地址</span><br></pre></td></tr></table></figure>
+
+<p><font color=red><strong>注意</strong></font>：评论地址注意是 <strong>http</strong> 不是 https（因为我没有SSL，使用https无法唤醒）。</p>
+<p><strong>免费版</strong>的 LeanCloud 容器，是有<strong>强制性休眠策略</strong>的，不能 24 小时运行：</p>
 <ul>
 <li>每天必须休眠 6 个小时</li>
 <li>30 分钟内没有外部请求，则休眠。</li>
@@ -1841,7 +1845,6 @@
 <p><img src="https://i.loli.net/2020/08/15/ZlauFhVYMsoykgE.png" alt="leancloud-定时任务.png"></p>
 <p><img src="https://i.loli.net/2020/08/15/rF6YfotjdZgXxSm.png" alt="leancloud-定时任务resend-mails__.png"></p>
 <h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><p><a href="https://valine.js.org/quickstart.html">Valine-快速开始</a></p>
-<p><a href="https://www.antmoe.com/posts/ff6aef7b/index.html#%E5%BC%80%E5%A7%8B%E5%B0%9D%E8%AF%95">优雅解决LeanCloud流控问题</a></p>
 <p><a href="https://www.cnblogs.com/huanhao/p/emailvaline.html">Valine评论系统邮件提醒</a></p>
 ]]></content>
       <categories>
