@@ -2309,7 +2309,7 @@
 </ul>
 <p>如果0x02～0x05存了一个 int ，读取这个 int 就需要先读0x01～0x04，留下0x02～0x04的内容，再读0x05～0x08，留下0x05的内容，两部分拼接起来才能得到那个 int 的值，这样读一个 int 就要两次内存访问，效率就低了。</p>
 <h2 id="pragma-pack"><a href="#pragma-pack" class="headerlink" title="pragma pack"></a>pragma pack</h2><p>用 <code>sizeof</code> 运算符求算某结构体所占空间时，并不是简单地将结构体中所有元素各自占的空间相加，这里涉及到内存字节对齐的问题，有时候为了内存对齐需要补齐空字节。通常写程序的时候，不需要考虑对齐问题。编译器会替我们选择适合目标平台的对齐策略。当然，我们也可以通知给编译器传递预编译指令而改变对指定数据的对齐方法。</p>
-<p>语法：**#pragma pack( [show] | [push | pop] [, identifier], n )** </p>
+<p>语法：<b>#pragma pack( [show] | [push | pop] [, identifier], n )</b></p>
 <p>作用：指定结构，联合和类的包对齐方式（pack alignment）</p>
 <figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">pragma</span> pack(4)    <span class="comment">//通知编译器 4字节对齐</span></span></span><br></pre></td></tr></table></figure>
 
@@ -2433,11 +2433,11 @@
 <figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> <span class="title">A</span> &#123;</span></span><br><span class="line">    <span class="keyword">double</span> val;        <span class="comment">// 8 bits</span></span><br><span class="line">    <span class="keyword">double</span> val2;    <span class="comment">// 8 bits</span></span><br><span class="line">&#125; A;</span><br><span class="line"></span><br><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> <span class="title">B</span> &#123;</span></span><br><span class="line">    <span class="keyword">int</span> m_i;            <span class="comment">// 4 bits    </span></span><br><span class="line">    A m_A;                <span class="comment">// 16 bits</span></span><br><span class="line">    <span class="keyword">double</span> m_d;    <span class="comment">// 8 bits</span></span><br><span class="line">    <span class="keyword">int</span> m_i2;            <span class="comment">// 4 bits</span></span><br><span class="line">&#125; B;</span><br></pre></td></tr></table></figure>
 
 <blockquote>
-<p>b.m_int          = 0x61fed8                 </p>
-<p>b.m_A.val      = 0x61fee0</p>
+<p>b.m_int          = 0x61fed8                 </p>
+<p>b.m_A.val      = 0x61fee0</p>
 <p>b.m_A.val2    = 0x61fee8</p>
 <p>b.m_double  = 0x61fef0 </p>
-<p> b.m_int2        = 0x61fef8 </p>
+<p> b.m_int2        = 0x61fef8 </p>
 <p>sizeof(A) = 16  </p>
 <p>sizeof(B) = 40 </p>
 </blockquote>
