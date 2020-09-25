@@ -2552,4 +2552,87 @@
         <tag>unp</tag>
       </tags>
   </entry>
+  <entry>
+    <title>C++11智能指针</title>
+    <url>/C++/C++11%E6%99%BA%E8%83%BD%E6%8C%87%E9%92%88/</url>
+    <content><![CDATA[<p>程序使用 <code>new</code> 从堆（自由存储区）分配内存，在不需要时，应使用 <code>delete</code> 将其释放。这个内存管理过程由程序员控制，内存泄露是困扰C/C++程序员的一大难题。，C++11中引入了智能指针的概念，方便管理堆内存。使用普通指针，容易造成堆内存泄露（忘记释放）、二次释放、程序发生异常时内存泄露等问题等，使用智能指针能更好的管理堆内存。</p>
+<p>在C++11中摒弃了auto_ptr（在 C++ 17 中被移除），新增三种智能指针：</p>
+<ul>
+<li><code>shared_ptr</code> ：通过指针保持对象<strong>共享</strong>所有权的智能指针；</li>
+<li><code>weak_ptr</code>：到 std::shared_ptr 所管理对象的<strong>弱引用</strong>，在访问所引用的对象前必须先转换为 std::shared_ptr ；</li>
+<li><code>unique_ptr</code>： 拥有<strong>独有</strong>对象所有权语义的智能指针。</li>
+</ul>
+<h2 id="显示调用"><a href="#显示调用" class="headerlink" title="显示调用"></a>显示调用</h2><p><code>shared_ptr</code> 、 <code>unique_ptr</code> 都有一个 <code>explicit</code> 构造函数，因此不能自动将指针转换为智能指针对象，<strong>必须显式调用</strong>。</p>
+<blockquote>
+<p>4.8.2</p>
+</blockquote>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">explicit</span> <span class="title">shared_ptr</span><span class="params">(_Tp1* __p)</span></span></span><br><span class="line"><span class="function">        : __shared_ptr&lt;_Tp&gt;<span class="params">(__p)</span> </span>&#123; &#125;</span><br><span class="line">        </span><br><span class="line"><span class="function"><span class="keyword">explicit</span> <span class="title">unique_ptr</span><span class="params">(pointer __p)</span> <span class="keyword">noexcept</span></span></span><br><span class="line"><span class="function">      : _<span class="title">M_t</span><span class="params">(__p, deleter_type())</span></span></span><br><span class="line"><span class="function">      </span>&#123; <span class="keyword">static_assert</span>(!is_pointer&lt;deleter_type&gt;::value,</span><br><span class="line">              <span class="string">&quot;constructed with null function pointer deleter&quot;</span>); &#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="shared-ptr"><a href="#shared-ptr" class="headerlink" title="shared_ptr"></a>shared_ptr</h2><p><code>std::shared_ptr</code> 是通过指针保持对象共享所有权的智能指针。<code>shared_ptr</code>的目标非常简单：多个指针可以同时指向一个对象。下列情况之一出现时销毁对象并解分配其内存：</p>
+<ul>
+<li>最后剩下的占有对象的 <code>shared_ptr</code> 被销毁；</li>
+<li>最后剩下的占有对象的 <code>shared_ptr</code> 被通过<code>operator=</code> 或 <code>reset()</code>]赋值为另一指针时。</li>
+</ul>
+<p>作者：卡巴拉的树<br>链接：<a href="https://www.jianshu.com/p/e4919f1c3a28">https://www.jianshu.com/p/e4919f1c3a28</a><br>来源：简书<br>著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。</p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="keyword">int</span> *p_int = <span class="keyword">new</span> <span class="keyword">int</span>;</span><br><span class="line"><span class="function"><span class="built_in">shared_ptr</span>&lt;<span class="keyword">int</span>&gt; <span class="title">sptr1</span><span class="params">(p)</span></span>;            <span class="comment">// OK</span></span><br><span class="line"><span class="built_in">shared_ptr</span>&lt;<span class="keyword">int</span>&gt; sptr2 = sptr1;        <span class="comment">// OK 引用计数+1</span></span><br><span class="line"><span class="built_in">shared_ptr</span>&lt;<span class="keyword">int</span>&gt; sptr3 = p_int;        <span class="comment">// Error!!!</span></span><br><span class="line"><span class="built_in">shared_ptr</span>&lt;<span class="keyword">int</span>&gt; sptr1 = make_shared&lt;<span class="keyword">int</span>&gt;(<span class="number">100</span>); <span class="comment">// OK 使用 make_shared</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="shared-ptr析构"><a href="#shared-ptr析构" class="headerlink" title="shared_ptr析构"></a>shared_ptr析构</h3><p><code>shared_ptr</code> 默认调用 <code>delete</code> 释放关联的资源。如果用户采用一个不一样的析构策略时，他可以自由指定构造这个 <code>shared_ptr</code> 的策略。如下：当离开作用域时，默认的析构函数调用 <code>delete</code> 释放资源。实际上，我们应该调用 <code>delete[]</code> 来销毁这个数组。</p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Test</span> &#123;</span></span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">    <span class="keyword">int</span> m_a;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">main</span><span class="params">()</span></span>&#123;</span><br><span class="line">    <span class="function"><span class="built_in">shared_ptr</span>&lt;Test&gt; <span class="title">sptr1</span><span class="params">(<span class="keyword">new</span> Test[<span class="number">5</span>])</span></span>;  <span class="comment">// 默认使用 delete 析构</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>用户可以通过调用一个<strong>函数</strong>，例如一个 <strong>lamda 表达式</strong>，来指定一个通用的释放步骤。</p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="built_in">shared_ptr</span>&lt;Test&gt; <span class="title">sptr1</span><span class="params">(<span class="keyword">new</span> Test[<span class="number">5</span>], [ ](Test* p) &#123; <span class="keyword">delete</span>[] p; &#125;)</span></span>;</span><br></pre></td></tr></table></figure>
+
+<h3 id="常用接口"><a href="#常用接口" class="headerlink" title="常用接口"></a>常用接口</h3><ul>
+<li><p><code>shared_ptr</code> 也提供解引用操作符 <code>*</code> 、<code>-&gt;</code> 。</p>
+</li>
+<li><p><code>std::make_shared</code> ：创建管理一个新对象的共享指针</p>
+</li>
+<li><p><code>get()</code> ：获取<code>shared_ptr</code>绑定的资源。</p>
+</li>
+<li><p><code>reset()</code> ：释放关联内存块的所有权，如果是最后一个指向该资源的<code>shared_ptr</code>,就释放这块内存。</p>
+</li>
+<li><p><code>unique</code> ：判断是否是唯一指向当前内存的<code>shared_ptr</code>。</p>
+</li>
+<li><p><code>operator bool</code> ：判断当前的<code>shared_ptr</code>是否指向一个内存块，可以用if 表达式判断。</p>
+<p>作者：卡巴拉的树<br>链接：<a href="https://www.jianshu.com/p/e4919f1c3a28">https://www.jianshu.com/p/e4919f1c3a28</a><br>来源：简书<br>著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。</p>
+</li>
+</ul>
+<h3 id="原始指针初始化shared-ptr"><a href="#原始指针初始化shared-ptr" class="headerlink" title="原始指针初始化shared_ptr"></a>原始指针初始化shared_ptr</h3><p><strong>不要用一个原始指针初始化多个 <code>shared_ptr</code>，否则会造成二次释放同一内存。</strong></p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">int</span>* ptr = <span class="keyword">new</span> <span class="keyword">int</span>;</span><br><span class="line">    <span class="function"><span class="built_in">shared_ptr</span>&lt;<span class="keyword">int</span>&gt; <span class="title">p1</span><span class="params">(ptr)</span></span>;  <span class="comment">// 引用计数 1</span></span><br><span class="line">    <span class="function"><span class="built_in">shared_ptr</span>&lt;<span class="keyword">int</span>&gt; <span class="title">p2</span><span class="params">(ptr)</span></span>;  <span class="comment">// 引用计数 1   p1、p2两者不知对方存在</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>如上，直接使用原始指针初始化多个 <code>shared_ptr</code> ，使用时，智能指针相互间不知道彼此的存在。p1、p2存储在栈上，程序结束时，首先 p2 死亡时引用计数为 0 ，释放掉 ptr 。接着 p1 死亡，p1 记录的引用计数也为 0 。再次对对象进行释放，<font color=red><strong>Crash !!!</strong></font> 。</p>
+<h3 id="循环引用"><a href="#循环引用" class="headerlink" title="循环引用"></a>循环引用</h3><p>引用计数是一种便利的内存管理机制，但它有一个很大的缺点，那就是不能管理循环引用的对象。</p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Parent</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    ~Parent() &#123; <span class="built_in">std</span>::<span class="built_in">cout</span> &lt;&lt; <span class="string">&quot;Parent destroying...&quot;</span> &lt;&lt; <span class="built_in">std</span>::<span class="built_in">endl</span>; &#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="built_in">shared_ptr</span>&lt;Child&gt; m_child;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Child</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    ~Child() &#123; <span class="built_in">std</span>::<span class="built_in">cout</span> &lt;&lt; <span class="string">&quot;Child destroying...&quot;</span> &lt;&lt; <span class="built_in">std</span>::<span class="built_in">endl</span>; &#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="built_in">shared_ptr</span>&lt;Parent&gt; m_parent;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="built_in">shared_ptr</span>&lt;Parent&gt; <span class="title">p_parent</span><span class="params">(<span class="keyword">new</span> Parent)</span></span>;</span><br><span class="line">    <span class="function"><span class="built_in">shared_ptr</span>&lt;Child&gt; <span class="title">p_child</span><span class="params">(<span class="keyword">new</span> Child)</span></span>;</span><br><span class="line">    p_child-&gt;m_parent = p_parent;</span><br><span class="line">    p_parent-&gt;m_child = p_child;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>两个对象的引用计数都是 2 。当 <code>p_child</code> 离开作用域时，子类对象引用计数 -1 （值为1）。当 <code>p_parent</code> 离开作用域时，父类对象引用计数 -1 （值为1）。两个智能指针生命期都结束了，但是对象内存却都没得到释放！！！</p>
+<p>【<strong>解决循环引用</strong>】</p>
+<ul>
+<li>当只剩下最后一个引用的时候需要手动打破循环引用释放对象。</li>
+<li>当parent的生存期超过child的生存期的时候，child改为使用一个普通指针指向parent。</li>
+<li>使用<strong>弱引用</strong>的智能指针打破这种循环引用。</li>
+</ul>
+<h2 id="weak-ptr"><a href="#weak-ptr" class="headerlink" title="weak_ptr"></a>weak_ptr</h2><p>为了解决<strong>循环引用</strong>，<code>C++</code>提供了另外一种智能指针：<code>weak_ptr</code> 。</p>
+<p><code>std::weak_ptr</code> 是一种智能指针，它对被 <code>std::shared_ptr</code> 管理的对象存在非拥有性（“弱”）引用。在访问所引用的对象前必须先转换为 <code>std::shared_ptr</code>。</p>
+<p><strong>强引用</strong>：被引用的对象活着，这个引用就存在。只要有一个强引用存在，这个对象就不能被释放。</p>
+<p><strong>弱引用</strong>：弱引用不修改对象的引用计数，意味这弱引用它并不对对象的内存进行管理，在功能上类似于普通指针，然而一个比较大的区别是，弱引用能检测到所管理的对象是否已经被释放，从而避免访问非法内存。</p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Parent</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    ~Parent() &#123; <span class="built_in">std</span>::<span class="built_in">cout</span> &lt;&lt; <span class="string">&quot;Parent destroying...&quot;</span> &lt;&lt; <span class="built_in">std</span>::<span class="built_in">endl</span>; &#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    weak_ptr&lt;Child&gt; m_child;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Child</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    ~Child() &#123; <span class="built_in">std</span>::<span class="built_in">cout</span> &lt;&lt; <span class="string">&quot;Child destroying...&quot;</span> &lt;&lt; <span class="built_in">std</span>::<span class="built_in">endl</span>; &#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    weak_ptr&lt;Parent&gt; m_parent;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="unique-ptr"><a href="#unique-ptr" class="headerlink" title="unique_ptr"></a>unique_ptr</h2><p><code>std::unique_ptr</code> 是通过指针占有并管理另一对象，并在 <code>unique_ptr</code> 离开作用域时释放该对象的智能指针。</p>
+<p>在下列两者之一发生时用关联的删除器释放对象：</p>
+<ul>
+<li>销毁了管理的 <code>unique_ptr</code> 对象。</li>
+<li>通过 <code>operator=</code> 或 <code>reset()</code> 赋值另一指针给管理的 <code>unique_ptr</code> 对象。</li>
+</ul>
+<p><code>unique_ptr</code>的创建方法和<code>shared_ptr</code>一样，除非创建一个指向数组类型的<code>unique_ptr</code>。<code>unique_ptr</code>提供了创建数组对象的特殊方法，当指针离开作用域时，调用<code>delete[]</code>代替<code>delete</code>。当创建<code>unique_ptr</code>时，这一组对象被视作模板参数的部分。这样，程序员就不需要再提供一个指定的析构方法</p>
+<p><code>unique_ptr</code>提供一个<code>release()</code>的方法，释放所有权。<code>release</code>和<code>reset</code>的区别在于，<code>release</code>仅仅释放所有权但不释放资源，<code>reset</code>释放所有权同时也释放资源。</p>
+]]></content>
+      <categories>
+        <category>笔记</category>
+        <category>C++</category>
+      </categories>
+      <tags>
+        <tag>C++</tag>
+        <tag>语法基础</tag>
+      </tags>
+  </entry>
 </search>
