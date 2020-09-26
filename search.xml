@@ -2326,7 +2326,7 @@
 </blockquote>
 </li>
 </ol>
-<p>【<strong>基本数据类型</strong>】无符号字节数一样。32位机默认4字节对齐、64位机默认8字节对齐。</p>
+<p>【<strong>基本数据类型</strong>】无符号字节数一样。32位机默认4字节对齐、64位机默认8字节对齐。（<strong>实践数据：linux 64位机默认16字节对齐、linux 32位机默认4字节对齐</strong>）。win64未验证。</p>
 <table>
 <thead>
 <tr>
