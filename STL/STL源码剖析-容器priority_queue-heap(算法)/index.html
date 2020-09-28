@@ -27,7 +27,7 @@
   <meta name="description" content="heap也就是数据结构中的堆，逻辑上可以看成一颗完全二叉树。binary max heap 作为 priority_queue 的底层机制。STL提供的是max-heap。">
 <meta property="og:type" content="article">
 <meta property="og:title" content="STL源码剖析-容器priority_queue-heap(算法)">
-<meta property="og:url" content="http://jakelin.cn/STL/STL%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90-%E5%AE%B9%E5%99%A8priority_queue-heap(%E7%AE%97%E6%B3%95)/index.html">
+<meta property="og:url" content="https://jakelin.cn/STL/STL%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90-%E5%AE%B9%E5%99%A8priority_queue-heap(%E7%AE%97%E6%B3%95)/index.html">
 <meta property="og:site_name" content="JakeLin&#39;s Blogs">
 <meta property="og:description" content="heap也就是数据结构中的堆，逻辑上可以看成一颗完全二叉树。binary max heap 作为 priority_queue 的底层机制。STL提供的是max-heap。">
 <meta property="og:locale" content="zh_CN">
@@ -43,7 +43,7 @@
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="https://i.loli.net/2020/08/09/KF12cDuCQVkaYmT.png">
 
-<link rel="canonical" href="http://jakelin.cn/STL/STL%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90-%E5%AE%B9%E5%99%A8priority_queue-heap(%E7%AE%97%E6%B3%95)/">
+<link rel="canonical" href="https://jakelin.cn/STL/STL%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90-%E5%AE%B9%E5%99%A8priority_queue-heap(%E7%AE%97%E6%B3%95)/">
 
 
 <script class="page-configurations">
@@ -308,7 +308,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://jakelin.cn/STL/STL%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90-%E5%AE%B9%E5%99%A8priority_queue-heap(%E7%AE%97%E6%B3%95)/">
+    <link itemprop="mainEntityOfPage" href="https://jakelin.cn/STL/STL%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90-%E5%AE%B9%E5%99%A8priority_queue-heap(%E7%AE%97%E6%B3%95)/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="https://i.loli.net/2020/07/31/OZl2JxuSRrweIk5.jpg">
@@ -366,6 +366,13 @@
               </span>
               <span class="post-meta-item-text">阅读次数：</span>
               <span class="leancloud-visitors-count"></span>
+            </span>
+            <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span id="busuanzi_value_page_pv"></span>
             </span>
   
   <span class="post-meta-item">
@@ -506,7 +513,7 @@
   </li>
   <li class="post-copyright-link">
     <strong>本文链接：</strong>
-    <a href="http://jakelin.cn/STL/STL%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90-%E5%AE%B9%E5%99%A8priority_queue-heap(%E7%AE%97%E6%B3%95)/" title="STL源码剖析-容器priority_queue-heap(算法)">http://jakelin.cn/STL/STL源码剖析-容器priority_queue-heap(算法)/</a>
+    <a href="https://jakelin.cn/STL/STL%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90-%E5%AE%B9%E5%99%A8priority_queue-heap(%E7%AE%97%E6%B3%95)/" title="STL源码剖析-容器priority_queue-heap(算法)">https://jakelin.cn/STL/STL源码剖析-容器priority_queue-heap(算法)/</a>
   </li>
   <li class="post-copyright-license">
     <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
@@ -605,6 +612,26 @@
 </div>
 
         
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
 
 
 
@@ -670,7 +697,7 @@ NexT.utils.loadComments('#valine-comments', () => {
     new Valine(Object.assign({
       el  : '#valine-comments',
       path: location.pathname,
-    }, {"enable":true,"appId":"TxCmvgp5BeE2PSBmfaTFCxSL-gzGzoHsz","appKey":"uvLJaDcjcRiFhjux02nOVHLI","placeholder":"ヾﾉ≧∀≦)o来啊，快活啊!","avatar":"mm","meta":["nick","mail","link"],"pageSize":10,"language":"zh-cn","visitor":true,"comment_count":true,"recordIP":false,"serverURLs":null,"enableQQ":false,"requiredFields":[]}
+    }, {"enable":true,"appId":"TxCmvgp5BeE2PSBmfaTFCxSL-gzGzoHsz","appKey":"uvLJaDcjcRiFhjux02nOVHLI","placeholder":"ヾﾉ≧∀≦)o来啊，快活啊!","avatar":"mm","meta":["nick","mail","link"],"pageSize":10,"language":"zh-cn","visitor":true,"comment_count":true,"recordIP":false,"serverURLs":null,"enableQQ":true,"requiredFields":[]}
     ));
   }, window.Valine);
 });
