@@ -1950,26 +1950,6 @@
       </tags>
   </entry>
   <entry>
-    <title>leetcode-排序</title>
-    <url>/leetcode/%E6%8E%92%E5%BA%8F/</url>
-    <content><![CDATA[<p><strong>【解题思路】</strong> </p>
-<div><div class="fold_hider"><div class="close hider_title">点击显示/隐藏解题代码</div></div><div class="fold">
-<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"></span><br></pre></td></tr></table></figure>
-
-</div></div>
-
-]]></content>
-      <categories>
-        <category>笔记</category>
-        <category>leetcode</category>
-        <category>排序</category>
-      </categories>
-      <tags>
-        <tag>C++</tag>
-        <tag>算法</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>leetcode-数学</title>
     <url>/leetcode/%E6%95%B0%E5%AD%A6/</url>
     <content><![CDATA[<h4 id="47-全排列-II"><a href="#47-全排列-II" class="headerlink" title="47. 全排列 II"></a><a href="https://leetcode-cn.com/problems/permutations-ii/">47. 全排列 II</a></h4><blockquote>
@@ -2693,6 +2673,34 @@
       <tags>
         <tag>C++</tag>
         <tag>语法基础</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>算法收录</title>
+    <url>/Algorithm/%E7%AE%97%E6%B3%95%E6%94%B6%E5%BD%95/</url>
+    <content><![CDATA[<h2 id="约瑟夫环"><a href="#约瑟夫环" class="headerlink" title="约瑟夫环"></a>约瑟夫环</h2><blockquote>
+<p>约瑟夫问题是个著名的问题：N个人围成一圈，第一个人从1开始报数，报M的将被杀掉，下一个人接着从1开始报。如此反复，最后剩下一个，求最后的胜利者。</p>
+</blockquote>
+<p><strong>【解题思路】</strong> </p>
+<p><a href="https://blog.csdn.net/u011500062/article/details/72855826">约瑟夫环——公式法（递推公式）</a> </p>
+<p><strong>递推公式：</strong><br><font color=red><b><em>f</em>(<em>N</em>,<em>M</em>) = ( <em>f</em>(<em>N</em>−1,<em>M</em>) + <em>M</em> ) % <em>N</em></b></font> </p>
+<ul>
+<li><em>f</em>(<em>N</em>,<em>M</em>) 表示，N个人报数，每报到M时杀掉那个人，最终胜利者的编号</li>
+<li><em>f</em>(<em>N</em>−1,<em>M</em>) 表示，N-1个人报数，每报到M时杀掉那个人，最终胜利者的编号</li>
+</ul>
+<p><em>注：求出的结果是数组中的下标，若从1开始编号，最终的编号还要加 1。</em> </p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">circle</span><span class="params">(<span class="keyword">int</span> n,<span class="keyword">int</span> m)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">int</span> p = <span class="number">0</span>; <span class="comment">// 仅一个人时 胜利者下标为 0</span></span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">2</span>;i&lt;=n;i++) &#123;</span><br><span class="line">        p=(p + m) % i;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> p+<span class="number">1</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>【<strong>例题</strong>】</p>
+<p><a href="https://www.nowcoder.com/practice/f78a359491e64a50bce2d89cff857eb6?tpId=13&&tqId=11199&rp=1&ru=/ta/coding-interviews&qru=/ta/coding-interviews/question-ranking">孩子们的游戏(圆圈中最后剩下的数)</a> </p>
+]]></content>
+      <categories>
+        <category>笔记</category>
+        <category>Algorithm</category>
+      </categories>
+      <tags>
+        <tag>C++</tag>
+        <tag>算法</tag>
       </tags>
   </entry>
 </search>
