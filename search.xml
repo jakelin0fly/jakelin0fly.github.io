@@ -2693,6 +2693,15 @@
 
 <p>【<strong>例题</strong>】</p>
 <p><a href="https://www.nowcoder.com/practice/f78a359491e64a50bce2d89cff857eb6?tpId=13&&tqId=11199&rp=1&ru=/ta/coding-interviews&qru=/ta/coding-interviews/question-ranking">孩子们的游戏(圆圈中最后剩下的数)</a> </p>
+<h2 id="动态规划"><a href="#动态规划" class="headerlink" title="动态规划"></a>动态规划</h2><blockquote>
+<p>动态规划（Dynamic Programming）问题一般形式是<strong>求最值</strong> 。</p>
+<p>求解动态规划问题的核心是<strong>穷举</strong>，由于这类问题存在<strong>重叠子问题</strong>，因此简单的暴力算法效率极低，便需要 <strong>DP table</strong> 来优化穷举过程。</p>
+</blockquote>
+<p>动态规划的核心思想是 <font color=red><strong>以空间换时间</strong></font> 。</p>
+<p>【<strong>算法解析</strong>】</p>
+<p><a href="https://blog.csdn.net/u013309870/article/details/75193592">算法-动态规划 Dynamic Programming–从菜鸟到老鸟</a> </p>
+<p>【<strong>例题分析</strong>】</p>
+<p><a href="https://labuladong.gitbook.io/algo/di-ling-zhang-bi-du-xi-lie/dong-tai-gui-hua-xiang-jie-jin-jie">动态规划解题套路框架- labuladong的算法小抄</a> </p>
 ]]></content>
       <categories>
         <category>笔记</category>
