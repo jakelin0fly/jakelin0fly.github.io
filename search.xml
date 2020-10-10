@@ -2712,4 +2712,84 @@
         <tag>算法</tag>
       </tags>
   </entry>
+  <entry>
+    <title>能不能在头文件中声明全局变量？</title>
+    <url>/C++/%E8%83%BD%E4%B8%8D%E8%83%BD%E5%9C%A8%E5%A4%B4%E6%96%87%E4%BB%B6%E4%B8%AD%E5%A3%B0%E6%98%8E%E5%85%A8%E5%B1%80%E5%8F%98%E9%87%8F/</url>
+    <content><![CDATA[<h2 id="编译器驱动程序"><a href="#编译器驱动程序" class="headerlink" title="编译器驱动程序"></a>编译器驱动程序</h2><p>大多数编译系统提供<strong>编译器驱动程序</strong>（compiler driver），它代表用户在需要时调用语言<strong>预处理器</strong>、<strong>编译器</strong>、<strong>汇编器</strong>、和<strong>链接器</strong>。</p>
+<p>我们所常说的 <em>“编译生成可执行文件”</em> 实际包括以下过程：</p>
+<ol>
+<li><p><strong>预处理器</strong> （某些编译系统，预处理器被集成到 <strong><em>编译器</em></strong>  中）</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">cpp [other arguments] main.c /tmp/main.i</span><br></pre></td></tr></table></figure>
+
+<p>处理预处理指令，生成<strong>中间文件</strong>，所有的预处理器命令都是以井号（#）开头。主要任务包括：</p>
+<ul>
+<li>删除注释；</li>
+<li>插入被 #include 指令所包含的的文件内容；</li>
+<li>定义和替换由#define指令定义的符号；</li>
+<li>确定代码的部分内容是否应该根据一些条件编译指令进行编译；</li>
+</ul>
+</li>
+<li><p><strong>编译器</strong> </p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">cc1 /tmp/main.i -Og [other arguments] -o /tmp/main.s</span><br></pre></td></tr></table></figure>
+
+<p>将预处理后的中间文件翻译成一个<strong>ASCII汇编语言文件</strong>。</p>
+</li>
+<li><p><strong>汇编器</strong></p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">as [other arguments] -o /tmp/main.o /tmp/main.s</span><br></pre></td></tr></table></figure>
+
+<p>将ASCII汇编语言文件翻译成一个<strong>可重定位目标文件</strong>。</p>
+</li>
+<li><p><strong>链接器</strong></p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">ld -o prog [system object files and args] /tmp/main.o /tmp/sum.o</span><br></pre></td></tr></table></figure>
+
+<p>将一个或多个可重定位目标文件，以及必要的系统目标文件组合起来，创建一个<strong>可执行文件</strong>。</p>
+</li>
+</ol>
+<img src="https://i.loli.net/2020/10/10/9y28jwNmZRcgiGE.png" alt="编译生成可执行文件过程.png" style="zoom:67%;" />
+
+<h2 id="非静态全局变量"><a href="#非静态全局变量" class="headerlink" title="非静态全局变量"></a>非静态全局变量</h2><p>先个下结论：<font color=red><strong>可以，但非常非常非常不建议！！</strong></font> </p>
+<ul>
+<li>若头文件仅被一个源文件使用到，可以正常生成可执行文件。</li>
+<li>若头文件被多个源文件包含，可正常执行完 cpp、cc1、as，但在链接(ld)时便会报错（重复定义）。</li>
+</ul>
+<p>由上面的图可以分析出，源程序代码在生成可执行文件的过程中，前三步均可看做独立完成的，仅在最后一步将多个源文件生成的目标文件链接起来。</p>
+<p>如下代码：</p>
+<p>a.cpp 、 b.cpp 在经过预处理器、编译器、汇编器时均认为是没有声明变量 A 的，于是都有变量声明。在链接时，便出现了二义性（重复声明定义）。</p>
+<blockquote>
+<p>[root@localhost val]# g++ a.cpp b.cpp </p>
+<p>/tmp/ccVzRqVG.o:(.bss+0x0): multiple definition of `A’</p>
+<p>/tmp/ccjI4zgp.o:(.bss+0x0): first defined here</p>
+<p>collect2: error: ld returned 1 exit status</p>
+</blockquote>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="comment">// a.h</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">ifndef</span> A_H</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> A_H</span></span><br><span class="line"><span class="keyword">int</span> A;</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">funcA</span><span class="params">()</span></span>;</span><br><span class="line"><span class="meta">#<span class="meta-keyword">endif</span></span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="comment">// a.cpp</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&quot;a.h&quot;</span></span></span><br><span class="line">                                              </span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">funcA</span><span class="params">()</span></span>&#123;</span><br><span class="line">    A = <span class="number">10</span>;</span><br><span class="line">    <span class="built_in">std</span>::<span class="built_in">cout</span> &lt;&lt; <span class="string">&quot;a.cpp : &quot;</span> &lt;&lt; A &lt;&lt; <span class="built_in">std</span>::<span class="built_in">endl</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="comment">// b.cpp</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&quot;a.h&quot;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span>&#123;</span><br><span class="line">    funcA();</span><br><span class="line">    A =<span class="number">20</span>;</span><br><span class="line">    <span class="built_in">std</span>::<span class="built_in">cout</span> &lt;&lt; <span class="string">&quot;b.cpp : &quot;</span> &lt;&lt; A &lt;&lt; <span class="built_in">std</span>::<span class="built_in">endl</span>;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="静态全局变量"><a href="#静态全局变量" class="headerlink" title="静态全局变量"></a>静态全局变量</h2><p>上面的代码如若将变量 A 声明为 static，编译执行没有问题。<strong>但是</strong>，静态变量的<strong>作用域仅在 ”当前源文件“</strong> ，即两处的变量 A 不是同一个变量，是不同的文件作用域内的静态变量。</p>
+<p>“静态全局变量” 这个称谓其实就有点怪异，静态变量在文件作用域内就是全局的，且仅在文件作用域内。</p>
+<h2 id="使用建议"><a href="#使用建议" class="headerlink" title="使用建议"></a>使用建议</h2><p>全局变量在某一个源文件中声明，其余源文件若要使用，将外部声明 <code>extern</code> 写在头文件中，源文件包含这个头文件。如下：</p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="comment">// a.cpp</span></span><br><span class="line"><span class="keyword">int</span> nums;  <span class="comment">// 全局变量声明</span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="comment">// out.h</span></span><br><span class="line"><span class="keyword">extern</span> <span class="keyword">int</span> nums;    <span class="comment">//外部变量声明</span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="comment">// b.cpp</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&quot;out.h&quot;</span> <span class="comment">// 相当于声明了外部变量</span></span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">set_nums</span><span class="params">(<span class="keyword">int</span> val)</span></span>&#123;</span><br><span class="line">    nums = val;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>g++ a.cpp b.cpp</p>
+</blockquote>
+<h2 id="更加深入-全局变量"><a href="#更加深入-全局变量" class="headerlink" title="更加深入-全局变量"></a>更加深入-全局变量</h2><p>如果在 a.h 中变量的声明时，声明为 <strong>“弱定义”</strong>，那么是能达到预期的目标。</p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="keyword">int</span>  A __attribute__((weak));</span><br></pre></td></tr></table></figure>
+
+]]></content>
+      <categories>
+        <category>笔记</category>
+        <category>C++</category>
+      </categories>
+      <tags>
+        <tag>C++</tag>
+        <tag>语法基础</tag>
+      </tags>
+  </entry>
 </search>
