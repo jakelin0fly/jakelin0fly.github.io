@@ -2782,6 +2782,20 @@
 <h2 id="更加深入-全局变量"><a href="#更加深入-全局变量" class="headerlink" title="更加深入-全局变量"></a>更加深入-全局变量</h2><p>如果在 a.h 中变量的声明时，声明为 <strong>“弱定义”</strong>，那么是能达到预期的目标。</p>
 <figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="keyword">int</span>  A __attribute__((weak));</span><br></pre></td></tr></table></figure>
 
+<h3 id="Linux-gcc"><a href="#Linux-gcc" class="headerlink" title="Linux gcc"></a>Linux gcc</h3><p><font color=red><strong><em>注意：仅在 gcc 下正确，换做 g++ 同样报错（重复定义）。</em></strong></font> </p>
+<p>在编译时，编译器向汇编器输出每个全局符号，或者是<em>强（strong）</em>或者是<em>弱（weak）</em>，而编译器把这个信息隐含地编码在可重定位目标文件的符号表里。<strong>函数</strong>和<strong>已初始化的全局变量</strong>是*<strong>强(strong)符号*** 。<strong>未初始化的全局变量</strong>是*</strong>弱(weak)符号***。</p>
+<p>根据弱符号的定义，<strong>Linux链接器</strong>使用下面的规则来处理多重定义的符号名：</p>
+<ul>
+<li>规则1：不允许有多个同名的强符号。</li>
+<li>规则2：如果有一个强符号和多个弱符号同名，那么选择强符号。</li>
+<li>规则3：若干有多个弱符号同名，那么从这些弱符号中任意选择一个。</li>
+</ul>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="comment">// bar.c</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="keyword">int</span> x;</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">f</span><span class="params">()</span></span>&#123;</span><br><span class="line"><span class="comment">//      std::cout &lt;&lt; &quot;begin f() x = &quot; &lt;&lt; x &lt;&lt; std::endl;      </span></span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;begin f() x = %d\n&quot;</span>, x);</span><br><span class="line">        x = <span class="number">654321</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="comment">// foo.c</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="keyword">int</span> x  = <span class="number">12345</span>; <span class="comment">// 已初始化 强符号</span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">f</span><span class="params">()</span></span>; </span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span>&#123;</span><br><span class="line">        f();</span><br><span class="line"><span class="comment">//      std::cout &lt;&lt; &quot;after f() x = &quot; &lt;&lt; x &lt;&lt; std::endl;</span></span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;after f() x = %d\n&quot;</span>, x);</span><br><span class="line">        <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">[root@localhost 7]# gcc foo.c bar.c </span><br><span class="line">[root@localhost 7]# ./a.out </span><br><span class="line">begin f() x = 12345</span><br><span class="line">after f() x = 654321</span><br></pre></td></tr></table></figure>
+
 ]]></content>
       <categories>
         <category>笔记</category>
