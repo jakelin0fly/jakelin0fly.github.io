@@ -2806,4 +2806,85 @@
         <tag>语法基础</tag>
       </tags>
   </entry>
+  <entry>
+    <title>基本TCP套接字</title>
+    <url>/UNP/%E5%9F%BA%E6%9C%ACTCP%E5%A5%97%E6%8E%A5%E5%AD%97/</url>
+    <content><![CDATA[<blockquote>
+<p>#include &lt;sys/types.h&gt;          /* See NOTES */</p>
+<p>#include &lt;sys/socket.h&gt;</p>
+</blockquote>
+<img src="https://i.loli.net/2020/10/23/tngDJxl8XPbZmRO.png" alt="基本TCP客户-服务器程序套接字函数.png" style="zoom:67%;" />
+
+<h2 id="socket"><a href="#socket" class="headerlink" title="socket"></a>socket</h2><blockquote>
+<p>创建一个套接字，指定通信协议类型</p>
+</blockquote>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 成功：返回文件描述符    失败：返回-1，设置errno</span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">socket</span><span class="params">(<span class="keyword">int</span> domain, <span class="keyword">int</span> type, <span class="keyword">int</span> protocol)</span></span>;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><p><code>domain</code> ：协议族</p>
+<p><code>AF_INET</code>、<code>AF_INET6</code>、AF_LOCAL、AF_ROUTE、AF_KEY</p>
+<p><code>AF_XXX</code> 指<strong>地址族</strong>，<code>PF_XXX</code> 指协议族。但是在实际中，支持多个地址族的协议族从来没有实现过，且&lt;sys/socket.h&gt;中 PF_ 值总是与对应的 AF_ 值相等，因此，<strong>两者值相等，现在可看成是一个意思</strong>。</p>
+</li>
+<li><p><code>type</code> ：套接字类型</p>
+<p><code>SOCK_STREAM</code>、<code>SOCK_DGRAM</code>、SOCK_SEQPACKET、SOCK_RAW </p>
+</li>
+<li><p><code>protocol</code> ：某协议类型的常值，通常为0</p>
+</li>
+</ul>
+<p><img src="https://i.loli.net/2020/10/23/2XiDWoOtZMe1rLk.png" alt="domain-type组合.png"></p>
+<h2 id="bind"><a href="#bind" class="headerlink" title="bind"></a>bind</h2><blockquote>
+<p>把一个本地<strong>协议地址</strong>赋予一个套接字。</p>
+<p>协议地址：<strong>ip地址 + port</strong> </p>
+</blockquote>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 成功：返回0    失败：返回-1，设置errno（常见：EACCES、EADDRINUSE）</span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">bind</span><span class="params">(<span class="keyword">int</span> sockfd, <span class="keyword">const</span> struct sockaddr *addr, <span class="keyword">socklen_t</span> addrlen)</span></span>;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">sockaddr_in</span> &#123;</span></span><br><span class="line">   <span class="keyword">sa_family_t</span>    sin_family; <span class="comment">/* address family: AF_INET */</span></span><br><span class="line">   <span class="keyword">in_port_t</span>      sin_port;   <span class="comment">/* port in network byte order */</span></span><br><span class="line">   <span class="class"><span class="keyword">struct</span> <span class="title">in_addr</span> <span class="title">sin_addr</span>;</span>   <span class="comment">/* internet address */</span></span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="comment">/* Internet address. */</span></span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">in_addr</span> &#123;</span></span><br><span class="line">   <span class="keyword">uint32_t</span>       s_addr;     <span class="comment">/* address in network byte order */</span></span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><code>sockfd</code> ：文件描述符（套接字）</li>
+<li><code>addr</code>：指向特定协议的<strong>地址结构</strong>的指针</li>
+<li><code>addrlen</code> ：地址结构长度</li>
+</ul>
+<h2 id="listen"><a href="#listen" class="headerlink" title="listen"></a>listen</h2><blockquote>
+<p>做两件事：</p>
+<ol>
+<li>把一个未连接的<strong>主动套接字</strong>转换成<strong>被动套接字</strong>，指示内核接收指向该套接字的连接请求，<strong>CLOSED状态</strong> –&gt; <strong>LISTEN状态</strong> </li>
+<li>backlog规定<strong>已完成连接队列</strong>的最大连接个数</li>
+</ol>
+</blockquote>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 成功：返回0    失败：返回-1，设置errno</span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">listen</span><span class="params">(<span class="keyword">int</span> sockfd, <span class="keyword">int</span> backlog)</span></span>;</span><br></pre></td></tr></table></figure>
+
+<p>内核为任何一个给定的监听套接字维护两个队列：</p>
+<ul>
+<li><strong>未完成连接队列</strong>：正在等待完成TCP三次握手，处于 <strong>SYN_RCVD</strong> 状态</li>
+<li><strong>已完成连接队列</strong>：已完成TCP三次握手，等待通过 <code>accept</code> 从队列中取出已连接套接字，处于 <strong>ESTABLISED</strong> 状态</li>
+</ul>
+<p>Linux 2.2 以后，backlog 表示已完成连接队列的 socket 上限。<strong>实际测试</strong>中，队列最大长度为 <font color=red><strong>backlog + 1</strong></font>。</p>
+<p><strong>测试代码及数据</strong>：<a href="https://github.com/JakeLin0fly/unp-code/tree/master/listen_backlog">listen()函数backlog参数测试</a> </p>
+<h2 id="connect"><a href="#connect" class="headerlink" title="connect"></a>connect</h2><blockquote>
+<p>TCP客户端使用，用于建立与TCP服务器的连接</p>
+</blockquote>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 成功：返回0    失败：返回-1，设置errno</span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">connect</span><span class="params">(<span class="keyword">int</span> sockfd, <span class="keyword">const</span> struct sockaddr *addr, <span class="keyword">socklen_t</span> addrlen)</span></span>;</span><br></pre></td></tr></table></figure>
+
+<h2 id="accept"><a href="#accept" class="headerlink" title="accept"></a>accept</h2><blockquote>
+<p>有TCP服务器调用，从<strong>已完成连接队列</strong>队头返回一个描述符。若队列为空，进程睡眠（默认阻塞方式）</p>
+</blockquote>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 成功：返回非负描述符    失败：返回-1，设置errno</span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">accept</span><span class="params">(<span class="keyword">int</span> sockfd, struct sockaddr *addr, <span class="keyword">socklen_t</span> *addrlen)</span></span>;</span><br></pre></td></tr></table></figure>
+
+<p>若对返回客户端协议地址不感兴趣，可把 addr、addrlen 均值为空指针。</p>
+<h2 id="close"><a href="#close" class="headerlink" title="close"></a>close</h2><blockquote>
+<p>关闭套接字，该套接字不能再被调用进程使用。并发服务器中，close调用实际是相应套接字引用计数减1</p>
+</blockquote>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 成功：返回0    失败：返回-1，设置errno</span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">close</span><span class="params">(<span class="keyword">int</span> sockfd)</span></span>;</span><br></pre></td></tr></table></figure>
+
+<p>当close关闭套接字时，TCP将尝试发送<strong>已排队等待发送</strong>到对端的任何数据，发送完毕后的是正常的TCP连接终止序列（四次握手）。</p>
+]]></content>
+      <categories>
+        <category>笔记</category>
+        <category>unp</category>
+      </categories>
+      <tags>
+        <tag>linux</tag>
+        <tag>unp</tag>
+        <tag>TCP</tag>
+      </tags>
+  </entry>
 </search>

@@ -24,21 +24,25 @@
     var CONFIG = {"hostname":"jakelin.cn","root":"/","scheme":"Gemini","version":"8.0.0-rc.5","exturl":false,"sidebar":{"position":"left","display":"always","padding":18,"offset":12},"copycode":true,"bookmark":{"enable":true,"color":"#222","save":"auto"},"fancybox":true,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"path":"search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}};
   </script>
 
-  <meta name="description" content="k8s图形化管理、监控UI---Weave Scope部署配置">
+  <meta name="description" content="Linux网络编程中，基本TCP套接字：socket、bind、listen、accept、connect、close">
 <meta property="og:type" content="article">
-<meta property="og:title" content="k8s Weave Scope 部署配置">
-<meta property="og:url" content="https://jakelin.cn/other/k8s%20weave%20scope%20%E5%AE%89%E8%A3%85%E9%85%8D%E7%BD%AE/index.html">
+<meta property="og:title" content="基本TCP套接字">
+<meta property="og:url" content="https://jakelin.cn/UNP/%E5%9F%BA%E6%9C%ACTCP%E5%A5%97%E6%8E%A5%E5%AD%97/index.html">
 <meta property="og:site_name" content="JakeLin&#39;s Blogs">
-<meta property="og:description" content="k8s图形化管理、监控UI---Weave Scope部署配置">
+<meta property="og:description" content="Linux网络编程中，基本TCP套接字：socket、bind、listen、accept、connect、close">
 <meta property="og:locale" content="zh_CN">
-<meta property="article:published_time" content="2020-01-10T16:00:00.000Z">
-<meta property="article:modified_time" content="2020-08-01T04:51:30.314Z">
+<meta property="og:image" content="https://i.loli.net/2020/10/23/tngDJxl8XPbZmRO.png">
+<meta property="og:image" content="https://i.loli.net/2020/10/23/2XiDWoOtZMe1rLk.png">
+<meta property="article:published_time" content="2020-10-22T16:00:00.000Z">
+<meta property="article:modified_time" content="2020-10-24T02:08:47.038Z">
 <meta property="article:author" content="jakelin">
 <meta property="article:tag" content="linux">
-<meta property="article:tag" content="k8s">
+<meta property="article:tag" content="unp">
+<meta property="article:tag" content="TCP">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://i.loli.net/2020/10/23/tngDJxl8XPbZmRO.png">
 
-<link rel="canonical" href="https://jakelin.cn/other/k8s%20weave%20scope%20%E5%AE%89%E8%A3%85%E9%85%8D%E7%BD%AE/">
+<link rel="canonical" href="https://jakelin.cn/UNP/%E5%9F%BA%E6%9C%ACTCP%E5%A5%97%E6%8E%A5%E5%AD%97/">
 
 
 <script class="page-configurations">
@@ -51,7 +55,7 @@
   };
 </script>
 
-  <title>k8s Weave Scope 部署配置 | JakeLin's Blogs</title>
+  <title>基本TCP套接字 | JakeLin's Blogs</title>
   
     <script async src="https://www.googletagmanager.com/gtag/js?id=UA-174281095-1"></script>
     <script>
@@ -226,7 +230,7 @@
 
       <!--noindex-->
       <section class="post-toc-wrap sidebar-panel">
-          <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-Weave-Scope-%E5%AE%89%E8%A3%85"><span class="nav-number">1.</span> <span class="nav-text">1. Weave Scope 安装</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-%E8%AE%BF%E9%97%AE%E9%85%8D%E7%BD%AE"><span class="nav-number">2.</span> <span class="nav-text">2. 访问配置</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-web-%E6%B5%8F%E8%A7%88"><span class="nav-number">3.</span> <span class="nav-text">3. web 浏览</span></a></li></ol></div>
+          <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#socket"><span class="nav-number">1.</span> <span class="nav-text">socket</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#bind"><span class="nav-number">2.</span> <span class="nav-text">bind</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#listen"><span class="nav-number">3.</span> <span class="nav-text">listen</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#connect"><span class="nav-number">4.</span> <span class="nav-text">connect</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#accept"><span class="nav-number">5.</span> <span class="nav-text">accept</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#close"><span class="nav-number">6.</span> <span class="nav-text">close</span></a></li></ol></div>
       </section>
       <!--/noindex-->
 
@@ -303,7 +307,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://jakelin.cn/other/k8s%20weave%20scope%20%E5%AE%89%E8%A3%85%E9%85%8D%E7%BD%AE/">
+    <link itemprop="mainEntityOfPage" href="https://jakelin.cn/UNP/%E5%9F%BA%E6%9C%ACTCP%E5%A5%97%E6%8E%A5%E5%AD%97/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="https://i.loli.net/2020/07/31/OZl2JxuSRrweIk5.jpg">
@@ -318,7 +322,7 @@
     
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          k8s Weave Scope 部署配置
+          基本TCP套接字
         </h1>
 
         <div class="post-meta">
@@ -328,7 +332,7 @@
                 发表于
               </span>
               <span class="post-meta-item-text">发表于</span>              
-              <time title="创建时间：2020-01-11 00:00:00" itemprop="dateCreated datePublished" datetime="2020-01-11T00:00:00+08:00">2020-01-11</time>
+              <time title="创建时间：2020-10-23 00:00:00" itemprop="dateCreated datePublished" datetime="2020-10-23T00:00:00+08:00">2020-10-23</time>
             </span>
               <span class="post-meta-item">
                 <span class="post-meta-item-icon">
@@ -336,7 +340,7 @@
                   更新于
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2020-08-01 12:51:30" itemprop="dateModified" datetime="2020-08-01T12:51:30+08:00">2020-08-01</time>
+                <time title="修改时间：2020-10-24 10:08:47" itemprop="dateModified" datetime="2020-10-24T10:08:47+08:00">2020-10-24</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -345,12 +349,16 @@
               </span>
               <span class="post-meta-item-text">分类于</span>
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E6%95%99%E7%A8%8B/" itemprop="url" rel="index"><span itemprop="name">教程</span></a>
+                  <a href="/categories/%E7%AC%94%E8%AE%B0/" itemprop="url" rel="index"><span itemprop="name">笔记</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E7%AC%94%E8%AE%B0/unp/" itemprop="url" rel="index"><span itemprop="name">unp</span></a>
                 </span>
             </span>
 
           
-            <span id="/other/k8s%20weave%20scope%20%E5%AE%89%E8%A3%85%E9%85%8D%E7%BD%AE/" class="post-meta-item leancloud_visitors" data-flag-title="k8s Weave Scope 部署配置" title="阅读次数">
+            <span id="/UNP/%E5%9F%BA%E6%9C%ACTCP%E5%A5%97%E6%8E%A5%E5%AD%97/" class="post-meta-item leancloud_visitors" data-flag-title="基本TCP套接字" title="阅读次数">
               <span class="post-meta-item-icon">
                 <i class="fa fa-eye"></i>
                 阅读量:
@@ -373,8 +381,8 @@
       </span>
       <span class="post-meta-item-text">Valine：</span>
     
-    <a title="valine" href="/other/k8s%20weave%20scope%20%E5%AE%89%E8%A3%85%E9%85%8D%E7%BD%AE/#valine-comments" itemprop="discussionUrl">
-      <span class="post-comments-count valine-comment-count" data-xid="/other/k8s%20weave%20scope%20%E5%AE%89%E8%A3%85%E9%85%8D%E7%BD%AE/" itemprop="commentCount"></span>
+    <a title="valine" href="/UNP/%E5%9F%BA%E6%9C%ACTCP%E5%A5%97%E6%8E%A5%E5%AD%97/#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/UNP/%E5%9F%BA%E6%9C%ACTCP%E5%A5%97%E6%8E%A5%E5%AD%97/" itemprop="commentCount"></span>
     </a>
   </span>
   
@@ -384,7 +392,7 @@
                 <i class="far fa-file-word"></i>
                 字数统计 ≈ 
               </span>
-              <span>2.4k</span>
+              <span>1.7k</span>
             </span>
             <span class="post-meta-item" title="阅读时长">
               <span class="post-meta-item-icon">
@@ -393,7 +401,7 @@
               </span>
               <span>2 分钟</span>
             </span>
-            <div class="post-description">k8s图形化管理、监控UI---Weave Scope部署配置</div>
+            <div class="post-description">Linux网络编程中，基本TCP套接字：socket、bind、listen、accept、connect、close</div>
 
         </div>
       </header>
@@ -402,16 +410,73 @@
     
     
     <div class="post-body" itemprop="articleBody">
-        <h2 id="1-Weave-Scope-安装"><a href="#1-Weave-Scope-安装" class="headerlink" title="1. Weave Scope 安装"></a>1. Weave Scope 安装</h2><p>在 master 上通过以下命令安装Weave Scope：<br>kubectl apply -f “<a target="_blank" rel="noopener" href="https://cloud.weave.works/k8s/scope.yaml?k8s-version=$">https://cloud.weave.works/k8s/scope.yaml?k8s-version=$</a>(kubectl version | base64 | tr -d ‘\n’)”<br>运行后会发现已经起来几个pod:</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">[root@k8s-master ~]# kubectl apply -f &quot;https://cloud.weave.works/k8s/scope.yaml?k8s-version=$(kubectl version | base64 | tr -d &#x27;\n&#x27;)&quot;</span><br><span class="line">namespace/weave created</span><br><span class="line">serviceaccount/weave-scope created</span><br><span class="line">clusterrole.rbac.authorization.k8s.io/weave-scope created</span><br><span class="line">clusterrolebinding.rbac.authorization.k8s.io/weave-scope created</span><br><span class="line">deployment.apps/weave-scope-app created</span><br><span class="line">service/weave-scope-app created</span><br><span class="line">deployment.apps/weave-scope-cluster-agent created</span><br><span class="line">daemonset.apps/weave-scope-agent created</span><br><span class="line">[root@k8s-master ~]# kubectl get pod -n weave  -o wide</span><br><span class="line">NAME                                        READY   STATUS    RESTARTS   AGE   IP              NODE         NOMINATED NODE   READINESS GATES</span><br><span class="line">weave-scope-agent-8zzq5                     1/1     Running   0          11s   192.168.1.92    k8s-master   &lt;none&gt;           &lt;none&gt;</span><br><span class="line">weave-scope-agent-jhcff                     1/1     Running   0          11s   192.168.1.85    k8s-node1    &lt;none&gt;           &lt;none&gt;</span><br><span class="line">weave-scope-agent-qs45b                     1/1     Running   0          11s   192.168.1.133   k8s-node2    &lt;none&gt;           &lt;none&gt;</span><br><span class="line">weave-scope-app-848cd4d8b5-4rlnd            1/1     Running   0          11s   10.244.1.4      k8s-node1    &lt;none&gt;           &lt;none&gt;</span><br><span class="line">weave-scope-cluster-agent-b4f45797c-7srs9   1/1     Running   0          11s   10.244.2.4      k8s-node2    &lt;none&gt;           &lt;none&gt;</span><br><span class="line">[root@k8s-master ~]# kubectl get service -n weave -o wide</span><br><span class="line">NAME              TYPE        CLUSTER-IP    EXTERNAL-IP   PORT(S)   AGE   SELECTOR</span><br><span class="line">weave-scope-app   ClusterIP   10.1.31.163   &lt;none&gt;        80/TCP    57s   app=weave-scope,name=weave-scope-app,weave-cloud-component=scope,weave-scope-component=app</span><br></pre></td></tr></table></figure>
-
-<h2 id="2-访问配置"><a href="#2-访问配置" class="headerlink" title="2. 访问配置"></a>2. 访问配置</h2><p><code>k8s-service-type</code>-Kubernetes服务类型（用于以独立模式运行Scope），可以是 <code>LoadBalancer</code>或<code>NodePort</code>，默认情况下未指定（仅内部访问）<br>使用<kbd>kubectl edit</kbd> 方式修改 nodeport 的端口</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"><span class="comment"># 首先 get svc 查看服务</span></span></span><br><span class="line">[root@k8s-master ~]# kubectl get svc --all-namespaces</span><br><span class="line">NAMESPACE     NAME              TYPE        CLUSTER-IP    EXTERNAL-IP   PORT(S)                  AGE</span><br><span class="line">default       kubernetes        ClusterIP   10.1.0.1      &lt;none&gt;        443/TCP                  28h</span><br><span class="line">kube-system   kube-dns          ClusterIP   10.1.0.10     &lt;none&gt;        53/UDP,53/TCP,9153/TCP   28h</span><br><span class="line">weave         weave-scope-app   ClusterIP   10.1.31.163   &lt;none&gt;        80/TCP                   4m4s</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"><span class="comment"># 修改 weave 服务</span></span></span><br><span class="line">[root@k8s-master ~]# kubectl edit svc/weave-scope-app -n weave</span><br></pre></td></tr></table></figure>
-
-<blockquote>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;</span><span class="bash"><span class="comment">## 以下修改标记</span></span></span><br><span class="line"><span class="meta">&gt;</span><span class="bash">spec:</span></span><br><span class="line"> clusterIP: 10.1.31.163</span><br><span class="line"> ports:</span><br><span class="line"> - name: app</span><br><span class="line">   nodePort: 30001        ## 新增 映射外网访问端口 30000-327627</span><br><span class="line">   port: 80        ## 默认 80 不能修改，修改后无法获取节点信息</span><br><span class="line">   protocol: TCP</span><br><span class="line">   targetPort: 4040</span><br><span class="line"> selector:</span><br><span class="line">   app: weave-scope</span><br><span class="line">   name: weave-scope-app</span><br><span class="line">   weave-cloud-component: scope</span><br><span class="line">   weave-scope-component: app</span><br><span class="line"> sessionAffinity: None</span><br><span class="line"> type: NodePort        ## 修改为 NodePort</span><br><span class="line"><span class="meta">&gt;</span><span class="bash">status:</span></span><br><span class="line"> loadBalancer: &#123;&#125;</span><br></pre></td></tr></table></figure>
+        <blockquote>
+<p>#include &lt;sys/types.h&gt;          /* See NOTES */</p>
+<p>#include &lt;sys/socket.h&gt;</p>
 </blockquote>
-<h2 id="3-web-浏览"><a href="#3-web-浏览" class="headerlink" title="3. web 浏览"></a>3. web 浏览</h2><p>在能访问 master 主机网络的主机上浏览器访问 <font color=red>master ip:nodePort</font>，如：<a target="_blank" rel="noopener" href="http://192.168.1.86:30001/">http://192.168.1.86:30001/</a></p>
+<img src="https://i.loli.net/2020/10/23/tngDJxl8XPbZmRO.png" alt="基本TCP客户-服务器程序套接字函数.png" style="zoom:67%;" />
+
+<h2 id="socket"><a href="#socket" class="headerlink" title="socket"></a>socket</h2><blockquote>
+<p>创建一个套接字，指定通信协议类型</p>
+</blockquote>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 成功：返回文件描述符    失败：返回-1，设置errno</span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">socket</span><span class="params">(<span class="keyword">int</span> domain, <span class="keyword">int</span> type, <span class="keyword">int</span> protocol)</span></span>;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><p><code>domain</code> ：协议族</p>
+<p><code>AF_INET</code>、<code>AF_INET6</code>、AF_LOCAL、AF_ROUTE、AF_KEY</p>
+<p><code>AF_XXX</code> 指<strong>地址族</strong>，<code>PF_XXX</code> 指协议族。但是在实际中，支持多个地址族的协议族从来没有实现过，且&lt;sys/socket.h&gt;中 PF_ 值总是与对应的 AF_ 值相等，因此，<strong>两者值相等，现在可看成是一个意思</strong>。</p>
+</li>
+<li><p><code>type</code> ：套接字类型</p>
+<p><code>SOCK_STREAM</code>、<code>SOCK_DGRAM</code>、SOCK_SEQPACKET、SOCK_RAW </p>
+</li>
+<li><p><code>protocol</code> ：某协议类型的常值，通常为0</p>
+</li>
+</ul>
+<p><img src="https://i.loli.net/2020/10/23/2XiDWoOtZMe1rLk.png" alt="domain-type组合.png"></p>
+<h2 id="bind"><a href="#bind" class="headerlink" title="bind"></a>bind</h2><blockquote>
+<p>把一个本地<strong>协议地址</strong>赋予一个套接字。</p>
+<p>协议地址：<strong>ip地址 + port</strong> </p>
+</blockquote>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 成功：返回0    失败：返回-1，设置errno（常见：EACCES、EADDRINUSE）</span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">bind</span><span class="params">(<span class="keyword">int</span> sockfd, <span class="keyword">const</span> struct sockaddr *addr, <span class="keyword">socklen_t</span> addrlen)</span></span>;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">sockaddr_in</span> &#123;</span></span><br><span class="line">   <span class="keyword">sa_family_t</span>    sin_family; <span class="comment">/* address family: AF_INET */</span></span><br><span class="line">   <span class="keyword">in_port_t</span>      sin_port;   <span class="comment">/* port in network byte order */</span></span><br><span class="line">   <span class="class"><span class="keyword">struct</span> <span class="title">in_addr</span> <span class="title">sin_addr</span>;</span>   <span class="comment">/* internet address */</span></span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="comment">/* Internet address. */</span></span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">in_addr</span> &#123;</span></span><br><span class="line">   <span class="keyword">uint32_t</span>       s_addr;     <span class="comment">/* address in network byte order */</span></span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><code>sockfd</code> ：文件描述符（套接字）</li>
+<li><code>addr</code>：指向特定协议的<strong>地址结构</strong>的指针</li>
+<li><code>addrlen</code> ：地址结构长度</li>
+</ul>
+<h2 id="listen"><a href="#listen" class="headerlink" title="listen"></a>listen</h2><blockquote>
+<p>做两件事：</p>
+<ol>
+<li>把一个未连接的<strong>主动套接字</strong>转换成<strong>被动套接字</strong>，指示内核接收指向该套接字的连接请求，<strong>CLOSED状态</strong> –&gt; <strong>LISTEN状态</strong> </li>
+<li>backlog规定<strong>已完成连接队列</strong>的最大连接个数</li>
+</ol>
+</blockquote>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 成功：返回0    失败：返回-1，设置errno</span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">listen</span><span class="params">(<span class="keyword">int</span> sockfd, <span class="keyword">int</span> backlog)</span></span>;</span><br></pre></td></tr></table></figure>
+
+<p>内核为任何一个给定的监听套接字维护两个队列：</p>
+<ul>
+<li><strong>未完成连接队列</strong>：正在等待完成TCP三次握手，处于 <strong>SYN_RCVD</strong> 状态</li>
+<li><strong>已完成连接队列</strong>：已完成TCP三次握手，等待通过 <code>accept</code> 从队列中取出已连接套接字，处于 <strong>ESTABLISED</strong> 状态</li>
+</ul>
+<p>Linux 2.2 以后，backlog 表示已完成连接队列的 socket 上限。<strong>实际测试</strong>中，队列最大长度为 <font color=red><strong>backlog + 1</strong></font>。</p>
+<p><strong>测试代码及数据</strong>：<a target="_blank" rel="noopener" href="https://github.com/JakeLin0fly/unp-code/tree/master/listen_backlog">listen()函数backlog参数测试</a> </p>
+<h2 id="connect"><a href="#connect" class="headerlink" title="connect"></a>connect</h2><blockquote>
+<p>TCP客户端使用，用于建立与TCP服务器的连接</p>
+</blockquote>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 成功：返回0    失败：返回-1，设置errno</span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">connect</span><span class="params">(<span class="keyword">int</span> sockfd, <span class="keyword">const</span> struct sockaddr *addr, <span class="keyword">socklen_t</span> addrlen)</span></span>;</span><br></pre></td></tr></table></figure>
+
+<h2 id="accept"><a href="#accept" class="headerlink" title="accept"></a>accept</h2><blockquote>
+<p>有TCP服务器调用，从<strong>已完成连接队列</strong>队头返回一个描述符。若队列为空，进程睡眠（默认阻塞方式）</p>
+</blockquote>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 成功：返回非负描述符    失败：返回-1，设置errno</span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">accept</span><span class="params">(<span class="keyword">int</span> sockfd, struct sockaddr *addr, <span class="keyword">socklen_t</span> *addrlen)</span></span>;</span><br></pre></td></tr></table></figure>
+
+<p>若对返回客户端协议地址不感兴趣，可把 addr、addrlen 均值为空指针。</p>
+<h2 id="close"><a href="#close" class="headerlink" title="close"></a>close</h2><blockquote>
+<p>关闭套接字，该套接字不能再被调用进程使用。并发服务器中，close调用实际是相应套接字引用计数减1</p>
+</blockquote>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 成功：返回0    失败：返回-1，设置errno</span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">close</span><span class="params">(<span class="keyword">int</span> sockfd)</span></span>;</span><br></pre></td></tr></table></figure>
+
+<p>当close关闭套接字时，TCP将尝试发送<strong>已排队等待发送</strong>到对端的任何数据，发送完毕后的是正常的TCP连接终止序列（四次握手）。</p>
 
     </div>
 
@@ -422,7 +487,7 @@
   <div class="popular-posts-header">相关文章推荐</div>
   <ul class="popular-posts">
     <li class="popular-posts-item">
-      <div class="popular-posts-title"><a href="\other\centos7-k8s1.16.2 集群安装配置\" rel="bookmark">centos-k8s1.16.2集群安装部署</a></div>
+      <div class="popular-posts-title"><a href="\UNP\select函数-linux内核源码剖析\" rel="bookmark">select函数-linux内核源码剖析</a></div>
     </li>
     <li class="popular-posts-item">
       <div class="popular-posts-title"><a href="\APUE\Linux进程地址空间（程序内存布局）\" rel="bookmark">Linux进程地址空间（程序内存布局）</a></div>
@@ -469,7 +534,7 @@
   </li>
   <li class="post-copyright-link">
     <strong>本文链接：</strong>
-    <a href="https://jakelin.cn/other/k8s%20weave%20scope%20%E5%AE%89%E8%A3%85%E9%85%8D%E7%BD%AE/" title="k8s Weave Scope 部署配置">https://jakelin.cn/other/k8s weave scope 安装配置/</a>
+    <a href="https://jakelin.cn/UNP/%E5%9F%BA%E6%9C%ACTCP%E5%A5%97%E6%8E%A5%E5%AD%97/" title="基本TCP套接字">https://jakelin.cn/UNP/基本TCP套接字/</a>
   </li>
   <li class="post-copyright-license">
     <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
@@ -481,7 +546,8 @@
       <footer class="post-footer">
           <div class="post-tags">
               <a href="/tags/linux/" rel="tag"><i class="fa fa-tag"></i> linux</a>
-              <a href="/tags/k8s/" rel="tag"><i class="fa fa-tag"></i> k8s</a>
+              <a href="/tags/unp/" rel="tag"><i class="fa fa-tag"></i> unp</a>
+              <a href="/tags/TCP/" rel="tag"><i class="fa fa-tag"></i> TCP</a>
           </div>
 
         
@@ -490,13 +556,10 @@
         
     <div class="post-nav">
       <div class="post-nav-item">
-    <a href="/other/centos7-k8s1.16.2%20%E9%9B%86%E7%BE%A4%E5%AE%89%E8%A3%85%E9%85%8D%E7%BD%AE/" rel="prev" title="centos-k8s1.16.2集群安装部署">
-      <i class="fa fa-chevron-left"></i> centos-k8s1.16.2集群安装部署
+    <a href="/C++/%E8%83%BD%E4%B8%8D%E8%83%BD%E5%9C%A8%E5%A4%B4%E6%96%87%E4%BB%B6%E4%B8%AD%E5%AE%9A%E4%B9%89%E5%85%A8%E5%B1%80%E5%8F%98%E9%87%8F/" rel="prev" title="能不能在头文件中定义全局变量？">
+      <i class="fa fa-chevron-left"></i> 能不能在头文件中定义全局变量？
     </a></div>
-      <div class="post-nav-item">
-    <a href="/STL/STL%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90%E6%A6%82%E8%BF%B0/" rel="next" title="STL源码剖析概述">
-      STL源码剖析概述 <i class="fa fa-chevron-right"></i>
-    </a></div>
+      <div class="post-nav-item"></div>
     </div>
       </footer>
     
