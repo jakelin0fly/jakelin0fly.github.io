@@ -2887,4 +2887,130 @@
         <tag>TCP</tag>
       </tags>
   </entry>
+  <entry>
+    <title>计算机网络-五层模型</title>
+    <url>/net/%E4%BA%94%E5%B1%82%E6%A8%A1%E5%9E%8B/</url>
+    <content><![CDATA[<img src="https://i.loli.net/2020/10/25/oMO4v7KFi2n9Psh.png" alt="TCP/IP协议族族中不同层次的协议.png" style="zoom: 67%;" />
+
+<img src="https://i.loli.net/2020/10/25/3PAhBF6RnzjJGO7.png" alt="协议封装过程.png" style="zoom:67%;" />
+
+<h2 id="物理层"><a href="#物理层" class="headerlink" title="物理层"></a>物理层</h2><ul>
+<li><strong>频分复用</strong>：所有用户在同样的时间占用不同的带宽资源</li>
+<li><strong>时分复用</strong>：所有用户是在不同的时间占用相同的频带宽度</li>
+<li>波分复用：光的频分复用</li>
+</ul>
+<p><strong>集线器</strong>：工作在物理层，<strong>简单的转发比特，不进行碰撞检测</strong>。不同鹏颛臾使用不同的速率则不能使用集线器互连。</p>
+<h2 id="数据链路层"><a href="#数据链路层" class="headerlink" title="数据链路层"></a>数据链路层</h2><p>主要信道：<strong>点对点信道</strong> 、<strong>广播信道</strong> </p>
+<p>三个基本问题：<strong>封装成帧</strong>、<strong>透明传输</strong>、<strong>差错检测（循环冗余检验CRC）</strong> </p>
+<p>以太网帧不能小于<strong>64B</strong>，以太网的端到端往返时间称为<strong>争用期</strong>（碰撞窗口），凡是长度小于64字节的帧都是由于冲突而异常终止的无效帧。</p>
+<p>数据链路层设备：</p>
+<ul>
+<li><p><strong>适配器</strong>：即”网卡“。串并转换、数据转存、安装设备驱动、实现以太网协。议。</p>
+</li>
+<li><p><strong>网桥</strong></p>
+<ul>
+<li>学习源地址</li>
+<li>过滤同网端帧</li>
+<li>转发异网端帧</li>
+<li>扩散未知帧</li>
+</ul>
+</li>
+<li><p>以太网交换机：实质就是多借口的<strong>网桥</strong>，能<strong>隔离碰撞域</strong>。</p>
+<p><strong>广播风暴</strong>：一个数据帧或包被传输到本地网段 (由广播域定义)上的每个节点就是广播；由于网络拓扑的设计和连接问题，或其他原因导致广播在网段内大量复制，传播数据帧，导致网络性能下降，甚至网络瘫痪。</p>
+<p>生成树协议STP：阻塞一个或多个冗余端口。</p>
+</li>
+</ul>
+<h2 id="网络层"><a href="#网络层" class="headerlink" title="网络层"></a>网络层</h2><p>网络层向上只提供更<strong>简单灵活的、无连接的、尽最大努力交付</strong>的数据报服务。网络层不提供服务质量的承诺。</p>
+<ul>
+<li><p><strong>IP协议</strong></p>
+<img src="https://i.loli.net/2020/10/25/mngxjNyYv74If6z.png" alt="IP数据报格式.png" style="zoom: 67%;" />
+</li>
+<li><p><strong>地址解析协议 ARP</strong></p>
+</li>
+<li><p><strong>逆地址解析协议 RARP</strong></p>
+</li>
+<li><p><strong>网际控制报文协议 ICMP</strong></p>
+</li>
+<li><p><strong>网际组管理协议 IGMP</strong></p>
+</li>
+<li><p>划分子网</p>
+</li>
+<li><p>路由选择协议</p>
+<ul>
+<li><strong>内部网关协议 RIP</strong></li>
+<li><strong>内部网关协议 OSPF</strong></li>
+<li>外部网关协议 BGP</li>
+</ul>
+</li>
+</ul>
+<h2 id="传输层"><a href="#传输层" class="headerlink" title="传输层"></a>传输层</h2><p>运输层向它上面的应用层提供<strong>通信服务</strong>。<strong>通信的真正端点并不是主机而是主机中的进程</strong>。</p>
+<p>两种运输协议：<strong>面向连接的TCP</strong> 和 <strong>无连接的UDP</strong>。</p>
+<ul>
+<li><p><strong>用户数据报协议 UDP</strong>：无连接、尽最大努力交付、面向报文</p>
+<ul>
+<li><p>报文数据格式</p>
+<img src="https://i.loli.net/2020/10/25/t8jmJIhCkTABOzu.png" alt="UDP用户数据报的首部和伪首部.png" style="zoom:67%;" />
+</li>
+</ul>
+</li>
+<li><p><strong>传输控制协议 TCP</strong>：面向连接、只能点到点、全双工通信、面向字节流</p>
+<ul>
+<li><p>报文数据格式</p>
+<img src="https://i.loli.net/2020/10/25/MP8xVwous3nap7j.png" alt="TCP报文段的首部格式.png" style="zoom:67%;" />
+</li>
+<li><p>TCP可靠传输的实现：以字节为单位的滑动窗口、超时重传</p>
+</li>
+<li><p>TCP流量控制：流量控制就是让发送方发送速率不要太快，要让接收方来得及接收，发送窗口不超过接收窗口。</p>
+<ul>
+<li>滑动窗口</li>
+</ul>
+</li>
+<li><p>TCP拥塞控制：防止过多的数据注入到网络中，使得网络中的路由器或链路不至于过载。判断网络拥塞的依据就是出现了超时。</p>
+<ul>
+<li><p><strong>慢开始</strong>：有小到大逐渐增大发送窗口。需设置慢开始门限。</p>
+</li>
+<li><p><strong>拥塞避免</strong>：让拥塞窗口 cwnd 缓慢地增大，按线性规律增长，使得网络比较不容易出现拥塞。</p>
+</li>
+<li><p><strong>快重传</strong>：要求接收方立即发送确认，即使收到失序的报文要立即发出对已收到报文段的重复确认。</p>
+<p>eg：假定没有收到M3，但却收到了M4，必须理解发送对M2的重复确认</p>
+</li>
+<li><p><strong>快恢复</strong>：发送方知道只是丢失了个别报文，将调整慢开始门限为 cwnd/2 ，并开始执行拥塞避免算法。</p>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p><strong>可靠传输原理</strong></p>
+<ul>
+<li>停止等待协议：每发送完一个分组就停止发送，等到对方确认，收到确认再发下一个分组。确认和重传机制，可以在不可靠的传输网络上实现可靠通信。</li>
+<li>连续ARP协议：发送方收到一个确认，发送窗口就向前滑动一个分组的位置；接收方不必对每个分组发送确认，对按序到达的最后一个分组发送确认。</li>
+</ul>
+</li>
+<li><p><strong>TCP连接管理</strong></p>
+<ul>
+<li><p><strong>“三次握手”</strong>：TCP的连接建立</p>
+<img src="https://i.loli.net/2020/10/25/BUtYroWNihSe6V7.png" alt="TCP三次握手.png" style="zoom:50%;" />
+</li>
+<li><p><strong>“四次握手”</strong>：TCP的连接释放</p>
+<img src="https://i.loli.net/2020/10/25/A7n6OUMl8YfCpjg.png" alt="TCP四次握手.png" style="zoom:50%;" />
+</li>
+<li><p><strong>TCP的有限状态机</strong></p>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="应用层"><a href="#应用层" class="headerlink" title="应用层"></a>应用层</h2><ul>
+<li>域名系统 DNS</li>
+<li>动态主机配置协议 DHCP</li>
+<li>超文本传送协议 HTTP</li>
+</ul>
+]]></content>
+      <categories>
+        <category>笔记</category>
+        <category>网络</category>
+      </categories>
+      <tags>
+        <tag>网络</tag>
+      </tags>
+  </entry>
 </search>
