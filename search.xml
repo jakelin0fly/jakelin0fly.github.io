@@ -2966,6 +2966,9 @@
 </ul>
 </li>
 <li><p>TCP拥塞控制：防止过多的数据注入到网络中，使得网络中的路由器或链路不至于过载。判断网络拥塞的依据就是出现了超时。</p>
+<blockquote>
+<p><a href="https://blog.csdn.net/sicofield/article/details/9708383">TCP的拥塞控制</a> </p>
+</blockquote>
 <ul>
 <li><p><strong>慢开始</strong>：有小到大逐渐增大发送窗口。需设置慢开始门限。</p>
 </li>
@@ -3100,6 +3103,56 @@
       </categories>
       <tags>
         <tag>网络</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Centos扩容</title>
+    <url>/other/Centos%E6%89%A9%E5%AE%B9/</url>
+    <content><![CDATA[<p>CVM存储在 <code>/var</code> 下，虽然固态硬盘大部分存储空间，都给了 <code>/var</code> ，但是虚拟机多一点，就担心空间不足。于是便通过以下步骤对 <code>/var</code> 进行扩容。</p>
+<p>更新–查看磁盘分区情况：</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">[root@localhost ~]# lsblk</span><br><span class="line">NAME              MAJ:MIN RM   SIZE RO TYPE MOUNTPOINT</span><br><span class="line">sda                 8:0    0 447.1G  0 disk </span><br><span class="line">├─sda1              8:1    0    50M  0 part /boot/efi</span><br><span class="line">├─sda2              8:2    0     1G  0 part /boot</span><br><span class="line">└─sda3              8:3    0 446.1G  0 part </span><br><span class="line">  ├─centos00-root 253:0    0    80G  0 lvm  /</span><br><span class="line">  ├─centos00-swap 253:1    0    64G  0 lvm  [SWAP]</span><br><span class="line">  └─centos00-var  253:2    0 742.1G  0 lvm  /var</span><br><span class="line">sdb                 8:16   0 447.1G  0 disk </span><br><span class="line">└─centos00-var    253:2    0 742.1G  0 lvm  /var</span><br><span class="line">sdc                 8:32   0 447.1G  0 disk</span><br></pre></td></tr></table></figure>
+
+
+
+<ol>
+<li><p>查看分区</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">[root@localhost ~]# df -hT</span><br><span class="line">Filesystem              Type      Size  Used Avail Use% Mounted on</span><br><span class="line">/dev/mapper/centos-root xfs        40G  3.9G   37G  10% /</span><br><span class="line">devtmpfs                devtmpfs   12G     0   12G   0% /dev</span><br><span class="line">tmpfs                   tmpfs      12G     0   12G   0% /dev/shm</span><br><span class="line">tmpfs                   tmpfs      12G   33M   12G   1% /run</span><br><span class="line">tmpfs                   tmpfs      12G     0   12G   0% /sys/fs/cgroup</span><br><span class="line">/dev/sdc2               xfs       497M  155M  343M  32% /boot</span><br><span class="line">/dev/sdc1               vfat       50M   12M   39M  23% /boot/efi</span><br><span class="line">/dev/mapper/centos-var  xfs       375G  254G  121G  68% /var  # 大小 375G</span><br><span class="line">tmpfs                   tmpfs     2.4G     0  2.4G   0% /run/user/0</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>查看磁盘编号</p>
+<p>也可以使用 <code>fdisk -l</code> 查看磁盘信息。其中 <code>/dev/sdb</code> 是用于扩容的磁盘。</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">[root@localhost ~]# ls /dev/sd*</span><br><span class="line">/dev/sda  /dev/sdb  /dev/sdc  /dev/sdc1  /dev/sdc2  /dev/sdc3</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>创建pv</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">[root@localhost ~]# pvcreate /dev/sdb </span><br><span class="line">  Physical volume &quot;/dev/sdb&quot; successfully created.</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>查看vg组</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">[root@localhost ~]# vgs</span><br><span class="line">  VG     #PV #LV #SN Attr   VSize    VFree</span><br><span class="line">  centos   1   3   0 wz--n- &lt;446.59g    0    # 此时vfree为0</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>扩展vg</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">[root@localhost ~]# vgextend centos /dev/sdb </span><br><span class="line">  Volume group &quot;centos&quot; successfully extended</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>再次查看vg组</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">[root@localhost ~]# vgs</span><br><span class="line">  VG     #PV #LV #SN Attr   VSize  VFree  </span><br><span class="line">  centos   2   3   0 wz--n- &lt;1.35t 931.51g     # 此时vfree为 931.51g</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>扩展lv（+500G）</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">[root@localhost ~]# lvextend -L +500G /dev/mapper/centos-var </span><br><span class="line">  Size of logical volume centos/var changed from &lt;374.59 GiB (95895 extents) to &lt;874.59 GiB (223895 extents).</span><br><span class="line">  Logical volume centos/var successfully resized.</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>系统重新读取大小</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">[root@localhost ~]# xfs_growfs /dev/mapper/centos-var </span><br><span class="line">meta-data=/dev/mapper/centos-var isize=256    agcount=4, agsize=24549120 blks</span><br><span class="line">         =                       sectsz=512   attr=2, projid32bit=1</span><br><span class="line">         =                       crc=0        finobt=0 spinodes=0</span><br><span class="line">data     =                       bsize=4096   blocks=98196480, imaxpct=25</span><br><span class="line">         =                       sunit=0      swidth=0 blks</span><br><span class="line">naming   =version 2              bsize=4096   ascii-ci=0 ftype=0</span><br><span class="line">log      =internal               bsize=4096   blocks=47947, version=2</span><br><span class="line">         =                       sectsz=512   sunit=0 blks, lazy-count=1</span><br><span class="line">realtime =none                   extsz=4096   blocks=0, rtextents=0</span><br><span class="line">data blocks changed from 98196480 to 229268480</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>查看扩容是否成功</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">[root@localhost ~]# df -h</span><br><span class="line">Filesystem               Size  Used Avail Use% Mounted on</span><br><span class="line">/dev/mapper/centos-root   40G  3.9G   37G  10% /</span><br><span class="line">devtmpfs                  12G     0   12G   0% /dev</span><br><span class="line">tmpfs                     12G     0   12G   0% /dev/shm</span><br><span class="line">tmpfs                     12G   33M   12G   1% /run</span><br><span class="line">tmpfs                     12G     0   12G   0% /sys/fs/cgroup</span><br><span class="line">/dev/sdc2                497M  155M  343M  32% /boot</span><br><span class="line">/dev/sdc1                 50M   12M   39M  23% /boot/efi</span><br><span class="line">/dev/mapper/centos-var   875G  254G  621G  30% /var        # 大小 375G + 500G = 875G</span><br><span class="line">tmpfs                    2.4G     0  2.4G   0% /run/user/0</span><br></pre></td></tr></table></figure>
+
+
+
+</li>
+</ol>
+]]></content>
+      <categories>
+        <category>文档</category>
+      </categories>
+      <tags>
+        <tag>linux</tag>
       </tags>
   </entry>
 </search>
