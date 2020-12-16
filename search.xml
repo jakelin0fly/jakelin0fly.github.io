@@ -1233,6 +1233,30 @@
 
 </div></div>
 
+<h2 id="SSL配置"><a href="#SSL配置" class="headerlink" title="SSL配置"></a>SSL配置</h2><p>Nginx 默认安装的情况下<code>ssl模块</code>并未被安装，如果要使用该模块则需要在编译nginx时指定<code>with-http_ssl_module</code>参数。</p>
+<ol>
+<li><p>查看ngixn版本极其编译参数</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">/usr/local/nginx/sbin/nginx -V</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>进入nginx源码目录</p>
+</li>
+<li><p>重新编译模块</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">./configure --prefix=/usr/local/nginx --with-http_stub_status_module --with-http_ssl_module --with-file-aio --with-http_realip_module</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><code>make</code>  <strong><em>全完别 make install 覆盖安装</em></strong></p>
+</li>
+<li><p>备份旧的nginx程序</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">cp /usr/local/nginx/sbin/nginx /usr/local/nginx/sbin/nginx.bak</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>将刚刚编译好的nginx覆盖掉原有的nginx（这个时候nginx要停止状态 — <code>kill 9</code>）</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">cp ./objs/nginx /usr/local/nginx/sbin/</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>查看模块安装结果</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">nginx -V</span><br><span class="line"><span class="meta">#</span><span class="bash"><span class="comment"># or</span></span></span><br><span class="line">/usr/local/nginx/sbin/nginx -V</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>检查配置&amp;启动nginx</p>
+</li>
+</ol>
 <h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><p><a href="https://www.cnblogs.com/zhoulifeng/p/10236116.html">nginx服务器搭建以及配置</a></p>
 ]]></content>
       <categories>
@@ -3153,6 +3177,65 @@
       </categories>
       <tags>
         <tag>linux</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>同步&amp;异步-阻塞&amp;非阻塞</title>
+    <url>/APUE/%E5%90%8C%E6%AD%A5&amp;%E5%BC%82%E6%AD%A5&amp;%E9%98%BB%E5%A1%9E&amp;%E9%9D%9E%E9%98%BB%E5%A1%9E/</url>
+    <content><![CDATA[<p><strong>同步&amp;异步</strong>：同步和异步关注的是<strong>消息通信机制</strong>。</p>
+<p><strong>阻塞&amp;非阻塞</strong>：阻塞和非阻塞关注的是程序在<strong>等待调用结果时的状态</strong>。</p>
+<blockquote>
+<p>张三爱喝茶，烧水泡茶。</p>
+<ol>
+<li>张三把水壶放火上，立等水开。（同步阻塞）</li>
+<li>张三把水壶放火上，去客厅看电视，时不时去厨房看水开没有。（同步非阻塞）</li>
+</ol>
+<p>张三买了个智能水壶，烧开后铃声提示。</p>
+<ol>
+<li>张三把智能水壶放火上，立等水开。（异步阻塞）</li>
+<li>张三把智能水壶放火上，去客厅看电视，水壶响之前不再去看它了，响了再去拿壶。（异步非阻塞）</li>
+</ol>
+<p><strong>同步&amp;异步</strong>，只是对<strong>水壶（被调用）</strong>而言。普通水壶——同步。智能水壶——异步。智能水壶能自己干完活后提示张三水开了，普通水壶智能让张三去轮询查看（造成张三效率低下）。</p>
+<p><strong>阻塞&amp;非阻塞</strong>，仅仅对于<strong>老张（调用者）</strong>而言。 立等的张三——阻塞；看电视的张三——非阻塞。 </p>
+<p>一般异步是配合非阻塞使用的，这样才能发挥异步的效用。</p>
+</blockquote>
+<p>从理论上说，<font color=red><strong>阻塞I/O</strong>、<strong>I/O复用</strong>以及<strong>信号驱动I/O</strong>都是<strong>同步I/O模型</strong></font>。</p>
+<p><strong>异步I/O</strong>的读写操作总是<strong>立即返回</strong>，而不论I/O是否是阻塞的，因为真正读写操作已经由内核接管。</p>
+<p><strong>同步I/O模型</strong>要求用户代码自行执行I/O操作，而<strong>异步I/O机制</strong>由内核来执行I/O操作。即，<strong>同步I/O</strong>向应用程序通知的是I/O就绪事件，异步I/O向应用程序通知的是<strong>I/O完成事件</strong>。</p>
+<hr>
+<table>
+<thead>
+<tr>
+<th>I/O模型</th>
+<th>读写操作和阻塞阶段</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>阻塞I/O</td>
+<td>程序阻塞与读写函数</td>
+</tr>
+<tr>
+<td>I/O复用</td>
+<td>程序阻塞于I/O复用系统调用，但可以同时监听多个I/O事件，对于I/O本身的读写操作是非阻塞的。</td>
+</tr>
+<tr>
+<td>SIGIO信号</td>
+<td>信号触发I/O就绪事件，用户程序执行读写操作。程序没有阻塞阶段。</td>
+</tr>
+<tr>
+<td>异步I/O</td>
+<td>内核执行读写操作并触发I/O完成事件。程序没有阻塞阶段。</td>
+</tr>
+</tbody></table>
+]]></content>
+      <categories>
+        <category>笔记</category>
+        <category>apue</category>
+      </categories>
+      <tags>
+        <tag>apue</tag>
+        <tag>操作系统</tag>
+        <tag>高性能服务器</tag>
       </tags>
   </entry>
 </search>
