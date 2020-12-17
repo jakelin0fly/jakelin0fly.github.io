@@ -3238,4 +3238,73 @@
         <tag>高性能服务器</tag>
       </tags>
   </entry>
+  <entry>
+    <title>高效事件处理模式--Proactor模式</title>
+    <url>/UNP/%E9%AB%98%E6%95%88%E4%BA%8B%E4%BB%B6%E5%A4%84%E7%90%86%E6%A8%A1%E5%BC%8F--Proactor%E6%A8%A1%E5%BC%8F/</url>
+    <content><![CDATA[<p><strong>同步I/O模型</strong>通常用于实现<strong>Reactor模式</strong>，<strong>异步I/O模型</strong>则用于实现<strong>Proactor模式</strong>。</p>
+<h3 id="Proactor模式"><a href="#Proactor模式" class="headerlink" title="Proactor模式"></a>Proactor模式</h3><p>与 Reactor 模式不同，Proactor 模式将所有 <strong>I/O 操作</strong>都交给<strong>主线程</strong>和<strong>内核</strong>来处理， <strong>工作线程</strong>仅仅负责<strong>业务逻辑</strong>。</p>
+<ul>
+<li><strong>主线程</strong>：负责<strong>监听已连接文件描述符</strong>上是否有事件发生。</li>
+<li><strong>内核</strong>：负责处理<strong>I/O读写</strong>操作。</li>
+<li><strong>工作线程</strong>：仅负责<strong>业务逻辑</strong>。</li>
+</ul>
+<img src="https://i.loli.net/2020/12/17/BHf5AtxvRQsWUV1.png" alt="Proactor模式.png" style="zoom:67%;" />
+
+<p>使用异步 I/O 模型（以 aio_read 和 aio_write为例）实现的 Proactor 模式的工作流程是：</p>
+<ol>
+<li>主线程调用 aio_read 函数向内核注册 socket 上的读完成事件，并告诉内核用户读缓冲区的位置，以及读操作完成时如何通知应用程序（这里以信号为例）。</li>
+<li>主线程继续处理其他逻辑。</li>
+<li>当 socket 上的数据被读入用户缓冲区后，内核将向应用程序发送一个信号，以 通知应用程序数据已经可用。</li>
+<li>应用程序预先定义好的信号处理函数选择一个工作线程来处理客户请求。工作线程处理完客户请求之后，调用 aio_write 函数向内核注册 socket 上的写完成事件，并告诉内核用户写缓冲区的位置，以及写操作完成时如何通知应用程序（仍然以信号为例）。</li>
+<li>主线程继续处理其他逻辑。</li>
+<li>当用户缓冲区的数据被写入 socket 之后，内核将向应用程序发送一个信号，以通知应用程序数据已经发送完毕。</li>
+<li>应用程序预先定义好的信号处理函数选择一个工作线程来做善后处理，比如决定是否关闭 socket。</li>
+</ol>
+<p>主线程中的 epoll_wait 调用<strong>仅能用来检测监听（已连接）socket</strong> 上的连接请求事件，而<strong>不能用来检测连接 socket</strong> 上的读写事件。</p>
+<hr>
+<p>参考：《Linux高性能服务器编程》 游双</p>
+]]></content>
+      <categories>
+        <category>笔记</category>
+        <category>unp</category>
+      </categories>
+      <tags>
+        <tag>操作系统</tag>
+        <tag>unp</tag>
+        <tag>高性能服务器</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>高效事件处理模式--Reactor模式</title>
+    <url>/UNP/%E9%AB%98%E6%95%88%E4%BA%8B%E4%BB%B6%E5%A4%84%E7%90%86%E6%A8%A1%E5%BC%8F--Reactor%E6%A8%A1%E5%BC%8F/</url>
+    <content><![CDATA[<p><strong>同步I/O模型</strong>通常用于实现<strong>Reactor模式</strong>，<strong>异步I/O模型</strong>则用于实现<strong>Proactor模式</strong>。</p>
+<h3 id="Reactor模式"><a href="#Reactor模式" class="headerlink" title="Reactor模式"></a>Reactor模式</h3><ul>
+<li><strong>主线程（I/O处理单元）</strong>：只负责<strong>监听文件描述符</strong>上是否有事件发生，有的话以及将该事件通知工作线程。</li>
+<li><strong>工作线程（逻辑单元）</strong>：<strong>读写数据</strong>，<strong>接受新的连接</strong>，<strong>处理用户请求</strong>均在工作线程中完成。</li>
+</ul>
+<img src="https://i.loli.net/2020/12/17/4QTMAk8369fYsDv.png" alt="Reactor模式.png" style="zoom:67%;" />
+
+<p>使用同步 I/O 模型（以 epoll_wait 为例）实现的 Reactor 模式的工作流程是：</p>
+<ol>
+<li>主线程往 epoll 内核事件表中注册 socket 上的<strong>读就绪事件</strong>。</li>
+<li>主线程调用 epoll_wait 等待 socket 上有数据可读。</li>
+<li>当 socket 上有数据可读时， epoll_wait 通知主线程。主线程则将 socket 可读事件放入请求队列。</li>
+<li>睡眠在请求队列上的某个工作线程被唤醒，它从 socket 读取数据，并处理客户请求，然后往 epoll 内核事件表中注册该 socket 上的<strong>写就绪事件</strong>。</li>
+<li>主线程调用 epoll_wait 等待 socket 可写。</li>
+<li>当 socket 可写时，epoll_wait 通知主线程。主线程将 socket 可写事件放入请求队列。</li>
+<li>睡眠在请求队列上的某个工作进程被唤醒，它往 socket 上写入服务器处理客户请求的结果。</li>
+</ol>
+<hr>
+<p>参考：《Linux高性能服务器编程》 游双</p>
+]]></content>
+      <categories>
+        <category>笔记</category>
+        <category>unp</category>
+      </categories>
+      <tags>
+        <tag>操作系统</tag>
+        <tag>unp</tag>
+        <tag>高性能服务器</tag>
+      </tags>
+  </entry>
 </search>

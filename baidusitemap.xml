@@ -1,6 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
+    <loc>https://jakelin.cn/UNP/%E9%AB%98%E6%95%88%E4%BA%8B%E4%BB%B6%E5%A4%84%E7%90%86%E6%A8%A1%E5%BC%8F--Proactor%E6%A8%A1%E5%BC%8F/</loc>
+    <lastmod>2020-12-17</lastmod>
+  </url>
+  <url>
+    <loc>https://jakelin.cn/UNP/%E9%AB%98%E6%95%88%E4%BA%8B%E4%BB%B6%E5%A4%84%E7%90%86%E6%A8%A1%E5%BC%8F--Reactor%E6%A8%A1%E5%BC%8F/</loc>
+    <lastmod>2020-12-17</lastmod>
+  </url>
+  <url>
     <loc>https://jakelin.cn/APUE/%E5%90%8C%E6%AD%A5&%E5%BC%82%E6%AD%A5&%E9%98%BB%E5%A1%9E&%E9%9D%9E%E9%98%BB%E5%A1%9E/</loc>
     <lastmod>2020-12-16</lastmod>
   </url>
