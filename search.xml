@@ -3180,65 +3180,6 @@
       </tags>
   </entry>
   <entry>
-    <title>同步&amp;异步-阻塞&amp;非阻塞</title>
-    <url>/APUE/%E5%90%8C%E6%AD%A5&amp;%E5%BC%82%E6%AD%A5&amp;%E9%98%BB%E5%A1%9E&amp;%E9%9D%9E%E9%98%BB%E5%A1%9E/</url>
-    <content><![CDATA[<p><strong>同步&amp;异步</strong>：同步和异步关注的是<strong>消息通信机制</strong>。</p>
-<p><strong>阻塞&amp;非阻塞</strong>：阻塞和非阻塞关注的是程序在<strong>等待调用结果时的状态</strong>。</p>
-<blockquote>
-<p>张三爱喝茶，烧水泡茶。</p>
-<ol>
-<li>张三把水壶放火上，立等水开。（同步阻塞）</li>
-<li>张三把水壶放火上，去客厅看电视，时不时去厨房看水开没有。（同步非阻塞）</li>
-</ol>
-<p>张三买了个智能水壶，烧开后铃声提示。</p>
-<ol>
-<li>张三把智能水壶放火上，立等水开。（异步阻塞）</li>
-<li>张三把智能水壶放火上，去客厅看电视，水壶响之前不再去看它了，响了再去拿壶。（异步非阻塞）</li>
-</ol>
-<p><strong>同步&amp;异步</strong>，只是对<strong>水壶（被调用）</strong>而言。普通水壶——同步。智能水壶——异步。智能水壶能自己干完活后提示张三水开了，普通水壶智能让张三去轮询查看（造成张三效率低下）。</p>
-<p><strong>阻塞&amp;非阻塞</strong>，仅仅对于<strong>老张（调用者）</strong>而言。 立等的张三——阻塞；看电视的张三——非阻塞。 </p>
-<p>一般异步是配合非阻塞使用的，这样才能发挥异步的效用。</p>
-</blockquote>
-<p>从理论上说，<font color=red><strong>阻塞I/O</strong>、<strong>I/O复用</strong>以及<strong>信号驱动I/O</strong>都是<strong>同步I/O模型</strong></font>。</p>
-<p><strong>异步I/O</strong>的读写操作总是<strong>立即返回</strong>，而不论I/O是否是阻塞的，因为真正读写操作已经由内核接管。</p>
-<p><strong>同步I/O模型</strong>要求用户代码自行执行I/O操作，而<strong>异步I/O机制</strong>由内核来执行I/O操作。即，<strong>同步I/O</strong>向应用程序通知的是I/O就绪事件，异步I/O向应用程序通知的是<strong>I/O完成事件</strong>。</p>
-<hr>
-<table>
-<thead>
-<tr>
-<th>I/O模型</th>
-<th>读写操作和阻塞阶段</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>阻塞I/O</td>
-<td>程序阻塞与读写函数</td>
-</tr>
-<tr>
-<td>I/O复用</td>
-<td>程序阻塞于I/O复用系统调用，但可以同时监听多个I/O事件，对于I/O本身的读写操作是非阻塞的。</td>
-</tr>
-<tr>
-<td>SIGIO信号</td>
-<td>信号触发I/O就绪事件，用户程序执行读写操作。程序没有阻塞阶段。</td>
-</tr>
-<tr>
-<td>异步I/O</td>
-<td>内核执行读写操作并触发I/O完成事件。程序没有阻塞阶段。</td>
-</tr>
-</tbody></table>
-]]></content>
-      <categories>
-        <category>笔记</category>
-        <category>apue</category>
-      </categories>
-      <tags>
-        <tag>apue</tag>
-        <tag>操作系统</tag>
-        <tag>高性能服务器</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>高效事件处理模式--Proactor模式</title>
     <url>/UNP/%E9%AB%98%E6%95%88%E4%BA%8B%E4%BB%B6%E5%A4%84%E7%90%86%E6%A8%A1%E5%BC%8F--Proactor%E6%A8%A1%E5%BC%8F/</url>
     <content><![CDATA[<p><strong>同步I/O模型</strong>通常用于实现<strong>Reactor模式</strong>，<strong>异步I/O模型</strong>则用于实现<strong>Proactor模式</strong>。</p>
@@ -3304,6 +3245,70 @@
       <tags>
         <tag>操作系统</tag>
         <tag>unp</tag>
+        <tag>高性能服务器</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>I/O模型中的同步&amp;异步-阻塞&amp;非阻塞</title>
+    <url>/UNP/IO%E6%A8%A1%E5%9E%8B%E4%B8%AD%E7%9A%84%E5%90%8C%E6%AD%A5&amp;%E5%BC%82%E6%AD%A5-%E9%98%BB%E5%A1%9E&amp;%E9%9D%9E%E9%98%BB%E5%A1%9E/</url>
+    <content><![CDATA[<p>I/O模型中：</p>
+<ul>
+<li><p><strong>同步&amp;异步</strong>：同步和异步关注的是<strong>消息通信机制</strong>。</p>
+</li>
+<li><p><strong>阻塞&amp;非阻塞</strong>：阻塞和非阻塞关注的是程序在<strong>等待调用结果时的状态</strong>。</p>
+</li>
+</ul>
+<blockquote>
+<p>张三爱喝茶，烧水泡茶。</p>
+<ol>
+<li>张三把水壶放火上，立等水开。（同步阻塞）</li>
+<li>张三把水壶放火上，去客厅看电视，时不时去厨房看水开没有。（同步非阻塞）</li>
+</ol>
+<p>张三买了个智能水壶，烧开后铃声提示。</p>
+<ol>
+<li>张三把智能水壶放火上，立等水开。（异步阻塞）</li>
+<li>张三把智能水壶放火上，去客厅看电视，水壶响之前不再去看它了，响了再去拿壶。（异步非阻塞）</li>
+</ol>
+<p><strong>同步&amp;异步</strong>，只是对<strong>水壶（被调用）</strong>而言。普通水壶——同步。智能水壶——异步。智能水壶能自己干完活后提示张三水开了，普通水壶智能让张三去轮询查看（造成张三效率低下）。</p>
+<p><strong>阻塞&amp;非阻塞</strong>，仅仅对于<strong>老张（调用者）</strong>而言。 立等的张三——阻塞；看电视的张三——非阻塞。 </p>
+<p>一般异步是配合非阻塞使用的，这样才能发挥异步的效用。</p>
+</blockquote>
+<p>从理论上说，<font color=red><strong>阻塞I/O</strong>、<strong>I/O复用</strong>以及<strong>信号驱动I/O</strong>都是<strong>同步I/O模型</strong></font>。</p>
+<p><strong>异步I/O</strong>的读写操作总是<strong>立即返回</strong>，而不论I/O是否是阻塞的，因为真正读写操作已经由内核接管。</p>
+<p><strong>同步I/O模型</strong>要求用户代码自行执行I/O操作，而<strong>异步I/O机制</strong>由内核来执行I/O操作。即，<strong>同步I/O</strong>向应用程序通知的是I/O就绪事件，异步I/O向应用程序通知的是<strong>I/O完成事件</strong>。</p>
+<hr>
+<table>
+<thead>
+<tr>
+<th>I/O模型</th>
+<th>读写操作和阻塞阶段</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>阻塞I/O</td>
+<td>程序阻塞与读写函数</td>
+</tr>
+<tr>
+<td>I/O复用</td>
+<td>程序阻塞于I/O复用系统调用，但可以同时监听多个I/O事件，对于I/O本身的读写操作是非阻塞的。</td>
+</tr>
+<tr>
+<td>SIGIO信号</td>
+<td>信号触发I/O就绪事件，用户程序执行读写操作。程序没有阻塞阶段。</td>
+</tr>
+<tr>
+<td>异步I/O</td>
+<td>内核执行读写操作并触发I/O完成事件。程序没有阻塞阶段。</td>
+</tr>
+</tbody></table>
+]]></content>
+      <categories>
+        <category>笔记</category>
+        <category>apue</category>
+      </categories>
+      <tags>
+        <tag>apue</tag>
+        <tag>操作系统</tag>
         <tag>高性能服务器</tag>
       </tags>
   </entry>
