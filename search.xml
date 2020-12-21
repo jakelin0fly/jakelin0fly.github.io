@@ -3304,11 +3304,58 @@
 ]]></content>
       <categories>
         <category>笔记</category>
-        <category>apue</category>
+        <category>unp</category>
       </categories>
       <tags>
-        <tag>apue</tag>
         <tag>操作系统</tag>
+        <tag>unp</tag>
+        <tag>高性能服务器</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>高效并发模式--半同步/半异步模式</title>
+    <url>/UNP/%E9%AB%98%E6%95%88%E5%B9%B6%E5%8F%91%E6%A8%A1%E5%BC%8F--%E5%8D%8A%E5%90%8C%E6%AD%A5%E5%8D%8A%E5%BC%82%E6%AD%A5%E6%A8%A1%E5%BC%8F/</url>
+    <content><![CDATA[<p>并发编程的目的是让程序“同时”执行多个任务。若程序是<strong>计算密集型</strong>的，并发编程并没有优势，相反由于任务的切换使得效率降低。但如果程序是<strong>I/O密集型</strong>的，比如经常读写文件，访问数据库等，则情况不同。由于I/O操作的速度远没有CPU计算的速度快，所以当程序阻塞于I/O操作将浪费大量CPU时间。</p>
+<p>并发模式是指I/O处理单元和多个逻辑单元之间的协调完成任务的方法。</p>
+<p><font color=red><strong>并发模式</strong>中，<strong>“同步”</strong>指的是程序完全按照代码序列的顺序执行；<strong>“异步”</strong>指的是程序的执行需要由系统事件来驱动。</font></p>
+<p>以<strong>异步线程</strong>执行的程序相对复杂，难于调适和扩展，并且<strong>不适合于大量的并发</strong>。<strong>同步线程</strong>则相反，程序效率相对较低，实时性较差，但逻辑简单。</p>
+<h3 id="半同步-半异步模式"><a href="#半同步-半异步模式" class="headerlink" title="半同步/半异步模式"></a>半同步/半异步模式</h3><p><strong>同步线程</strong>用于处理客户逻辑，相当于逻辑单元；<strong>异步线程</strong>用于处理I/O事件，相当于I/O处理单元。</p>
+<img src="https://i.loli.net/2020/12/21/uP2neT3l7QIZaUF.png" alt="半同步半异步模式工作流程.png" style="zoom: 80%;" />
+
+<h3 id="半同步-半反应堆模式"><a href="#半同步-半反应堆模式" class="headerlink" title="半同步/半反应堆模式"></a>半同步/半反应堆模式</h3><blockquote>
+<p><strong>half-sync / half-reactive</strong></p>
+<p>事件处理模式是<strong>Reactor模式</strong>：要求工作线程自己从socket上读取客户请求和往socket写入服务器应答。</p>
+</blockquote>
+<img src="https://i.loli.net/2020/12/21/gcyLzCZjOGFfid4.png" alt="半同步-半反应堆模式.png" style="zoom:80%;" />
+
+<p><strong>主线程</strong>：<strong>异步</strong>线程。负责监听<strong>所有 socket</strong> 上的事件。</p>
+<ul>
+<li>当有新的连接请求到来，主线程接受连接请求得到新的连接socket，然后往epoll内核事件表中注册socket上的读写事件。</li>
+<li>有新的已连接客户端请求到来或有数据要发送至客户端，主线程将该连接socket插入请求队列。</li>
+</ul>
+<p><strong>工作线程</strong>：<strong>同步</strong>线程。所有的工作线程都休眠在请求队列上，当有任务到来，它们通过竞争获得任务的接管权。</p>
+<p><strong>缺点：</strong></p>
+<ul>
+<li>主线程和工作线程共享请求队列：主线程添加任务，工作线程取出任务，都需要对请求队列加锁保护，耗费CPU时间。</li>
+<li>每个工作线程在同一时间只能处理一个客户请求：若客户较多，工作线程较少，则请求队列中任务堆积，客户端响应慢。若增加工作线程，线程切换耗费大量CPU时间。</li>
+</ul>
+<h3 id="相对高效的半同步-半异步模式"><a href="#相对高效的半同步-半异步模式" class="headerlink" title="相对高效的半同步/半异步模式"></a>相对高效的半同步/半异步模式</h3><blockquote>
+<p>每个线程都是<strong>异步线程</strong>，故并非严格意义上的半同步/半异步模式。</p>
+</blockquote>
+<img src="https://i.loli.net/2020/12/21/i6BpGWfeAcVD4YU.png" alt="高效的半同步-半异步模式.png" style="zoom:80%;" />
+
+<p><strong>主线程</strong>：<strong>异步</strong>线程。<strong>只</strong>负责管理<strong>监听socket（listen_socket）</strong>。当有新的连接请求到来，主线程接受连接请求得到新的连接socket，并将新返回的连接socket派发给某个工作线程。</p>
+<p><strong>工作线程</strong>：<strong>异步</strong>线程。负责管理<strong>请求socket（connected_socket）</strong>。主线程向工作线程派发新的连接socket后，工作线程负责该socket的任何I/O操作，直到客户端关闭。</p>
+<hr>
+<p>参考：《Linux高性能服务器编程》 游双</p>
+]]></content>
+      <categories>
+        <category>笔记</category>
+        <category>unp</category>
+      </categories>
+      <tags>
+        <tag>操作系统</tag>
+        <tag>unp</tag>
         <tag>高性能服务器</tag>
       </tags>
   </entry>
