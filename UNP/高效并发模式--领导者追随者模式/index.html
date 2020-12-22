@@ -24,17 +24,26 @@
     var CONFIG = {"hostname":"jakelin.cn","root":"/","scheme":"Gemini","version":"8.0.0-rc.5","exturl":false,"sidebar":{"position":"left","display":"always","padding":18,"offset":12},"copycode":true,"bookmark":{"enable":true,"color":"#222","save":"auto"},"fancybox":true,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"path":"search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}};
   </script>
 
-  <meta name="description" content="一个记录、分享学习的地方">
-<meta property="og:type" content="website">
-<meta property="og:title" content="JakeLin&#39;s Blogs">
-<meta property="og:url" content="https://jakelin.cn/categories/%E7%AC%94%E8%AE%B0/page/3/index.html">
+  <meta name="description" content="并发模式中，“同步”指的是程序完全按照代码序列的顺序执行；“异步”指的是程序的执行需要由系统事件来驱动。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="高效并发模式--领导者&#x2F;追随者模式">
+<meta property="og:url" content="https://jakelin.cn/UNP/%E9%AB%98%E6%95%88%E5%B9%B6%E5%8F%91%E6%A8%A1%E5%BC%8F--%E9%A2%86%E5%AF%BC%E8%80%85%E8%BF%BD%E9%9A%8F%E8%80%85%E6%A8%A1%E5%BC%8F/index.html">
 <meta property="og:site_name" content="JakeLin&#39;s Blogs">
-<meta property="og:description" content="一个记录、分享学习的地方">
+<meta property="og:description" content="并发模式中，“同步”指的是程序完全按照代码序列的顺序执行；“异步”指的是程序的执行需要由系统事件来驱动。">
 <meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://i.loli.net/2020/12/22/5NeaoEdxAW4THrX.png">
+<meta property="og:image" content="https://i.loli.net/2020/12/22/JFtIr9V6qHRlj2E.png">
+<meta property="og:image" content="https://i.loli.net/2020/12/22/erUN2d16DGFc9Tg.png">
+<meta property="article:published_time" content="2020-12-21T16:00:00.000Z">
+<meta property="article:modified_time" content="2020-12-22T08:30:42.149Z">
 <meta property="article:author" content="jakelin">
+<meta property="article:tag" content="操作系统">
+<meta property="article:tag" content="unp">
+<meta property="article:tag" content="高性能服务器">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://i.loli.net/2020/12/22/5NeaoEdxAW4THrX.png">
 
-<link rel="canonical" href="https://jakelin.cn/categories/%E7%AC%94%E8%AE%B0/page/3/">
+<link rel="canonical" href="https://jakelin.cn/UNP/%E9%AB%98%E6%95%88%E5%B9%B6%E5%8F%91%E6%A8%A1%E5%BC%8F--%E9%A2%86%E5%AF%BC%E8%80%85%E8%BF%BD%E9%9A%8F%E8%80%85%E6%A8%A1%E5%BC%8F/">
 
 
 <script class="page-configurations">
@@ -42,12 +51,12 @@
   CONFIG.page = {
     sidebar: "",
     isHome : false,
-    isPost : false,
+    isPost : true,
     lang   : 'zh-CN'
   };
 </script>
 
-  <title>分类: 笔记 | JakeLin's Blogs</title>
+  <title>高效并发模式--领导者/追随者模式 | JakeLin's Blogs</title>
   
     <script async src="https://www.googletagmanager.com/gtag/js?id=UA-174281095-1"></script>
     <script>
@@ -210,7 +219,7 @@
 
   <aside class="sidebar">
 
-    <div class="sidebar-inner sidebar-overview-active">
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
       <ul class="sidebar-nav">
         <li class="sidebar-nav-toc">
           文章目录
@@ -222,6 +231,7 @@
 
       <!--noindex-->
       <section class="post-toc-wrap sidebar-panel">
+          <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%A2%86%E5%AF%BC%E8%80%85-%E8%BF%BD%E9%9A%8F%E8%80%85%E6%A8%A1%E5%BC%8F"><span class="nav-number">1.</span> <span class="nav-text">领导者&#x2F;追随者模式</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%BB%84%E4%BB%B6"><span class="nav-number">1.1.</span> <span class="nav-text">组件</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%BC%98%E5%8A%BF-amp-%E7%BC%BA%E9%99%B7"><span class="nav-number">1.2.</span> <span class="nav-text">优势&amp;缺陷</span></a></li></ol></li></ol></div>
       </section>
       <!--/noindex-->
 
@@ -291,240 +301,260 @@
       <div class="main-inner">
         
 
-        <div class="content category">
+        <div class="content post posts-expand">
           
 
+    
   
   
-  
-  <div class="post-block">
-    <div class="posts-collapse">
-      <div class="collection-title">
-        <h2 class="collection-header">笔记
-          <small>分类</small>
-        </h2>
-      </div>
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://jakelin.cn/UNP/%E9%AB%98%E6%95%88%E5%B9%B6%E5%8F%91%E6%A8%A1%E5%BC%8F--%E9%A2%86%E5%AF%BC%E8%80%85%E8%BF%BD%E9%9A%8F%E8%80%85%E6%A8%A1%E5%BC%8F/">
 
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://i.loli.net/2020/07/31/OZl2JxuSRrweIk5.jpg">
+      <meta itemprop="name" content="jakelin">
+      <meta itemprop="description" content="一个记录、分享学习的地方">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="JakeLin's Blogs">
+    </span>
+
+    
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          高效并发模式--领导者/追随者模式
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+                发表于
+              </span>
+              <span class="post-meta-item-text">发表于</span>              
+              <time title="创建时间：2020-12-22 00:00:00" itemprop="dateCreated datePublished" datetime="2020-12-22T00:00:00+08:00">2020-12-22</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                  更新于
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-12-22 16:30:42" itemprop="dateModified" datetime="2020-12-22T16:30:42+08:00">2020-12-22</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+                分类于
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E7%AC%94%E8%AE%B0/" itemprop="url" rel="index"><span itemprop="name">笔记</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E7%AC%94%E8%AE%B0/unp/" itemprop="url" rel="index"><span itemprop="name">unp</span></a>
+                </span>
+            </span>
+
+          
+            <span id="/UNP/%E9%AB%98%E6%95%88%E5%B9%B6%E5%8F%91%E6%A8%A1%E5%BC%8F--%E9%A2%86%E5%AF%BC%E8%80%85%E8%BF%BD%E9%9A%8F%E8%80%85%E6%A8%A1%E5%BC%8F/" class="post-meta-item leancloud_visitors" data-flag-title="高效并发模式--领导者/追随者模式" title="阅读次数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+                阅读量:
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span class="leancloud-visitors-count"></span>
+            </span>
+            <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span>
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Valine：</span>
+    
+    <a title="valine" href="/UNP/%E9%AB%98%E6%95%88%E5%B9%B6%E5%8F%91%E6%A8%A1%E5%BC%8F--%E9%A2%86%E5%AF%BC%E8%80%85%E8%BF%BD%E9%9A%8F%E8%80%85%E6%A8%A1%E5%BC%8F/#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/UNP/%E9%AB%98%E6%95%88%E5%B9%B6%E5%8F%91%E6%A8%A1%E5%BC%8F--%E9%A2%86%E5%AF%BC%E8%80%85%E8%BF%BD%E9%9A%8F%E8%80%85%E6%A8%A1%E5%BC%8F/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+                字数统计 ≈ 
+              </span>
+              <span>879</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+                阅读时长 ≈ 
+              </span>
+              <span>1 分钟</span>
+            </span>
+            <div class="post-description">并发模式中，“同步”指的是程序完全按照代码序列的顺序执行；“异步”指的是程序的执行需要由系统事件来驱动。</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <p>并发模式是指I/O处理单元和多个逻辑单元之间的协调完成任务的方法。</p>
+<p><font color=red><strong>并发模式</strong>中，<strong>“同步”</strong>指的是程序完全按照代码序列的顺序执行；<strong>“异步”</strong>指的是程序的执行需要由系统事件来驱动。</font></p>
+<h3 id="领导者-追随者模式"><a href="#领导者-追随者模式" class="headerlink" title="领导者/追随者模式"></a>领导者/追随者模式</h3><p>领导者/追随者模式是<strong>多个工作线程轮流获得事件源集合，轮流监听、分发并处理事件的一种模式</strong>。</p>
+<p><strong>领导者线程</strong>：在任意时间点，程序都仅有一个领导者线程。负责监听I/O事件。</p>
+<p><strong>追随者线程</strong>：当前时间点，除领导者线程之外的所有线程都是追随者，都休眠在线程池中等待成为新的领导者。</p>
+<p>当前的领导者如果检测到I/O事件：</p>
+<ol>
+<li>从线程池中推线新的领导者；</li>
+<li>旧的领导者去处理I/O事件；</li>
+<li>新的领导者等待新的I/O事件。</li>
+</ol>
+<img src="https://i.loli.net/2020/12/22/5NeaoEdxAW4THrX.png" alt="领导者-追随者模式.png" style="zoom:80%;" />
+
+<h4 id="组件"><a href="#组件" class="headerlink" title="组件"></a>组件</h4><img src="https://i.loli.net/2020/12/22/JFtIr9V6qHRlj2E.png" alt="领导者-追随者模式的组件.png" style="zoom:80%;" />
+
+<ul>
+<li><p><strong>句柄集（HandleSet）</strong></p>
+<p>句柄（Handle）用于表示<strong>I/O资源</strong>，Linux下通常是文件描述符。句柄集管理从多句柄。</p>
+<ul>
+<li><code>wait_for_event()</code>：监听句柄集中的所有句柄的I/O事件，并将就绪事件通知给领导者进程。</li>
+<li><code>register_handle()</code>：绑定句柄和事件处理器。</li>
+<li><code>unregister_handle()</code>：解绑句柄和事件处理器。</li>
+</ul>
+</li>
+<li><p><strong>线程集（ThreadSet）</strong></p>
+<p><strong>所有工作线程</strong>，包括领导者线程和追随者线程。线程集主要负责<strong>线程之间的同步</strong>，以及<strong>推选新的领导者</strong>。线程状态包括：</p>
+<img src="https://i.loli.net/2020/12/22/erUN2d16DGFc9Tg.png" alt="领导者-追随者模式的状态转移.png" style="zoom: 80%;" />
+
+<ul>
+<li>Leader：领导者身份，等待句柄集上的I/O事件。当检测到新的I/O事件，可以推选新的领导者，本线程转为Processing处理事件，也可能指定其他追溯者来处理事件；</li>
+<li>Processing：正在处理事件；</li>
+<li>Follower：追随者身份，等待成为新的领导者，也可能被当前领导者指定来处理新的任务。</li>
+</ul>
+</li>
+<li><p><strong>事件处理器（EventHandler）和具体事件处理器（ConcreteEventHandler）</strong></p>
+<p>事件处理器通常包含一个或多个回调函数<code>handle_event</code>。这些回调函数用于处理事件对应的业务逻辑。</p>
+</li>
+</ul>
+<h4 id="优势-amp-缺陷"><a href="#优势-amp-缺陷" class="headerlink" title="优势&amp;缺陷"></a>优势&amp;缺陷</h4><p>优势：</p>
+<ol>
+<li>不需要在线程之间传递任何额外的数据（领导者自己监听I/O事件并处理请求）；</li>
+<li>线程之间无须同步队请求队列的访问（对比半同步/半反应堆模式）。</li>
+</ol>
+<p>缺陷：</p>
+<ol>
+<li>仅支持一个事件源集合</li>
+<li>无法让每个工作线程独立地管理多个客户连接</li>
+</ol>
+
+    </div>
+
+    
+    
+    
       
-    <div class="collection-year">
-      <span class="collection-header">2020</span>
-    </div>
+  <div class="popular-posts-header">相关文章推荐</div>
+  <ul class="popular-posts">
+    <li class="popular-posts-item">
+      <div class="popular-posts-title"><a href="\UNP\高效事件处理模式--Proactor模式\" rel="bookmark">高效事件处理模式--Proactor模式</a></div>
+    </li>
+    <li class="popular-posts-item">
+      <div class="popular-posts-title"><a href="\UNP\高效事件处理模式--Reactor模式\" rel="bookmark">高效事件处理模式--Reactor模式</a></div>
+    </li>
+    <li class="popular-posts-item">
+      <div class="popular-posts-title"><a href="\UNP\IO模型中的同步&异步-阻塞&非阻塞\" rel="bookmark">I/O模型中的同步&异步-阻塞&非阻塞</a></div>
+    </li>
+    <li class="popular-posts-item">
+      <div class="popular-posts-title"><a href="\UNP\高效并发模式--半同步半异步模式\" rel="bookmark">高效并发模式--半同步/半异步模式</a></div>
+    </li>
+    <li class="popular-posts-item">
+      <div class="popular-posts-title"><a href="\APUE\Linux进程地址空间（程序内存布局）\" rel="bookmark">Linux进程地址空间（程序内存布局）</a></div>
+    </li>
+  </ul>
 
-  <article itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
 
-      <div class="post-meta">
-        <time itemprop="dateCreated"
-              datetime="2020-08-07T00:00:00+08:00"
-              content="2020-08-07">
-          08-07
-        </time>
+    <script type="text/javascript" src="//rf.revolvermaps.com/0/0/8.js?i=510wybm3she&amp;m=0&amp;c=ff0000&amp;cr1=ffffff&amp;f=arial&amp;l=33" async="async"></script>
+        <div class="reward-container">
+  <div></div>
+  <button onclick="document.getElementById('post-reward').classList.toggle('active');">
+    赞赏
+  </button>
+  <div id="post-reward">
+      
+      <div>
+        <img src="https://i.loli.net/2020/08/01/na8BbXF1ow63OIJ.png" alt="jakelin 微信">
+        <p>微信</p>
+      </div>
+      
+      <div>
+        <img src="https://i.loli.net/2020/08/01/NALchOTe3vM8aYy.jpg" alt="jakelin 支付宝">
+        <p>支付宝</p>
       </div>
 
-      <div class="post-title">
-          <a class="post-title-link" href="/UNP/select%E5%87%BD%E6%95%B0-linux%E5%86%85%E6%A0%B8%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/" itemprop="url">
-            <span itemprop="name">select函数-linux内核源码剖析</span>
-          </a>
-      </div>
-
-    </header>
-  </article>
-
-  <article itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <div class="post-meta">
-        <time itemprop="dateCreated"
-              datetime="2020-08-06T00:00:00+08:00"
-              content="2020-08-06">
-          08-06
-        </time>
-      </div>
-
-      <div class="post-title">
-          <a class="post-title-link" href="/APUE/%E7%B3%BB%E7%BB%9FIO%E5%87%BD%E6%95%B0%E4%B8%8EC%E6%A0%87%E5%87%86%E5%BA%93%E5%87%BD%E6%95%B0/" itemprop="url">
-            <span itemprop="name">系统I/O函数与C标准库函数</span>
-          </a>
-      </div>
-
-    </header>
-  </article>
-
-  <article itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <div class="post-meta">
-        <time itemprop="dateCreated"
-              datetime="2020-08-05T00:00:00+08:00"
-              content="2020-08-05">
-          08-05
-        </time>
-      </div>
-
-      <div class="post-title">
-          <a class="post-title-link" href="/APUE/Linux%E8%BF%9B%E7%A8%8B%E5%9C%B0%E5%9D%80%E7%A9%BA%E9%97%B4%EF%BC%88%E7%A8%8B%E5%BA%8F%E5%86%85%E5%AD%98%E5%B8%83%E5%B1%80%EF%BC%89/" itemprop="url">
-            <span itemprop="name">Linux进程地址空间（程序内存布局）</span>
-          </a>
-      </div>
-
-    </header>
-  </article>
-
-  <article itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <div class="post-meta">
-        <time itemprop="dateCreated"
-              datetime="2020-04-12T00:00:00+08:00"
-              content="2020-04-12">
-          04-12
-        </time>
-      </div>
-
-      <div class="post-title">
-          <a class="post-title-link" href="/STL/STL%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90-%E5%AE%B9%E5%99%A8-slist/" itemprop="url">
-            <span itemprop="name">STL源码剖析-容器-slist</span>
-          </a>
-      </div>
-
-    </header>
-  </article>
-
-  <article itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <div class="post-meta">
-        <time itemprop="dateCreated"
-              datetime="2020-04-11T00:00:00+08:00"
-              content="2020-04-11">
-          04-11
-        </time>
-      </div>
-
-      <div class="post-title">
-          <a class="post-title-link" href="/STL/STL%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90-%E5%AE%B9%E5%99%A8-deque/" itemprop="url">
-            <span itemprop="name">STL源码剖析-容器-deque</span>
-          </a>
-      </div>
-
-    </header>
-  </article>
-
-  <article itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <div class="post-meta">
-        <time itemprop="dateCreated"
-              datetime="2020-04-10T00:00:00+08:00"
-              content="2020-04-10">
-          04-10
-        </time>
-      </div>
-
-      <div class="post-title">
-          <a class="post-title-link" href="/STL/STL%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90-%E5%AE%B9%E5%99%A8-vector/" itemprop="url">
-            <span itemprop="name">STL源码剖析-容器-vector</span>
-          </a>
-      </div>
-
-    </header>
-  </article>
-
-  <article itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <div class="post-meta">
-        <time itemprop="dateCreated"
-              datetime="2020-04-10T00:00:00+08:00"
-              content="2020-04-10">
-          04-10
-        </time>
-      </div>
-
-      <div class="post-title">
-          <a class="post-title-link" href="/STL/STL%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90-%E8%BF%AD%E4%BB%A3%E5%99%A8-iterators/" itemprop="url">
-            <span itemprop="name">STL源码剖析-迭代器-iterators</span>
-          </a>
-      </div>
-
-    </header>
-  </article>
-
-  <article itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <div class="post-meta">
-        <time itemprop="dateCreated"
-              datetime="2020-04-08T00:00:00+08:00"
-              content="2020-04-08">
-          04-08
-        </time>
-      </div>
-
-      <div class="post-title">
-          <a class="post-title-link" href="/STL/STL%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90-%E5%AE%B9%E5%99%A8-list/" itemprop="url">
-            <span itemprop="name">STL源码剖析-容器-list</span>
-          </a>
-      </div>
-
-    </header>
-  </article>
-
-  <article itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <div class="post-meta">
-        <time itemprop="dateCreated"
-              datetime="2020-04-06T00:00:00+08:00"
-              content="2020-04-06">
-          04-06
-        </time>
-      </div>
-
-      <div class="post-title">
-          <a class="post-title-link" href="/STL/STL%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90-%E5%88%86%E9%85%8D%E5%99%A8Allocator/" itemprop="url">
-            <span itemprop="name">STL源码剖析-分配器Allocators</span>
-          </a>
-      </div>
-
-    </header>
-  </article>
-
-  <article itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <div class="post-meta">
-        <time itemprop="dateCreated"
-              datetime="2020-04-06T00:00:00+08:00"
-              content="2020-04-06">
-          04-06
-        </time>
-      </div>
-
-      <div class="post-title">
-          <a class="post-title-link" href="/STL/STL%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90%E6%A6%82%E8%BF%B0/" itemprop="url">
-            <span itemprop="name">STL源码剖析概述</span>
-          </a>
-      </div>
-
-    </header>
-  </article>
-
-    </div>
   </div>
-  
-  
-  
+</div>
 
+        
+
+<div>
+<ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者： </strong>jakelin
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="https://jakelin.cn/UNP/%E9%AB%98%E6%95%88%E5%B9%B6%E5%8F%91%E6%A8%A1%E5%BC%8F--%E9%A2%86%E5%AF%BC%E8%80%85%E8%BF%BD%E9%9A%8F%E8%80%85%E6%A8%A1%E5%BC%8F/" title="高效并发模式--领导者&#x2F;追随者模式">https://jakelin.cn/UNP/高效并发模式--领导者追随者模式/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/" rel="tag"><i class="fa fa-tag"></i> 操作系统</a>
+              <a href="/tags/unp/" rel="tag"><i class="fa fa-tag"></i> unp</a>
+              <a href="/tags/%E9%AB%98%E6%80%A7%E8%83%BD%E6%9C%8D%E5%8A%A1%E5%99%A8/" rel="tag"><i class="fa fa-tag"></i> 高性能服务器</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/UNP/%E9%AB%98%E6%95%88%E5%B9%B6%E5%8F%91%E6%A8%A1%E5%BC%8F--%E5%8D%8A%E5%90%8C%E6%AD%A5%E5%8D%8A%E5%BC%82%E6%AD%A5%E6%A8%A1%E5%BC%8F/" rel="prev" title="高效并发模式--半同步/半异步模式">
+      <i class="fa fa-chevron-left"></i> 高效并发模式--半同步/半异步模式
+    </a></div>
+      <div class="post-nav-item"></div>
+    </div>
+      </footer>
+    
+  </article>
   
-  <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/categories/%E7%AC%94%E8%AE%B0/page/2/"><i class="fa fa-angle-left" aria-label="上一页"></i></a><a class="page-number" href="/categories/%E7%AC%94%E8%AE%B0/">1</a><a class="page-number" href="/categories/%E7%AC%94%E8%AE%B0/page/2/">2</a><span class="page-number current">3</span>
-  </nav>
+  
+  
 
 
 
         </div>
         
+    <div class="comments" id="valine-comments"></div>
 
 <script>
   window.addEventListener('tabs:register', () => {

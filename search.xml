@@ -2577,7 +2577,6 @@
 <li>最后剩下的占有对象的 <code>shared_ptr</code> 被销毁；</li>
 <li>最后剩下的占有对象的 <code>shared_ptr</code> 被通过<code>operator=</code> 或 <code>reset()</code>]赋值为另一指针时。</li>
 </ul>
-<p>作者：卡巴拉的树<br>链接：<a href="https://www.jianshu.com/p/e4919f1c3a28">https://www.jianshu.com/p/e4919f1c3a28</a><br>来源：简书<br>著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。</p>
 <figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="keyword">int</span> *p_int = <span class="keyword">new</span> <span class="keyword">int</span>;</span><br><span class="line"><span class="function"><span class="built_in">shared_ptr</span>&lt;<span class="keyword">int</span>&gt; <span class="title">sptr1</span><span class="params">(p)</span></span>;            <span class="comment">// OK</span></span><br><span class="line"><span class="built_in">shared_ptr</span>&lt;<span class="keyword">int</span>&gt; sptr2 = sptr1;        <span class="comment">// OK 引用计数+1</span></span><br><span class="line"><span class="built_in">shared_ptr</span>&lt;<span class="keyword">int</span>&gt; sptr3 = p_int;        <span class="comment">// Error!!!</span></span><br><span class="line"><span class="built_in">shared_ptr</span>&lt;<span class="keyword">int</span>&gt; sptr1 = make_shared&lt;<span class="keyword">int</span>&gt;(<span class="number">100</span>); <span class="comment">// OK 使用 make_shared</span></span><br></pre></td></tr></table></figure>
 
 <h3 id="shared-ptr析构"><a href="#shared-ptr析构" class="headerlink" title="shared_ptr析构"></a>shared_ptr析构</h3><p><code>shared_ptr</code> 默认调用 <code>delete</code> 释放关联的资源。如果用户采用一个不一样的析构策略时，他可以自由指定构造这个 <code>shared_ptr</code> 的策略。如下：当离开作用域时，默认的析构函数调用 <code>delete</code> 释放资源。实际上，我们应该调用 <code>delete[]</code> 来销毁这个数组。</p>
@@ -2598,7 +2597,6 @@
 <li><p><code>unique</code> ：判断是否是唯一指向当前内存的<code>shared_ptr</code>。</p>
 </li>
 <li><p><code>operator bool</code> ：判断当前的<code>shared_ptr</code>是否指向一个内存块，可以用if 表达式判断。</p>
-<p>作者：卡巴拉的树<br>链接：<a href="https://www.jianshu.com/p/e4919f1c3a28">https://www.jianshu.com/p/e4919f1c3a28</a><br>来源：简书<br>著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。</p>
 </li>
 </ul>
 <h3 id="原始指针初始化shared-ptr"><a href="#原始指针初始化shared-ptr" class="headerlink" title="原始指针初始化shared_ptr"></a>原始指针初始化shared_ptr</h3><p><strong>不要用一个原始指针初始化多个 <code>shared_ptr</code>，否则会造成二次释放同一内存。</strong></p>
@@ -3348,6 +3346,68 @@
 <p><strong>工作线程</strong>：<strong>异步</strong>线程。负责管理<strong>请求socket（connected_socket）</strong>。主线程向工作线程派发新的连接socket后，工作线程负责该socket的任何I/O操作，直到客户端关闭。</p>
 <hr>
 <p>参考：《Linux高性能服务器编程》 游双</p>
+]]></content>
+      <categories>
+        <category>笔记</category>
+        <category>unp</category>
+      </categories>
+      <tags>
+        <tag>操作系统</tag>
+        <tag>unp</tag>
+        <tag>高性能服务器</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>高效并发模式--领导者/追随者模式</title>
+    <url>/UNP/%E9%AB%98%E6%95%88%E5%B9%B6%E5%8F%91%E6%A8%A1%E5%BC%8F--%E9%A2%86%E5%AF%BC%E8%80%85%E8%BF%BD%E9%9A%8F%E8%80%85%E6%A8%A1%E5%BC%8F/</url>
+    <content><![CDATA[<p>并发模式是指I/O处理单元和多个逻辑单元之间的协调完成任务的方法。</p>
+<p><font color=red><strong>并发模式</strong>中，<strong>“同步”</strong>指的是程序完全按照代码序列的顺序执行；<strong>“异步”</strong>指的是程序的执行需要由系统事件来驱动。</font></p>
+<h3 id="领导者-追随者模式"><a href="#领导者-追随者模式" class="headerlink" title="领导者/追随者模式"></a>领导者/追随者模式</h3><p>领导者/追随者模式是<strong>多个工作线程轮流获得事件源集合，轮流监听、分发并处理事件的一种模式</strong>。</p>
+<p><strong>领导者线程</strong>：在任意时间点，程序都仅有一个领导者线程。负责监听I/O事件。</p>
+<p><strong>追随者线程</strong>：当前时间点，除领导者线程之外的所有线程都是追随者，都休眠在线程池中等待成为新的领导者。</p>
+<p>当前的领导者如果检测到I/O事件：</p>
+<ol>
+<li>从线程池中推线新的领导者；</li>
+<li>旧的领导者去处理I/O事件；</li>
+<li>新的领导者等待新的I/O事件。</li>
+</ol>
+<img src="https://i.loli.net/2020/12/22/5NeaoEdxAW4THrX.png" alt="领导者-追随者模式.png" style="zoom:80%;" />
+
+<h4 id="组件"><a href="#组件" class="headerlink" title="组件"></a>组件</h4><img src="https://i.loli.net/2020/12/22/JFtIr9V6qHRlj2E.png" alt="领导者-追随者模式的组件.png" style="zoom:80%;" />
+
+<ul>
+<li><p><strong>句柄集（HandleSet）</strong></p>
+<p>句柄（Handle）用于表示<strong>I/O资源</strong>，Linux下通常是文件描述符。句柄集管理从多句柄。</p>
+<ul>
+<li><code>wait_for_event()</code>：监听句柄集中的所有句柄的I/O事件，并将就绪事件通知给领导者进程。</li>
+<li><code>register_handle()</code>：绑定句柄和事件处理器。</li>
+<li><code>unregister_handle()</code>：解绑句柄和事件处理器。</li>
+</ul>
+</li>
+<li><p><strong>线程集（ThreadSet）</strong></p>
+<p><strong>所有工作线程</strong>，包括领导者线程和追随者线程。线程集主要负责<strong>线程之间的同步</strong>，以及<strong>推选新的领导者</strong>。线程状态包括：</p>
+<img src="https://i.loli.net/2020/12/22/erUN2d16DGFc9Tg.png" alt="领导者-追随者模式的状态转移.png" style="zoom: 80%;" />
+
+<ul>
+<li>Leader：领导者身份，等待句柄集上的I/O事件。当检测到新的I/O事件，可以推选新的领导者，本线程转为Processing处理事件，也可能指定其他追溯者来处理事件；</li>
+<li>Processing：正在处理事件；</li>
+<li>Follower：追随者身份，等待成为新的领导者，也可能被当前领导者指定来处理新的任务。</li>
+</ul>
+</li>
+<li><p><strong>事件处理器（EventHandler）和具体事件处理器（ConcreteEventHandler）</strong></p>
+<p>事件处理器通常包含一个或多个回调函数<code>handle_event</code>。这些回调函数用于处理事件对应的业务逻辑。</p>
+</li>
+</ul>
+<h4 id="优势-amp-缺陷"><a href="#优势-amp-缺陷" class="headerlink" title="优势&amp;缺陷"></a>优势&amp;缺陷</h4><p>优势：</p>
+<ol>
+<li>不需要在线程之间传递任何额外的数据（领导者自己监听I/O事件并处理请求）；</li>
+<li>线程之间无须同步队请求队列的访问（对比半同步/半反应堆模式）。</li>
+</ol>
+<p>缺陷：</p>
+<ol>
+<li>仅支持一个事件源集合</li>
+<li>无法让每个工作线程独立地管理多个客户连接</li>
+</ol>
 ]]></content>
       <categories>
         <category>笔记</category>
