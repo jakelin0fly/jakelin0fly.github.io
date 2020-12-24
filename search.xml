@@ -2321,12 +2321,12 @@
 <ol>
 <li><p>各个数据成员按各自数据类型对齐</p>
 <blockquote>
-<p>对齐模数是【该数据成员所占内存】与【#pragma pack指定的数值】中的较小者。</p>
+<p>对齐模数是【该数据成员所占内存】与【#pragma pack指定的数值】中的<font color=red><strong>较小者</strong></font>。</p>
 </blockquote>
 </li>
 <li><p>整个结构体字节大小向结构体模数对齐</p>
 <blockquote>
-<p>结构体模数是【#pragma pack指定的数值（32位机默认4字节、64位机默认8字节）】和【结构体内部最大的基本数据类型成员】长度中<strong>数值较小者</strong>。结构体的长度应该是该模数的整数倍。</p>
+<p>结构体模数是【#pragma pack指定的数值（32位机默认4字节、64位机默认8字节）】和【结构体内部最大的基本数据类型成员】长度中数值<font color=red><strong>较小者</strong></font>。结构体的长度应该是该模数的整数倍。</p>
 </blockquote>
 </li>
 </ol>
