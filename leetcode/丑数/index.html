@@ -24,28 +24,21 @@
     var CONFIG = {"hostname":"jakelin.cn","root":"/","scheme":"Gemini","version":"8.0.0-rc.5","exturl":false,"sidebar":{"position":"left","display":"always","padding":18,"offset":12},"copycode":true,"bookmark":{"enable":true,"color":"#222","save":"auto"},"fancybox":true,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"path":"search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}};
   </script>
 
-  <meta name="description" content="计算机网络五层模型的概述。">
+  <meta name="description" content="丑数问题：丑数的判断、寻找最大丑数、“超级丑数”">
 <meta property="og:type" content="article">
-<meta property="og:title" content="计算机网络-五层模型">
-<meta property="og:url" content="https://jakelin.cn/net/%E4%BA%94%E5%B1%82%E6%A8%A1%E5%9E%8B/index.html">
+<meta property="og:title" content="丑数">
+<meta property="og:url" content="https://jakelin.cn/leetcode/%E4%B8%91%E6%95%B0/index.html">
 <meta property="og:site_name" content="JakeLin&#39;s Blogs">
-<meta property="og:description" content="计算机网络五层模型的概述。">
+<meta property="og:description" content="丑数问题：丑数的判断、寻找最大丑数、“超级丑数”">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="https://i.loli.net/2020/10/25/oMO4v7KFi2n9Psh.png">
-<meta property="og:image" content="https://i.loli.net/2020/10/25/3PAhBF6RnzjJGO7.png">
-<meta property="og:image" content="https://i.loli.net/2020/10/25/mngxjNyYv74If6z.png">
-<meta property="og:image" content="https://i.loli.net/2020/10/25/t8jmJIhCkTABOzu.png">
-<meta property="og:image" content="https://i.loli.net/2020/10/25/MP8xVwous3nap7j.png">
-<meta property="og:image" content="https://i.loli.net/2020/10/25/BUtYroWNihSe6V7.png">
-<meta property="og:image" content="https://i.loli.net/2020/10/25/A7n6OUMl8YfCpjg.png">
-<meta property="article:published_time" content="2020-10-24T16:00:00.000Z">
-<meta property="article:modified_time" content="2020-11-03T07:33:26.300Z">
+<meta property="article:published_time" content="2021-01-03T16:00:00.000Z">
+<meta property="article:modified_time" content="2021-01-09T03:30:31.915Z">
 <meta property="article:author" content="jakelin">
-<meta property="article:tag" content="网络">
+<meta property="article:tag" content="C++">
+<meta property="article:tag" content="算法">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://i.loli.net/2020/10/25/oMO4v7KFi2n9Psh.png">
 
-<link rel="canonical" href="https://jakelin.cn/net/%E4%BA%94%E5%B1%82%E6%A8%A1%E5%9E%8B/">
+<link rel="canonical" href="https://jakelin.cn/leetcode/%E4%B8%91%E6%95%B0/">
 
 
 <script class="page-configurations">
@@ -58,7 +51,7 @@
   };
 </script>
 
-  <title>计算机网络-五层模型 | JakeLin's Blogs</title>
+  <title>丑数 | JakeLin's Blogs</title>
   
     <script async src="https://www.googletagmanager.com/gtag/js?id=UA-174281095-1"></script>
     <script>
@@ -233,7 +226,7 @@
 
       <!--noindex-->
       <section class="post-toc-wrap sidebar-panel">
-          <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%89%A9%E7%90%86%E5%B1%82"><span class="nav-number">1.</span> <span class="nav-text">物理层</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%95%B0%E6%8D%AE%E9%93%BE%E8%B7%AF%E5%B1%82"><span class="nav-number">2.</span> <span class="nav-text">数据链路层</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%BD%91%E7%BB%9C%E5%B1%82"><span class="nav-number">3.</span> <span class="nav-text">网络层</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BC%A0%E8%BE%93%E5%B1%82"><span class="nav-number">4.</span> <span class="nav-text">传输层</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%BA%94%E7%94%A8%E5%B1%82"><span class="nav-number">5.</span> <span class="nav-text">应用层</span></a></li></ol></div>
+          <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%91%E6%95%B0%E7%9A%84%E5%AE%9A%E4%B9%89"><span class="nav-number">1.</span> <span class="nav-text">丑数的定义</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%91%E6%95%B0%E7%9A%84%E5%88%A4%E6%96%AD"><span class="nav-number">2.</span> <span class="nav-text">丑数的判断</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%89%BE%E5%87%BA%E7%AC%ACN%E5%A4%A7%E7%9A%84%E4%B8%91%E6%95%B0"><span class="nav-number">3.</span> <span class="nav-text">找出第N大的丑数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%B6%85%E7%BA%A7%E4%B8%91%E6%95%B0"><span class="nav-number">4.</span> <span class="nav-text">超级丑数</span></a></li></ol></div>
       </section>
       <!--/noindex-->
 
@@ -310,7 +303,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://jakelin.cn/net/%E4%BA%94%E5%B1%82%E6%A8%A1%E5%9E%8B/">
+    <link itemprop="mainEntityOfPage" href="https://jakelin.cn/leetcode/%E4%B8%91%E6%95%B0/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="https://i.loli.net/2020/07/31/OZl2JxuSRrweIk5.jpg">
@@ -325,7 +318,7 @@
     
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          计算机网络-五层模型
+          丑数
         </h1>
 
         <div class="post-meta">
@@ -335,7 +328,7 @@
                 发表于
               </span>
               <span class="post-meta-item-text">发表于</span>              
-              <time title="创建时间：2020-10-25 00:00:00" itemprop="dateCreated datePublished" datetime="2020-10-25T00:00:00+08:00">2020-10-25</time>
+              <time title="创建时间：2021-01-04 00:00:00" itemprop="dateCreated datePublished" datetime="2021-01-04T00:00:00+08:00">2021-01-04</time>
             </span>
               <span class="post-meta-item">
                 <span class="post-meta-item-icon">
@@ -343,7 +336,7 @@
                   更新于
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2020-11-03 15:33:26" itemprop="dateModified" datetime="2020-11-03T15:33:26+08:00">2020-11-03</time>
+                <time title="修改时间：2021-01-09 11:30:31" itemprop="dateModified" datetime="2021-01-09T11:30:31+08:00">2021-01-09</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -356,12 +349,12 @@
                 </span>
                   ，
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E7%AC%94%E8%AE%B0/%E7%BD%91%E7%BB%9C/" itemprop="url" rel="index"><span itemprop="name">网络</span></a>
+                  <a href="/categories/%E7%AC%94%E8%AE%B0/%E5%88%B7%E9%A2%98/" itemprop="url" rel="index"><span itemprop="name">刷题</span></a>
                 </span>
             </span>
 
           
-            <span id="/net/%E4%BA%94%E5%B1%82%E6%A8%A1%E5%9E%8B/" class="post-meta-item leancloud_visitors" data-flag-title="计算机网络-五层模型" title="阅读次数">
+            <span id="/leetcode/%E4%B8%91%E6%95%B0/" class="post-meta-item leancloud_visitors" data-flag-title="丑数" title="阅读次数">
               <span class="post-meta-item-icon">
                 <i class="fa fa-eye"></i>
                 阅读量:
@@ -384,8 +377,8 @@
       </span>
       <span class="post-meta-item-text">Valine：</span>
     
-    <a title="valine" href="/net/%E4%BA%94%E5%B1%82%E6%A8%A1%E5%9E%8B/#valine-comments" itemprop="discussionUrl">
-      <span class="post-comments-count valine-comment-count" data-xid="/net/%E4%BA%94%E5%B1%82%E6%A8%A1%E5%9E%8B/" itemprop="commentCount"></span>
+    <a title="valine" href="/leetcode/%E4%B8%91%E6%95%B0/#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/leetcode/%E4%B8%91%E6%95%B0/" itemprop="commentCount"></span>
     </a>
   </span>
   
@@ -395,16 +388,16 @@
                 <i class="far fa-file-word"></i>
                 字数统计 ≈ 
               </span>
-              <span>1.3k</span>
+              <span>1.9k</span>
             </span>
             <span class="post-meta-item" title="阅读时长">
               <span class="post-meta-item-icon">
                 <i class="far fa-clock"></i>
                 阅读时长 ≈ 
               </span>
-              <span>1 分钟</span>
+              <span>2 分钟</span>
             </span>
-            <div class="post-description">计算机网络五层模型的概述。</div>
+            <div class="post-description">丑数问题：丑数的判断、寻找最大丑数、“超级丑数”</div>
 
         </div>
       </header>
@@ -413,123 +406,22 @@
     
     
     <div class="post-body" itemprop="articleBody">
-        <img src="https://i.loli.net/2020/10/25/oMO4v7KFi2n9Psh.png" alt="TCP/IP协议族族中不同层次的协议.png" style="zoom: 67%;" />
-
-<img src="https://i.loli.net/2020/10/25/3PAhBF6RnzjJGO7.png" alt="协议封装过程.png" style="zoom:67%;" />
-
-<h2 id="物理层"><a href="#物理层" class="headerlink" title="物理层"></a>物理层</h2><ul>
-<li><strong>频分复用</strong>：所有用户在同样的时间占用不同的带宽资源</li>
-<li><strong>时分复用</strong>：所有用户是在不同的时间占用相同的频带宽度</li>
-<li>波分复用：光的频分复用</li>
-</ul>
-<p><strong>集线器</strong>：工作在物理层，<strong>简单的转发比特，不进行碰撞检测</strong>。不同鹏颛臾使用不同的速率则不能使用集线器互连。</p>
-<h2 id="数据链路层"><a href="#数据链路层" class="headerlink" title="数据链路层"></a>数据链路层</h2><p>主要信道：<strong>点对点信道</strong> 、<strong>广播信道</strong> </p>
-<p>三个基本问题：<strong>封装成帧</strong>、<strong>透明传输</strong>、<strong>差错检测（循环冗余检验CRC）</strong> </p>
-<p>以太网帧不能小于<strong>64B</strong>，以太网的端到端往返时间称为<strong>争用期</strong>（碰撞窗口），凡是长度小于64字节的帧都是由于冲突而异常终止的无效帧。</p>
-<p>数据链路层设备：</p>
-<ul>
-<li><p><strong>适配器</strong>：即”网卡“。串并转换、数据转存、安装设备驱动、实现以太网协。议。</p>
-</li>
-<li><p><strong>网桥</strong></p>
-<ul>
-<li>学习源地址</li>
-<li>过滤同网端帧</li>
-<li>转发异网端帧</li>
-<li>扩散未知帧</li>
-</ul>
-</li>
-<li><p>以太网交换机：实质就是多借口的<strong>网桥</strong>，能<strong>隔离碰撞域</strong>。</p>
-<p><strong>广播风暴</strong>：一个数据帧或包被传输到本地网段 (由广播域定义)上的每个节点就是广播；由于网络拓扑的设计和连接问题，或其他原因导致广播在网段内大量复制，传播数据帧，导致网络性能下降，甚至网络瘫痪。</p>
-<p>生成树协议STP：阻塞一个或多个冗余端口。</p>
-</li>
-</ul>
-<h2 id="网络层"><a href="#网络层" class="headerlink" title="网络层"></a>网络层</h2><p>网络层向上只提供更<strong>简单灵活的、无连接的、尽最大努力交付</strong>的数据报服务。网络层不提供服务质量的承诺。</p>
-<ul>
-<li><p><strong>IP协议</strong></p>
-<img src="https://i.loli.net/2020/10/25/mngxjNyYv74If6z.png" alt="IP数据报格式.png" style="zoom: 67%;" />
-</li>
-<li><p><strong>地址解析协议 ARP</strong></p>
-</li>
-<li><p><strong>逆地址解析协议 RARP</strong></p>
-</li>
-<li><p><strong>网际控制报文协议 ICMP</strong></p>
-</li>
-<li><p><strong>网际组管理协议 IGMP</strong></p>
-</li>
-<li><p>划分子网</p>
-</li>
-<li><p>路由选择协议</p>
-<ul>
-<li><strong>内部网关协议 RIP</strong></li>
-<li><strong>内部网关协议 OSPF</strong></li>
-<li>外部网关协议 BGP</li>
-</ul>
-</li>
-</ul>
-<h2 id="传输层"><a href="#传输层" class="headerlink" title="传输层"></a>传输层</h2><p>运输层向它上面的应用层提供<strong>通信服务</strong>。<strong>通信的真正端点并不是主机而是主机中的进程</strong>。</p>
-<p>两种运输协议：<strong>面向连接的TCP</strong> 和 <strong>无连接的UDP</strong>。</p>
-<ul>
-<li><p><strong>用户数据报协议 UDP</strong>：无连接、尽最大努力交付、面向报文</p>
-<ul>
-<li><p>报文数据格式</p>
-<img src="https://i.loli.net/2020/10/25/t8jmJIhCkTABOzu.png" alt="UDP用户数据报的首部和伪首部.png" style="zoom:67%;" />
-</li>
-</ul>
-</li>
-<li><p><strong>传输控制协议 TCP</strong>：面向连接、只能点到点、全双工通信、面向字节流</p>
-<ul>
-<li><p>报文数据格式</p>
-<img src="https://i.loli.net/2020/10/25/MP8xVwous3nap7j.png" alt="TCP报文段的首部格式.png" style="zoom:67%;" />
-</li>
-<li><p>TCP可靠传输的实现：以字节为单位的滑动窗口、超时重传</p>
-</li>
-<li><p>TCP流量控制：流量控制就是让发送方发送速率不要太快，要让接收方来得及接收，发送窗口不超过接收窗口。</p>
-<ul>
-<li>滑动窗口</li>
-</ul>
-</li>
-<li><p>TCP拥塞控制：防止过多的数据注入到网络中，使得网络中的路由器或链路不至于过载。判断网络拥塞的依据就是出现了超时。</p>
+        <h3 id="丑数的定义"><a href="#丑数的定义" class="headerlink" title="丑数的定义"></a>丑数的定义</h3><p>我们把只包含质因子 2、3 和 5 的数称作丑数（Ugly Number）。</p>
 <blockquote>
-<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/sicofield/article/details/9708383">TCP的拥塞控制</a> </p>
+<p>1, 2, 3, 4, 5, 6, 8, 9, 10, 12 是前 10 个丑数。</p>
 </blockquote>
-<ul>
-<li><p><strong>慢开始</strong>：有小到大逐渐增大发送窗口。需设置慢开始门限。</p>
-</li>
-<li><p><strong>拥塞避免</strong>：让拥塞窗口 cwnd 缓慢地增大，按线性规律增长，使得网络比较不容易出现拥塞。</p>
-</li>
-<li><p><strong>快重传</strong>：要求接收方立即发送确认，即使收到失序的报文要立即发出对已收到报文段的重复确认。</p>
-<p>eg：假定没有收到M3，但却收到了M4，必须理解发送对M2的重复确认</p>
-</li>
-<li><p><strong>快恢复</strong>：发送方知道只是丢失了个别报文，将调整慢开始门限为 cwnd/2 ，并开始执行拥塞避免算法。</p>
-</li>
-</ul>
-</li>
-</ul>
-</li>
-<li><p><strong>可靠传输原理</strong></p>
-<ul>
-<li>停止等待协议：每发送完一个分组就停止发送，等到对方确认，收到确认再发下一个分组。确认和重传机制，可以在不可靠的传输网络上实现可靠通信。</li>
-<li>连续ARP协议：发送方收到一个确认，发送窗口就向前滑动一个分组的位置；接收方不必对每个分组发送确认，对按序到达的最后一个分组发送确认。</li>
-</ul>
-</li>
-<li><p><strong>TCP连接管理</strong></p>
-<ul>
-<li><p><strong>“三次握手”</strong>：TCP的连接建立</p>
-<img src="https://i.loli.net/2020/10/25/BUtYroWNihSe6V7.png" alt="TCP三次握手.png" style="zoom:50%;" />
-</li>
-<li><p><strong>“四次握手”</strong>：TCP的连接释放</p>
-<img src="https://i.loli.net/2020/10/25/A7n6OUMl8YfCpjg.png" alt="TCP四次握手.png" style="zoom:50%;" />
-</li>
-<li><p><strong>TCP的有限状态机</strong></p>
-</li>
-</ul>
-</li>
-</ul>
-<h2 id="应用层"><a href="#应用层" class="headerlink" title="应用层"></a>应用层</h2><ul>
-<li>域名系统 DNS</li>
-<li>动态主机配置协议 DHCP</li>
-<li>超文本传送协议 HTTP</li>
-</ul>
+<h3 id="丑数的判断"><a href="#丑数的判断" class="headerlink" title="丑数的判断"></a>丑数的判断</h3><p>依次循环除以2、3、5直到不能整除，最后值为1则为丑数。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">bool</span> <span class="title">isUgly</span><span class="params">(<span class="keyword">int</span> num)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span>(num &lt;= <span class="number">0</span>)    <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">    <span class="keyword">if</span>(num &lt; <span class="number">7</span>)     <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">while</span>(num % <span class="number">2</span> == <span class="number">0</span>)</span><br><span class="line">        num /= <span class="number">2</span>;</span><br><span class="line">    <span class="keyword">while</span>(num % <span class="number">3</span> == <span class="number">0</span>)</span><br><span class="line">        num /= <span class="number">3</span>;</span><br><span class="line">    <span class="keyword">while</span>(num % <span class="number">5</span> == <span class="number">0</span>)</span><br><span class="line">        num /= <span class="number">5</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> num == <span class="number">1</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="找出第N大的丑数"><a href="#找出第N大的丑数" class="headerlink" title="找出第N大的丑数"></a>找出第N大的丑数</h3><p>【思路】 <strong>动态规划</strong></p>
+<p>丑数可以看做是2、3、5的幂的积。</p>
+<p>根据幂得到一个丑数容易，问题的难点在于如何使得数据有序。依次递增存储丑数，使用三指针记录当前乘以2、3、5待选的丑数索引，再记录待选中间结果减少计算次数。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">nthUglyNumber</span><span class="params">(<span class="keyword">int</span> n)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span>(n &lt; <span class="number">7</span>) <span class="keyword">return</span> n; <span class="comment">// 1 2 3 4 5 6</span></span><br><span class="line">    <span class="function"><span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; <span class="title">uglyNums</span><span class="params">(n, <span class="number">1</span>)</span></span>; <span class="comment">// n个丑数 第一个为1</span></span><br><span class="line">    <span class="keyword">int</span> index_2 = <span class="number">0</span>, index_3 = <span class="number">0</span>, index_5 = <span class="number">0</span>; <span class="comment">// 当前乘2、3、5的丑数列表中值的下标</span></span><br><span class="line">    <span class="keyword">int</span> tmp_2 = <span class="number">2</span>, tmp_3 = <span class="number">3</span>, tmp_5 = <span class="number">5</span>;        <span class="comment">// 乘2、3、5的待选丑数（减少计算次数）</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">1</span>; i &lt; n; ++i)&#123;</span><br><span class="line">        uglyNums[i] = min(tmp_2, min(tmp_3, tmp_5)); <span class="comment">// 取最小值</span></span><br><span class="line">        <span class="comment">// 更新待选丑数</span></span><br><span class="line">        <span class="comment">// 存在待选值相等的情况</span></span><br><span class="line">        <span class="keyword">if</span>(uglyNums[i] == tmp_2)&#123;</span><br><span class="line">            tmp_2 = uglyNums[++index_2] * <span class="number">2</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span>(uglyNums[i] == tmp_3)&#123;</span><br><span class="line">            tmp_3 = uglyNums[++index_3] * <span class="number">3</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span>(uglyNums[i] == tmp_5)&#123;</span><br><span class="line">            tmp_5 = uglyNums[++index_5] * <span class="number">5</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> uglyNums[n<span class="number">-1</span>];</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="超级丑数"><a href="#超级丑数" class="headerlink" title="超级丑数"></a>超级丑数</h3><p>超级丑数是指其所有质因数都是长度为 <code>k</code> 的质数列表 <code>primes</code> 中的正整数。</p>
+<p>【思路】 <strong>动态规划</strong></p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 得到最小待选结果索引集合</span></span><br><span class="line"><span class="function"><span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; <span class="title">findMinValueIndex</span><span class="params">(<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&amp; tmp, <span class="keyword">const</span> <span class="keyword">int</span>&amp; k)</span></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> minValue = tmp[<span class="number">0</span>];  <span class="comment">// 待选最小值</span></span><br><span class="line">    <span class="function"><span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; <span class="title">minValueIndexs</span><span class="params">(<span class="number">1</span>, <span class="number">0</span>)</span></span>;</span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">1</span>; i &lt; k; ++i)&#123;</span><br><span class="line">        <span class="keyword">if</span>(tmp[i] &lt; minValue)&#123;</span><br><span class="line">            minValue = tmp[i]; <span class="comment">// 最小值</span></span><br><span class="line">            minValueIndexs.clear(); <span class="comment">// 擦除旧索引</span></span><br><span class="line">            minValueIndexs.push_back(i); <span class="comment">// 新索引</span></span><br><span class="line">        &#125;<span class="keyword">else</span> <span class="keyword">if</span>(tmp[i] == minValue)&#123;</span><br><span class="line">            minValueIndexs.push_back(i);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> minValueIndexs;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 第N个超级丑数</span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">nthSuperUglyNumber</span><span class="params">(<span class="keyword">int</span> n, <span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&amp; primes)</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; <span class="title">uglyNums</span><span class="params">(n, <span class="number">1</span>)</span></span>; <span class="comment">// n个丑数  第一个丑数是1</span></span><br><span class="line">    <span class="keyword">int</span> k = primes.size();</span><br><span class="line">    <span class="function"><span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; <span class="title">index</span><span class="params">(k, <span class="number">0</span>)</span></span>;    <span class="comment">// 索引</span></span><br><span class="line">    <span class="function"><span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; <span class="title">tmp</span><span class="params">(primes)</span></span>;    <span class="comment">// 待选数据缓冲</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">1</span>; i &lt; n; ++i)&#123;</span><br><span class="line">        <span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; tmpIndex = findMinValueIndex(tmp, k); <span class="comment">// 最小待选值索引</span></span><br><span class="line">        uglyNums[i] = tmp[tmpIndex[<span class="number">0</span>]];</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">auto</span>&amp; val : tmpIndex)&#123;</span><br><span class="line">            ++index[val];</span><br><span class="line">            tmp[val] = uglyNums[index[val]] * primes[val];</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> uglyNums[n<span class="number">-1</span>];</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
 
     </div>
 
@@ -540,7 +432,19 @@
   <div class="popular-posts-header">相关文章推荐</div>
   <ul class="popular-posts">
     <li class="popular-posts-item">
-      <div class="popular-posts-title"><a href="\net\“三次握手”与“四次挥手”\" rel="bookmark">“三次握手”与“四次挥手”</a></div>
+      <div class="popular-posts-title"><a href="\leetcode\剑指Offer刷题记录\" rel="bookmark">剑指Offer刷题记录</a></div>
+    </li>
+    <li class="popular-posts-item">
+      <div class="popular-posts-title"><a href="\leetcode\数学\" rel="bookmark">leetcode-数学</a></div>
+    </li>
+    <li class="popular-posts-item">
+      <div class="popular-posts-title"><a href="\leetcode\栈\" rel="bookmark">leetcode-栈</a></div>
+    </li>
+    <li class="popular-posts-item">
+      <div class="popular-posts-title"><a href="\Algorithm\算法收录\" rel="bookmark">算法收录</a></div>
+    </li>
+    <li class="popular-posts-item">
+      <div class="popular-posts-title"><a href="\C++\C++笔记(面向对象高级编程--侯捷)\" rel="bookmark">C++笔记(面向对象高级编程--侯捷)</a></div>
     </li>
   </ul>
 
@@ -575,7 +479,7 @@
   </li>
   <li class="post-copyright-link">
     <strong>本文链接：</strong>
-    <a href="https://jakelin.cn/net/%E4%BA%94%E5%B1%82%E6%A8%A1%E5%9E%8B/" title="计算机网络-五层模型">https://jakelin.cn/net/五层模型/</a>
+    <a href="https://jakelin.cn/leetcode/%E4%B8%91%E6%95%B0/" title="丑数">https://jakelin.cn/leetcode/丑数/</a>
   </li>
   <li class="post-copyright-license">
     <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
@@ -586,7 +490,8 @@
 
       <footer class="post-footer">
           <div class="post-tags">
-              <a href="/tags/%E7%BD%91%E7%BB%9C/" rel="tag"><i class="fa fa-tag"></i> 网络</a>
+              <a href="/tags/C/" rel="tag"><i class="fa fa-tag"></i> C++</a>
+              <a href="/tags/%E7%AE%97%E6%B3%95/" rel="tag"><i class="fa fa-tag"></i> 算法</a>
           </div>
 
         
@@ -595,13 +500,10 @@
         
     <div class="post-nav">
       <div class="post-nav-item">
-    <a href="/UNP/%E5%9F%BA%E6%9C%ACTCP%E5%A5%97%E6%8E%A5%E5%AD%97/" rel="prev" title="基本TCP套接字">
-      <i class="fa fa-chevron-left"></i> 基本TCP套接字
+    <a href="/UNP/%E9%AB%98%E6%95%88%E5%B9%B6%E5%8F%91%E6%A8%A1%E5%BC%8F--%E9%A2%86%E5%AF%BC%E8%80%85%E8%BF%BD%E9%9A%8F%E8%80%85%E6%A8%A1%E5%BC%8F/" rel="prev" title="高效并发模式--领导者/追随者模式">
+      <i class="fa fa-chevron-left"></i> 高效并发模式--领导者/追随者模式
     </a></div>
-      <div class="post-nav-item">
-    <a href="/net/%E2%80%9C%E4%B8%89%E6%AC%A1%E6%8F%A1%E6%89%8B%E2%80%9D%E4%B8%8E%E2%80%9C%E5%9B%9B%E6%AC%A1%E6%8C%A5%E6%89%8B%E2%80%9D/" rel="next" title="“三次握手”与“四次挥手”">
-      “三次握手”与“四次挥手” <i class="fa fa-chevron-right"></i>
-    </a></div>
+      <div class="post-nav-item"></div>
     </div>
       </footer>
     
