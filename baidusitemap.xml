@@ -1,6 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
+    <loc>https://jakelin.cn/doc/Markdown%E5%AD%A6%E4%B9%A0%E6%80%BB%E7%BB%93%E7%AC%94%E8%AE%B0/</loc>
+    <lastmod>2021-01-25</lastmod>
+  </url>
+  <url>
+    <loc>https://jakelin.cn/leetcode/%E4%B8%91%E6%95%B0/</loc>
+    <lastmod>2021-01-15</lastmod>
+  </url>
+  <url>
     <loc>https://jakelin.cn/Algorithm/%E3%80%90%E8%BD%AC%E8%BD%BD%E3%80%91Union-Find%E7%AE%97%E6%B3%95%E8%AF%A6%E8%A7%A3/</loc>
     <lastmod>2021-01-15</lastmod>
   </url>
@@ -11,10 +19,6 @@
   <url>
     <loc>https://jakelin.cn/leetcode/%E4%B9%B0%E5%8D%96%E8%82%A1%E7%A5%A8%E6%9C%80%E4%BD%B3%E6%97%B6%E6%9C%BA/</loc>
     <lastmod>2021-01-10</lastmod>
-  </url>
-  <url>
-    <loc>https://jakelin.cn/leetcode/%E4%B8%91%E6%95%B0/</loc>
-    <lastmod>2021-01-09</lastmod>
   </url>
   <url>
     <loc>https://jakelin.cn/APUE/%E5%AD%97%E8%8A%82%E5%AF%B9%E9%BD%90/</loc>
@@ -49,7 +53,7 @@
     <lastmod>2020-12-01</lastmod>
   </url>
   <url>
-    <loc>https://jakelin.cn/other/Centos%E6%89%A9%E5%AE%B9/</loc>
+    <loc>https://jakelin.cn/doc/Centos%E6%89%A9%E5%AE%B9/</loc>
     <lastmod>2020-11-22</lastmod>
   </url>
   <url>
@@ -107,10 +111,6 @@
   <url>
     <loc>https://jakelin.cn/UNP/select%E5%87%BD%E6%95%B0-linux%E5%86%85%E6%A0%B8%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/</loc>
     <lastmod>2020-08-12</lastmod>
-  </url>
-  <url>
-    <loc>https://jakelin.cn/doc/Centos%E6%89%A9%E5%AE%B9/</loc>
-    <lastmod>2020-08-11</lastmod>
   </url>
   <url>
     <loc>https://jakelin.cn/STL/STL%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90-%E8%BF%AD%E4%BB%A3%E5%99%A8-iterators/</loc>
@@ -186,10 +186,6 @@
   </url>
   <url>
     <loc>https://jakelin.cn/other/k8s%20weave%20scope%20%E5%AE%89%E8%A3%85%E9%85%8D%E7%BD%AE/</loc>
-    <lastmod>2020-08-01</lastmod>
-  </url>
-  <url>
-    <loc>https://jakelin.cn/doc/Markdown%E5%AD%A6%E4%B9%A0%E6%80%BB%E7%BB%93%E7%AC%94%E8%AE%B0/</loc>
     <lastmod>2020-08-01</lastmod>
   </url>
 </urlset> 
