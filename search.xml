@@ -311,80 +311,6 @@
       </tags>
   </entry>
   <entry>
-    <title>进程间通信方式(一)管道</title>
-    <url>/APUE/%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1%E6%96%B9%E5%BC%8F(%E4%B8%80)%E7%AE%A1%E9%81%93/</url>
-    <content><![CDATA[<p>Linux环境下，<strong>进程地址空间相互独立</strong>，每个进程各自有不同的用户地址空间。任何一个进程的全局变量在另一个进程中都看不到，所以进程和进程之间不能相互访问，要交换数据必须通过<strong>内核</strong>，在内核中开辟一块缓冲区，进程A把数据从用户空间拷到内核缓冲区，进程B再从内核缓冲区把数据读走，内核提供的这种机制称为<strong>进程间通信</strong>（<strong>IPC</strong>，InterProcess Communication）。</p>
-<h1 id="管道（使用最简单）"><a href="#管道（使用最简单）" class="headerlink" title="管道（使用最简单）"></a>管道（使用最简单）</h1><img src="https://i.loli.net/2020/08/16/BPgd7qliosW94VM.png" alt="pipe管道-进程通信.png" style="zoom:67%;" />
-
-<h2 id="pipe-（半双工管道）"><a href="#pipe-（半双工管道）" class="headerlink" title="pipe （半双工管道）"></a>pipe （半双工管道）</h2><p>管道是一种最基本的IPC机制，作用于<strong>有血缘关系</strong>的进程之间，完成数据传递。<code>pipe</code>为匿名管道。</p>
-<h3 id="管道特质"><a href="#管道特质" class="headerlink" title="管道特质"></a>管道特质</h3><ol>
-<li>其本质是一个<strong>伪文件</strong>（实为内核缓冲区）</li>
-<li>由两个文件描述符引用，一个表示读端，一个表示写端</li>
-<li>规定数据从管道的写端流入管道，从读端流出</li>
-</ol>
-<h3 id="pipe的原理"><a href="#pipe的原理" class="headerlink" title="pipe的原理"></a>pipe的原理</h3><p>管道实为内核使用<strong>环形队列</strong>机制，借助内核缓冲区(4k)实现。</p>
-<h3 id="pipe的局限性"><a href="#pipe的局限性" class="headerlink" title="pipe的局限性"></a>pipe的局限性</h3><p>​    ① 管道采用<strong>半双工</strong>通信方式。即数据只能在一个方向上流动。</p>
-<p>​    ② 只能在有<strong>公共祖先</strong>的进程间使用管道。</p>
-<p>​    ③ 数据一旦被读走，便不在管道中存在，<strong>不可反复读取</strong>。</p>
-<p>​    ④ <del>数据自己读不能自己写。</del></p>
-<h3 id="管道的读写行为"><a href="#管道的读写行为" class="headerlink" title="管道的读写行为"></a>管道的读写行为</h3><p><strong>从管道中读数据</strong>：</p>
-<ol>
-<li><p>管道中<strong>有数据</strong>：</p>
-<p>read返回实际读到的字节数。</p>
-</li>
-<li><p>管道中<strong>无数据</strong>：</p>
-<p>(1) 管道<strong>写端全部关闭</strong>（管道写端引用计数为0），read返回0 (就像读到文件结尾)。</p>
-<p>(2)  管道写端<strong>没</strong>有<strong>全部关闭</strong>，read阻塞等待(不久的将来可能有数据递达，此时会让出cpu)。</p>
-</li>
-</ol>
-<p><strong>往管道写数据</strong>：</p>
-<ol>
-<li><p>管道<strong>读端全部关闭</strong>：</p>
-<p>进程异常终止（也可使用捕捉<strong>SIGPIPE</strong>信号，使进程不终止，errno设置为EPIPE）。</p>
-</li>
-<li><p>管道读端<strong>没有全部关闭</strong>：</p>
-<p>(1) 管道已满，write阻塞。</p>
-<p>(2) 管道未满，write将数据写入，并返回实际写入的字节数。</p>
-</li>
-</ol>
-<h3 id="pipe示例"><a href="#pipe示例" class="headerlink" title="pipe示例"></a>pipe示例</h3><div><div class="fold_hider"><div class="close hider_title">点击显示/隐藏-pipe.c</div></div><div class="fold">
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;unistd.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;string.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdlib.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;sys/wait.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">int</span> argc, <span class="keyword">char</span> <span class="keyword">const</span> *argv[])</span> </span>&#123;</span><br><span class="line">  <span class="keyword">int</span> fd[<span class="number">2</span>];</span><br><span class="line">  <span class="keyword">int</span> ret;</span><br><span class="line">  <span class="keyword">pid_t</span> pid;</span><br><span class="line">  <span class="keyword">char</span> *str = <span class="string">&quot;hello pipe\n&quot;</span>;</span><br><span class="line">  <span class="keyword">char</span> buf[<span class="number">1024</span>];</span><br><span class="line"></span><br><span class="line">  <span class="comment">//创建pipe</span></span><br><span class="line">  ret = pipe(fd);</span><br><span class="line">  <span class="keyword">if</span> (<span class="number">-1</span> == ret) &#123;</span><br><span class="line">    perror(<span class="string">&quot;pipe create error: &quot;</span>);</span><br><span class="line">    <span class="built_in">exit</span>(<span class="number">1</span>);</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">if</span> (<span class="number">-1</span> == (pid = fork())) &#123;</span><br><span class="line">    perror(<span class="string">&quot;fork error: &quot;</span>);</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">else</span> <span class="keyword">if</span> (pid &gt; <span class="number">0</span>) &#123; <span class="comment">//父进程写管道</span></span><br><span class="line">    close(fd[<span class="number">0</span>]); <span class="comment">//关闭读端</span></span><br><span class="line">    sleep(<span class="number">2</span>); <span class="comment">//父进程sleep，管道无数据且写端未全部关闭，子进程阻塞等待</span></span><br><span class="line">    write(fd[<span class="number">1</span>], str, <span class="built_in">strlen</span>(str)); <span class="comment">//写入数据</span></span><br><span class="line">    wait(<span class="literal">NULL</span>);</span><br><span class="line">    close(fd[<span class="number">1</span>]); </span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">else</span> <span class="keyword">if</span> (<span class="number">0</span> == pid) &#123; <span class="comment">//子进程读管道</span></span><br><span class="line">    close(fd[<span class="number">1</span>]); <span class="comment">//关闭写端</span></span><br><span class="line">    ret =read(fd[<span class="number">0</span>], buf, <span class="keyword">sizeof</span>(buf));</span><br><span class="line">    <span class="keyword">if</span> (<span class="number">-1</span> == ret) &#123;  <span class="comment">//读数据</span></span><br><span class="line">      perror(<span class="string">&quot;read error: &quot;</span>);</span><br><span class="line">      <span class="built_in">exit</span>(<span class="number">1</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    write(STDOUT_FILENO, buf, ret); <span class="comment">//输出到屏幕</span></span><br><span class="line">    close(fd[<span class="number">0</span>]);</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">  <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-</div></div>
-
-<h2 id="FIFO"><a href="#FIFO" class="headerlink" title="FIFO"></a>FIFO</h2><p>FIFO常被称为<strong>命名管道</strong>，以区分管道(pipe)。管道(pipe)只能用于“有血缘关系”的进程间。但<strong>通过FIFO，不相关的进程也能交换数据</strong>。</p>
-<p>FIFO是<strong>Linux基础文件类型</strong>中的一种。但，<strong>FIFO文件在磁盘上没有数据块</strong>，仅仅用来标识内核中一条通道。各进程可以打开这个文件进行read/write，实际上是在读写内核通道，这样就实现了进程间通信。</p>
-<h3 id="FIFO读写性质"><a href="#FIFO读写性质" class="headerlink" title="FIFO读写性质"></a>FIFO读写性质</h3><p><strong>只有读写都存在时，才能打开FIFO。（即有程序以只读方式打开也有程序以只写方式打开、或以读写方式打开）时，才能打开FIFO文件。）</strong></p>
-<p>由下面程序可验证:</p>
-<ul>
-<li>当没有写进程打开FIFO，此时读进程open FIFO将阻塞</li>
-<li>当所有读进程结束后，写进程将终止</li>
-</ul>
-<h3 id="FIFO示例"><a href="#FIFO示例" class="headerlink" title="FIFO示例"></a>FIFO示例</h3><div><div class="fold_hider"><div class="close hider_title">点击显示/隐藏-fifo_w.c</div></div><div class="fold">
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;unistd.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;sys/stat.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;sys/types.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;fcntl.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdlib.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;string.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;errno.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">sys_err</span><span class="params">(<span class="keyword">char</span> *str)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    perror(str);</span><br><span class="line">    <span class="built_in">exit</span>(<span class="number">-1</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">int</span> argc, <span class="keyword">char</span> *argv[])</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> fd, i;</span><br><span class="line">    <span class="keyword">char</span> buf[<span class="number">4096</span>];</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (argc &lt; <span class="number">2</span>) &#123;</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;Enter like this: ./a.out fifoname\n&quot;</span>);</span><br><span class="line">        <span class="keyword">return</span> <span class="number">-1</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">//创建FIFO</span></span><br><span class="line">    <span class="keyword">if</span> (mkfifo(argv[<span class="number">1</span>], S_IRUSR | S_IWUSR) &amp;&amp; errno != EEXIST)</span><br><span class="line">        sys_err(<span class="string">&quot;caon&#x27;t create FIFO&quot;</span>);</span><br><span class="line"></span><br><span class="line">    fd = open(argv[<span class="number">1</span>], O_WRONLY);</span><br><span class="line">    <span class="keyword">if</span> (fd &lt; <span class="number">0</span>) </span><br><span class="line">        sys_err(<span class="string">&quot;open&quot;</span>);</span><br><span class="line"></span><br><span class="line">    i = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">while</span> (<span class="number">1</span>) &#123;</span><br><span class="line">        <span class="built_in">sprintf</span>(buf, <span class="string">&quot;hello FIFO %d\n&quot;</span>, i++);</span><br><span class="line"></span><br><span class="line">        write(fd, buf, <span class="built_in">strlen</span>(buf));</span><br><span class="line">        sleep(<span class="number">1</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    close(fd);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-</div></div>
-
-<div><div class="fold_hider"><div class="close hider_title">点击显示/隐藏-fifo_r.c</div></div><div class="fold">
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;unistd.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;sys/stat.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;sys/types.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;fcntl.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdlib.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;string.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;errno.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">sys_err</span><span class="params">(<span class="keyword">char</span> *str)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    perror(str);</span><br><span class="line">    <span class="built_in">exit</span>(<span class="number">1</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">int</span> argc, <span class="keyword">char</span> *argv[])</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> fd, len;</span><br><span class="line">    <span class="keyword">char</span> buf[<span class="number">4096</span>];</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (argc &lt; <span class="number">2</span>) &#123;</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;./a.out fifoname\n&quot;</span>);</span><br><span class="line">        <span class="keyword">return</span> <span class="number">-1</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">//创建FIFO</span></span><br><span class="line">    <span class="keyword">if</span> (mkfifo(argv[<span class="number">1</span>], S_IRUSR | S_IWUSR) &amp;&amp; errno != EEXIST)</span><br><span class="line">        sys_err(<span class="string">&quot;caon&#x27;t create FIFO&quot;</span>);</span><br><span class="line"></span><br><span class="line">    fd = open(argv[<span class="number">1</span>], O_RDONLY);</span><br><span class="line">    <span class="keyword">if</span> (fd &lt; <span class="number">0</span>) </span><br><span class="line">        sys_err(<span class="string">&quot;open&quot;</span>);</span><br><span class="line">    <span class="keyword">while</span> (<span class="number">1</span>) &#123;</span><br><span class="line">        len = read(fd, buf, <span class="keyword">sizeof</span>(buf));</span><br><span class="line">        write(STDOUT_FILENO, buf, len);</span><br><span class="line">        sleep(<span class="number">3</span>);           <span class="comment">//多个读端时应增加睡眠秒数,放大效果.</span></span><br><span class="line">    &#125;</span><br><span class="line">    close(fd);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-</div></div>
-
-<h2 id="管道和FIFO的额外属性"><a href="#管道和FIFO的额外属性" class="headerlink" title="管道和FIFO的额外属性"></a>管道和FIFO的额外属性</h2><p><strong>O_NONBLOCK</strong>标志对管道和FIFO的影响</p>
-<p><img src="https://i.loli.net/2020/08/19/OwERLep16s9Kgqa.png" alt="O_NONBLOCK标志对管道和FIFO的影响.png"></p>
-<h1 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h1><p>《UNIX环境高级编程：第3版》</p>
-<p>《UNIX网络编程：第2卷 进程间通信》</p>
-]]></content>
-      <categories>
-        <category>apue</category>
-      </categories>
-      <tags>
-        <tag>apue</tag>
-        <tag>进程</tag>
-        <tag>unp</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>【转载】Union-Find算法详解</title>
     <url>/Algorithm/%E3%80%90%E8%BD%AC%E8%BD%BD%E3%80%91Union-Find%E7%AE%97%E6%B3%95%E8%AF%A6%E8%A7%A3/</url>
     <content><![CDATA[<p>【<font color=red><strong>声明</strong></font>】 <strong>本文转载自 <a href="https://github.com/labuladong/fucking-algorithm/blob/master/%E7%AE%97%E6%B3%95%E6%80%9D%E7%BB%B4%E7%B3%BB%E5%88%97/UnionFind%E7%AE%97%E6%B3%95%E8%AF%A6%E8%A7%A3.md">Union-Find算法详解 - GitHub</a></strong> </p>
@@ -3641,6 +3567,111 @@
         <tag>unp</tag>
         <tag>I/O复用</tag>
         <tag>kernel</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>进程间通信方式(一)管道</title>
+    <url>/UNP/%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1%E6%96%B9%E5%BC%8F(%E4%B8%80)%E7%AE%A1%E9%81%93/</url>
+    <content><![CDATA[<p>Linux环境下，<strong>进程地址空间相互独立</strong>，每个进程各自有不同的用户地址空间。任何一个进程的全局变量在另一个进程中都看不到，所以进程和进程之间不能相互访问，要交换数据必须通过<strong>内核</strong>，在内核中开辟一块缓冲区，进程A把数据从用户空间拷到内核缓冲区，进程B再从内核缓冲区把数据读走，内核提供的这种机制称为<strong>进程间通信</strong>（<strong>IPC</strong>，InterProcess Communication）。</p>
+<h2 id="管道-pipe-（半双工）"><a href="#管道-pipe-（半双工）" class="headerlink" title="管道 pipe （半双工）"></a>管道 pipe （半双工）</h2><p>管道 （<code>pipe</code>）是一种最基本的IPC机制，作用于<strong>有血缘关系</strong>的进程之间，完成数据传递。</p>
+<img src="https://i.loli.net/2020/08/16/BPgd7qliosW94VM.png" alt="pipe管道-进程通信.png" style="zoom:67%;" />
+
+<h3 id="管道特质"><a href="#管道特质" class="headerlink" title="管道特质"></a>管道特质</h3><ol>
+<li>其本质是一个<strong>伪文件</strong>（实为内核缓冲区）</li>
+<li>由两个文件描述符引用，一个表示读端，一个表示写端</li>
+<li>规定数据从管道的写端流入管道，从读端流出</li>
+</ol>
+<h3 id="pipe的原理"><a href="#pipe的原理" class="headerlink" title="pipe的原理"></a>pipe的原理</h3><p>管道实为内核使用<strong>环形队列</strong>机制，借助内核缓冲区(4k)实现。</p>
+<h3 id="pipe的局限性"><a href="#pipe的局限性" class="headerlink" title="pipe的局限性"></a>pipe的局限性</h3><p>​    ① 管道采用<strong>半双工</strong>通信方式。即数据只能在一个方向上流动。</p>
+<p>​    ② 只能在有<strong>公共祖先</strong>的进程间使用管道。</p>
+<p>​    ③ 数据一旦被读走，便不在管道中存在，<strong>不可反复读取</strong>。</p>
+<p>​    <del>④ 数据自己读不能自己写。</del></p>
+<h3 id="管道的读写行为"><a href="#管道的读写行为" class="headerlink" title="管道的读写行为"></a>管道的读写行为</h3><p>从管道中<strong>「读数据」</strong>：</p>
+<ol>
+<li><p>管道中<strong>有数据</strong>：</p>
+<p>read返回实际读到的字节数。</p>
+</li>
+<li><p>管道中<strong>无数据</strong>：</p>
+<p>(1) 管道<strong>写端全部关闭</strong>（管道写端引用计数为0），read返回0 (就像读到文件结尾)。</p>
+<p>(2)  管道写端<strong>没</strong>有<strong>全部关闭</strong>，read阻塞等待(不久的将来可能有数据递达，此时会让出cpu)。</p>
+</li>
+</ol>
+<p>往管道<strong>「写数据」</strong>：</p>
+<ol>
+<li><p>管道<strong>读端全部关闭</strong>：</p>
+<p>进程异常终止（也可使用捕捉 <strong>SIGPIPE</strong> 信号，使进程不终止，errno设置为EPIPE）。</p>
+</li>
+<li><p>管道读端<strong>没有全部关闭</strong>：</p>
+<p>(1) 管道已满，write阻塞。</p>
+<p>(2) 管道未满，write将数据写入，并返回实际写入的字节数。</p>
+</li>
+</ol>
+<h3 id="pipe程序示例"><a href="#pipe程序示例" class="headerlink" title="pipe程序示例"></a>pipe程序示例</h3><p>【实际步骤】</p>
+<blockquote>
+<p>「父进程」向「子进程」发送消息：</p>
+<ol>
+<li>创建管道；</li>
+<li>fork；</li>
+<li>父进程关闭读端 fd[0] ，子进程关闭写端 fd[1] ；</li>
+</ol>
+</blockquote>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;unistd.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;string.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdlib.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;sys/wait.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">int</span> argc, <span class="keyword">char</span> <span class="keyword">const</span> *argv[])</span> </span>&#123;</span><br><span class="line">  <span class="keyword">int</span> fd[<span class="number">2</span>];</span><br><span class="line">  <span class="keyword">int</span> ret;</span><br><span class="line">  <span class="keyword">pid_t</span> pid;</span><br><span class="line">  <span class="keyword">char</span> *str = <span class="string">&quot;hello pipe\n&quot;</span>;</span><br><span class="line">  <span class="keyword">char</span> buf[<span class="number">1024</span>];</span><br><span class="line"></span><br><span class="line">  <span class="comment">// 1. 创建 pipe</span></span><br><span class="line">  ret = pipe(fd);</span><br><span class="line">  <span class="keyword">if</span> (<span class="number">-1</span> == ret) &#123;</span><br><span class="line">    perror(<span class="string">&quot;pipe create error: &quot;</span>);</span><br><span class="line">    <span class="built_in">exit</span>(<span class="number">1</span>);</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="comment">// 2. fork</span></span><br><span class="line">  <span class="keyword">if</span> (<span class="number">-1</span> == (pid = fork())) &#123;</span><br><span class="line">    perror(<span class="string">&quot;fork error: &quot;</span>);</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="comment">// 3. 父进程关闭读端 fd[0] ，子进程关闭写端 fd[1] </span></span><br><span class="line">  <span class="keyword">else</span> <span class="keyword">if</span> (pid &gt; <span class="number">0</span>) &#123; <span class="comment">// 父进程写管道</span></span><br><span class="line">    close(fd[<span class="number">0</span>]); <span class="comment">// 关闭读端</span></span><br><span class="line">    sleep(<span class="number">2</span>); <span class="comment">// 父进程sleep，管道无数据且写端未全部关闭，子进程阻塞等待</span></span><br><span class="line">    write(fd[<span class="number">1</span>], str, <span class="built_in">strlen</span>(str)); <span class="comment">// 写入数据</span></span><br><span class="line">    wait(<span class="literal">NULL</span>);</span><br><span class="line">    close(fd[<span class="number">1</span>]); </span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">else</span> <span class="keyword">if</span> (<span class="number">0</span> == pid) &#123; <span class="comment">// 子进程读管道</span></span><br><span class="line">    close(fd[<span class="number">1</span>]); <span class="comment">// 关闭写端</span></span><br><span class="line">    ret =read(fd[<span class="number">0</span>], buf, <span class="keyword">sizeof</span>(buf));</span><br><span class="line">    <span class="keyword">if</span> (<span class="number">-1</span> == ret) &#123;  <span class="comment">// 读数据</span></span><br><span class="line">      perror(<span class="string">&quot;read error: &quot;</span>);</span><br><span class="line">      <span class="built_in">exit</span>(<span class="number">1</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    write(STDOUT_FILENO, buf, ret); <span class="comment">// 输出到屏幕</span></span><br><span class="line">    close(fd[<span class="number">0</span>]);</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  waitpid(pid, <span class="literal">NULL</span>, <span class="number">0</span>);</span><br><span class="line">  <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="FIFO"><a href="#FIFO" class="headerlink" title="FIFO"></a>FIFO</h2><p>FIFO指*<em>先进先出**</em>（first in，first out），常被称为<strong>有名管道</strong>（named pipe），以区分管道(pipe)。管道(pipe)只能用于 「有血缘关系」的进程间。<strong>使用 FIFO，不相关的进程也能交换数据</strong>。</p>
+<p>FIFO是<strong>Linux基础文件类型</strong>中的一种。但，<strong>FIFO文件在磁盘上没有数据块</strong>，仅仅用来标识内核中一条通道。各进程可以打开这个文件进行<code>read/write</code>，实际上是在读写内核通道，这样就实现了进程间通信。</p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;sys/types.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;sys/stat.h&gt;</span></span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">mkfifo</span><span class="params">(<span class="keyword">const</span> <span class="keyword">char</span> *pathname, <span class="keyword">mode_t</span> mode)</span></span>; <span class="comment">// 默认 O_CREAT | O_EXCL</span></span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="FIFO读写性质"><a href="#FIFO读写性质" class="headerlink" title="FIFO读写性质"></a>FIFO读写性质</h3><p><strong>只有读写都存在时，才能打开FIFO</strong>。及以下情况：</p>
+<ol>
+<li>有进程以只写方式打开，且有进程以只读方式打开；</li>
+<li>以读写方式打开。</li>
+</ol>
+<p>由下面程序可验证:</p>
+<ul>
+<li><strong>当没有写进程打开 FIFO 时读进程打开 FIFO 将阻塞</strong>；</li>
+<li><strong>当所有读进程结束后，写进程将终止</strong>。</li>
+</ul>
+<h3 id="FIFO程序示例"><a href="#FIFO程序示例" class="headerlink" title="FIFO程序示例"></a>FIFO程序示例</h3><p>【<strong>写进程</strong>实际步骤】</p>
+<blockquote>
+<ol>
+<li>创建 FIFO （已存在则跳过）；</li>
+<li>以只写方式打开 FIFO；</li>
+<li>写数据；</li>
+<li>关闭 FIFO 写。</li>
+</ol>
+</blockquote>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;unistd.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;sys/stat.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;sys/types.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;fcntl.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdlib.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;string.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;errno.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">sys_err</span><span class="params">(<span class="keyword">char</span> *str)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    perror(str);</span><br><span class="line">    <span class="built_in">exit</span>(<span class="number">-1</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">int</span> argc, <span class="keyword">char</span> *argv[])</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> fd, i;</span><br><span class="line">    <span class="keyword">char</span> buf[<span class="number">4096</span>];</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (argc &lt; <span class="number">2</span>) &#123;</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;Enter like this: ./a.out fifoname\n&quot;</span>);</span><br><span class="line">        <span class="keyword">return</span> <span class="number">-1</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">// 1. 创建 FIFO （已存在则跳过）</span></span><br><span class="line">    <span class="keyword">if</span> (mkfifo(argv[<span class="number">1</span>], S_IRUSR | S_IWUSR) &amp;&amp; errno != EEXIST)</span><br><span class="line">        sys_err(<span class="string">&quot;caon&#x27;t create FIFO&quot;</span>);</span><br><span class="line">    <span class="comment">// 2. 以只写方式打开 FIFO</span></span><br><span class="line">    fd = open(argv[<span class="number">1</span>], O_WRONLY);</span><br><span class="line">    <span class="keyword">if</span> (fd &lt; <span class="number">0</span>) </span><br><span class="line">        sys_err(<span class="string">&quot;open&quot;</span>);</span><br><span class="line">    <span class="comment">// 3. 写数据</span></span><br><span class="line">    i = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">while</span> (<span class="number">1</span>) &#123;</span><br><span class="line">        <span class="built_in">sprintf</span>(buf, <span class="string">&quot;hello FIFO %d\n&quot;</span>, i++);</span><br><span class="line">        write(fd, buf, <span class="built_in">strlen</span>(buf));</span><br><span class="line">        sleep(<span class="number">1</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">// 4. 关闭 FIFO</span></span><br><span class="line">    close(fd);</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>【<strong>读进程</strong>实际步骤】</p>
+<blockquote>
+<ol>
+<li>创建 FIFO （已存在则跳过）；</li>
+<li>以只读方式打开 FIFO；</li>
+<li>读数据；</li>
+<li>关闭 FIFO 读。</li>
+</ol>
+</blockquote>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;unistd.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;sys/stat.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;sys/types.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;fcntl.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdlib.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;string.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;errno.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">sys_err</span><span class="params">(<span class="keyword">char</span> *str)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    perror(str);</span><br><span class="line">    <span class="built_in">exit</span>(<span class="number">1</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">int</span> argc, <span class="keyword">char</span> *argv[])</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> fd, len;</span><br><span class="line">    <span class="keyword">char</span> buf[<span class="number">4096</span>];</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (argc &lt; <span class="number">2</span>) &#123;</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;./a.out fifoname\n&quot;</span>);</span><br><span class="line">        <span class="keyword">return</span> <span class="number">-1</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">// 1. 创建 FIFO （已存在则跳过）</span></span><br><span class="line">    <span class="keyword">if</span> (mkfifo(argv[<span class="number">1</span>], S_IRUSR | S_IWUSR) &amp;&amp; errno != EEXIST)</span><br><span class="line">        sys_err(<span class="string">&quot;caon&#x27;t create FIFO&quot;</span>);</span><br><span class="line">    <span class="comment">// 2. 以只读方式打开 FIFO</span></span><br><span class="line">    fd = open(argv[<span class="number">1</span>], O_RDONLY);</span><br><span class="line">    <span class="keyword">if</span> (fd &lt; <span class="number">0</span>) </span><br><span class="line">        sys_err(<span class="string">&quot;open&quot;</span>);</span><br><span class="line">    <span class="comment">// 3. 读数据</span></span><br><span class="line">    <span class="keyword">while</span> (<span class="number">1</span>) &#123;</span><br><span class="line">        len = read(fd, buf, <span class="keyword">sizeof</span>(buf));</span><br><span class="line">        write(STDOUT_FILENO, buf, len);</span><br><span class="line">        sleep(<span class="number">3</span>);           <span class="comment">//多个读端时应增加睡眠秒数,放大效果.</span></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">// 4. 关闭 FIFO 读</span></span><br><span class="line">    close(fd);</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="管道和FIFO的额外属性"><a href="#管道和FIFO的额外属性" class="headerlink" title="管道和FIFO的额外属性"></a>管道和FIFO的额外属性</h2><ul>
+<li><strong>O_NONBLOCK</strong> 标志对管道和FIFO的影响</li>
+</ul>
+<p><img src="https://i.loli.net/2020/08/19/OwERLep16s9Kgqa.png" alt="O_NONBLOCK标志对管道和FIFO的影响.png"></p>
+<ul>
+<li><strong>原子性</strong> 完全由所请求字节是否小于等于 <code>PIPE_BUF</code> 。</li>
+</ul>
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><p>《UNIX环境高级编程：第3版》</p>
+<p>《UNIX网络编程：第2卷 进程间通信》</p>
+]]></content>
+      <categories>
+        <category>unp</category>
+      </categories>
+      <tags>
+        <tag>进程</tag>
+        <tag>unp</tag>
+        <tag>IPC</tag>
       </tags>
   </entry>
 </search>
