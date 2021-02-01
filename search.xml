@@ -3675,4 +3675,146 @@
         <tag>kernel</tag>
       </tags>
   </entry>
+  <entry>
+    <title>Posix消息队列</title>
+    <url>/UNP/Posix%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97/</url>
+    <content><![CDATA[<blockquote>
+<p>程序示例可见参考链接：<a href="https://blog.csdn.net/zx714311728/article/details/53197196"><em>Posix消息队列_ZX714311728的博客-CSDN博客</em></a> </p>
+</blockquote>
+<h2 id="消息队列"><a href="#消息队列" class="headerlink" title="消息队列"></a>消息队列</h2><p>消息队列可以认为是一个消息链表，消息队列是<strong>随内核持续</strong>的。队列中每个消息的属性有：</p>
+<ol>
+<li><p>一个无符号整数<strong>优先级</strong>（Posix）或一个长整数类型（System V）；</p>
+</li>
+<li><p>消息的<strong>数据部分长度</strong>（可以为0）；</p>
+</li>
+<li><p><strong>数据</strong>本身（如果长度大于0）。</p>
+</li>
+</ol>
+<p>链表头含有当前队列的两个属性：</p>
+<ol>
+<li>队列中运行的最大消息数 <code>mq_maxmsg</code> ；</li>
+<li>每个消息的最大大小 <code>mq_msgsize</code> 。</li>
+</ol>
+<p>消息队列的可能布局如下：</p>
+<p><img src="https://gitee.com/jakel-in/images/raw/master/2021-02/%E5%90%AB%E6%9C%89%E4%B8%89%E4%B8%AA%E6%B6%88%E6%81%AF%E7%9A%84Posix%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97%E7%9A%84%E5%8F%AF%E8%83%BD%E5%B8%83%E5%B1%80.png"></p>
+<p>Posix 消息队列与System V消息队列主要区别：</p>
+<ol>
+<li>Posix 消息队列的读总是返回「最高优先级的最早消息」；System V 消息队列的读则可以返回任一指定优先级消息。</li>
+<li>往空队列放置消息时，Posix 消息队列允许产生一个信号或启动一个线程；System V则不提供类似机制。</li>
+</ol>
+<p>Posix消息队列与管道或FIFO的主要区别：</p>
+<ol>
+<li><p>在某个进程往一个队列写入消息之前，并不需要另外某个进程在该队列上等待消息的到达。对管道和FIFO来说，除非读出者已存在，否则先有写入者是没有意义的。</p>
+</li>
+<li><p>管道和FIFO是字节流模型，没有消息边界。消息队列则指定了数据长度，有边界。</p>
+</li>
+</ol>
+<h2 id="mq-open-、-mq-close和-mq-unlink"><a href="#mq-open-、-mq-close和-mq-unlink" class="headerlink" title="mq_open 、  mq_close和 mq_unlink"></a>mq_open 、  mq_close和 mq_unlink</h2><blockquote>
+<p>mq_xxx() 函数不是标准库函数，所以链接时需指定库，通过在最后加上 <strong><code>-lrt</code></strong> 选项来指定</p>
+</blockquote>
+<h3 id="mq-open"><a href="#mq-open" class="headerlink" title="mq_open"></a>mq_open</h3><figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 「创建」新消息队列或「打开」已存在的消息队列</span></span><br><span class="line"><span class="function"><span class="keyword">mqd_t</span> <span class="title">mq_open</span><span class="params">(<span class="keyword">const</span> <span class="keyword">char</span> *name, <span class="keyword">int</span> oflag, ...<span class="comment">/*mode_t mode, struct mq_attr *attr*/</span>)</span></span>;</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>返回值：成功，<strong>消息队列描述符</strong>； 出错，-1</p>
+<p>mode 和 attr 仅创建时使用</p>
+<p>创建的 “文件” 存放在 <code>/dev/mqueue/</code> 下</p>
+</blockquote>
+<p><code>name</code> 规则：必须以一个<code>/</code> 开头，并且不能再包含任何其他斜杠符；</p>
+<p><code>oflag</code> ：O_RDONLY、O_WRONLY、O_RDWR三者之一，按位或上O_CREAT、O_EXCL</p>
+<p><code>mode</code> ：S_ISRUSR、S_ISWUSR、S_ISRGRP、S_ISWGRP、S_ISROTH、S_ISWOTH </p>
+<p><code>attr</code> ：mq_open 只能设置 mq_maxmsg 和 mq_msgsize 属性，并且两个必须要同时设置；</p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">mq_attr</span> &#123;</span></span><br><span class="line">    <span class="keyword">long</span> mq_flags;<span class="comment">// 阻塞标志， 0或O_NONBLOCK</span></span><br><span class="line">    <span class="keyword">long</span> mq_maxmsg;<span class="comment">// 最大消息数</span></span><br><span class="line">    <span class="keyword">long</span> mq_msgsize;<span class="comment">// 每个消息最大大小</span></span><br><span class="line">    <span class="keyword">long</span> mq_curmsgs;<span class="comment">// 当前消息数</span></span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<h3 id="mq-close和mq-unlink"><a href="#mq-close和mq-unlink" class="headerlink" title="mq_close和mq_unlink"></a>mq_close和mq_unlink</h3><figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 关闭已打开的消息队列</span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">mq_close</span><span class="params">(<span class="keyword">mqd_t</span> mqd)</span></span>;</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>返回值：成功，0；出错，-1</p>
+</blockquote>
+<p>与 <code>close</code>  函数类似：调用进程可以不再使用该描述符，但消息队列并不从系统中删除。</p>
+<p> 一个进程终止时，它的所有打开的消息队列都关闭，如同调用了mq_close。</p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 删除消息队列的name</span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">mq_unlink</span><span class="params">(<span class="keyword">const</span> <span class="keyword">char</span> *name)</span></span>;</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>返回值：成功，0；出错，-1</p>
+</blockquote>
+<p>每个消息队列有一个保存其当前打开的描述符数的引用计数，只有当引用计数为0时，才删除该消息队列。当一个消息队列的引用计数仍大于0时，其 name 就能删除，但是该队列的析构（这与从系统中删除其名字不同）要等到最后一个 mq_close 发生时才进行。</p>
+<h2 id="mq-getattr、-mq-setattr"><a href="#mq-getattr、-mq-setattr" class="headerlink" title="mq_getattr、  mq_setattr"></a>mq_getattr、  mq_setattr</h2><figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="comment">//获取、设置消息队列属性</span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">mq_getattr</span><span class="params">(<span class="keyword">mqd_t</span> mqd, struct mq_attr *attr)</span></span>;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">mq_setattr</span><span class="params">(<span class="keyword">mqd_t</span> mqd, <span class="keyword">const</span> struct mq_attr *attr, struct mq_attr *oattr)</span></span>;</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>返回值：成功，0；出错，-1</p>
+<p>mq_setattr 只能设置 mq_flags 属性；mq_getattr 返回全部4个属性。</p>
+</blockquote>
+<h2 id="mq-send、-mq-receive"><a href="#mq-send、-mq-receive" class="headerlink" title="mq_send、  mq_receive"></a>mq_send、  mq_receive</h2><figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 往消息队列中放置一个消息</span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">mq_send</span><span class="params">(<span class="keyword">mqd_t</span> mqd, <span class="keyword">const</span> <span class="keyword">char</span> *ptr, <span class="keyword">size_t</span> len, <span class="keyword">unsigned</span> <span class="keyword">int</span> prio)</span></span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">//从消息队列中取走一个消息</span></span><br><span class="line"><span class="function"><span class="keyword">ssize_t</span> <span class="title">mq_receive</span><span class="params">(<span class="keyword">mqd_t</span> mqd, <span class="keyword">char</span> *ptr, <span class="keyword">size_t</span> len, <span class="keyword">unsigned</span> <span class="keyword">int</span> *prio)</span></span>;</span><br></pre></td></tr></table></figure>
+
+<p>说明：</p>
+<ul>
+<li><code>mq_send</code> 中优先级 prio 要小于 <code>MQ_PRIO_MAX</code>；</li>
+<li><code>mq_send</code> 的 prio 参数：<ul>
+<li>为非空指针，优先级通过该指针存放；</li>
+<li>为空指针，指定优先级值为 0 。</li>
+</ul>
+</li>
+<li><code>mq_receive</code> 总是返回指定队列中 最高优先级的最早消息；</li>
+<li><code>mq_receive</code> 的 len 参数值不能小于能加到所指队列中消息的最大大小（mq_msgsize）。若小于该值则立即返回 EMSGSIZE 错误。</li>
+</ul>
+<h2 id="消息队列限制"><a href="#消息队列限制" class="headerlink" title="消息队列限制"></a>消息队列限制</h2><ul>
+<li><code>mq_maxmsg</code>：消息队列中最大消息数</li>
+<li><code>mq_msgsize</code>：给定消息队列的最大字节数</li>
+<li><code>MQ_OPEN_MAX</code>：一个进程能够同时拥有的打开着的消息队列的最大数目（Posix要求它至少为8）</li>
+<li><code>MQ_PRIO_MAX</code>：任意消息的最大优先级值加1</li>
+</ul>
+<h2 id="mq-notify"><a href="#mq-notify" class="headerlink" title="mq_notify"></a>mq_notify</h2><p>Posix消息队列允许<strong>异步事件通知</strong>，以告知何时有一个消息放置到了某个空消息队列中。这种通知有两种方式可供选择：</p>
+<ol>
+<li>产生一个信号</li>
+<li>创建一个线程来执行指定的函数</li>
+</ol>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 为指定队列建立或删除异步事件通知</span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">mq_notify</span><span class="params">(<span class="keyword">mqd_t</span> mqd, <span class="keyword">const</span> struct sigevent *notification)</span></span>;</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>返回值：成功，0；出错-1</p>
+</blockquote>
+<ul>
+<li><code>notification</code> 参数：<ul>
+<li>非空，该进程被注册为接收该消息队列的通知</li>
+<li>空指针，当前进程被注册为接收该消息队列的通知，已存在的注册将被撤销</li>
+</ul>
+</li>
+<li>对一个消息队列来说，任一时刻只有一个进程可以被注册</li>
+<li>当通知被发送给注册进程时，注册即被撤销，该进程若要重新注册，则必须重新调用 mq_notify() （一次注册，接收一次）</li>
+</ul>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="keyword">union</span> sigval &#123;          <span class="comment">/* Data passed with notification */</span></span><br><span class="line">    <span class="keyword">int</span> sival_int;         <span class="comment">/* Integer value */</span></span><br><span class="line">    <span class="keyword">void</span> *sival_ptr;         <span class="comment">/* Pointer value */</span></span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">sigevent</span> &#123;</span></span><br><span class="line">    <span class="keyword">int</span> sigev_notify; <span class="comment">/* Notification method */</span></span><br><span class="line">    <span class="keyword">int</span> sigev_signo;  <span class="comment">/* Notification signal */</span></span><br><span class="line">    <span class="keyword">union</span> sigval sigev_value;  <span class="comment">/* Data passed with</span></span><br><span class="line"><span class="comment">                                         notification */</span></span><br><span class="line">    <span class="keyword">void</span> (*sigev_notify_function) (<span class="keyword">union</span> sigval);  <span class="comment">/* Function used for thread notification (SIGEV_THREAD) */</span></span><br><span class="line">    <span class="keyword">void</span> *sigev_notify_attributes;   <span class="comment">/* Attributes for notification thread (SIGEV_THREAD) */</span></span><br><span class="line">    <span class="keyword">pid_t</span> sigev_notify_thread_id;   <span class="comment">/* ID of thread to signal (SIGEV_THREAD_ID) */</span></span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><code>sigev_notify</code> 取值：<ul>
+<li>SIGEV_NONE：事件发生时，什么也不做；</li>
+<li>SIGEV_SIGNAL：事件发生时，将sigev_signo指定的信号发送给指定的进程；</li>
+<li>SIGEV_THREAD：事件发生时，内核会（在此进程内）以 sigev_notify_attributes 为线程属性创建一个线程，并让其执行 sigev_notify_function，并以 sigev_value 为其参数</li>
+</ul>
+</li>
+<li><code>sigev_signo</code>：在 sigev_notify=SIGEV_SIGNAL 时使用，指定信号类别</li>
+<li><code>sigev_value</code>：sigev_notify=SIGEV_SIGEV_THREAD 时使用，作为 sigev_notify_function 的参数</li>
+<li><code>sigev_notify_function</code>：在 sigev_notify=SIGEV_THREAD 时使用，其他情况下置NULL</li>
+</ul>
+<h2 id="Posix实时信号"><a href="#Posix实时信号" class="headerlink" title="Posix实时信号"></a>Posix实时信号</h2><p>信号可划分为两个大组：</p>
+<ol>
+<li>值在 SIGRTMIN（值34） 和 SIGRTMAX（值64） 之间（包括两者在内）的<strong>实时信号</strong>；</li>
+<li>所有<strong>其他信号</strong>：SIGALRM、SIGINT、SIGKILL等</li>
+</ol>
+<p>实时信号中 “<strong>实时</strong>” 的意思是：</p>
+<ol>
+<li><strong>信号是排队的</strong>，是按先进先出(FIFO)顺序排队的。同一信号产生3次，则递交3次</li>
+<li>当有多个 SIGRTMIN 到 SIGRTMAX 范围内的解阻塞信号排队时，值较小的信号先与较大的信号递交</li>
+<li>实时信号能比非实时信号<strong>携带更多信息</strong></li>
+</ol>
+]]></content>
+      <categories>
+        <category>笔记</category>
+        <category>unp</category>
+      </categories>
+      <tags>
+        <tag>进程</tag>
+        <tag>unp</tag>
+        <tag>IPC</tag>
+      </tags>
+  </entry>
 </search>
