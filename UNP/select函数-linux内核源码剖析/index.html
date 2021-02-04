@@ -29,7 +29,7 @@
 <meta property="og:type" content="article">
 <meta property="og:title" content="select函数-linux内核源码剖析">
 <meta property="og:url" content="https://jakelin.cn/UNP/select%E5%87%BD%E6%95%B0-linux%E5%86%85%E6%A0%B8%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/index.html">
-<meta property="og:site_name" content="世界上有10种人！">
+<meta property="og:site_name" content="JakeLin&#39;s Blog">
 <meta property="og:description" content="前两天与师兄讨论到I&#x2F;O复用，I&#x2F;O复用在UNIX网络编程中，提供了三个系统调用，分别是select、poll、epoll。对于这三个系统调用的使用我已有coding，但是追其原理还有点捋不完整，这一篇博客记录通过源码阅读剖析select底层实现。">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://i.loli.net/2020/08/07/WdJIKFkZlCmUpoO.png">
@@ -57,7 +57,7 @@
     lang   : 'zh-CN'
   };
 </script>
-<title>select函数-linux内核源码剖析 | 世界上有10种人！</title>
+<title>select函数-linux内核源码剖析 | JakeLin's Blog</title>
   
     <script async src="https://www.googletagmanager.com/gtag/js?id=UA-174281095-1"></script>
     <script>
@@ -136,7 +136,7 @@
 
     <a href="/" class="brand" rel="start">
       <i class="logo-line"></i>
-      <h1 class="site-title">世界上有10种人！</h1>
+      <h1 class="site-title">JakeLin's Blog</h1>
       <i class="logo-line"></i>
     </a>
       <p class="site-subtitle" itemprop="description">世界上有10种人！</p>
@@ -228,7 +228,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
           <a href="/archives">
-          <span class="site-state-item-count">48</span>
+          <span class="site-state-item-count">49</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -301,7 +301,7 @@
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="世界上有10种人！">
+      <meta itemprop="name" content="JakeLin's Blog">
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
@@ -611,14 +611,14 @@
       <i class="fa fa-chart-line"></i>
     </span>
       <span>站点总字数：</span>
-    <span title="站点总字数">146k</span>
+    <span title="站点总字数">153k</span>
   </span>
   <span class="post-meta-item">
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
       <span>站点阅读时长 &asymp;</span>
-    <span title="站点阅读时长">2:13</span>
+    <span title="站点阅读时长">2:19</span>
   </span>
 </div>
 <div class="busuanzi-count">
