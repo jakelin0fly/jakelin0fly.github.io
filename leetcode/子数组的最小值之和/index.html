@@ -33,10 +33,10 @@
 <meta property="og:description" content="单调栈">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2021-02-05T16:00:00.000Z">
-<meta property="article:modified_time" content="2021-02-07T05:39:50.599Z">
+<meta property="article:modified_time" content="2021-02-09T05:45:16.406Z">
 <meta property="article:author" content="jakelin">
 <meta property="article:tag" content="C++">
-<meta property="article:tag" content="栈">
+<meta property="article:tag" content="单调栈">
 <meta name="twitter:card" content="summary">
 
 
@@ -208,7 +208,7 @@
       <div class="sidebar-panel-container">
         <!--noindex-->
         <div class="post-toc-wrap sidebar-panel">
-            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#907-%E5%AD%90%E6%95%B0%E7%BB%84%E7%9A%84%E6%9C%80%E5%B0%8F%E5%80%BC%E4%B9%8B%E5%92%8C"><span class="nav-number">1.</span> <span class="nav-text">907. 子数组的最小值之和</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%96%B9%E6%B3%95%E4%B8%80%EF%BC%9A%E5%90%91%E4%B8%A4%E7%AB%AF%E6%90%9C%E7%B4%A2%EF%BC%88%E8%B6%85%E6%97%B6%EF%BC%89"><span class="nav-number">1.1.</span> <span class="nav-text">方法一：向两端搜索（超时）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%96%B9%E6%B3%95%E4%BA%8C%EF%BC%9A%E5%8D%95%E8%B0%83%E6%A0%88"><span class="nav-number">1.2.</span> <span class="nav-text">方法二：单调栈</span></a></li></ol></li></ol></div>
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#907-%E5%AD%90%E6%95%B0%E7%BB%84%E7%9A%84%E6%9C%80%E5%B0%8F%E5%80%BC%E4%B9%8B%E5%92%8C"><span class="nav-number">1.</span> <span class="nav-text">907. 子数组的最小值之和</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%96%B9%E6%B3%95%E4%B8%80%EF%BC%9A%E6%9A%B4%E5%8A%9B%EF%BC%88%E8%B6%85%E6%97%B6%EF%BC%89"><span class="nav-number">1.1.</span> <span class="nav-text">方法一：暴力（超时）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%96%B9%E6%B3%95%E4%BA%8C%EF%BC%9A%E5%8D%95%E8%B0%83%E6%A0%88"><span class="nav-number">1.2.</span> <span class="nav-text">方法二：单调栈</span></a></li></ol></li></ol></div>
         </div>
         <!--/noindex-->
 
@@ -223,7 +223,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
           <a href="/archives">
-          <span class="site-state-item-count">51</span>
+          <span class="site-state-item-count">53</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -318,7 +318,7 @@
           <i class="far fa-calendar-check"></i>
         </span>
         <span class="post-meta-item-text">更新于</span>
-        <time title="修改时间：2021-02-07 13:39:50" itemprop="dateModified" datetime="2021-02-07T13:39:50+08:00">2021-02-07</time>
+        <time title="修改时间：2021-02-09 13:45:16" itemprop="dateModified" datetime="2021-02-09T13:45:16+08:00">2021-02-09</time>
       </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -387,7 +387,7 @@
 </blockquote>
 <p><strong>【解题】</strong></p>
 <p>也就是计算数组 A 的所有连续子数组中最小值的总和。如果计算出每个位置的数为连续子数组中最小值的次数，那么也就得目标结果。</p>
-<h3 id="方法一：向两端搜索（超时）"><a href="#方法一：向两端搜索（超时）" class="headerlink" title="方法一：向两端搜索（超时）"></a>方法一：向两端搜索（超时）</h3><p>首先想到的是，对于数组中的一个数，从当前位置开始，往左右查找，直到找到比它更小（在右侧，不大于当前值）的值或是到了数组边界。</p>
+<h3 id="方法一：暴力（超时）"><a href="#方法一：暴力（超时）" class="headerlink" title="方法一：暴力（超时）"></a>方法一：暴力（超时）</h3><p>首先想到的是，对于数组中的一个数，从当前位置开始，往左右查找，直到找到比它更小（在右侧，不大于当前值）的值或是到了数组边界。</p>
 <p><strong>时间复杂度</strong> ：<strong>O(n^2)</strong> </p>
 <p><strong>空间复杂度</strong> ：<strong>O(1)</strong> </p>
 <figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">sumSubarrayMins</span><span class="params">(<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&amp; A)</span> </span>&#123;  </span><br><span class="line">    <span class="keyword">int</span> n = A.size();</span><br><span class="line">    <span class="keyword">int</span> left_small_index, right_small_index;</span><br><span class="line">    <span class="keyword">long</span> sum = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> current_index = <span class="number">0</span>; current_index &lt; A.size(); ++current_index)&#123;</span><br><span class="line">        <span class="comment">// 往左侧查找第一个不小于当前值的位置</span></span><br><span class="line">        left_small_index = current_index - <span class="number">1</span>;</span><br><span class="line">        <span class="keyword">while</span>(left_small_index &gt;= <span class="number">0</span> &amp;&amp; A[left_small_index] &gt; A[current_index]) <span class="comment">// 此处不取等 </span></span><br><span class="line">            --left_small_index;</span><br><span class="line">        <span class="comment">// 往右侧查找小于当前值的位置</span></span><br><span class="line">        right_small_index = current_index + <span class="number">1</span>; </span><br><span class="line">        <span class="comment">// 此处取等 当有重复数字时也满足</span></span><br><span class="line">        <span class="keyword">while</span>(right_small_index &lt; n &amp;&amp; A[right_small_index] &gt;= A[current_index]) </span><br><span class="line">            ++right_small_index;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 连续子数组中 A[current_index] 为最小值的 数组组合方式</span></span><br><span class="line">        <span class="comment">// 当前位置前有 current_index - left_small_index 种取法</span></span><br><span class="line">        <span class="comment">// 当前位置后有 right_small_index - current_index 种取法</span></span><br><span class="line">        sum += (current_index - left_small_index) * (right_small_index - current_index) * A[current_index];</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> sum % <span class="number">1000000007</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
@@ -419,6 +419,12 @@
   <div class="popular-posts-header">相关文章推荐</div>
   <ul class="popular-posts">
     <li class="popular-posts-item">
+      <div class="popular-posts-title"><a href="\leetcode\力扣-84.柱状图中最大的矩形\" rel="bookmark">力扣-84.柱状图中最大的矩形</a></div>
+    </li>
+    <li class="popular-posts-item">
+      <div class="popular-posts-title"><a href="\leetcode\力扣-85.最大矩形\" rel="bookmark">力扣-85.最大矩形</a></div>
+    </li>
+    <li class="popular-posts-item">
       <div class="popular-posts-title"><a href="\Algorithm\【转载】Union-Find算法详解\" rel="bookmark">【转载】Union-Find算法详解</a></div>
     </li>
     <li class="popular-posts-item">
@@ -426,12 +432,6 @@
     </li>
     <li class="popular-posts-item">
       <div class="popular-posts-title"><a href="\Algorithm\算法收录\" rel="bookmark">算法收录</a></div>
-    </li>
-    <li class="popular-posts-item">
-      <div class="popular-posts-title"><a href="\C++\C++11智能指针\" rel="bookmark">C++11智能指针</a></div>
-    </li>
-    <li class="popular-posts-item">
-      <div class="popular-posts-title"><a href="\C++\C++笔记(面向对象高级编程--侯捷)\" rel="bookmark">C++笔记(面向对象高级编程--侯捷)</a></div>
     </li>
   </ul>
 
@@ -456,7 +456,7 @@
 
           <div class="post-tags">
               <a href="/tags/C/" rel="tag"><i class="fa fa-tag"></i> C++</a>
-              <a href="/tags/%E6%A0%88/" rel="tag"><i class="fa fa-tag"></i> 栈</a>
+              <a href="/tags/%E5%8D%95%E8%B0%83%E6%A0%88/" rel="tag"><i class="fa fa-tag"></i> 单调栈</a>
           </div>
 
         
@@ -528,14 +528,14 @@
       <i class="fa fa-chart-line"></i>
     </span>
       <span>站点总字数：</span>
-    <span title="站点总字数">156k</span>
+    <span title="站点总字数">162k</span>
   </span>
   <span class="post-meta-item">
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
       <span>站点阅读时长 &asymp;</span>
-    <span title="站点阅读时长">2:22</span>
+    <span title="站点阅读时长">2:28</span>
   </span>
 </div>
 <div class="busuanzi-count">
