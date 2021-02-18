@@ -4363,4 +4363,59 @@
         <tag>排序</tag>
       </tags>
   </entry>
+  <entry>
+    <title>力扣-995.K连续位的最小翻转次数</title>
+    <url>/leetcode/%E5%8A%9B%E6%89%A3-995.K%E8%BF%9E%E7%BB%AD%E4%BD%8D%E7%9A%84%E6%9C%80%E5%B0%8F%E7%BF%BB%E8%BD%AC%E6%AC%A1%E6%95%B0/</url>
+    <content><![CDATA[<h2 id="995-K-连续位的最小翻转次数"><a href="#995-K-连续位的最小翻转次数" class="headerlink" title="995. K 连续位的最小翻转次数"></a>995. K 连续位的最小翻转次数</h2><blockquote>
+<p>在仅包含 0 和 1 的数组 A 中，一次 K 位翻转包括选择一个长度为 K 的（连续）子数组，同时将子数组中的每个 0 更改为 1，而每个 1 更改为 0。</p>
+<p>返回所需的 K 位翻转的最小次数，以便数组没有值为 0 的元素。如果不可能，返回 -1。</p>
+<p>示例 1：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">输入：A &#x3D; [0,1,0], K &#x3D; 1</span><br><span class="line">输出：2</span><br><span class="line">解释：先翻转 A[0]，然后翻转 A[2]。</span><br></pre></td></tr></table></figure>
+
+<p>示例 2：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">输入：A &#x3D; [1,1,0], K &#x3D; 2</span><br><span class="line">输出：-1</span><br><span class="line">解释：无论我们怎样翻转大小为 2 的子数组，我们都不能使数组变为 [1,1,1]。</span><br></pre></td></tr></table></figure>
+
+<p>来源：力扣（LeetCode） <a href="https://leetcode-cn.com/problems/minimum-number-of-k-consecutive-bit-flips">https://leetcode-cn.com/problems/minimum-number-of-k-consecutive-bit-flips</a></p>
+</blockquote>
+<h2 id="分享"><a href="#分享" class="headerlink" title="分享"></a>分享</h2><p>看到 “<strong>K 连续位</strong>” 首先想到的就是 <strong>滑动窗口</strong>。根据题目意思，是要把所有的 0 包括中间过程产生的 0）翻转为 1。在此我们有几点注意：</p>
+<ul>
+<li>后面子区间的翻转，不会影响到前面已经全1的区间；</li>
+<li>翻转<strong>偶数次</strong>的结果是最初始的值 <code>A[i]</code>，翻转<strong>奇数次</strong>的结果是 <code>A[i] ^ 1</code> 。</li>
+</ul>
+<h2 id="方法一：暴力模拟翻转"><a href="#方法一：暴力模拟翻转" class="headerlink" title="方法一：暴力模拟翻转"></a>方法一：暴力模拟翻转</h2><blockquote>
+<p>【<strong>时间复杂度</strong>】<strong>O(N*K)</strong> </p>
+<p>【<strong>空间复杂度</strong>】<strong>O(1)</strong> </p>
+</blockquote>
+<p>暴力方法很简单，就是从左往右移动滑动窗口，最左侧遇到 0 便翻转区间内的数。但是，很显然暴力算法会 <strong>计算超时</strong>。</p>
+<h2 id="方法二：滑动窗口"><a href="#方法二：滑动窗口" class="headerlink" title="方法二：滑动窗口"></a>方法二：滑动窗口</h2><blockquote>
+<p>【<strong>时间复杂度</strong>】<strong>O(N)</strong> </p>
+<p>【<strong>空间复杂度</strong>】<strong>O(K)</strong> </p>
+</blockquote>
+<p>暴力模拟的问题在于，每次翻转都要对K个数赋值。上面我们提到了翻转<strong>奇数次</strong>和<strong>偶数次</strong>的值我们是知道的，那么如果我们记录下该值被翻转的次数，便知道滑动窗口移动到此处是否还需要翻转。<strong>每一次翻转的发生都是由某一个元素引起的，我们规定，引起翻转发生的元素为滑动窗口最左侧的元素</strong>。</p>
+<p>当前元素<strong>已经翻转次数</strong> ，等价于被前面 <code>K - 1</code>个元素翻转的次数。</p>
+<ol>
+<li>若是<strong>偶数次</strong>，当前元素<strong>初值为 0</strong>，则需要再次翻转；</li>
+<li>若是<strong>奇数次</strong>，当前元素<strong>初值为 1</strong>，则需要再次翻转。</li>
+</ol>
+<p>【补充】关于<strong>已翻转次数</strong>。给定一个大小为 K 的滑动窗口，若最左侧元素为 0 ，则翻转窗口，我们就可以看成，窗口内后 <code>K-1</code> 个元素被第一个元素翻转一次。因此某一元素的已翻转次数也就等于它前面 <code>K - 1</code> 个元素中导致发生翻转的元素个数。</p>
+<p>【实际算法】</p>
+<ol>
+<li>使用队列记录当前元素的前 <code>K - 1</code> 个元素中导致发生翻转的元素索引。</li>
+<li>队头元素不能与当前元素在同一窗口内，队头出队。</li>
+<li>队列中元素个数即为当前元素已翻转次数。</li>
+<li>当前元素导致发生翻转，则当前元素索引入队。</li>
+</ol>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">minKBitFlips</span><span class="params">(<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&amp; A, <span class="keyword">int</span> K)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> n = A.size();</span><br><span class="line">        <span class="built_in">queue</span>&lt;<span class="keyword">int</span>&gt; indexQueue;</span><br><span class="line">        <span class="keyword">int</span> ans = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; n; ++i) &#123;</span><br><span class="line">            <span class="comment">// 超出窗口大小：队头元素不能与当前元素在同一窗口内</span></span><br><span class="line">            <span class="keyword">if</span> (!indexQueue.empty() &amp;&amp; indexQueue.front() + K &lt;= i) &#123;</span><br><span class="line">                indexQueue.pop();</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="comment">// 已翻转偶数次 且 当前为 0 (indexQueue.size() &amp; 1) == 0 &amp;&amp; A[i] == 0</span></span><br><span class="line">            <span class="comment">// 已翻转奇数次 且 当前为 1 (indexQueue.size() &amp; 1) == 1 &amp;&amp; A[i] == 1</span></span><br><span class="line">            <span class="keyword">if</span> ((indexQueue.size() &amp; <span class="number">1</span>) == A[i]) &#123; </span><br><span class="line">                indexQueue.push(i);</span><br><span class="line">                ++ans;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span> (!indexQueue.empty() &amp;&amp; indexQueue.back() + K &gt; n)</span><br><span class="line">            <span class="keyword">return</span> <span class="number">-1</span>;</span><br><span class="line">        <span class="keyword">return</span> ans;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+]]></content>
+      <categories>
+        <category>笔记</category>
+        <category>刷题</category>
+        <category>leetcode</category>
+      </categories>
+      <tags>
+        <tag>C++</tag>
+        <tag>滑动窗口</tag>
+      </tags>
+  </entry>
 </search>
