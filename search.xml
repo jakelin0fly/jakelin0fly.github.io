@@ -4418,4 +4418,37 @@
         <tag>滑动窗口</tag>
       </tags>
   </entry>
+  <entry>
+    <title>力扣-1438.绝对差不超过限制的最长连续子数组</title>
+    <url>/leetcode/%E5%8A%9B%E6%89%A3-1438.%E7%BB%9D%E5%AF%B9%E5%B7%AE%E4%B8%8D%E8%B6%85%E8%BF%87%E9%99%90%E5%88%B6%E7%9A%84%E6%9C%80%E9%95%BF%E8%BF%9E%E7%BB%AD%E5%AD%90%E6%95%B0%E7%BB%84/</url>
+    <content><![CDATA[<h2 id="1438-绝对差不超过限制的最长连续子数组"><a href="#1438-绝对差不超过限制的最长连续子数组" class="headerlink" title="1438.绝对差不超过限制的最长连续子数组"></a>1438.绝对差不超过限制的最长连续子数组</h2><blockquote>
+<p>给你一个整数数组 nums ，和一个表示限制的整数 limit，请你返回最长连续子数组的长度，该子数组中的任意两个元素之间的绝对差必须小于或者等于 limit 。</p>
+<p>如果不存在满足条件的子数组，则返回 0 。</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">输入：nums &#x3D; [10,1,2,4,7,2], limit &#x3D; 5</span><br><span class="line">输出：4 </span><br><span class="line">解释：满足题意的最长子数组是 [2,4,7,2]，其最大绝对差 |2-7| &#x3D; 5 &lt;&#x3D; 5 。</span><br></pre></td></tr></table></figure>
+
+<p>来源：力扣（LeetCode） <a href="https://leetcode-cn.com/problems/longest-continuous-subarray-with-absolute-diff-less-than-or-equal-to-limit">https://leetcode-cn.com/problems/longest-continuous-subarray-with-absolute-diff-less-than-or-equal-to-limit</a></p>
+</blockquote>
+<h2 id="解题分析"><a href="#解题分析" class="headerlink" title="解题分析"></a>解题分析</h2><ol>
+<li>标识子数组，可用双指针 ——【滑动窗口】</li>
+<li>记录子数组中的最大值，最小值 </li>
+</ol>
+<p>关于记录子数组中的最大值与最小值，有多种方法：</p>
+<p>  方法一：暴力查找（显然不是好方法）</p>
+<p>  方法二：<strong>滑动窗口 + 堆 + 延迟删除</strong> （类似于 <a href="https://jakelin.cn/leetcode/%E6%BB%91%E5%8A%A8%E7%AA%97%E5%8F%A3%E4%B8%AD%E4%BD%8D%E6%95%B0/#%E9%A2%98%E8%A7%A3">JakeLin’s Blog: 480-滑动窗口中位数-堆+延迟删除</a> ）</p>
+<p>  方法三：<strong>滑动窗口 + 单调队列</strong> （使用<strong>双端队列</strong>是为方便删除队头、队尾） </p>
+<h2 id="方法三：滑动窗口-单调队列"><a href="#方法三：滑动窗口-单调队列" class="headerlink" title="方法三：滑动窗口 + 单调队列"></a>方法三：滑动窗口 + 单调队列</h2><p>【<strong>滑动窗口</strong>】双指针实现</p>
+<p>【<strong>单调队列</strong>】维护两个单调队列，以记录子数组中的 <strong>最大值</strong> 与 <strong>最小值</strong> 。（使用 <strong>双端队列</strong> 是为方便删除队头、队尾） </p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">longestSubarray</span><span class="params">(<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&amp; nums, <span class="keyword">int</span> limit)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> n = nums.size();</span><br><span class="line">        <span class="keyword">int</span> left = <span class="number">0</span>, right = <span class="number">0</span>; <span class="comment">// 双指针 标识子数组</span></span><br><span class="line">        <span class="keyword">int</span> ans = <span class="number">0</span>;</span><br><span class="line">        <span class="built_in">deque</span>&lt;<span class="keyword">int</span>&gt; maxQueue, minQueue; <span class="comment">// 单调队列 子数组中的最值</span></span><br><span class="line">        <span class="keyword">for</span> (right = <span class="number">0</span>; right &lt; n; ++right) &#123;</span><br><span class="line">            <span class="comment">// 最大值 单调队列</span></span><br><span class="line">            <span class="keyword">while</span> (!maxQueue.empty() &amp;&amp; maxQueue.back() &lt; nums[right]) &#123;</span><br><span class="line">                maxQueue.pop_back();</span><br><span class="line">            &#125;</span><br><span class="line">            maxQueue.push_back(nums[right]);</span><br><span class="line"></span><br><span class="line">            <span class="comment">// 最小值 单调队列</span></span><br><span class="line">            <span class="keyword">while</span> (!minQueue.empty() &amp;&amp; minQueue.back() &gt; nums[right]) &#123;</span><br><span class="line">                minQueue.pop_back();</span><br><span class="line">            &#125;</span><br><span class="line">            minQueue.push_back(nums[right]);</span><br><span class="line"></span><br><span class="line">            <span class="comment">// 子数组不满足条件 滑动窗口左边界右移</span></span><br><span class="line">            <span class="keyword">while</span> (!maxQueue.empty() &amp;&amp; !minQueue.empty() &amp;&amp; (maxQueue.front() - minQueue.front()) &gt; limit) &#123;</span><br><span class="line">                <span class="keyword">if</span> (nums[left] == maxQueue.front()) &#123;</span><br><span class="line">                    maxQueue.pop_front();</span><br><span class="line">                &#125;</span><br><span class="line">                <span class="keyword">if</span> (nums[left] == minQueue.front()) &#123;</span><br><span class="line">                    minQueue.pop_front();</span><br><span class="line">                &#125;</span><br><span class="line">                ++left;</span><br><span class="line">            &#125;</span><br><span class="line">            ans = max(ans, right - left + <span class="number">1</span>);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> ans;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+]]></content>
+      <categories>
+        <category>笔记</category>
+        <category>刷题</category>
+        <category>leetcode</category>
+      </categories>
+      <tags>
+        <tag>C++</tag>
+        <tag>单调栈</tag>
+      </tags>
+  </entry>
 </search>

@@ -25,22 +25,22 @@
     var NexT = window.NexT || {};
     var CONFIG = {"hostname":"jakelin.cn","root":"/","images":"/images","scheme":"Gemini","version":"8.2.0","exturl":false,"sidebar":{"position":"left","display":"always","padding":18,"offset":12},"copycode":true,"bookmark":{"enable":true,"color":"#222","save":"auto"},"fancybox":true,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}};
   </script>
-<meta name="description" content="Hexo-Theme-Butterfly(二) 主题页面">
+<meta name="description" content="给你一个整数数组 nums ，和一个表示限制的整数 limit，请你返回最长连续子数组的长度，该子数组中的任意两个元素之间的绝对差必须小于或者等于 limit 。">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Hexo-Theme-Butterfly(二) 主题页面">
-<meta property="og:url" content="https://jakelin.cn/hexo/Hexo-Theme-Butterfly(%E4%BA%8C)-%E4%B8%BB%E9%A2%98%E9%A1%B5%E9%9D%A2/index.html">
+<meta property="og:title" content="力扣-1438.绝对差不超过限制的最长连续子数组">
+<meta property="og:url" content="https://jakelin.cn/leetcode/%E5%8A%9B%E6%89%A3-1438.%E7%BB%9D%E5%AF%B9%E5%B7%AE%E4%B8%8D%E8%B6%85%E8%BF%87%E9%99%90%E5%88%B6%E7%9A%84%E6%9C%80%E9%95%BF%E8%BF%9E%E7%BB%AD%E5%AD%90%E6%95%B0%E7%BB%84/index.html">
 <meta property="og:site_name" content="JakeLin&#39;s Blog">
-<meta property="og:description" content="Hexo-Theme-Butterfly(二) 主题页面">
+<meta property="og:description" content="给你一个整数数组 nums ，和一个表示限制的整数 limit，请你返回最长连续子数组的长度，该子数组中的任意两个元素之间的绝对差必须小于或者等于 limit 。">
 <meta property="og:locale" content="zh_CN">
-<meta property="article:published_time" content="2020-07-28T16:00:00.000Z">
-<meta property="article:modified_time" content="2020-08-03T02:25:10.895Z">
+<meta property="article:published_time" content="2021-02-20T16:00:00.000Z">
+<meta property="article:modified_time" content="2021-02-21T07:17:11.946Z">
 <meta property="article:author" content="jakelin">
-<meta property="article:tag" content="Butterfly">
-<meta property="article:tag" content="Hexo">
+<meta property="article:tag" content="C++">
+<meta property="article:tag" content="单调栈">
 <meta name="twitter:card" content="summary">
 
 
-<link rel="canonical" href="https://jakelin.cn/hexo/Hexo-Theme-Butterfly(%E4%BA%8C)-%E4%B8%BB%E9%A2%98%E9%A1%B5%E9%9D%A2/">
+<link rel="canonical" href="https://jakelin.cn/leetcode/%E5%8A%9B%E6%89%A3-1438.%E7%BB%9D%E5%AF%B9%E5%B7%AE%E4%B8%8D%E8%B6%85%E8%BF%87%E9%99%90%E5%88%B6%E7%9A%84%E6%9C%80%E9%95%BF%E8%BF%9E%E7%BB%AD%E5%AD%90%E6%95%B0%E7%BB%84/">
 
 
 <script class="page-configurations">
@@ -52,7 +52,7 @@
     lang   : 'zh-CN'
   };
 </script>
-<title>Hexo-Theme-Butterfly(二) 主题页面 | JakeLin's Blog</title>
+<title>力扣-1438.绝对差不超过限制的最长连续子数组 | JakeLin's Blog</title>
   
     <script async src="https://www.googletagmanager.com/gtag/js?id=UA-174281095-1"></script>
     <script>
@@ -208,7 +208,7 @@
       <div class="sidebar-panel-container">
         <!--noindex-->
         <div class="post-toc-wrap sidebar-panel">
-            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Front-matter"><span class="nav-number">1.</span> <span class="nav-text">Front-matter</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Page-Front-matter"><span class="nav-number">1.1.</span> <span class="nav-text">Page Front-matter</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Post-Front-matter"><span class="nav-number">1.2.</span> <span class="nav-text">Post Front-matter</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%A0%87%E7%AD%BE%E9%A1%B5"><span class="nav-number">2.</span> <span class="nav-text">标签页</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%88%86%E7%B1%BB%E9%A1%B5"><span class="nav-number">3.</span> <span class="nav-text">分类页</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%8F%8B%E6%83%85%E9%93%BE%E6%8E%A5"><span class="nav-number">4.</span> <span class="nav-text">友情链接</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%88%9B%E5%BB%BA%E5%8F%8B%E6%83%85%E9%93%BE%E6%8E%A5%E9%A1%B5%E9%9D%A2"><span class="nav-number">4.1.</span> <span class="nav-text">创建友情链接页面</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8F%8B%E6%83%85%E9%93%BE%E6%8E%A5%E6%B7%BB%E5%8A%A0"><span class="nav-number">4.2.</span> <span class="nav-text">友情链接添加</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E9%9F%B3%E4%B9%90"><span class="nav-number">5.</span> <span class="nav-text">音乐</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%94%B5%E5%BD%B1"><span class="nav-number">6.</span> <span class="nav-text">电影</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#404-%E9%A1%B5%E9%9D%A2"><span class="nav-number">7.</span> <span class="nav-text">404 页面</span></a></li></ol></div>
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#1438-%E7%BB%9D%E5%AF%B9%E5%B7%AE%E4%B8%8D%E8%B6%85%E8%BF%87%E9%99%90%E5%88%B6%E7%9A%84%E6%9C%80%E9%95%BF%E8%BF%9E%E7%BB%AD%E5%AD%90%E6%95%B0%E7%BB%84"><span class="nav-number">1.</span> <span class="nav-text">1438.绝对差不超过限制的最长连续子数组</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%A7%A3%E9%A2%98%E5%88%86%E6%9E%90"><span class="nav-number">2.</span> <span class="nav-text">解题分析</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%96%B9%E6%B3%95%E4%B8%89%EF%BC%9A%E6%BB%91%E5%8A%A8%E7%AA%97%E5%8F%A3-%E5%8D%95%E8%B0%83%E9%98%9F%E5%88%97"><span class="nav-number">3.</span> <span class="nav-text">方法三：滑动窗口 + 单调队列</span></a></li></ol></div>
         </div>
         <!--/noindex-->
 
@@ -293,7 +293,7 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://jakelin.cn/hexo/Hexo-Theme-Butterfly(%E4%BA%8C)-%E4%B8%BB%E9%A2%98%E9%A1%B5%E9%9D%A2/">
+    <link itemprop="mainEntityOfPage" href="https://jakelin.cn/leetcode/%E5%8A%9B%E6%89%A3-1438.%E7%BB%9D%E5%AF%B9%E5%B7%AE%E4%B8%8D%E8%B6%85%E8%BF%87%E9%99%90%E5%88%B6%E7%9A%84%E6%9C%80%E9%95%BF%E8%BF%9E%E7%BB%AD%E5%AD%90%E6%95%B0%E7%BB%84/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="https://i.loli.net/2020/07/31/OZl2JxuSRrweIk5.jpg">
@@ -306,7 +306,7 @@
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          Hexo-Theme-Butterfly(二) 主题页面
+          力扣-1438.绝对差不超过限制的最长连续子数组
         </h1>
 
         <div class="post-meta-container">
@@ -317,14 +317,14 @@
       </span>
       <span class="post-meta-item-text">发表于</span>
 
-      <time title="创建时间：2020-07-29 00:00:00" itemprop="dateCreated datePublished" datetime="2020-07-29T00:00:00+08:00">2020-07-29</time>
+      <time title="创建时间：2021-02-21 00:00:00" itemprop="dateCreated datePublished" datetime="2021-02-21T00:00:00+08:00">2021-02-21</time>
     </span>
       <span class="post-meta-item">
         <span class="post-meta-item-icon">
           <i class="far fa-calendar-check"></i>
         </span>
         <span class="post-meta-item-text">更新于</span>
-        <time title="修改时间：2020-08-03 10:25:10" itemprop="dateModified" datetime="2020-08-03T10:25:10+08:00">2020-08-03</time>
+        <time title="修改时间：2021-02-21 15:17:11" itemprop="dateModified" datetime="2021-02-21T15:17:11+08:00">2021-02-21</time>
       </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -332,7 +332,15 @@
       </span>
       <span class="post-meta-item-text">分类于</span>
         <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/%E6%95%99%E7%A8%8B/" itemprop="url" rel="index"><span itemprop="name">教程</span></a>
+          <a href="/categories/%E7%AC%94%E8%AE%B0/" itemprop="url" rel="index"><span itemprop="name">笔记</span></a>
+        </span>
+          ，
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E7%AC%94%E8%AE%B0/%E5%88%B7%E9%A2%98/" itemprop="url" rel="index"><span itemprop="name">刷题</span></a>
+        </span>
+          ，
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E7%AC%94%E8%AE%B0/%E5%88%B7%E9%A2%98/leetcode/" itemprop="url" rel="index"><span itemprop="name">leetcode</span></a>
         </span>
     </span>
 
@@ -351,18 +359,18 @@
         <i class="far fa-file-word"></i>
       </span>
       <span class="post-meta-item-text">本文字数：</span>
-      <span>2.2k</span>
+      <span>1.5k</span>
     </span>
     <span class="post-meta-item" title="阅读时长">
       <span class="post-meta-item-icon">
         <i class="far fa-clock"></i>
       </span>
       <span class="post-meta-item-text">阅读时长 &asymp;</span>
-      <span>2 分钟</span>
+      <span>1 分钟</span>
     </span>
 </div>
 
-            <div class="post-description">Hexo-Theme-Butterfly(二) 主题页面</div>
+            <div class="post-description">给你一个整数数组 nums ，和一个表示限制的整数 limit，请你返回最长连续子数组的长度，该子数组中的任意两个元素之间的绝对差必须小于或者等于 limit 。</div>
         </div>
       </header>
 
@@ -370,136 +378,25 @@
     
     
     <div class="post-body" itemprop="articleBody">
-        <blockquote>
-<p>感谢原作者 <a target="_blank" rel="noopener" href="https://jerryc.me/">JerryC</a> </p>
-<p>由于主题更新，此文件中部分配置可能失效。请参考作者博客或文档：<a target="_blank" rel="noopener" href="https://demo.jerryc.me/posts/dc584b87/">Butterfly 安装文档(二) 主题页面</a> </p>
+        <h2 id="1438-绝对差不超过限制的最长连续子数组"><a href="#1438-绝对差不超过限制的最长连续子数组" class="headerlink" title="1438.绝对差不超过限制的最长连续子数组"></a>1438.绝对差不超过限制的最长连续子数组</h2><blockquote>
+<p>给你一个整数数组 nums ，和一个表示限制的整数 limit，请你返回最长连续子数组的长度，该子数组中的任意两个元素之间的绝对差必须小于或者等于 limit 。</p>
+<p>如果不存在满足条件的子数组，则返回 0 。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">输入：nums &#x3D; [10,1,2,4,7,2], limit &#x3D; 5</span><br><span class="line">输出：4 </span><br><span class="line">解释：满足题意的最长子数组是 [2,4,7,2]，其最大绝对差 |2-7| &#x3D; 5 &lt;&#x3D; 5 。</span><br></pre></td></tr></table></figure>
+
+<p>来源：力扣（LeetCode） <a target="_blank" rel="noopener" href="https://leetcode-cn.com/problems/longest-continuous-subarray-with-absolute-diff-less-than-or-equal-to-limit">https://leetcode-cn.com/problems/longest-continuous-subarray-with-absolute-diff-less-than-or-equal-to-limit</a></p>
 </blockquote>
-<h1 id="Front-matter"><a href="#Front-matter" class="headerlink" title="Front-matter"></a>Front-matter</h1><h2 id="Page-Front-matter"><a href="#Page-Front-matter" class="headerlink" title="Page Front-matter"></a>Page Front-matter</h2><table>
-<thead>
-<tr>
-<th>参数</th>
-<th>解释</th>
-</tr>
-</thead>
-<tbody><tr>
-<td><strong>title</strong></td>
-<td>【必需】页面标题</td>
-</tr>
-<tr>
-<td><strong>date</strong></td>
-<td>【必需】页面创建日期</td>
-</tr>
-<tr>
-<td><strong>type</strong></td>
-<td>【必需】标签、分类和友情链接三个页面需要配置</td>
-</tr>
-<tr>
-<td>description</td>
-<td>页面描述（需要设置主页文章节选）</td>
-</tr>
-<tr>
-<td>keywords</td>
-<td>页面关键字</td>
-</tr>
-<tr>
-<td>comments</td>
-<td>是否要显示页面评论模块，默认true</td>
-</tr>
-<tr>
-<td>top_img</td>
-<td>页面顶部图片</td>
-</tr>
-</tbody></table>
-<p>查看完整参数：<a target="_blank" rel="noopener" href="https://demo.jerryc.me/posts/dc584b87/#Page-Front-matter">Page Front-matter</a></p>
-<h2 id="Post-Front-matter"><a href="#Post-Front-matter" class="headerlink" title="Post Front-matter"></a>Post Front-matter</h2><table>
-<thead>
-<tr>
-<th>标签</th>
-<th>解释</th>
-</tr>
-</thead>
-<tbody><tr>
-<td><strong>title</strong></td>
-<td>【必需】文章标题</td>
-</tr>
-<tr>
-<td><strong>date</strong></td>
-<td>【必需】文章创建日期</td>
-</tr>
-<tr>
-<td>tags</td>
-<td>文章标签</td>
-</tr>
-<tr>
-<td>categories</td>
-<td>文章分类</td>
-</tr>
-<tr>
-<td>description</td>
-<td>文章描述（没看到哪儿显示……）</td>
-</tr>
-<tr>
-<td></td>
-<td>文章缩略图 (如果没有设置 top_img, 文章页顶部将显示缩略图，可设为 false / 图片地址 / 留空)</td>
-</tr>
-<tr>
-<td>keywords</td>
-<td>文章关键字</td>
-</tr>
-<tr>
-<td>comments</td>
-<td>显示文章评论模块，默认true</td>
-</tr>
-<tr>
-<td>top_img</td>
-<td>页面顶部图片</td>
-</tr>
-</tbody></table>
-<p>查看完整参数：<a target="_blank" rel="noopener" href="https://demo.jerryc.me/posts/dc584b87/#Post-Front-matter">Post Front-matter</a></p>
-<h1 id="标签页"><a href="#标签页" class="headerlink" title="标签页"></a>标签页</h1><ol>
-<li>前往你的 Hexo 博客的根目录</li>
-<li>输入 <code>hexo new page tags</code></li>
-<li>你会找到 <code>source/tags/index.md</code> 这个文件</li>
-<li>根据 <a href="#Page-Front-matter"><strong>Page Front-matter</strong></a> 修改这个文件：</li>
+<h2 id="解题分析"><a href="#解题分析" class="headerlink" title="解题分析"></a>解题分析</h2><ol>
+<li>标识子数组，可用双指针 ——【滑动窗口】</li>
+<li>记录子数组中的最大值，最小值 </li>
 </ol>
-<figure class="highlight markdown"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">---</span><br><span class="line">title: 标签页</span><br><span class="line">date: 2020-07-29</span><br><span class="line">type: tags</span><br><span class="line">comments: false</span><br><span class="line">top<span class="emphasis">_img: /img/page-tags-top.png</span></span><br><span class="line"><span class="emphasis">---</span></span><br></pre></td></tr></table></figure>
+<p>关于记录子数组中的最大值与最小值，有多种方法：</p>
+<p>  方法一：暴力查找（显然不是好方法）</p>
+<p>  方法二：<strong>滑动窗口 + 堆 + 延迟删除</strong> （类似于 <a href="https://jakelin.cn/leetcode/%E6%BB%91%E5%8A%A8%E7%AA%97%E5%8F%A3%E4%B8%AD%E4%BD%8D%E6%95%B0/#%E9%A2%98%E8%A7%A3">JakeLin’s Blog: 480-滑动窗口中位数-堆+延迟删除</a> ）</p>
+<p>  方法三：<strong>滑动窗口 + 单调队列</strong> （使用<strong>双端队列</strong>是为方便删除队头、队尾） </p>
+<h2 id="方法三：滑动窗口-单调队列"><a href="#方法三：滑动窗口-单调队列" class="headerlink" title="方法三：滑动窗口 + 单调队列"></a>方法三：滑动窗口 + 单调队列</h2><p>【<strong>滑动窗口</strong>】双指针实现</p>
+<p>【<strong>单调队列</strong>】维护两个单调队列，以记录子数组中的 <strong>最大值</strong> 与 <strong>最小值</strong> 。（使用 <strong>双端队列</strong> 是为方便删除队头、队尾） </p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">longestSubarray</span><span class="params">(<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&amp; nums, <span class="keyword">int</span> limit)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> n = nums.size();</span><br><span class="line">        <span class="keyword">int</span> left = <span class="number">0</span>, right = <span class="number">0</span>; <span class="comment">// 双指针 标识子数组</span></span><br><span class="line">        <span class="keyword">int</span> ans = <span class="number">0</span>;</span><br><span class="line">        <span class="built_in">deque</span>&lt;<span class="keyword">int</span>&gt; maxQueue, minQueue; <span class="comment">// 单调队列 子数组中的最值</span></span><br><span class="line">        <span class="keyword">for</span> (right = <span class="number">0</span>; right &lt; n; ++right) &#123;</span><br><span class="line">            <span class="comment">// 最大值 单调队列</span></span><br><span class="line">            <span class="keyword">while</span> (!maxQueue.empty() &amp;&amp; maxQueue.back() &lt; nums[right]) &#123;</span><br><span class="line">                maxQueue.pop_back();</span><br><span class="line">            &#125;</span><br><span class="line">            maxQueue.push_back(nums[right]);</span><br><span class="line"></span><br><span class="line">            <span class="comment">// 最小值 单调队列</span></span><br><span class="line">            <span class="keyword">while</span> (!minQueue.empty() &amp;&amp; minQueue.back() &gt; nums[right]) &#123;</span><br><span class="line">                minQueue.pop_back();</span><br><span class="line">            &#125;</span><br><span class="line">            minQueue.push_back(nums[right]);</span><br><span class="line"></span><br><span class="line">            <span class="comment">// 子数组不满足条件 滑动窗口左边界右移</span></span><br><span class="line">            <span class="keyword">while</span> (!maxQueue.empty() &amp;&amp; !minQueue.empty() &amp;&amp; (maxQueue.front() - minQueue.front()) &gt; limit) &#123;</span><br><span class="line">                <span class="keyword">if</span> (nums[left] == maxQueue.front()) &#123;</span><br><span class="line">                    maxQueue.pop_front();</span><br><span class="line">                &#125;</span><br><span class="line">                <span class="keyword">if</span> (nums[left] == minQueue.front()) &#123;</span><br><span class="line">                    minQueue.pop_front();</span><br><span class="line">                &#125;</span><br><span class="line">                ++left;</span><br><span class="line">            &#125;</span><br><span class="line">            ans = max(ans, right - left + <span class="number">1</span>);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> ans;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
 
-<h1 id="分类页"><a href="#分类页" class="headerlink" title="分类页"></a>分类页</h1><ol>
-<li>前往你的 Hexo 博客的根目录</li>
-<li>输入 <code>hexo new page categories</code></li>
-<li>你会找到 <code>source/categories/index.md</code> 这个文件</li>
-<li>根据 <a href="#Page-Front-matter"><strong>Page Front-matter</strong></a> 修改这个文件：</li>
-</ol>
-<figure class="highlight markdown"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">---</span><br><span class="line">title: 分类</span><br><span class="line">date: 2020-07-29</span><br><span class="line">type: categories</span><br><span class="line">comments: false</span><br><span class="line">top<span class="emphasis">_img: /img/page-categories-top.jpg</span></span><br><span class="line"><span class="emphasis">---</span></span><br></pre></td></tr></table></figure>
-
-<h1 id="友情链接"><a href="#友情链接" class="headerlink" title="友情链接"></a>友情链接</h1><h2 id="创建友情链接页面"><a href="#创建友情链接页面" class="headerlink" title="创建友情链接页面"></a>创建友情链接页面</h2><ol>
-<li>前往你的 Hexo 博客的根目录</li>
-<li>输入 <code>hexo new page link</code></li>
-<li>你会找到 <code>source/link/index.md</code> 这个文件</li>
-<li>根据 <a href="#Page-Front-matter"><strong>Page Front-matter</strong></a> 修改这个文件：</li>
-</ol>
-<figure class="highlight markdown"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">---</span><br><span class="line">title: 友情链接</span><br><span class="line">date: 2020-07-29</span><br><span class="line">type: link</span><br><span class="line">comments: false</span><br><span class="line">top<span class="emphasis">_img: /img/page-link-top.jpg</span></span><br><span class="line"><span class="emphasis">---</span></span><br></pre></td></tr></table></figure>
-
-<h2 id="友情链接添加"><a href="#友情链接添加" class="headerlink" title="友情链接添加"></a>友情链接添加</h2><p>在 Hexo 博客目录中的 <code>source/_data</code>，创建一个文件 <code>link.yml</code>，格式如下：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line">- class_name: 友情链接簇</span><br><span class="line">  class_desc: 友情链接簇描述</span><br><span class="line">  link_list:</span><br><span class="line">    1:</span><br><span class="line">      name: 链接名</span><br><span class="line">      link: 链接地址</span><br><span class="line">      avatar: 链接头像</span><br><span class="line">      descr: 链接描述</span><br><span class="line">    2:</span><br><span class="line">      name: 链接名</span><br><span class="line">      link: 链接地址</span><br><span class="line">      avatar: 链接头像</span><br><span class="line">      descr: 链接描述</span><br><span class="line"></span><br><span class="line">- class_name: 网站</span><br><span class="line">  class_desc: 值得推荐的网站</span><br><span class="line">  link_list:</span><br><span class="line">    - name: Youtube</span><br><span class="line">      link: https:&#x2F;&#x2F;www.youtube.com&#x2F;</span><br><span class="line">      avatar: https:&#x2F;&#x2F;i.loli.net&#x2F;2020&#x2F;05&#x2F;14&#x2F;9ZkGg8v3azHJfM1.png</span><br><span class="line">      descr: 视频网站</span><br><span class="line">    - name: Weibo</span><br><span class="line">      link: https:&#x2F;&#x2F;www.weibo.com&#x2F;</span><br><span class="line">      avatar: https:&#x2F;&#x2F;i.loli.net&#x2F;2020&#x2F;05&#x2F;14&#x2F;TLJBum386vcnI1P.png</span><br><span class="line">      descr: 中国最大社交分享平台</span><br><span class="line">    - name: Twitter</span><br><span class="line">      link: https:&#x2F;&#x2F;twitter.com&#x2F;</span><br><span class="line">      avatar: https:&#x2F;&#x2F;i.loli.net&#x2F;2020&#x2F;05&#x2F;14&#x2F;5VyHPQqR6LWF39a.png</span><br><span class="line">      descr: 社交分享平台</span><br></pre></td></tr></table></figure>
-
-<p><code>class_name</code> 和 <code>class_desc</code> 支持 <code>html</code> 格式书写，如不需要，也可以留空。</p>
-<h1 id="音乐"><a href="#音乐" class="headerlink" title="音乐"></a>音乐</h1><p>音乐界面使用了插件  。使用方法参考 <a target="_blank" rel="noopener" href="https://github.com/MoePlayer/hexo-tag-aplayer/blob/master/docs/README-zh_cn.md"><strong>插件文档</strong></a> 。</p>
-<p>首先在 Hexo 根目录 <code>_config</code> 里配置 <code>asset_inject</code> 为 <code>false</code></p>
-<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">aplayer:</span></span><br><span class="line">  <span class="attr">asset_inject:</span> <span class="literal">false</span></span><br></pre></td></tr></table></figure>
-
-
-<p>然后在你需要使用 <code>aplayer</code> 的页面 <code>Front-matter</code> 添加</p>
-<figure class="highlight markdown"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">aplayer: true</span><br></pre></td></tr></table></figure>
-
-<p>这样只会在需要 aplayer 的页面插入 js 和 css。</p>
-<h1 id="电影"><a href="#电影" class="headerlink" title="电影"></a>电影</h1><p>电影界面使用了插件 <a target="_blank" rel="noopener" href="https://github.com/mythsman/hexo-douban"><strong>hexo-douban</strong></a> ，使用方法参考插件文档。</p>
-<h1 id="404-页面"><a href="#404-页面" class="headerlink" title="404 页面"></a>404 页面</h1><p>主题内置了一个简单的 404 页面，可在设置中开启，<code>butterfly.yml</code> </p>
-<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># A simple 404 page</span></span><br><span class="line"><span class="attr">error_404:</span></span><br><span class="line">  <span class="attr">enable:</span> <span class="literal">true</span></span><br><span class="line">  <span class="attr">subtitle:</span> <span class="string">&#x27;Page not found&#x27;</span></span><br><span class="line">  <span class="attr">background:</span> <span class="string">/img/page-404.jpg</span></span><br></pre></td></tr></table></figure>
-
-<blockquote>
-<p>本地浏览： <a target="_blank" rel="noopener" href="http://localhost:4000/404.html">http://localhost:4000/404.html</a></p>
-</blockquote>
 
     </div>
 
@@ -510,19 +407,19 @@
   <div class="popular-posts-header">相关文章推荐</div>
   <ul class="popular-posts">
     <li class="popular-posts-item">
-      <div class="popular-posts-title"><a href="\hexo\Hexo-Theme-Butterfly(一)-快速开始\" rel="bookmark">Hexo-Theme-Butterfly(一) 快速开始</a></div>
+      <div class="popular-posts-title"><a href="\leetcode\子数组的最小值之和\" rel="bookmark">子数组的最小值之和</a></div>
     </li>
     <li class="popular-posts-item">
-      <div class="popular-posts-title"><a href="\hexo\Hexo-Theme-Butterfly(三)-主题配置\" rel="bookmark">Hexo-Theme-Butterfly(三) 主题配置</a></div>
+      <div class="popular-posts-title"><a href="\leetcode\力扣-84.柱状图中最大的矩形\" rel="bookmark">力扣-84.柱状图中最大的矩形</a></div>
     </li>
     <li class="popular-posts-item">
-      <div class="popular-posts-title"><a href="\hexo\Linux下github+hexo搭建个人博客\" rel="bookmark">Linux下Hexo+GitHub搭建个人博客</a></div>
+      <div class="popular-posts-title"><a href="\leetcode\力扣-85.最大矩形\" rel="bookmark">力扣-85.最大矩形</a></div>
     </li>
     <li class="popular-posts-item">
-      <div class="popular-posts-title"><a href="\hexo\hexo-theme-next主题配置\" rel="bookmark">hexo-theme-next主题配置</a></div>
+      <div class="popular-posts-title"><a href="\Algorithm\【转载】Union-Find算法详解\" rel="bookmark">【转载】Union-Find算法详解</a></div>
     </li>
     <li class="popular-posts-item">
-      <div class="popular-posts-title"><a href="\hexo\hexo-theme-next提交给搜索引擎\" rel="bookmark">hexo-theme-next提交给搜索引擎</a></div>
+      <div class="popular-posts-title"><a href="\Algorithm\算法排序\" rel="bookmark">排序算法</a></div>
     </li>
   </ul>
 
@@ -539,7 +436,7 @@
   </li>
   <li class="post-copyright-link">
       <strong>本文链接：</strong>
-      <a href="https://jakelin.cn/hexo/Hexo-Theme-Butterfly(%E4%BA%8C)-%E4%B8%BB%E9%A2%98%E9%A1%B5%E9%9D%A2/" title="Hexo-Theme-Butterfly(二) 主题页面">https://jakelin.cn/hexo/Hexo-Theme-Butterfly(二)-主题页面/</a>
+      <a href="https://jakelin.cn/leetcode/%E5%8A%9B%E6%89%A3-1438.%E7%BB%9D%E5%AF%B9%E5%B7%AE%E4%B8%8D%E8%B6%85%E8%BF%87%E9%99%90%E5%88%B6%E7%9A%84%E6%9C%80%E9%95%BF%E8%BF%9E%E7%BB%AD%E5%AD%90%E6%95%B0%E7%BB%84/" title="力扣-1438.绝对差不超过限制的最长连续子数组">https://jakelin.cn/leetcode/力扣-1438.绝对差不超过限制的最长连续子数组/</a>
   </li>
   <li class="post-copyright-license">
     <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
@@ -548,22 +445,19 @@
 </div>
 
           <div class="post-tags">
-              <a href="/tags/Butterfly/" rel="tag"><i class="fa fa-tag"></i> Butterfly</a>
-              <a href="/tags/Hexo/" rel="tag"><i class="fa fa-tag"></i> Hexo</a>
+              <a href="/tags/C/" rel="tag"><i class="fa fa-tag"></i> C++</a>
+              <a href="/tags/%E5%8D%95%E8%B0%83%E6%A0%88/" rel="tag"><i class="fa fa-tag"></i> 单调栈</a>
           </div>
 
         
 
           <div class="post-nav">
             <div class="post-nav-item">
-                <a href="/hexo/Linux%E4%B8%8Bgithub+hexo%E6%90%AD%E5%BB%BA%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2/" rel="prev" title="Linux下Hexo+GitHub搭建个人博客">
-                  <i class="fa fa-chevron-left"></i> Linux下Hexo+GitHub搭建个人博客
+                <a href="/leetcode/%E5%8A%9B%E6%89%A3-995.K%E8%BF%9E%E7%BB%AD%E4%BD%8D%E7%9A%84%E6%9C%80%E5%B0%8F%E7%BF%BB%E8%BD%AC%E6%AC%A1%E6%95%B0/" rel="prev" title="力扣-995.K连续位的最小翻转次数">
+                  <i class="fa fa-chevron-left"></i> 力扣-995.K连续位的最小翻转次数
                 </a>
             </div>
             <div class="post-nav-item">
-                <a href="/hexo/Hexo-Theme-Butterfly(%E4%B8%80)-%E5%BF%AB%E9%80%9F%E5%BC%80%E5%A7%8B/" rel="next" title="Hexo-Theme-Butterfly(一) 快速开始">
-                  Hexo-Theme-Butterfly(一) 快速开始 <i class="fa fa-chevron-right"></i>
-                </a>
             </div>
           </div>
     </footer>
