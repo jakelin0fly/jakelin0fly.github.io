@@ -4448,7 +4448,8 @@
       </categories>
       <tags>
         <tag>C++</tag>
-        <tag>单调栈</tag>
+        <tag>滑动窗口</tag>
+        <tag>单调队列</tag>
       </tags>
   </entry>
 </search>
