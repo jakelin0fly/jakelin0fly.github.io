@@ -4736,4 +4736,45 @@
         <tag>数组</tag>
       </tags>
   </entry>
+  <entry>
+    <title>剑指Offer-11.旋转数组的最小数字</title>
+    <url>/leetcode/%E5%89%91%E6%8C%87Offer-11.%E6%97%8B%E8%BD%AC%E6%95%B0%E7%BB%84%E7%9A%84%E6%9C%80%E5%B0%8F%E6%95%B0%E5%AD%97/</url>
+    <content><![CDATA[<h2 id="11-旋转数组的最小数字"><a href="#11-旋转数组的最小数字" class="headerlink" title="11.旋转数组的最小数字"></a>11.旋转数组的最小数字</h2><blockquote>
+<p>把一个数组最开始的若干个元素搬到数组的末尾，我们称之为数组的旋转。输入一个递增排序的数组的一个旋转，输出旋转数组的最小元素。例如，数组 [3,4,5,1,2] 为 [1,2,3,4,5] 的一个旋转，该数组的最小值为1。 </p>
+<p>来源：力扣（LeetCode） <a href="https://leetcode-cn.com/problems/xuan-zhuan-shu-zu-de-zui-xiao-shu-zi-lcof">https://leetcode-cn.com/problems/xuan-zhuan-shu-zu-de-zui-xiao-shu-zi-lcof</a></p>
+<p><strong>示例 ：</strong></p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">输入：[3,4,5,1,2]</span><br><span class="line">输出：1</span><br><span class="line">输入：[2,2,2,0,1]</span><br><span class="line">输出：0</span><br></pre></td></tr></table></figure>
+</blockquote>
+<h2 id="二分法"><a href="#二分法" class="headerlink" title="二分法"></a>二分法</h2><blockquote>
+<p>【<strong>时间复杂度</strong>】<strong>O(logN)</strong> </p>
+<p>【<strong>空间复杂度</strong>】<strong>O(1)</strong> </p>
+</blockquote>
+<p>首先，原数组是递增的，旋转数组可以看成是部分递增（分成两段递增）。不考虑重复值的情况下，数组内元素大小关系变化如图所示：</p>
+<p><img src="https://gitee.com/jakel-in/images/raw/master/2021-02/%E5%89%91%E6%8C%87Offer-11.%E6%97%8B%E8%BD%AC%E6%95%B0%E7%BB%84%E7%9A%84%E6%9C%80%E5%B0%8F%E6%95%B0%E5%AD%97.png" alt="剑指Offer-11.旋转数组的最小数字"></p>
+<p>很显然，可以采用 【<strong>二分查找</strong>】</p>
+<ul>
+<li>若区间 [left, right] 有 <code>numbers[left] &lt; numbers[right]</code> ，那么第一个元素即为最小值；</li>
+<li>若区间 [left, right] 有 <code>numbers[left] &gt;= numbers[right]</code> ，最小值在区间内，采用 <strong>二分法</strong> ，取中间位置 mid ；<ul>
+<li>若 <code>numbers[left] &gt; numbers[mid]</code> ，则最小值在子区间 [left, mid] 中；</li>
+<li>若 <code>numbers[left] == numbers[mid]</code> ：<ul>
+<li>最小值在 [mid, right] ，必然是从左侧开始第一个小于 numbers[mid] 的值；</li>
+<li>最小值在 [left, mid]，继续二分。</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">minArray</span><span class="params">(<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&amp; numbers)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> n = numbers.size();</span><br><span class="line">        <span class="keyword">if</span> (n &lt; <span class="number">1</span>)</span><br><span class="line">            <span class="keyword">return</span> <span class="number">0</span>; <span class="comment">// 空数组没有预期输出</span></span><br><span class="line">        <span class="keyword">int</span> left = <span class="number">0</span>, right = n - <span class="number">1</span>;</span><br><span class="line">        <span class="keyword">while</span> (left &lt; right) &#123;</span><br><span class="line">            <span class="comment">// 1、[left, right] 递增有序，最小值为 numbers[left]</span></span><br><span class="line">            <span class="keyword">if</span> (numbers[left] &lt; numbers[right]) &#123;</span><br><span class="line">                <span class="keyword">return</span> numbers[left];</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            <span class="comment">// 2、最小值在区间 [left, right] 中</span></span><br><span class="line">            <span class="keyword">int</span> mid = left + (right - left) / <span class="number">2</span>;</span><br><span class="line">            <span class="comment">// 2.1 numbers[left] &gt; numbers[mid] 最小值在子区间 [left, mid] 中</span></span><br><span class="line">            <span class="keyword">if</span> (numbers[left] &gt; numbers[mid]) &#123;</span><br><span class="line">                right = mid;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="comment">// 2.2 numbers[left] == numbers[mid]</span></span><br><span class="line">            <span class="comment">// 最小值在 [mid, right]，必然是从左侧开始第一个小于 numbers[mid] 的值</span></span><br><span class="line">            <span class="comment">// 否则，最小值在 [left, mid]</span></span><br><span class="line">            <span class="keyword">else</span> &#123;</span><br><span class="line">                <span class="keyword">for</span> (<span class="keyword">int</span> i = mid + <span class="number">1</span>; i &lt;= right; ++i) &#123;</span><br><span class="line">                    <span class="keyword">if</span> (numbers[mid] &gt; numbers[i])</span><br><span class="line">                        <span class="keyword">return</span> numbers[i];</span><br><span class="line">                &#125;</span><br><span class="line">                right = mid - <span class="number">1</span>;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> numbers[left];</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+]]></content>
+      <categories>
+        <category>笔记</category>
+        <category>刷题</category>
+        <category>剑指Offer</category>
+      </categories>
+      <tags>
+        <tag>C++</tag>
+        <tag>数组</tag>
+      </tags>
+  </entry>
 </search>
