@@ -4777,4 +4777,78 @@
         <tag>数组</tag>
       </tags>
   </entry>
+  <entry>
+    <title>力扣-1178.猜字谜</title>
+    <url>/leetcode/%E5%8A%9B%E6%89%A3-1178.%E7%8C%9C%E5%AD%97%E8%B0%9C/</url>
+    <content><![CDATA[<h2 id="1178-猜字谜"><a href="#1178-猜字谜" class="headerlink" title="1178.猜字谜"></a>1178.猜字谜</h2><blockquote>
+<p>外国友人仿照中国字谜设计了一个英文版猜字谜小游戏，请你来猜猜看吧。字谜的迷面 puzzle 按字符串形式给出，如果一个单词 word 符合下面两个条件，那么它就可以算作谜底：</p>
+<ul>
+<li><p>单词 word 中包含谜面 puzzle 的第一个字母。</p>
+</li>
+<li><p>单词 word 中的每一个字母都可以在谜面 puzzle 中找到。<br>例如，如果字谜的谜面是 “abcdefg”，那么可以作为谜底的单词有 “faced”, “cabbage”, 和 “baggage”；而 “beefed”（不含字母 “a”）以及 “based”（其中的 “s” 没有出现在谜面中）。</p>
+</li>
+</ul>
+<p>返回一个答案数组 answer，数组中的每个元素 answer[i] 是在给出的单词列表 words 中可以作为字谜迷面 puzzles[i] 所对应的谜底的单词数目。</p>
+<p>示例：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&gt;输入：</span><br><span class="line">words &#x3D; [&quot;aaaa&quot;,&quot;asas&quot;,&quot;able&quot;,&quot;ability&quot;,&quot;actt&quot;,&quot;actor&quot;,&quot;access&quot;], </span><br><span class="line">puzzles &#x3D; [&quot;aboveyz&quot;,&quot;abrodyz&quot;,&quot;abslute&quot;,&quot;absoryz&quot;,&quot;actresz&quot;,&quot;gaswxyz&quot;]</span><br><span class="line">输出：[1,1,3,2,4,0]</span><br><span class="line">解释：</span><br><span class="line">1 个单词可以作为 &quot;aboveyz&quot; 的谜底 : &quot;aaaa&quot; </span><br><span class="line">1 个单词可以作为 &quot;abrodyz&quot; 的谜底 : &quot;aaaa&quot;</span><br><span class="line">3 个单词可以作为 &quot;abslute&quot; 的谜底 : &quot;aaaa&quot;, &quot;asas&quot;, &quot;able&quot;</span><br><span class="line">2 个单词可以作为 &quot;absoryz&quot; 的谜底 : &quot;aaaa&quot;, &quot;asas&quot;</span><br><span class="line">4 个单词可以作为 &quot;actresz&quot; 的谜底 : &quot;aaaa&quot;, &quot;asas&quot;, &quot;actt&quot;, &quot;access&quot;</span><br><span class="line">没有单词可以作为 &quot;gaswxyz&quot; 的谜底，因为列表中的单词都不含字母 &#39;g&#39;。</span><br></pre></td></tr></table></figure>
+
+
+<p>提示：</p>
+<ul>
+<li>1 &lt;= words.length &lt;= 10^5</li>
+<li>4 &lt;= words[i].length &lt;= 50</li>
+<li>1 &lt;= puzzles.length &lt;= 10^4</li>
+<li>puzzles[i].length == 7</li>
+<li>words[i][j], puzzles[i][j] 都是小写英文字母。</li>
+<li>每个 puzzles[i] 所包含的字符都不重复。</li>
+</ul>
+<p>来源：力扣（LeetCode） <a href="https://leetcode-cn.com/problems/number-of-valid-words-for-each-puzzle">https://leetcode-cn.com/problems/number-of-valid-words-for-each-puzzle</a></p>
+</blockquote>
+<p>注意到题目中，关于谜底的定义以及要求：</p>
+<ul>
+<li><p><strong>单词 word 中包含谜面 puzzle 的第一个字母。</strong></p>
+</li>
+<li><p><strong>单词 word 中的每一个字母都可以在谜面 puzzle 中找到。</strong></p>
+</li>
+</ul>
+<h2 id="方法一：生成字典数组"><a href="#方法一：生成字典数组" class="headerlink" title="方法一：生成字典数组"></a>方法一：生成字典数组</h2><blockquote>
+<p>【<strong>时间复杂度</strong>】<strong>O(MN)</strong> </p>
+<p>【<strong>空间复杂度</strong>】<strong>O(M+N)</strong> </p>
+</blockquote>
+<p>要验证是否满足这两个条件，就需要判断字符是否在字符串中。不仅要判断字符是否在 word 中，还要判断字符是否在 puzzle 中。首先想到的就是 <strong>生成字典，记录字符串中各个字符是否出现（该题不关注字符出现多少次）</strong>。</p>
+<ul>
+<li>对于每个字符串（word、puzzle）都生成字典数组，给定一个长度为26的数组记录一个字符串对应字符是否出现；</li>
+<li>匹配 puzzle 的第一个字母是否出现在 word 中；</li>
+<li>匹配 word 中的每一个字母是否都在 puzzle 中。</li>
+</ul>
+<h2 id="改进一：位字典（超时）"><a href="#改进一：位字典（超时）" class="headerlink" title="改进一：位字典（超时）"></a>改进一：位字典（超时）</h2><blockquote>
+<p>【<strong>时间复杂度</strong>】<strong>O(MN)</strong> </p>
+<p>【<strong>空间复杂度</strong>】<strong>O(M)</strong> </p>
+</blockquote>
+<p>我们留意到，<strong>方法一：生成字典数组</strong>，在进行匹配时，有个缺陷：<strong>需要匹配字典数组中的每一位（word 字典数组中的每一位）</strong>。有注意到一个条件：<strong>words[i][j], puzzles[i][j] 都是小写英文字母</strong>。我们就想到使用<strong>二进制位</strong>来表示对应的字符存在。</p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="comment">// 都是小写英文字母</span></span><br><span class="line">    <span class="function"><span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; <span class="title">findNumOfValidWords</span><span class="params">(<span class="built_in">vector</span>&lt;<span class="built_in">string</span>&gt;&amp; words, <span class="built_in">vector</span>&lt;<span class="built_in">string</span>&gt;&amp; puzzles)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> wordNums = words.size(); <span class="comment">// 1 &lt;= words.length &lt;= 10^5</span></span><br><span class="line">        <span class="keyword">int</span> puzzleNums = puzzles.size(); <span class="comment">// 1 &lt;= puzzles.length &lt;= 10^4</span></span><br><span class="line">        <span class="comment">// if (puzzleNums == 0)</span></span><br><span class="line">        <span class="comment">//     return &#123;&#125;;</span></span><br><span class="line">        <span class="comment">// 1、生成字典</span></span><br><span class="line">        <span class="comment">// word字典: 二进制位表示26个字符</span></span><br><span class="line">        <span class="function"><span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; <span class="title">wordDictionarys</span><span class="params">(wordNums, <span class="number">0</span>)</span></span>; </span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; wordNums; ++i) &#123;</span><br><span class="line">            <span class="keyword">for</span> (<span class="keyword">auto</span>&amp; c : words[i]) &#123;</span><br><span class="line">                wordDictionarys[i] |= <span class="number">1</span> &lt;&lt; (c - <span class="string">&#x27;a&#x27;</span>);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="function"><span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; <span class="title">ans</span><span class="params">(puzzleNums, <span class="number">0</span>)</span></span>; </span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; puzzleNums; ++i) &#123;</span><br><span class="line">            <span class="keyword">int</span> puzzleBit = <span class="number">0</span>; <span class="comment">// puzzle 位字典</span></span><br><span class="line">            <span class="keyword">for</span> (<span class="keyword">auto</span>&amp; c : puzzles[i]) &#123; <span class="comment">// puzzles[i].length == 7</span></span><br><span class="line">                puzzleBit |= <span class="number">1</span> &lt;&lt; (c - <span class="string">&#x27;a&#x27;</span>);</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">for</span> (<span class="keyword">auto</span>&amp; wordBit : wordDictionarys) &#123;</span><br><span class="line">                <span class="comment">// 2、匹配 puzzle 的第一个字母是否出现在 word 中</span></span><br><span class="line">                <span class="comment">// 3、匹配 word 中的每一个字母是否都在 puzzle 中</span></span><br><span class="line">                <span class="keyword">if</span> ((wordBit &amp; (<span class="number">1</span> &lt;&lt; (puzzles[i][<span class="number">0</span>] - <span class="string">&#x27;a&#x27;</span>))) != <span class="number">0</span> &amp;&amp; (wordBit &amp; puzzleBit) == wordBit) &#123;</span><br><span class="line">                    ++ans[i];</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;            </span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> ans;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<h2 id="改进二：哈希表-子集位字典"><a href="#改进二：哈希表-子集位字典" class="headerlink" title="改进二：哈希表+子集位字典"></a>改进二：哈希表+子集位字典</h2><blockquote>
+<p>【<strong>时间复杂度</strong>】<strong>O(M+N)</strong> </p>
+<p>【<strong>空间复杂度</strong>】<strong>O(M)</strong> </p>
+</blockquote>
+<p>上一步改进，虽然降低了空间复杂度，也减少了匹配运算，但是在数量级上，时间复杂度还是 <code>O(MN)</code> 。</p>
+<p>留意题中信息 <strong>每个 <code>puzzles[i]</code> 所包含的字符都不重复</strong> ，我们再次改进：</p>
+<ol>
+<li>引入<strong>哈希表</strong>记录一个位字典数对应多少个 word。例如 <code>&quot;ab&quot;</code> 与 <code>&quot;aabb&quot;</code> 对应相同的位字典。</li>
+<li>匹配改为<strong>查找子集位字典</strong>，puzzle 长度为7，首位必须取，剩下6位，直接暴力dfs。</li>
+</ol>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="comment">// 都是小写英文字母</span></span><br><span class="line">    <span class="function"><span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; <span class="title">findNumOfValidWords</span><span class="params">(<span class="built_in">vector</span>&lt;<span class="built_in">string</span>&gt;&amp; words, <span class="built_in">vector</span>&lt;<span class="built_in">string</span>&gt;&amp; puzzles)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> wordNums = words.size(); <span class="comment">// 1 &lt;= words.length &lt;= 10^5</span></span><br><span class="line">        <span class="keyword">int</span> puzzleNums = puzzles.size(); <span class="comment">// 1 &lt;= puzzles.length &lt;= 10^4</span></span><br><span class="line">        <span class="comment">// if (puzzleNums == 0)</span></span><br><span class="line">        <span class="comment">//     return &#123;&#125;;</span></span><br><span class="line">        <span class="comment">// 1、生成字典</span></span><br><span class="line">        <span class="comment">// word字典: 二进制位表示26个字符</span></span><br><span class="line">        <span class="built_in">unordered_map</span>&lt;<span class="keyword">int</span>, <span class="keyword">int</span>&gt; wordBitMap; <span class="comment">// 位字典哈希表</span></span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; wordNums; ++i) &#123;</span><br><span class="line">            <span class="keyword">int</span> wordBit = <span class="number">0</span>;</span><br><span class="line">            <span class="keyword">for</span> (<span class="keyword">auto</span>&amp; c : words[i]) &#123;</span><br><span class="line">                wordBit |= <span class="number">1</span> &lt;&lt; (c - <span class="string">&#x27;a&#x27;</span>);</span><br><span class="line">            &#125;</span><br><span class="line">            ++wordBitMap[wordBit];</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="function"><span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; <span class="title">ans</span><span class="params">(puzzleNums, <span class="number">0</span>)</span></span>; </span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; puzzleNums; ++i) &#123;</span><br><span class="line">            <span class="comment">// puzzle 子集位字典，首位必须取</span></span><br><span class="line">            <span class="comment">// 深度优先，puzzle子集</span></span><br><span class="line">            dfs(wordBitMap, puzzles[i], <span class="number">1</span> &lt;&lt; (puzzles[i][<span class="number">0</span>] - <span class="string">&#x27;a&#x27;</span>), <span class="number">1</span>, ans[i]); </span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> ans;</span><br><span class="line">    &#125;</span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">dfs</span><span class="params">(<span class="built_in">unordered_map</span>&lt;<span class="keyword">int</span>, <span class="keyword">int</span>&gt;&amp; wordBitMap, <span class="built_in">string</span>&amp; puzzle, <span class="keyword">int</span> puzzleSubBit, <span class="keyword">int</span> index, <span class="keyword">int</span>&amp; count)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (index == puzzle.length()) &#123;</span><br><span class="line">            count += wordBitMap[puzzleSubBit];</span><br><span class="line">            <span class="keyword">return</span> ;</span><br><span class="line">        &#125;</span><br><span class="line">        dfs(wordBitMap, puzzle, puzzleSubBit, index+<span class="number">1</span>, count);</span><br><span class="line">        dfs(wordBitMap, puzzle, puzzleSubBit | (<span class="number">1</span> &lt;&lt; (puzzle[index] - <span class="string">&#x27;a&#x27;</span>)), index+<span class="number">1</span>, count);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+]]></content>
+      <categories>
+        <category>笔记</category>
+        <category>刷题</category>
+        <category>leetcode</category>
+      </categories>
+      <tags>
+        <tag>C++</tag>
+        <tag>字符串</tag>
+      </tags>
+  </entry>
 </search>
