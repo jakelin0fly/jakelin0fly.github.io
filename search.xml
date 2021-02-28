@@ -4851,4 +4851,61 @@
         <tag>字符串</tag>
       </tags>
   </entry>
+  <entry>
+    <title>力扣-5690.最接近目标价格的甜点成本</title>
+    <url>/leetcode/%E5%8A%9B%E6%89%A3-5690.%E6%9C%80%E6%8E%A5%E8%BF%91%E7%9B%AE%E6%A0%87%E4%BB%B7%E6%A0%BC%E7%9A%84%E7%94%9C%E7%82%B9%E6%88%90%E6%9C%AC/</url>
+    <content><![CDATA[<h2 id="5690-最接近目标价格的甜点成本"><a href="#5690-最接近目标价格的甜点成本" class="headerlink" title="5690.最接近目标价格的甜点成本"></a>5690.最接近目标价格的甜点成本</h2><blockquote>
+<p>你打算做甜点，现在需要购买配料。目前共有 n 种冰激凌基料和 m 种配料可供选购。而制作甜点需要遵循以下几条规则：</p>
+<ul>
+<li>必须选择 <strong>一种</strong> 冰激凌基料。</li>
+<li>可以添加 <strong>一种或多种</strong> 配料，也可以不添加任何配料。</li>
+<li>每种类型的配料 <strong>最多两份</strong> 。</li>
+</ul>
+<p>给你以下三个输入：</p>
+<ul>
+<li>baseCosts ，一个长度为 n 的整数数组，其中每个 baseCosts[i] 表示第 i 种冰激凌基料的价格。</li>
+<li>toppingCosts，一个长度为 m 的整数数组，其中每个 toppingCosts[i] 表示 一份 第 i 种冰激凌配料的价格。</li>
+<li>target ，一个整数，表示你制作甜点的目标价格。</li>
+</ul>
+<p>你希望自己做的甜点总成本尽可能接近目标价格 target 。<br>返回最接近 target 的甜点成本。如果有多种方案，返回 <strong>成本相对较低</strong> 的一种。</p>
+<p>示例 1：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">输入：baseCosts &#x3D; [1,7], toppingCosts &#x3D; [3,4], target &#x3D; 10</span><br><span class="line">输出：10</span><br><span class="line">解释：考虑下面的方案组合（所有下标均从 0 开始）：</span><br><span class="line">- 选择 1 号基料：成本 7</span><br><span class="line">- 选择 1 份 0 号配料：成本 1 x 3 &#x3D; 3</span><br><span class="line">- 选择 0 份 1 号配料：成本 0 x 4 &#x3D; 0</span><br><span class="line">总成本：7 + 3 + 0 &#x3D; 10 。</span><br></pre></td></tr></table></figure>
+
+<p>来源：力扣（LeetCode） <a href="https://leetcode-cn.com/problems/closest-dessert-cost">https://leetcode-cn.com/problems/closest-dessert-cost</a></p>
+</blockquote>
+<h2 id="状态数组"><a href="#状态数组" class="headerlink" title="状态数组"></a>状态数组</h2><p>梳理一下题意，配置甜点的方案规则如下：</p>
+<ol>
+<li>选择一种基料</li>
+<li>每种配料有以下可能：<ol>
+<li>不配置</li>
+<li>配置一份</li>
+<li>配置两份</li>
+</ol>
+</li>
+</ol>
+<p>【目标】得到最接近 <code>target</code> 且值更小的甜点成本。</p>
+<p>【<strong>方案分析</strong>】</p>
+<p><strong>暴力的解法</strong> 就是记录所有配置方案，去计算每种方案的成本。</p>
+<blockquote>
+<p>【<strong>时间复杂度</strong>】<strong>O(n * m)</strong> </p>
+<p>【<strong>空间复杂度</strong>】<strong>O(n * 3^m)</strong> </p>
+</blockquote>
+<p>尝试保存中间状态（中间配置方案），使用数组记录。实际上我们不需要记录配置的方案，只需要记录配置的价格，使得价格逼近 <code>target</code> 。超过 target 的价格，再增加后续的配料肯定不符合题意了，不用再考虑。</p>
+<blockquote>
+<p>【<strong>时间复杂度</strong>】<strong>O(n * m)</strong>   最坏情况！</p>
+<p>【<strong>空间复杂度</strong>】<strong>O(n * 2^m)</strong> </p>
+</blockquote>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment">两种搭配方案：</span></span><br><span class="line"><span class="comment">    1、选择一种基料</span></span><br><span class="line"><span class="comment">    2、配料选择：</span></span><br><span class="line"><span class="comment">        a) 不配置</span></span><br><span class="line"><span class="comment">        b) 配置一份</span></span><br><span class="line"><span class="comment">        c) 配置两份</span></span><br><span class="line"><span class="comment">**/</span></span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">closestCost</span><span class="params">(<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&amp; baseCosts, <span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&amp; toppingCosts, <span class="keyword">int</span> target)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> n = baseCosts.size();</span><br><span class="line">        <span class="keyword">int</span> m = toppingCosts.size();</span><br><span class="line">        <span class="keyword">int</span> ans = baseCosts[<span class="number">0</span>];        </span><br><span class="line">        <span class="keyword">int</span> minAbs = <span class="built_in">abs</span>(baseCosts[<span class="number">0</span>] - target);</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">auto</span>&amp; base : baseCosts) &#123;</span><br><span class="line">            <span class="keyword">if</span> (<span class="built_in">abs</span>(base - target) &lt; minAbs || (<span class="built_in">abs</span>(base - target) == minAbs &amp;&amp; base &lt; ans)) &#123;</span><br><span class="line">                ans = base;</span><br><span class="line">                minAbs = <span class="built_in">abs</span>(base - target);</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">if</span> (target &lt;= base) &#123;</span><br><span class="line">                <span class="keyword">continue</span>;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="function"><span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; <span class="title">dp</span><span class="params">(<span class="number">1</span>, base)</span></span>;  <span class="comment">// 只记录 target - cost &gt; 0 的值</span></span><br><span class="line">            <span class="comment">// 选配料</span></span><br><span class="line">            <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; m; ++i) &#123;</span><br><span class="line">                <span class="keyword">int</span> end = dp.size();</span><br><span class="line">                <span class="comment">// 组合前面的配料</span></span><br><span class="line">                <span class="keyword">for</span> (<span class="keyword">int</span> j = <span class="number">0</span>; j &lt; end; ++j) &#123;</span><br><span class="line">                    <span class="keyword">int</span> tmp = dp[j] + toppingCosts[i];</span><br><span class="line">                    <span class="keyword">if</span> (<span class="built_in">abs</span>(tmp - target) &lt; minAbs || (<span class="built_in">abs</span>(tmp - target) == minAbs &amp;&amp; tmp &lt; ans)) &#123;</span><br><span class="line">                        ans = tmp;</span><br><span class="line">                        minAbs = <span class="built_in">abs</span>(tmp - target);</span><br><span class="line">                    &#125;</span><br><span class="line">                    <span class="keyword">if</span> (tmp &lt; target)</span><br><span class="line">                        dp.push_back(tmp);</span><br><span class="line">                    </span><br><span class="line">                    tmp += toppingCosts[i];</span><br><span class="line">                    <span class="keyword">if</span> (<span class="built_in">abs</span>(tmp - target) &lt; minAbs || (<span class="built_in">abs</span>(tmp - target) == minAbs &amp;&amp; tmp &lt; ans)) &#123;</span><br><span class="line">                        ans = tmp;</span><br><span class="line">                        minAbs = <span class="built_in">abs</span>(tmp - target);</span><br><span class="line">                    &#125;</span><br><span class="line">                    <span class="keyword">if</span> (tmp &lt; target)</span><br><span class="line">                        dp.push_back(tmp);</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">return</span> ans;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+]]></content>
+      <categories>
+        <category>笔记</category>
+        <category>刷题</category>
+        <category>leetcode</category>
+      </categories>
+      <tags>
+        <tag>C++</tag>
+        <tag>状态数组</tag>
+      </tags>
+  </entry>
 </search>
