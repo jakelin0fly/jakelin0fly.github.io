@@ -4908,4 +4908,50 @@
         <tag>状态数组</tag>
       </tags>
   </entry>
+  <entry>
+    <title>力扣-1353.最多可以参加的会议数目</title>
+    <url>/leetcode/%E5%8A%9B%E6%89%A3-1353.%E6%9C%80%E5%A4%9A%E5%8F%AF%E4%BB%A5%E5%8F%82%E5%8A%A0%E7%9A%84%E4%BC%9A%E8%AE%AE%E6%95%B0%E7%9B%AE/</url>
+    <content><![CDATA[<h2 id="1353-最多可以参加的会议数目"><a href="#1353-最多可以参加的会议数目" class="headerlink" title="1353.最多可以参加的会议数目"></a>1353.最多可以参加的会议数目</h2><blockquote>
+<p>给你一个数组 events，其中 events[i] = [startDayi, endDayi] ，表示会议 i 开始于 startDayi ，结束于 endDayi 。</p>
+<p>你可以在满足 startDayi &lt;= d &lt;= endDayi 中的任意一天 d 参加会议 i 。注意，一天只能参加一个会议。</p>
+<p>请你返回你可以参加的 最大 会议数目。</p>
+<p><strong>示例 1：</strong></p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">输入：events &#x3D; [[1,2],[2,3],[3,4]]</span><br><span class="line">输出：3</span><br><span class="line">解释：你可以参加所有的三个会议。</span><br><span class="line">安排会议的一种方案如上图。</span><br><span class="line">第 1 天参加第一个会议。</span><br><span class="line">第 2 天参加第二个会议。</span><br><span class="line">第 3 天参加第三个会议。</span><br></pre></td></tr></table></figure>
+
+<p>来源：力扣（LeetCode） <a href="https://leetcode-cn.com/problems/maximum-number-of-events-that-can-be-attended">https://leetcode-cn.com/problems/maximum-number-of-events-that-can-be-attended</a></p>
+</blockquote>
+<h2 id="贪心"><a href="#贪心" class="headerlink" title="贪心"></a>贪心</h2><blockquote>
+<p>【<strong>时间复杂度</strong>】<strong>O(n * logn)</strong></p>
+<p>【<strong>空间复杂度</strong>】<strong>O(n)</strong>  最坏情况！</p>
+</blockquote>
+<p>注意两个关键信息：</p>
+<ol>
+<li>在会议进行中的任意一天参加，即可表示参加了该会议；</li>
+<li>一天只能参加一个会议。</li>
+</ol>
+<p>该题也就等价于，在所有会议持续的这段时间内如何能尽可能多的天数参加不同的会议。最好就是每天的可以参加，且参加的会议为不同的会议。这也就是 <strong>贪心</strong> 的解法。要使得参加会议的数目最多，那么也就是在第 i 天选择参加一个正在进行的会议后，后续的时间有尽可能多的会议可选择。也就是优先选择当前进行中的最早结束的会议。</p>
+<p>【<strong>贪心思路</strong>】</p>
+<ol>
+<li>根据会议开始时间排序会议数组；</li>
+<li>对于第 i 天，优先选择正在进行且结束时间最早的会议。</li>
+</ol>
+<p>【<strong>解题实现</strong>】</p>
+<ol>
+<li>根据会议<strong>开始时间升序</strong>排序会议数组；</li>
+<li>从最早的会议时间开始，当前正在进行的会议放入以<strong>结束时间最早优先的优先队列</strong>中，并且已结束的会议从队列中删除；</li>
+<li>选择参加正在进行且结束时间最早的会议。</li>
+</ol>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">maxEvents</span><span class="params">(<span class="built_in">vector</span>&lt;<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&gt;&amp; events)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> greedy(events);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">    <span class="comment">// 贪心</span></span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">greedy</span><span class="params">(<span class="built_in">vector</span>&lt;<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&gt;&amp; events)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> n = events.size();</span><br><span class="line">        <span class="keyword">if</span> (n &lt;= <span class="number">1</span>)</span><br><span class="line">            <span class="keyword">return</span> n;</span><br><span class="line">        <span class="comment">// 排序</span></span><br><span class="line">        sort(events.begin(), events.end(), [&amp;](<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&amp; a, <span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&amp; b) &#123;            </span><br><span class="line">            <span class="comment">// 以开始时间优先</span></span><br><span class="line">            <span class="keyword">if</span> (a[<span class="number">0</span>] &lt; b[<span class="number">0</span>] || (a[<span class="number">0</span>] == b[<span class="number">0</span>] &amp;&amp; a[<span class="number">1</span>] &lt;= b[<span class="number">1</span>]))</span><br><span class="line">                <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line"></span><br><span class="line">            <span class="keyword">return</span> <span class="literal">false</span>;            </span><br><span class="line">        &#125;);</span><br><span class="line"></span><br><span class="line">        <span class="keyword">int</span> ans = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">int</span> day = events[<span class="number">0</span>][<span class="number">0</span>]; <span class="comment">// 当前日期</span></span><br><span class="line">        <span class="comment">// cout &lt;&lt;day&lt;&lt;endl;</span></span><br><span class="line">        <span class="comment">// 小顶堆 结束日期</span></span><br><span class="line">        <span class="built_in">priority_queue</span>&lt;<span class="keyword">int</span>, <span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;, greater&lt;&gt;&gt; minHeap;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> index = <span class="number">0</span>; index &lt; n || !minHeap.empty(); ++day) &#123;</span><br><span class="line">            <span class="comment">// 已结束的会议 出堆</span></span><br><span class="line">            <span class="keyword">while</span> (!minHeap.empty() &amp;&amp; minHeap.top() &lt; day) &#123;</span><br><span class="line">                minHeap.pop();</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="comment">// 一开始的会议 入堆</span></span><br><span class="line">            <span class="keyword">while</span> (index &lt; n &amp;&amp; events[index][<span class="number">0</span>] &lt;= day) &#123;</span><br><span class="line">                minHeap.push(events[index][<span class="number">1</span>]); <span class="comment">// 结束时间入堆</span></span><br><span class="line">                ++index;</span><br><span class="line">            &#125;</span><br><span class="line">            </span><br><span class="line">            <span class="comment">// 选择当前日期正在进行的，并且最早结束的会议</span></span><br><span class="line">            <span class="keyword">if</span> (!minHeap.empty()) &#123;</span><br><span class="line">                minHeap.pop();</span><br><span class="line">                ++ans;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> ans;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+]]></content>
+      <categories>
+        <category>笔记</category>
+        <category>刷题</category>
+        <category>leetcode</category>
+      </categories>
+      <tags>
+        <tag>C++</tag>
+        <tag>贪心</tag>
+      </tags>
+  </entry>
 </search>
