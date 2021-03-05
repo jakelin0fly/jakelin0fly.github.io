@@ -4954,4 +4954,46 @@
         <tag>贪心</tag>
       </tags>
   </entry>
+  <entry>
+    <title>C++左值右值</title>
+    <url>/C++/C++%E5%B7%A6%E5%80%BC%E5%8F%B3%E5%80%BC/</url>
+    <content><![CDATA[<h2 id="定义与区别"><a href="#定义与区别" class="headerlink" title="定义与区别"></a>定义与区别</h2><p><strong>左值 (lvalue, locator value)</strong> 表示了一个占据内存中某个可识别的位置（也就是一个地址）的对象。即左值指的是可以取地址的变量。</p>
+<p>区分表达式的左右值属性有一个简便方法：<strong>若可对表达式用 &amp; 符取址，则为左值，否则为右值</strong>。左值与右值的根本区别在于能否获取内存地址，而能否赋值不是区分的依据。</p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="keyword">const</span> <span class="keyword">int</span> a = <span class="number">10</span>; <span class="comment">// &#x27;a&#x27; 是左值</span></span><br><span class="line">a = <span class="number">10</span>;           <span class="comment">// 但不可以赋值给它！</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="左值与右值直接的转换"><a href="#左值与右值直接的转换" class="headerlink" title="左值与右值直接的转换"></a>左值与右值直接的转换</h2><p>一般上讲，对象之间的运算，对象是以右值的形式参与的。表示<strong>数组</strong>、<strong>函数</strong>和<strong>非完整类型</strong>的左值是不能转换为右值的，因为无法对那些类型进行求值。</p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="keyword">int</span> a = <span class="number">1</span>;     <span class="comment">// a 是左值</span></span><br><span class="line"><span class="keyword">int</span> b = <span class="number">2</span>;     <span class="comment">// b 是左值</span></span><br><span class="line"><span class="keyword">int</span> c = a + b; <span class="comment">// a和b自动转换为右值求和</span></span><br></pre></td></tr></table></figure>
+
+<p>右值可以通过一些更显式的方法产生左值。例如，一元解引用操作符 <code>&#39;*&#39;</code> 需要一个右值参数，但返回一个左值结果。</p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="keyword">int</span> arr[] = &#123;<span class="number">1</span>, <span class="number">2</span>&#125;;</span><br><span class="line"><span class="keyword">int</span>* p = &amp;arr[<span class="number">0</span>];</span><br><span class="line">*(p + <span class="number">1</span>) = <span class="number">10</span>;   <span class="comment">// 正确: p + 1 是右值，但 *(p + 1) 是左值</span></span><br></pre></td></tr></table></figure>
+
+<p>相反地，一元取地址操作符 <code>&#39;&amp;&#39;</code> 需要一个左值参数，返回一个右值：</p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="keyword">int</span> var = <span class="number">10</span>;</span><br><span class="line"><span class="keyword">int</span>* bad_addr = &amp;(var + <span class="number">1</span>); <span class="comment">// 错误: 一元 &#x27;&amp;&#x27; 操作符需要左值参数</span></span><br><span class="line"><span class="keyword">int</span>* addr = &amp;var;           <span class="comment">// 正确: var 是左值</span></span><br><span class="line">&amp;var = <span class="number">40</span>;                  <span class="comment">// 错误: 赋值操作的左操作数需要是左值</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="左值引用"><a href="#左值引用" class="headerlink" title="左值引用"></a>左值引用</h2><p>C++中可以使用&amp;符定义引用，如果一个左值同时是引用，就称为“左值引用”。</p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="built_in">std</span>::<span class="built_in">string</span> s;</span><br><span class="line"><span class="built_in">std</span>::<span class="built_in">string</span>&amp; sref = s;  <span class="comment">//sref为左值引用</span></span><br></pre></td></tr></table></figure>
+
+<p><strong>非const左值引用</strong> 不能使用右值对其赋值。但 <strong>const左值引用</strong> 可以。</p>
+<p>【<strong>解析</strong>】非const引用类型的变量是可以后续对其进行赋值操作的，但是右值是不可获取内存地址。但const左值引用不一样，因为常量不能被修改，也就不存在上述问题。</p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="built_in">std</span>::<span class="built_in">string</span>&amp; r = <span class="built_in">std</span>::<span class="built_in">string</span>(); <span class="comment">//错误！std::string（）产生一个临时对象，为右值</span></span><br><span class="line"><span class="keyword">const</span> <span class="built_in">std</span>::<span class="built_in">string</span>&amp; r = <span class="built_in">std</span>::<span class="built_in">string</span>(); <span class="comment">//可以</span></span><br></pre></td></tr></table></figure>
+
+<p>因此，我们经常<strong>使用const左值引用作为函数的参数类型，可以减少不必要的对象复制</strong>。</p>
+<h2 id="C-11-右值引用"><a href="#C-11-右值引用" class="headerlink" title="C++11 右值引用"></a>C++11 右值引用</h2><p>参考：</p>
+<ul>
+<li><p><a href="https://nettee.github.io/posts/2018/Understanding-lvalues-and-rvalues-in-C-and-C/">理解 C/C++ 中的左值和右值</a> </p>
+</li>
+<li><p><a href="https://blog.csdn.net/p942005405/article/details/84644069/">c++ 之 std::move 原理实现与用法总结</a></p>
+</li>
+</ul>
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><p><a href="https://nettee.github.io/posts/2018/Understanding-lvalues-and-rvalues-in-C-and-C/">理解 C/C++ 中的左值和右值</a> </p>
+]]></content>
+      <categories>
+        <category>笔记</category>
+        <category>C++</category>
+      </categories>
+      <tags>
+        <tag>C++</tag>
+        <tag>语法基础</tag>
+      </tags>
+  </entry>
 </search>

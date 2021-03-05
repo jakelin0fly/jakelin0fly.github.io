@@ -25,23 +25,22 @@
     var NexT = window.NexT || {};
     var CONFIG = {"hostname":"jakelin.cn","root":"/","images":"/images","scheme":"Gemini","version":"8.2.0","exturl":false,"sidebar":{"position":"left","display":"always","padding":18,"offset":12},"copycode":true,"bookmark":{"enable":true,"color":"#222","save":"auto"},"fancybox":true,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}};
   </script>
-<meta name="description" content="给你一个整数数组 nums ，和一个表示限制的整数 limit，请你返回最长连续子数组的长度，该子数组中的任意两个元素之间的绝对差必须小于或者等于 limit 。">
+<meta name="description" content="左值与右值的根本区别在于能否获取内存地址，而能否赋值不是区分的依据。">
 <meta property="og:type" content="article">
-<meta property="og:title" content="力扣-1438.绝对差不超过限制的最长连续子数组">
-<meta property="og:url" content="https://jakelin.cn/leetcode/%E5%8A%9B%E6%89%A3-1438.%E7%BB%9D%E5%AF%B9%E5%B7%AE%E4%B8%8D%E8%B6%85%E8%BF%87%E9%99%90%E5%88%B6%E7%9A%84%E6%9C%80%E9%95%BF%E8%BF%9E%E7%BB%AD%E5%AD%90%E6%95%B0%E7%BB%84/index.html">
+<meta property="og:title" content="C++左值右值">
+<meta property="og:url" content="https://jakelin.cn/C++/C++%E5%B7%A6%E5%80%BC%E5%8F%B3%E5%80%BC/index.html">
 <meta property="og:site_name" content="JakeLin&#39;s Blog">
-<meta property="og:description" content="给你一个整数数组 nums ，和一个表示限制的整数 limit，请你返回最长连续子数组的长度，该子数组中的任意两个元素之间的绝对差必须小于或者等于 limit 。">
+<meta property="og:description" content="左值与右值的根本区别在于能否获取内存地址，而能否赋值不是区分的依据。">
 <meta property="og:locale" content="zh_CN">
-<meta property="article:published_time" content="2021-02-20T16:00:00.000Z">
-<meta property="article:modified_time" content="2021-02-21T07:43:57.655Z">
+<meta property="article:published_time" content="2021-03-04T16:00:00.000Z">
+<meta property="article:modified_time" content="2021-03-05T13:27:43.169Z">
 <meta property="article:author" content="jakelin">
 <meta property="article:tag" content="C++">
-<meta property="article:tag" content="滑动窗口">
-<meta property="article:tag" content="单调队列">
+<meta property="article:tag" content="语法基础">
 <meta name="twitter:card" content="summary">
 
 
-<link rel="canonical" href="https://jakelin.cn/leetcode/%E5%8A%9B%E6%89%A3-1438.%E7%BB%9D%E5%AF%B9%E5%B7%AE%E4%B8%8D%E8%B6%85%E8%BF%87%E9%99%90%E5%88%B6%E7%9A%84%E6%9C%80%E9%95%BF%E8%BF%9E%E7%BB%AD%E5%AD%90%E6%95%B0%E7%BB%84/">
+<link rel="canonical" href="https://jakelin.cn/C++/C++%E5%B7%A6%E5%80%BC%E5%8F%B3%E5%80%BC/">
 
 
 <script class="page-configurations">
@@ -53,7 +52,7 @@
     lang   : 'zh-CN'
   };
 </script>
-<title>力扣-1438.绝对差不超过限制的最长连续子数组 | JakeLin's Blog</title>
+<title>C++左值右值 | JakeLin's Blog</title>
   
     <script async src="https://www.googletagmanager.com/gtag/js?id=UA-174281095-1"></script>
     <script>
@@ -209,7 +208,7 @@
       <div class="sidebar-panel-container">
         <!--noindex-->
         <div class="post-toc-wrap sidebar-panel">
-            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#1438-%E7%BB%9D%E5%AF%B9%E5%B7%AE%E4%B8%8D%E8%B6%85%E8%BF%87%E9%99%90%E5%88%B6%E7%9A%84%E6%9C%80%E9%95%BF%E8%BF%9E%E7%BB%AD%E5%AD%90%E6%95%B0%E7%BB%84"><span class="nav-number">1.</span> <span class="nav-text">1438.绝对差不超过限制的最长连续子数组</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%A7%A3%E9%A2%98%E5%88%86%E6%9E%90"><span class="nav-number">2.</span> <span class="nav-text">解题分析</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%96%B9%E6%B3%95%E4%B8%89%EF%BC%9A%E6%BB%91%E5%8A%A8%E7%AA%97%E5%8F%A3-%E5%8D%95%E8%B0%83%E9%98%9F%E5%88%97"><span class="nav-number">3.</span> <span class="nav-text">方法三：滑动窗口 + 单调队列</span></a></li></ol></div>
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AE%9A%E4%B9%89%E4%B8%8E%E5%8C%BA%E5%88%AB"><span class="nav-number">1.</span> <span class="nav-text">定义与区别</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%B7%A6%E5%80%BC%E4%B8%8E%E5%8F%B3%E5%80%BC%E7%9B%B4%E6%8E%A5%E7%9A%84%E8%BD%AC%E6%8D%A2"><span class="nav-number">2.</span> <span class="nav-text">左值与右值直接的转换</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%B7%A6%E5%80%BC%E5%BC%95%E7%94%A8"><span class="nav-number">3.</span> <span class="nav-text">左值引用</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#C-11-%E5%8F%B3%E5%80%BC%E5%BC%95%E7%94%A8"><span class="nav-number">4.</span> <span class="nav-text">C++11 右值引用</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8F%82%E8%80%83"><span class="nav-number">5.</span> <span class="nav-text">参考</span></a></li></ol></div>
         </div>
         <!--/noindex-->
 
@@ -294,7 +293,7 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://jakelin.cn/leetcode/%E5%8A%9B%E6%89%A3-1438.%E7%BB%9D%E5%AF%B9%E5%B7%AE%E4%B8%8D%E8%B6%85%E8%BF%87%E9%99%90%E5%88%B6%E7%9A%84%E6%9C%80%E9%95%BF%E8%BF%9E%E7%BB%AD%E5%AD%90%E6%95%B0%E7%BB%84/">
+    <link itemprop="mainEntityOfPage" href="https://jakelin.cn/C++/C++%E5%B7%A6%E5%80%BC%E5%8F%B3%E5%80%BC/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="https://i.loli.net/2020/07/31/OZl2JxuSRrweIk5.jpg">
@@ -307,7 +306,7 @@
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          力扣-1438.绝对差不超过限制的最长连续子数组
+          C++左值右值
         </h1>
 
         <div class="post-meta-container">
@@ -318,14 +317,14 @@
       </span>
       <span class="post-meta-item-text">发表于</span>
 
-      <time title="创建时间：2021-02-21 00:00:00" itemprop="dateCreated datePublished" datetime="2021-02-21T00:00:00+08:00">2021-02-21</time>
+      <time title="创建时间：2021-03-05 00:00:00" itemprop="dateCreated datePublished" datetime="2021-03-05T00:00:00+08:00">2021-03-05</time>
     </span>
       <span class="post-meta-item">
         <span class="post-meta-item-icon">
           <i class="far fa-calendar-check"></i>
         </span>
         <span class="post-meta-item-text">更新于</span>
-        <time title="修改时间：2021-02-21 15:43:57" itemprop="dateModified" datetime="2021-02-21T15:43:57+08:00">2021-02-21</time>
+        <time title="修改时间：2021-03-05 21:27:43" itemprop="dateModified" datetime="2021-03-05T21:27:43+08:00">2021-03-05</time>
       </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -337,11 +336,7 @@
         </span>
           ，
         <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/%E7%AC%94%E8%AE%B0/%E5%88%B7%E9%A2%98/" itemprop="url" rel="index"><span itemprop="name">刷题</span></a>
-        </span>
-          ，
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/%E7%AC%94%E8%AE%B0/%E5%88%B7%E9%A2%98/leetcode/" itemprop="url" rel="index"><span itemprop="name">leetcode</span></a>
+          <a href="/categories/%E7%AC%94%E8%AE%B0/C/" itemprop="url" rel="index"><span itemprop="name">C++</span></a>
         </span>
     </span>
 
@@ -360,7 +355,7 @@
         <i class="far fa-file-word"></i>
       </span>
       <span class="post-meta-item-text">本文字数：</span>
-      <span>1.5k</span>
+      <span>1.1k</span>
     </span>
     <span class="post-meta-item" title="阅读时长">
       <span class="post-meta-item-icon">
@@ -371,7 +366,7 @@
     </span>
 </div>
 
-            <div class="post-description">给你一个整数数组 nums ，和一个表示限制的整数 limit，请你返回最长连续子数组的长度，该子数组中的任意两个元素之间的绝对差必须小于或者等于 limit 。</div>
+            <div class="post-description">左值与右值的根本区别在于能否获取内存地址，而能否赋值不是区分的依据。</div>
         </div>
       </header>
 
@@ -379,25 +374,35 @@
     
     
     <div class="post-body" itemprop="articleBody">
-        <h2 id="1438-绝对差不超过限制的最长连续子数组"><a href="#1438-绝对差不超过限制的最长连续子数组" class="headerlink" title="1438.绝对差不超过限制的最长连续子数组"></a>1438.绝对差不超过限制的最长连续子数组</h2><blockquote>
-<p>给你一个整数数组 nums ，和一个表示限制的整数 limit，请你返回最长连续子数组的长度，该子数组中的任意两个元素之间的绝对差必须小于或者等于 limit 。</p>
-<p>如果不存在满足条件的子数组，则返回 0 。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">输入：nums &#x3D; [10,1,2,4,7,2], limit &#x3D; 5</span><br><span class="line">输出：4 </span><br><span class="line">解释：满足题意的最长子数组是 [2,4,7,2]，其最大绝对差 |2-7| &#x3D; 5 &lt;&#x3D; 5 。</span><br></pre></td></tr></table></figure>
+        <h2 id="定义与区别"><a href="#定义与区别" class="headerlink" title="定义与区别"></a>定义与区别</h2><p><strong>左值 (lvalue, locator value)</strong> 表示了一个占据内存中某个可识别的位置（也就是一个地址）的对象。即左值指的是可以取地址的变量。</p>
+<p>区分表达式的左右值属性有一个简便方法：<strong>若可对表达式用 &amp; 符取址，则为左值，否则为右值</strong>。左值与右值的根本区别在于能否获取内存地址，而能否赋值不是区分的依据。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> <span class="keyword">int</span> a = <span class="number">10</span>; <span class="comment">// &#x27;a&#x27; 是左值</span></span><br><span class="line">a = <span class="number">10</span>;           <span class="comment">// 但不可以赋值给它！</span></span><br></pre></td></tr></table></figure>
 
-<p>来源：力扣（LeetCode） <a target="_blank" rel="noopener" href="https://leetcode-cn.com/problems/longest-continuous-subarray-with-absolute-diff-less-than-or-equal-to-limit">https://leetcode-cn.com/problems/longest-continuous-subarray-with-absolute-diff-less-than-or-equal-to-limit</a></p>
-</blockquote>
-<h2 id="解题分析"><a href="#解题分析" class="headerlink" title="解题分析"></a>解题分析</h2><ol>
-<li>标识子数组，可用双指针 ——【滑动窗口】</li>
-<li>记录子数组中的最大值，最小值 </li>
-</ol>
-<p>关于记录子数组中的最大值与最小值，有多种方法：</p>
-<p>  方法一：暴力查找（显然不是好方法）</p>
-<p>  方法二：<strong>滑动窗口 + 堆 + 延迟删除</strong> （类似于 <a href="https://jakelin.cn/leetcode/%E6%BB%91%E5%8A%A8%E7%AA%97%E5%8F%A3%E4%B8%AD%E4%BD%8D%E6%95%B0/#%E9%A2%98%E8%A7%A3">JakeLin’s Blog: 480-滑动窗口中位数-堆+延迟删除</a> ）</p>
-<p>  方法三：<strong>滑动窗口 + 单调队列</strong> （使用<strong>双端队列</strong>是为方便删除队头、队尾） </p>
-<h2 id="方法三：滑动窗口-单调队列"><a href="#方法三：滑动窗口-单调队列" class="headerlink" title="方法三：滑动窗口 + 单调队列"></a>方法三：滑动窗口 + 单调队列</h2><p>【<strong>滑动窗口</strong>】双指针实现</p>
-<p>【<strong>单调队列</strong>】维护两个单调队列，以记录子数组中的 <strong>最大值</strong> 与 <strong>最小值</strong> 。（使用 <strong>双端队列</strong> 是为方便删除队头、队尾） </p>
-<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">longestSubarray</span><span class="params">(<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&amp; nums, <span class="keyword">int</span> limit)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> n = nums.size();</span><br><span class="line">        <span class="keyword">int</span> left = <span class="number">0</span>, right = <span class="number">0</span>; <span class="comment">// 双指针 标识子数组</span></span><br><span class="line">        <span class="keyword">int</span> ans = <span class="number">0</span>;</span><br><span class="line">        <span class="built_in">deque</span>&lt;<span class="keyword">int</span>&gt; maxQueue, minQueue; <span class="comment">// 单调队列 子数组中的最值</span></span><br><span class="line">        <span class="keyword">for</span> (right = <span class="number">0</span>; right &lt; n; ++right) &#123;</span><br><span class="line">            <span class="comment">// 最大值 单调队列</span></span><br><span class="line">            <span class="keyword">while</span> (!maxQueue.empty() &amp;&amp; maxQueue.back() &lt; nums[right]) &#123;</span><br><span class="line">                maxQueue.pop_back();</span><br><span class="line">            &#125;</span><br><span class="line">            maxQueue.push_back(nums[right]);</span><br><span class="line"></span><br><span class="line">            <span class="comment">// 最小值 单调队列</span></span><br><span class="line">            <span class="keyword">while</span> (!minQueue.empty() &amp;&amp; minQueue.back() &gt; nums[right]) &#123;</span><br><span class="line">                minQueue.pop_back();</span><br><span class="line">            &#125;</span><br><span class="line">            minQueue.push_back(nums[right]);</span><br><span class="line"></span><br><span class="line">            <span class="comment">// 子数组不满足条件 滑动窗口左边界右移</span></span><br><span class="line">            <span class="keyword">while</span> (!maxQueue.empty() &amp;&amp; !minQueue.empty() &amp;&amp; (maxQueue.front() - minQueue.front()) &gt; limit) &#123;</span><br><span class="line">                <span class="keyword">if</span> (nums[left] == maxQueue.front()) &#123;</span><br><span class="line">                    maxQueue.pop_front();</span><br><span class="line">                &#125;</span><br><span class="line">                <span class="keyword">if</span> (nums[left] == minQueue.front()) &#123;</span><br><span class="line">                    minQueue.pop_front();</span><br><span class="line">                &#125;</span><br><span class="line">                ++left;</span><br><span class="line">            &#125;</span><br><span class="line">            ans = max(ans, right - left + <span class="number">1</span>);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> ans;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<h2 id="左值与右值直接的转换"><a href="#左值与右值直接的转换" class="headerlink" title="左值与右值直接的转换"></a>左值与右值直接的转换</h2><p>一般上讲，对象之间的运算，对象是以右值的形式参与的。表示<strong>数组</strong>、<strong>函数</strong>和<strong>非完整类型</strong>的左值是不能转换为右值的，因为无法对那些类型进行求值。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">int</span> a = <span class="number">1</span>;     <span class="comment">// a 是左值</span></span><br><span class="line"><span class="keyword">int</span> b = <span class="number">2</span>;     <span class="comment">// b 是左值</span></span><br><span class="line"><span class="keyword">int</span> c = a + b; <span class="comment">// a和b自动转换为右值求和</span></span><br></pre></td></tr></table></figure>
 
+<p>右值可以通过一些更显式的方法产生左值。例如，一元解引用操作符 <code>&#39;*&#39;</code> 需要一个右值参数，但返回一个左值结果。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">int</span> arr[] = &#123;<span class="number">1</span>, <span class="number">2</span>&#125;;</span><br><span class="line"><span class="keyword">int</span>* p = &amp;arr[<span class="number">0</span>];</span><br><span class="line">*(p + <span class="number">1</span>) = <span class="number">10</span>;   <span class="comment">// 正确: p + 1 是右值，但 *(p + 1) 是左值</span></span><br></pre></td></tr></table></figure>
+
+<p>相反地，一元取地址操作符 <code>&#39;&amp;&#39;</code> 需要一个左值参数，返回一个右值：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">int</span> var = <span class="number">10</span>;</span><br><span class="line"><span class="keyword">int</span>* bad_addr = &amp;(var + <span class="number">1</span>); <span class="comment">// 错误: 一元 &#x27;&amp;&#x27; 操作符需要左值参数</span></span><br><span class="line"><span class="keyword">int</span>* addr = &amp;var;           <span class="comment">// 正确: var 是左值</span></span><br><span class="line">&amp;var = <span class="number">40</span>;                  <span class="comment">// 错误: 赋值操作的左操作数需要是左值</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="左值引用"><a href="#左值引用" class="headerlink" title="左值引用"></a>左值引用</h2><p>C++中可以使用&amp;符定义引用，如果一个左值同时是引用，就称为“左值引用”。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">std</span>::<span class="built_in">string</span> s;</span><br><span class="line"><span class="built_in">std</span>::<span class="built_in">string</span>&amp; sref = s;  <span class="comment">//sref为左值引用</span></span><br></pre></td></tr></table></figure>
+
+<p><strong>非const左值引用</strong> 不能使用右值对其赋值。但 <strong>const左值引用</strong> 可以。</p>
+<p>【<strong>解析</strong>】非const引用类型的变量是可以后续对其进行赋值操作的，但是右值是不可获取内存地址。但const左值引用不一样，因为常量不能被修改，也就不存在上述问题。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">std</span>::<span class="built_in">string</span>&amp; r = <span class="built_in">std</span>::<span class="built_in">string</span>(); <span class="comment">//错误！std::string（）产生一个临时对象，为右值</span></span><br><span class="line"><span class="keyword">const</span> <span class="built_in">std</span>::<span class="built_in">string</span>&amp; r = <span class="built_in">std</span>::<span class="built_in">string</span>(); <span class="comment">//可以</span></span><br></pre></td></tr></table></figure>
+
+<p>因此，我们经常<strong>使用const左值引用作为函数的参数类型，可以减少不必要的对象复制</strong>。</p>
+<h2 id="C-11-右值引用"><a href="#C-11-右值引用" class="headerlink" title="C++11 右值引用"></a>C++11 右值引用</h2><p>参考：</p>
+<ul>
+<li><p><a target="_blank" rel="noopener" href="https://nettee.github.io/posts/2018/Understanding-lvalues-and-rvalues-in-C-and-C/">理解 C/C++ 中的左值和右值</a> </p>
+</li>
+<li><p><a target="_blank" rel="noopener" href="https://blog.csdn.net/p942005405/article/details/84644069/">c++ 之 std::move 原理实现与用法总结</a></p>
+</li>
+</ul>
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><p><a target="_blank" rel="noopener" href="https://nettee.github.io/posts/2018/Understanding-lvalues-and-rvalues-in-C-and-C/">理解 C/C++ 中的左值和右值</a> </p>
 
     </div>
 
@@ -408,19 +413,19 @@
   <div class="popular-posts-header">相关文章推荐</div>
   <ul class="popular-posts">
     <li class="popular-posts-item">
-      <div class="popular-posts-title"><a href="\leetcode\力扣-995.K连续位的最小翻转次数\" rel="bookmark">力扣-995.K连续位的最小翻转次数</a></div>
+      <div class="popular-posts-title"><a href="\C++\C++11智能指针\" rel="bookmark">C++11智能指针</a></div>
     </li>
     <li class="popular-posts-item">
-      <div class="popular-posts-title"><a href="\leetcode\力扣-1052.爱生气的书店老板\" rel="bookmark">力扣-1052.爱生气的书店老板</a></div>
+      <div class="popular-posts-title"><a href="\C++\C++笔记(面向对象高级编程--侯捷)\" rel="bookmark">C++笔记(面向对象高级编程--侯捷)</a></div>
     </li>
     <li class="popular-posts-item">
-      <div class="popular-posts-title"><a href="\Algorithm\【转载】Union-Find算法详解\" rel="bookmark">【转载】Union-Find算法详解</a></div>
+      <div class="popular-posts-title"><a href="\C++\C++类型转换运算符\" rel="bookmark">C++类型转换运算符</a></div>
     </li>
     <li class="popular-posts-item">
-      <div class="popular-posts-title"><a href="\Algorithm\算法排序\" rel="bookmark">排序算法</a></div>
+      <div class="popular-posts-title"><a href="\C++\能不能在头文件中定义全局变量\" rel="bookmark">能不能在头文件中定义全局变量？</a></div>
     </li>
     <li class="popular-posts-item">
-      <div class="popular-posts-title"><a href="\Algorithm\算法收录\" rel="bookmark">算法收录</a></div>
+      <div class="popular-posts-title"><a href="\C++\C++11新特性\" rel="bookmark">C++11新特性</a></div>
     </li>
   </ul>
 
@@ -438,7 +443,7 @@
   </li>
   <li class="post-copyright-link">
       <strong>本文链接：</strong>
-      <a href="https://jakelin.cn/leetcode/%E5%8A%9B%E6%89%A3-1438.%E7%BB%9D%E5%AF%B9%E5%B7%AE%E4%B8%8D%E8%B6%85%E8%BF%87%E9%99%90%E5%88%B6%E7%9A%84%E6%9C%80%E9%95%BF%E8%BF%9E%E7%BB%AD%E5%AD%90%E6%95%B0%E7%BB%84/" title="力扣-1438.绝对差不超过限制的最长连续子数组">https://jakelin.cn/leetcode/力扣-1438.绝对差不超过限制的最长连续子数组/</a>
+      <a href="https://jakelin.cn/C++/C++%E5%B7%A6%E5%80%BC%E5%8F%B3%E5%80%BC/" title="C++左值右值">https://jakelin.cn/C++/C++左值右值/</a>
   </li>
   <li class="post-copyright-license">
     <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
@@ -448,22 +453,18 @@
 
           <div class="post-tags">
               <a href="/tags/C/" rel="tag"><i class="fa fa-tag"></i> C++</a>
-              <a href="/tags/%E6%BB%91%E5%8A%A8%E7%AA%97%E5%8F%A3/" rel="tag"><i class="fa fa-tag"></i> 滑动窗口</a>
-              <a href="/tags/%E5%8D%95%E8%B0%83%E9%98%9F%E5%88%97/" rel="tag"><i class="fa fa-tag"></i> 单调队列</a>
+              <a href="/tags/%E8%AF%AD%E6%B3%95%E5%9F%BA%E7%A1%80/" rel="tag"><i class="fa fa-tag"></i> 语法基础</a>
           </div>
 
         
 
           <div class="post-nav">
             <div class="post-nav-item">
-                <a href="/leetcode/%E5%8A%9B%E6%89%A3-995.K%E8%BF%9E%E7%BB%AD%E4%BD%8D%E7%9A%84%E6%9C%80%E5%B0%8F%E7%BF%BB%E8%BD%AC%E6%AC%A1%E6%95%B0/" rel="prev" title="力扣-995.K连续位的最小翻转次数">
-                  <i class="fa fa-chevron-left"></i> 力扣-995.K连续位的最小翻转次数
+                <a href="/leetcode/%E5%8A%9B%E6%89%A3-1353.%E6%9C%80%E5%A4%9A%E5%8F%AF%E4%BB%A5%E5%8F%82%E5%8A%A0%E7%9A%84%E4%BC%9A%E8%AE%AE%E6%95%B0%E7%9B%AE/" rel="prev" title="力扣-1353.最多可以参加的会议数目">
+                  <i class="fa fa-chevron-left"></i> 力扣-1353.最多可以参加的会议数目
                 </a>
             </div>
             <div class="post-nav-item">
-                <a href="/leetcode/%E5%8A%9B%E6%89%A3-1052.%E7%88%B1%E7%94%9F%E6%B0%94%E7%9A%84%E4%B9%A6%E5%BA%97%E8%80%81%E6%9D%BF/" rel="next" title="力扣-1052.爱生气的书店老板">
-                  力扣-1052.爱生气的书店老板 <i class="fa fa-chevron-right"></i>
-                </a>
             </div>
           </div>
     </footer>
