@@ -25,29 +25,22 @@
     var NexT = window.NexT || {};
     var CONFIG = {"hostname":"jakelin.cn","root":"/","images":"/images","scheme":"Gemini","version":"8.2.2","exturl":false,"sidebar":{"position":"left","display":"always","padding":18,"offset":12},"copycode":true,"bookmark":{"enable":true,"color":"#222","save":"auto"},"fancybox":true,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}};
   </script>
-<meta name="description" content="共享内存区是可用IPC形式中最快的。一旦内存映射到共享它的进程的地址空间，这些进程间的数据传递就不再涉及内核。当然对共享内存区的数据的存取操作需要某种形式的同步。">
+<meta name="description" content="动态规划+回溯">
 <meta property="og:type" content="article">
-<meta property="og:title" content="共享内存区">
-<meta property="og:url" content="https://jakelin.cn/UNP/%E5%85%B1%E4%BA%AB%E5%86%85%E5%AD%98%E5%8C%BA/index.html">
+<meta property="og:title" content="力扣-131.分割回文串">
+<meta property="og:url" content="https://jakelin.cn/leetcode/%E5%8A%9B%E6%89%A3-131.%E5%88%86%E5%89%B2%E5%9B%9E%E6%96%87%E4%B8%B2/index.html">
 <meta property="og:site_name" content="JakeLin&#39;s Blog">
-<meta property="og:description" content="共享内存区是可用IPC形式中最快的。一旦内存映射到共享它的进程的地址空间，这些进程间的数据传递就不再涉及内核。当然对共享内存区的数据的存取操作需要某种形式的同步。">
+<meta property="og:description" content="动态规划+回溯">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="https://gitee.com/jakel-in/images/raw/master/2021-02/%E4%BB%8E%E6%9C%8D%E5%8A%A1%E5%99%A8%E5%88%B0%E5%AE%A2%E6%88%B7%E7%9A%84%E6%96%87%E4%BB%B6%E6%95%B0%E6%8D%AE%E6%B5%81.png">
-<meta property="og:image" content="https://gitee.com/jakel-in/images/raw/master/2021-02/%E4%BD%BF%E7%94%A8%E5%85%B1%E4%BA%AB%E5%86%85%E5%AD%98%E5%8C%BA%E4%BB%8E%E6%9C%8D%E5%8A%A1%E5%99%A8%E5%88%B0%E5%AE%A2%E6%88%B7%E7%9A%84%E6%96%87%E4%BB%B6%E6%95%B0%E6%8D%AE%E6%B5%81.png">
-<meta property="og:image" content="https://gitee.com/jakel-in/images/raw/master/2020-xx/mmap%E6%96%87%E4%BB%B6%E6%98%A0%E5%B0%84.png">
-<meta property="og:image" content="https://gitee.com/jakel-in/images/raw/master/2020-xx/mmap%E6%96%87%E4%BB%B6%E6%98%A0%E5%B0%84%E5%8C%BA%E5%A4%A7%E5%B0%8F%E7%AD%89%E4%BA%8E%E6%96%87%E4%BB%B6%E5%A4%A7%E5%B0%8F.png">
-<meta property="og:image" content="https://gitee.com/jakel-in/images/raw/master/2021-02/mmap%E5%A4%A7%E5%B0%8F%E8%B6%85%E8%BF%87%E6%96%87%E4%BB%B6%E5%A4%A7%E5%B0%8F%E6%97%B6.png">
-<meta property="og:image" content="https://gitee.com/jakel-in/images/raw/master/2021-02/Posix%E5%86%85%E5%AD%98%E5%8C%BA%E5%AF%B9%E8%B1%A1%EF%BC%9A%E5%86%85%E5%AD%98%E6%98%A0%E5%B0%84%E6%96%87%E4%BB%B6%E5%92%8C%E5%85%B1%E4%BA%AB%E5%86%85%E5%AD%98%E5%8C%BA%E5%AF%B9%E8%B1%A1.png">
-<meta property="article:published_time" content="2021-02-05T16:00:00.000Z">
-<meta property="article:modified_time" content="2021-02-06T08:43:19.044Z">
+<meta property="article:published_time" content="2021-03-06T16:00:00.000Z">
+<meta property="article:modified_time" content="2021-03-08T02:00:57.179Z">
 <meta property="article:author" content="jakelin">
-<meta property="article:tag" content="unp">
-<meta property="article:tag" content="IPC">
+<meta property="article:tag" content="C++">
+<meta property="article:tag" content="动态规划">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://gitee.com/jakel-in/images/raw/master/2021-02/%E4%BB%8E%E6%9C%8D%E5%8A%A1%E5%99%A8%E5%88%B0%E5%AE%A2%E6%88%B7%E7%9A%84%E6%96%87%E4%BB%B6%E6%95%B0%E6%8D%AE%E6%B5%81.png">
 
 
-<link rel="canonical" href="https://jakelin.cn/UNP/%E5%85%B1%E4%BA%AB%E5%86%85%E5%AD%98%E5%8C%BA/">
+<link rel="canonical" href="https://jakelin.cn/leetcode/%E5%8A%9B%E6%89%A3-131.%E5%88%86%E5%89%B2%E5%9B%9E%E6%96%87%E4%B8%B2/">
 
 
 <script class="page-configurations">
@@ -59,7 +52,7 @@
     lang   : 'zh-CN'
   };
 </script>
-<title>共享内存区 | JakeLin's Blog</title>
+<title>力扣-131.分割回文串 | JakeLin's Blog</title>
   
     <script async src="https://www.googletagmanager.com/gtag/js?id=UA-174281095-1"></script>
     <script>
@@ -215,7 +208,7 @@
       <div class="sidebar-panel-container">
         <!--noindex-->
         <div class="post-toc-wrap sidebar-panel">
-            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%B1%E4%BA%AB%E5%86%85%E5%AD%98%E5%8C%BA%E4%BB%8B%E7%BB%8D"><span class="nav-number">1.</span> <span class="nav-text">共享内存区介绍</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%98%A0%E5%B0%84%E5%88%B0%E8%BF%9B%E7%A8%8B%E5%9C%B0%E5%9D%80%E7%A9%BA%E9%97%B4"><span class="nav-number">2.</span> <span class="nav-text">映射到进程地址空间</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8C%BF%E5%90%8D%E5%86%85%E5%AD%98%E6%98%A0%E5%B0%84"><span class="nav-number">3.</span> <span class="nav-text">匿名内存映射</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%98%A0%E5%B0%84%E5%8C%BA%E5%86%85%E5%AD%98"><span class="nav-number">4.</span> <span class="nav-text">映射区内存</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Posix%E5%85%B1%E4%BA%AB%E5%86%85%E5%AD%98%E5%8C%BA"><span class="nav-number">5.</span> <span class="nav-text">Posix共享内存区</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%85%B1%E4%BA%AB%E5%86%85%E5%AD%98%E5%8C%BA%E5%AF%B9%E8%B1%A1%E6%93%8D%E4%BD%9C"><span class="nav-number">5.1.</span> <span class="nav-text">共享内存区对象操作</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ftruncate%E5%92%8Cfstat"><span class="nav-number">5.2.</span> <span class="nav-text">ftruncate和fstat</span></a></li></ol></li></ol></div>
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#131-%E5%88%86%E5%89%B2%E5%9B%9E%E6%96%87%E4%B8%B2"><span class="nav-number">1.</span> <span class="nav-text">131.分割回文串</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92-%E5%9B%9E%E6%BA%AF"><span class="nav-number">2.</span> <span class="nav-text">动态规划+回溯</span></a></li></ol></div>
         </div>
         <!--/noindex-->
 
@@ -300,7 +293,7 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://jakelin.cn/UNP/%E5%85%B1%E4%BA%AB%E5%86%85%E5%AD%98%E5%8C%BA/">
+    <link itemprop="mainEntityOfPage" href="https://jakelin.cn/leetcode/%E5%8A%9B%E6%89%A3-131.%E5%88%86%E5%89%B2%E5%9B%9E%E6%96%87%E4%B8%B2/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="https://i.loli.net/2020/07/31/OZl2JxuSRrweIk5.jpg">
@@ -313,7 +306,7 @@
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          共享内存区
+          力扣-131.分割回文串
         </h1>
 
         <div class="post-meta-container">
@@ -324,14 +317,14 @@
       </span>
       <span class="post-meta-item-text">发表于</span>
 
-      <time title="创建时间：2021-02-06 00:00:00" itemprop="dateCreated datePublished" datetime="2021-02-06T00:00:00+08:00">2021-02-06</time>
+      <time title="创建时间：2021-03-07 00:00:00" itemprop="dateCreated datePublished" datetime="2021-03-07T00:00:00+08:00">2021-03-07</time>
     </span>
       <span class="post-meta-item">
         <span class="post-meta-item-icon">
           <i class="far fa-calendar-check"></i>
         </span>
         <span class="post-meta-item-text">更新于</span>
-        <time title="修改时间：2021-02-06 16:43:19" itemprop="dateModified" datetime="2021-02-06T16:43:19+08:00">2021-02-06</time>
+        <time title="修改时间：2021-03-08 10:00:57" itemprop="dateModified" datetime="2021-03-08T10:00:57+08:00">2021-03-08</time>
       </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -343,7 +336,11 @@
         </span>
           ，
         <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/%E7%AC%94%E8%AE%B0/unp/" itemprop="url" rel="index"><span itemprop="name">unp</span></a>
+          <a href="/categories/%E7%AC%94%E8%AE%B0/%E5%88%B7%E9%A2%98/" itemprop="url" rel="index"><span itemprop="name">刷题</span></a>
+        </span>
+          ，
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E7%AC%94%E8%AE%B0/%E5%88%B7%E9%A2%98/leetcode/" itemprop="url" rel="index"><span itemprop="name">leetcode</span></a>
         </span>
     </span>
 
@@ -362,18 +359,18 @@
         <i class="far fa-file-word"></i>
       </span>
       <span class="post-meta-item-text">本文字数：</span>
-      <span>2.4k</span>
+      <span>1.6k</span>
     </span>
     <span class="post-meta-item" title="阅读时长">
       <span class="post-meta-item-icon">
         <i class="far fa-clock"></i>
       </span>
       <span class="post-meta-item-text">阅读时长 &asymp;</span>
-      <span>2 分钟</span>
+      <span>1 分钟</span>
     </span>
 </div>
 
-            <div class="post-description">共享内存区是可用IPC形式中最快的。一旦内存映射到共享它的进程的地址空间，这些进程间的数据传递就不再涉及内核。当然对共享内存区的数据的存取操作需要某种形式的同步。</div>
+            <div class="post-description">动态规划+回溯</div>
         </div>
       </header>
 
@@ -381,145 +378,30 @@
     
     
     <div class="post-body" itemprop="articleBody">
-        <h2 id="共享内存区介绍"><a href="#共享内存区介绍" class="headerlink" title="共享内存区介绍"></a>共享内存区介绍</h2><p><strong>共享内存区</strong> 是可用IPC形式中 <strong>最快</strong> 的。一旦内存映射到共享它的进程的地址空间，这些进程间的数据传递就 <strong>不再涉及内核</strong> 。当然对共享内存区的数据的存取操作需要某种形式的同步：<a href="../Unix%E5%90%8C%E6%AD%A5%E6%96%B9%E5%BC%8F">Unix同步方式</a>。</p>
-<p>服务器-客户端文件复制程序的通常步骤如下图：</p>
-<p>一组数据传递，<strong>内核空间</strong> 和 <strong>进程空间</strong> 之间的数据复制有 <strong>4次</strong> 。</p>
-<p><img src="https://gitee.com/jakel-in/images/raw/master/2021-02/%E4%BB%8E%E6%9C%8D%E5%8A%A1%E5%99%A8%E5%88%B0%E5%AE%A2%E6%88%B7%E7%9A%84%E6%96%87%E4%BB%B6%E6%95%B0%E6%8D%AE%E6%B5%81.png" alt="从服务器到客户的文件数据流"></p>
-<p>通过使用进程间共享内存区，一组数据传递，<strong>内核空间</strong> 和 <strong>进程空间</strong> 之间的数据复制有 <strong>2次</strong> 。如下图：</p>
-<p><img src="https://gitee.com/jakel-in/images/raw/master/2021-02/%E4%BD%BF%E7%94%A8%E5%85%B1%E4%BA%AB%E5%86%85%E5%AD%98%E5%8C%BA%E4%BB%8E%E6%9C%8D%E5%8A%A1%E5%99%A8%E5%88%B0%E5%AE%A2%E6%88%B7%E7%9A%84%E6%96%87%E4%BB%B6%E6%95%B0%E6%8D%AE%E6%B5%81.png" alt="使用共享内存区从服务器到客户的文件数据流"></p>
-<h2 id="映射到进程地址空间"><a href="#映射到进程地址空间" class="headerlink" title="映射到进程地址空间"></a>映射到进程地址空间</h2><p><code>mmap</code> 函数把一个 <strong>文件</strong> 或一个 <strong>Posix共享内存对象</strong> 映射到调用进程的 <strong>进程地址空间</strong> 。该函数有三个目的：</p>
-<ol>
-<li>使用 <strong>普通文件</strong> 以提供 <strong>内存映射I/O</strong> ；</li>
-<li>使用 <strong>特殊文件</strong> 以提供 <strong>匿名内存映射</strong> ；</li>
-<li>使用 <strong><code>shm_open</code></strong> 以提供 <strong>无亲缘关系进程间的Posix共享内存区</strong> 。</li>
-</ol>
-<p>内存映射文件的例子：</p>
-<p><img src="https://gitee.com/jakel-in/images/raw/master/2020-xx/mmap%E6%96%87%E4%BB%B6%E6%98%A0%E5%B0%84.png" alt="mmap文件映射"></p>
-<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> *<span class="title">mmap</span><span class="params">(<span class="keyword">void</span> *addr, <span class="keyword">size_t</span> length, <span class="keyword">int</span> prot, <span class="keyword">int</span> flags, <span class="keyword">int</span> fd, <span class="keyword">off_t</span> offset)</span></span>;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">munmap</span><span class="params">(<span class="keyword">void</span> *addr, <span class="keyword">size_t</span> length)</span></span>;</span><br></pre></td></tr></table></figure>
+        <h2 id="131-分割回文串"><a href="#131-分割回文串" class="headerlink" title="131.分割回文串"></a>131.分割回文串</h2><blockquote>
+<p>给你一个字符串 s，请你将 s 分割成一些子串，使每个子串都是 回文串 。返回 s 所有可能的分割方案。回文串 是正着读和反着读都一样的字符串。</p>
+<p>示例 1：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">输入：s &#x3D; &quot;aab&quot;</span><br><span class="line">输出：[[&quot;a&quot;,&quot;a&quot;,&quot;b&quot;],[&quot;aa&quot;,&quot;b&quot;]]</span><br></pre></td></tr></table></figure>
 
-<p>【<strong>注意</strong>】不是所有的文件都能进行内存映射，例如：访问终端或套接字的描述符。</p>
-<ul>
-<li><p><code>addr</code> ：指定映射到进程空间的 <strong>起始地址</strong> 。通常被指定为 <code>NULL</code>，由内核自己选择起始地址。</p>
-</li>
-<li><p><code>length</code> ：映射到调用进程地址空间中的 <strong>字节数</strong>，从 offset 偏移处开始算。</p>
-</li>
-<li><p><code>prot</code> ：内存映射区的保护</p>
-<table>
-<thead>
-<tr>
-<th>prot</th>
-<th>说明</th>
-</tr>
-</thead>
-<tbody><tr>
-<td><code>PROT_READ</code></td>
-<td>数据可读</td>
-</tr>
-<tr>
-<td><code>PROT_WRITE</code></td>
-<td>数据可写</td>
-</tr>
-<tr>
-<td>PROT_EXEC</td>
-<td>数据可执行</td>
-</tr>
-<tr>
-<td>PROT_NONE</td>
-<td>数据不可访问</td>
-</tr>
-</tbody></table>
-</li>
-<li><p><code>flags</code> ：内存映射区属性</p>
-<ul>
-<li><code>MAP_PRIVATE</code> ：调用进程对映射区数据的修改仅对该进程可见，并且不改变其底层支撑对象（文件或共享内存区对象）。</li>
-<li><code>MAP_SHARED</code> ：调用进程对映射区数据的修改，在所有共享该对象的所有进程都可见，并且改变同步到其底层支撑对象。</li>
-<li><code>MAP_ANON</code> 或 <code>MAP_ANONYMOUS</code> ：匿名内存映射</li>
-<li>MAP_FIXED ：准确的解释 addr 参数，从移植性上考虑，该参数不应该指定。</li>
-</ul>
-</li>
-<li><p><code>fd</code> ：底层对象描述符。</p>
-</li>
-<li><p><code>offset</code> ：底层对象映射从 offset 偏移处开始的 length 长度的字节映射到到调用进程地址空间中。</p>
-</li>
-</ul>
-<p>在设置了 <code>MAP_SHARED</code> 属性的前提下，修改了内存区中的数据，内核将在稍后某个时刻相应的更新底层支撑对象。如果我们期望底层支撑对象与内存映射区中的内容一致，使用 msync 来执行同步。</p>
-<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">msync</span><span class="params">(<span class="keyword">void</span> *addr, <span class="keyword">size_t</span> length, <span class="keyword">int</span> flags)</span></span>;</span><br></pre></td></tr></table></figure>
+<p>示例 2：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">输入：s &#x3D; &quot;a&quot;</span><br><span class="line">输出：[[&quot;a&quot;]]</span><br></pre></td></tr></table></figure>
 
-<ul>
-<li><p><code>addr</code> 和 <code>length</code> 通常指代整个内存映射区，不过也可以指定该内存区的一个子集。</p>
-</li>
-<li><p><code>flags</code> ：<code>MS_ASYNC</code> 和<code>MS_SYNC</code> <strong>必须指定一个，且仅指定一个</strong>。 </p>
-<table>
-<thead>
-<tr>
-<th>flags</th>
-<th>说明</th>
-</tr>
-</thead>
-<tbody><tr>
-<td><code>MS_ASYNC</code></td>
-<td>执行异步写（立即返回）</td>
-</tr>
-<tr>
-<td><code>MS_SYNC</code></td>
-<td>执行同步写（等待写完返回）</td>
-</tr>
-<tr>
-<td><code>MS_INVALIDATE</code></td>
-<td>使高速缓存的数据失效（与最终副本不一致的都失效，后续从底层支撑中取）</td>
-</tr>
-</tbody></table>
-</li>
-</ul>
-<h2 id="匿名内存映射"><a href="#匿名内存映射" class="headerlink" title="匿名内存映射"></a>匿名内存映射</h2><ol>
-<li><ol start="4">
-<li><p>4BSD提供<code>MAP_ANON</code> 或 <code>MAP_ANONYMOUS</code> ，<strong>彻底避免了文件的创建和打开</strong>。</p>
-<p>把 <code>mmap</code> 的 flags 参数指定成 <code>MAP_SHARED | MAP_ANON</code> ，<code>fd = -1</code>，offset 参数将被忽略。这样内存区初始化为0.</p>
-</li>
-</ol>
-</li>
-<li><p>SVR4提供 <code>/dev/zero</code> 设备文件</p>
-<p>从该设备读时返回的字节全为0，写往该设备的任何字节则被丢弃。</p>
-</li>
-</ol>
-<h2 id="映射区内存"><a href="#映射区内存" class="headerlink" title="映射区内存"></a>映射区内存</h2><p><strong>内核的内存保护是以页面为单位的！</strong> 内核允许我们读写最后一页中映射区以外的部分，但是我们写在映射区以外这一部分的任何内容都不会同步到底层支撑（如文件）。</p>
-<p>页面大小4096，mmap大小 = 文件大小（5000）：</p>
-<p><img src="https://gitee.com/jakel-in/images/raw/master/2020-xx/mmap%E6%96%87%E4%BB%B6%E6%98%A0%E5%B0%84%E5%8C%BA%E5%A4%A7%E5%B0%8F%E7%AD%89%E4%BA%8E%E6%96%87%E4%BB%B6%E5%A4%A7%E5%B0%8F.png" alt="mmap文件映射区大小等于文件大小"></p>
-<p>页面大小4096，mmap大小(15000) &gt; 文件大小(5000)：</p>
-<p><img src="https://gitee.com/jakel-in/images/raw/master/2021-02/mmap%E5%A4%A7%E5%B0%8F%E8%B6%85%E8%BF%87%E6%96%87%E4%BB%B6%E5%A4%A7%E5%B0%8F%E6%97%B6.png" alt="mmap大小超过文件大小时"></p>
-<h2 id="Posix共享内存区"><a href="#Posix共享内存区" class="headerlink" title="Posix共享内存区"></a>Posix共享内存区</h2><p>考虑 <strong>无亲缘关系</strong> 进程间共享内存的方法：</p>
-<ol>
-<li><strong>内存映射文件</strong>；</li>
-<li><strong>共享内存区对象</strong>。</li>
-</ol>
-<p><img src="https://gitee.com/jakel-in/images/raw/master/2021-02/Posix%E5%86%85%E5%AD%98%E5%8C%BA%E5%AF%B9%E8%B1%A1%EF%BC%9A%E5%86%85%E5%AD%98%E6%98%A0%E5%B0%84%E6%96%87%E4%BB%B6%E5%92%8C%E5%85%B1%E4%BA%AB%E5%86%85%E5%AD%98%E5%8C%BA%E5%AF%B9%E8%B1%A1.png" alt="Posix内存区对象：内存映射文件和共享内存区对象"></p>
-<h3 id="共享内存区对象操作"><a href="#共享内存区对象操作" class="headerlink" title="共享内存区对象操作"></a>共享内存区对象操作</h3><p><code>shm_open</code>  操作类似于文件 open ，<strong>创建</strong> 或 <strong>打开</strong> 一个<strong>共享内存区对象</strong>。<code>shm_unlink</code> 删除一个共享内存区对象的名字。</p>
-<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">shm_open</span><span class="params">(<span class="keyword">const</span> <span class="keyword">char</span> *name, <span class="keyword">int</span> oflag, <span class="keyword">mode_t</span> mode)</span></span>;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">shm_unlink</span><span class="params">(<span class="keyword">const</span> <span class="keyword">char</span> *name)</span></span>;</span><br></pre></td></tr></table></figure>
 
+<p>提示：</p>
 <ul>
-<li><code>name</code> 参数指定共享内存区对象的名称，由 <code>/</code> 开头，且仅有一个斜杠组成。</li>
-<li><code>shm_unlink</code> 函数类似于其他的 unlink 函数，删除一个名字不会影响对于其底层支撑对象的现有引用，直到该对象的引用全部关闭为止。（删掉名字 <strong>!=</strong> 析构清除）</li>
+<li>1 &lt;= s.length &lt;= 16</li>
+<li>s 仅由小写英文字母组成</li>
 </ul>
-<p>【<strong>注意</strong>】<strong>Posix共享内存区</strong> 具有 <strong>随内核</strong> 的持续性。</p>
-<p>【<strong>疑问</strong>】Posix共享内存区，调用 <code>shm_unlink</code> 删除名称，但还未未释放时，再次 <code>shm_open</code> 会如何？</p>
-<p>答：manpage 给出了说明，<code>shm_open</code> 将会失败，除非指定了 <code>O_CRAET</code> 。同时，新建的 Posix共享内存内对象 区别于已存在的。</p>
-<blockquote>
-<p>After a successful shm_unlink(), attempts to shm_open() an object with the same name <strong>will fail (unless O_CREAT was specified, in which case a new, distinct object is created)</strong>.</p>
+<p>来源：力扣（LeetCode） <a target="_blank" rel="noopener" href="https://leetcode-cn.com/problems/palindrome-partitioning">https://leetcode-cn.com/problems/palindrome-partitioning</a></p>
 </blockquote>
-<h3 id="ftruncate和fstat"><a href="#ftruncate和fstat" class="headerlink" title="ftruncate和fstat"></a>ftruncate和fstat</h3><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">ftruncate</span><span class="params">(<span class="keyword">int</span> fd, <span class="keyword">off_t</span> length)</span></span>;</span><br><span class="line"><span class="comment">// 获取属性信息</span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">fstat</span><span class="params">(<span class="keyword">int</span> fd, struct stat *buf)</span></span>; </span><br></pre></td></tr></table></figure>
+<h2 id="动态规划-回溯"><a href="#动态规划-回溯" class="headerlink" title="动态规划+回溯"></a>动态规划+回溯</h2><blockquote>
+<p>【<strong>时间复杂度</strong>】<strong>O(n^2)</strong></p>
+<p>【<strong>空间复杂度</strong>】<strong>O(n^2)</strong>  </p>
+</blockquote>
+<p>首先想到的是计算过程必然要判断子串是否是回文串，假设子串长度m，判断回文串的复杂度是 O(m)，但是该过程会多次重复计算，因此肯定采用【<strong>动态规划</strong>】记录子串是否是回文串。</p>
+<p>再有结果集是字符串数组集合，采用【<strong>回溯</strong>】减少函数参数拷贝。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment">【回溯】+【动态规划】</span></span><br><span class="line"><span class="comment">**/</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="built_in">vector</span>&lt;<span class="built_in">vector</span>&lt;<span class="built_in">string</span>&gt;&gt; <span class="title">partition</span><span class="params">(<span class="built_in">string</span> s)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> n = s.length();</span><br><span class="line">        <span class="keyword">if</span> (n &lt; <span class="number">1</span>)</span><br><span class="line">            <span class="keyword">return</span> &#123;&#125;;</span><br><span class="line">        <span class="built_in">vector</span>&lt;<span class="built_in">vector</span>&lt;<span class="built_in">string</span>&gt;&gt; ans;</span><br><span class="line">        <span class="function"><span class="built_in">vector</span>&lt;<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&gt; <span class="title">dp</span><span class="params">(n, <span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;(n, <span class="number">-1</span>))</span></span>;</span><br><span class="line">        <span class="built_in">vector</span>&lt;<span class="built_in">string</span>&gt; tmp;</span><br><span class="line">        dfs(s, <span class="number">0</span>, ans, tmp, dp);</span><br><span class="line">        <span class="keyword">return</span> ans;</span><br><span class="line">    &#125;</span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">    <span class="comment">// dp[begin][end] 表示子串 [begin, end] 是不是回文串：-1表示未知、0表示不是、1表示是</span></span><br><span class="line">    <span class="function"><span class="keyword">bool</span> <span class="title">isPalindrome</span><span class="params">(<span class="keyword">const</span> <span class="built_in">string</span>&amp; s, <span class="keyword">int</span> begin, <span class="keyword">int</span> end, <span class="built_in">vector</span>&lt;<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&gt;&amp; dp)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (begin &gt; end) <span class="comment">// 空串</span></span><br><span class="line">            <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">        <span class="keyword">if</span> (<span class="number">-1</span> == dp[begin][end]) &#123;</span><br><span class="line">            dp[begin][end] = s[begin] != s[end]? <span class="number">0</span> : isPalindrome(s, begin+<span class="number">1</span>, end<span class="number">-1</span>, dp);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> dp[begin][end];</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 深度优先 回溯</span></span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">dfs</span><span class="params">(<span class="keyword">const</span> <span class="built_in">string</span>&amp; s, <span class="keyword">int</span> begin, <span class="built_in">vector</span>&lt;<span class="built_in">vector</span>&lt;<span class="built_in">string</span>&gt;&gt;&amp; ans, <span class="built_in">vector</span>&lt;<span class="built_in">string</span>&gt;&amp; tmp, <span class="built_in">vector</span>&lt;<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&gt;&amp; dp)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> n = s.length();</span><br><span class="line">        <span class="keyword">if</span> (begin &gt;= n) &#123;</span><br><span class="line">            ans.push_back(tmp);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = begin; i &lt; n; ++i) &#123;</span><br><span class="line">            <span class="keyword">if</span> (isPalindrome(s, begin, i, dp)) &#123;</span><br><span class="line">                tmp.push_back(s.substr(begin, i - begin + <span class="number">1</span>));</span><br><span class="line">                dfs(s, i + <span class="number">1</span>, ans, tmp, dp);  <span class="comment">// 深度优先</span></span><br><span class="line">                tmp.pop_back();  <span class="comment">// 回溯</span></span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
 
-<ul>
-<li><code>ftruncate</code> 用于修改普通文件或共享内存区对象的大小。<ul>
-<li>须是以<strong>写入模式</strong>打开的；</li>
-<li><strong>普通文件</strong>：<ul>
-<li>如果原文件大小大于 length，则额外的数据将被丢弃；如果原来的文件大小比参数length小，则文件将被扩展，与 lseek 系统调用类似，文件的扩展部分将以 ‘\0’ 填充。</li>
-<li>扩展文件时，此函数并未实质性的向磁盘写入数据，只是分配了一定的空间供当前文件使用。</li>
-</ul>
-</li>
-<li><strong>共享内存区对象</strong>：把该对象的大小设置成 length 字节。</li>
-</ul>
-</li>
-</ul>
 
     </div>
 
@@ -530,19 +412,19 @@
   <div class="popular-posts-header">相关文章推荐</div>
   <ul class="popular-posts">
     <li class="popular-posts-item">
-      <div class="popular-posts-title"><a href="\UNP\Posix消息队列\" rel="bookmark">Posix消息队列</a></div>
+      <div class="popular-posts-title"><a href="\leetcode\力扣-买卖股票问题合集\" rel="bookmark">力扣-买卖股票问题合集</a></div>
     </li>
     <li class="popular-posts-item">
-      <div class="popular-posts-title"><a href="\UNP\进程间通信方式(一)管道\" rel="bookmark">进程间通信方式(一)管道</a></div>
+      <div class="popular-posts-title"><a href="\leetcode\力扣-132.分割回文串-II\" rel="bookmark">力扣-132.分割回文串 II</a></div>
     </li>
     <li class="popular-posts-item">
-      <div class="popular-posts-title"><a href="\UNP\Unix同步方式\" rel="bookmark">Unix同步方式</a></div>
+      <div class="popular-posts-title"><a href="\Algorithm\【转载】Union-Find算法详解\" rel="bookmark">【转载】Union-Find算法详解</a></div>
     </li>
     <li class="popular-posts-item">
-      <div class="popular-posts-title"><a href="\UNP\IO模型中的同步&异步-阻塞&非阻塞\" rel="bookmark">I/O模型中的同步&异步-阻塞&非阻塞</a></div>
+      <div class="popular-posts-title"><a href="\Algorithm\算法排序\" rel="bookmark">排序算法</a></div>
     </li>
     <li class="popular-posts-item">
-      <div class="popular-posts-title"><a href="\UNP\高效事件处理模式--Proactor模式\" rel="bookmark">高效事件处理模式--Proactor模式</a></div>
+      <div class="popular-posts-title"><a href="\Algorithm\算法收录\" rel="bookmark">算法收录</a></div>
     </li>
   </ul>
 
@@ -560,7 +442,7 @@
   </li>
   <li class="post-copyright-link">
       <strong>本文链接：</strong>
-      <a href="https://jakelin.cn/UNP/%E5%85%B1%E4%BA%AB%E5%86%85%E5%AD%98%E5%8C%BA/" title="共享内存区">https://jakelin.cn/UNP/共享内存区/</a>
+      <a href="https://jakelin.cn/leetcode/%E5%8A%9B%E6%89%A3-131.%E5%88%86%E5%89%B2%E5%9B%9E%E6%96%87%E4%B8%B2/" title="力扣-131.分割回文串">https://jakelin.cn/leetcode/力扣-131.分割回文串/</a>
   </li>
   <li class="post-copyright-license">
     <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
@@ -569,21 +451,21 @@
 </div>
 
           <div class="post-tags">
-              <a href="/tags/unp/" rel="tag"><i class="fa fa-tag"></i> unp</a>
-              <a href="/tags/IPC/" rel="tag"><i class="fa fa-tag"></i> IPC</a>
+              <a href="/tags/C/" rel="tag"><i class="fa fa-tag"></i> C++</a>
+              <a href="/tags/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/" rel="tag"><i class="fa fa-tag"></i> 动态规划</a>
           </div>
 
         
 
           <div class="post-nav">
             <div class="post-nav-item">
-                <a href="/leetcode/%E5%8A%9B%E6%89%A3-907.%E5%AD%90%E6%95%B0%E7%BB%84%E7%9A%84%E6%9C%80%E5%B0%8F%E5%80%BC%E4%B9%8B%E5%92%8C/" rel="prev" title="力扣-907.子数组的最小值之和">
-                  <i class="fa fa-chevron-left"></i> 力扣-907.子数组的最小值之和
+                <a href="/interview/C++%E5%AD%A6%E4%B9%A0%E8%B5%84%E6%96%99%E6%95%B4%E7%90%86/" rel="prev" title="C++学习资料整理">
+                  <i class="fa fa-chevron-left"></i> C++学习资料整理
                 </a>
             </div>
             <div class="post-nav-item">
-                <a href="/leetcode/%E5%8A%9B%E6%89%A3-85.%E6%9C%80%E5%A4%A7%E7%9F%A9%E5%BD%A2/" rel="next" title="力扣-85.最大矩形">
-                  力扣-85.最大矩形 <i class="fa fa-chevron-right"></i>
+                <a href="/leetcode/%E5%8A%9B%E6%89%A3-132.%E5%88%86%E5%89%B2%E5%9B%9E%E6%96%87%E4%B8%B2-II/" rel="next" title="力扣-132.分割回文串 II">
+                  力扣-132.分割回文串 II <i class="fa fa-chevron-right"></i>
                 </a>
             </div>
           </div>
