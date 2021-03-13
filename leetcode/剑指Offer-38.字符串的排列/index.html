@@ -25,18 +25,23 @@
     var NexT = window.NexT || {};
     var CONFIG = {"hostname":"jakelin.cn","root":"/","images":"/images","scheme":"Gemini","version":"8.2.2","exturl":false,"sidebar":{"position":"left","display":"always","padding":18,"offset":12},"copycode":true,"bookmark":{"enable":true,"color":"#222","save":"auto"},"fancybox":true,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}};
   </script>
-<meta name="description" content="一个记录、分享学习的地方">
-<meta property="og:type" content="website">
-<meta property="og:title" content="JakeLin&#39;s Blog">
-<meta property="og:url" content="https://jakelin.cn/categories/%E7%AC%94%E8%AE%B0/%E5%88%B7%E9%A2%98/index.html">
+<meta name="description" content="输入一个字符串，打印出该字符串中字符的所有排列。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="剑指Offer-38.字符串的排列">
+<meta property="og:url" content="https://jakelin.cn/leetcode/%E5%89%91%E6%8C%87Offer-38.%E5%AD%97%E7%AC%A6%E4%B8%B2%E7%9A%84%E6%8E%92%E5%88%97/index.html">
 <meta property="og:site_name" content="JakeLin&#39;s Blog">
-<meta property="og:description" content="一个记录、分享学习的地方">
+<meta property="og:description" content="输入一个字符串，打印出该字符串中字符的所有排列。">
 <meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2021-03-13T09:07:58.000Z">
+<meta property="article:modified_time" content="2021-03-13T09:23:24.850Z">
 <meta property="article:author" content="jakelin">
+<meta property="article:tag" content="C++">
+<meta property="article:tag" content="字符串">
+<meta property="article:tag" content="dfs">
 <meta name="twitter:card" content="summary">
 
 
-<link rel="canonical" href="https://jakelin.cn/categories/%E7%AC%94%E8%AE%B0/%E5%88%B7%E9%A2%98/">
+<link rel="canonical" href="https://jakelin.cn/leetcode/%E5%89%91%E6%8C%87Offer-38.%E5%AD%97%E7%AC%A6%E4%B8%B2%E7%9A%84%E6%8E%92%E5%88%97/">
 
 
 <script class="page-configurations">
@@ -44,11 +49,11 @@
   CONFIG.page = {
     sidebar: "",
     isHome : false,
-    isPost : false,
+    isPost : true,
     lang   : 'zh-CN'
   };
 </script>
-<title>分类: 刷题 | JakeLin's Blog</title>
+<title>剑指Offer-38.字符串的排列 | JakeLin's Blog</title>
   
     <script async src="https://www.googletagmanager.com/gtag/js?id=UA-174281095-1"></script>
     <script>
@@ -191,7 +196,7 @@
 
   <aside class="sidebar">
 
-    <div class="sidebar-inner sidebar-overview-active">
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
       <ul class="sidebar-nav">
         <li class="sidebar-nav-toc">
           文章目录
@@ -204,6 +209,7 @@
       <div class="sidebar-panel-container">
         <!--noindex-->
         <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%89%91%E6%8C%87Offer-38-%E5%AD%97%E7%AC%A6%E4%B8%B2%E7%9A%84%E6%8E%92%E5%88%97"><span class="nav-number">1.</span> <span class="nav-text">剑指Offer-38.字符串的排列</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%B7%B1%E5%BA%A6%E4%BC%98%E5%85%88DFS"><span class="nav-number">2.</span> <span class="nav-text">深度优先DFS</span></a></li></ol></div>
         </div>
         <!--/noindex-->
 
@@ -277,233 +283,200 @@
 </noscript>
 
 
-    <div class="main-inner category posts-collapse">
+    <div class="main-inner post posts-expand">
 
 
   
+
+
+<div class="post-block">
   
   
-  <div class="post-block">
-    <div class="post-content">
-      <div class="collection-title">
-        <h2 class="collection-header">刷题
-          <small>分类</small>
-        </h2>
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://jakelin.cn/leetcode/%E5%89%91%E6%8C%87Offer-38.%E5%AD%97%E7%AC%A6%E4%B8%B2%E7%9A%84%E6%8E%92%E5%88%97/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://i.loli.net/2020/07/31/OZl2JxuSRrweIk5.jpg">
+      <meta itemprop="name" content="jakelin">
+      <meta itemprop="description" content="一个记录、分享学习的地方">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="JakeLin's Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          剑指Offer-38.字符串的排列
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2021-03-13 17:07:58" itemprop="dateCreated datePublished" datetime="2021-03-13T17:07:58+08:00">2021-03-13</time>
+    </span>
+      <span class="post-meta-item">
+        <span class="post-meta-item-icon">
+          <i class="far fa-calendar-check"></i>
+        </span>
+        <span class="post-meta-item-text">更新于</span>
+        <time title="修改时间：2021-03-13 17:23:24" itemprop="dateModified" datetime="2021-03-13T17:23:24+08:00">2021-03-13</time>
+      </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E7%AC%94%E8%AE%B0/" itemprop="url" rel="index"><span itemprop="name">笔记</span></a>
+        </span>
+          ，
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E7%AC%94%E8%AE%B0/%E5%88%B7%E9%A2%98/" itemprop="url" rel="index"><span itemprop="name">刷题</span></a>
+        </span>
+          ，
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E7%AC%94%E8%AE%B0/%E5%88%B7%E9%A2%98/%E5%89%91%E6%8C%87Offer/" itemprop="url" rel="index"><span itemprop="name">剑指Offer</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">阅读次数：</span>
+      <span id="busuanzi_value_page_pv"></span>
+    </span>
       </div>
+      <div class="post-meta">
+    <span class="post-meta-item" title="本文字数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">本文字数：</span>
+      <span>1.2k</span>
+    </span>
+    <span class="post-meta-item" title="阅读时长">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">阅读时长 &asymp;</span>
+      <span>1 分钟</span>
+    </span>
+</div>
 
-      
-    <div class="collection-year">
-      <span class="collection-header">2021</span>
+            <div class="post-description">输入一个字符串，打印出该字符串中字符的所有排列。</div>
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <h2 id="剑指Offer-38-字符串的排列"><a href="#剑指Offer-38-字符串的排列" class="headerlink" title="剑指Offer-38.字符串的排列"></a>剑指Offer-38.字符串的排列</h2><blockquote>
+<p>输入一个字符串，打印出该字符串中字符的所有排列。你可以以任意顺序返回这个字符串数组，但里面不能有重复元素。示例:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">输入：s &#x3D; &quot;abc&quot;</span><br><span class="line">输出：[&quot;abc&quot;,&quot;acb&quot;,&quot;bac&quot;,&quot;bca&quot;,&quot;cab&quot;,&quot;cba&quot;]</span><br></pre></td></tr></table></figure>
+
+
+<p>限制：</p>
+<p>1 &lt;= s 的长度 &lt;= 8</p>
+<p>来源：力扣（LeetCode） <a target="_blank" rel="noopener" href="https://leetcode-cn.com/problems/zi-fu-chuan-de-pai-lie-lcof">https://leetcode-cn.com/problems/zi-fu-chuan-de-pai-lie-lcof</a></p>
+</blockquote>
+<h2 id="深度优先DFS"><a href="#深度优先DFS" class="headerlink" title="深度优先DFS"></a>深度优先DFS</h2><p>这是一个排列问题。暴力思想是枚举所有的可能，但是因为字符可能重复，那么问题也就是怎么避免结果集中有重复元素。解决的办法就是 <strong>排序</strong> 。这里的排序需要注意是两方面：</p>
+<ol>
+<li>原字符串排序（字符升序）。</li>
+<li>排序过程中要保证 “待排字符串” 有序。</li>
+</ol>
+<p>【<strong>重要说明</strong>】现在举例说明保证 “<strong>待排字符串</strong>“ 有序的操作 （加粗表示待排序字符串）：</p>
+<p>初始字符串：”a<strong>abbcc</strong>“；</p>
+<p>已排序串末尾选择加入 a ：”aa<strong>bbcc</strong>“</p>
+<p>已排序串末尾选择加入 b ：”ab<strong>abcc</strong>“</p>
+<p>已排序串末尾选择加入 c ：”ac<strong>abbc</strong>“</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment">排列问题 【DFS】</span></span><br><span class="line"><span class="comment">1、字符串可分解成两部分：“已排列” + “待排列”</span></span><br><span class="line"><span class="comment">2、先排序，方便剪枝</span></span><br><span class="line"><span class="comment">3、往 “已排序” 末尾添加一个字符（相同字符只能插入一次）</span></span><br><span class="line"><span class="comment">**/</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="built_in">vector</span>&lt;<span class="built_in">string</span>&gt; <span class="title">permutation</span><span class="params">(<span class="built_in">string</span> s)</span> </span>&#123;</span><br><span class="line">        <span class="built_in">vector</span>&lt;<span class="built_in">string</span>&gt; res;</span><br><span class="line">        sort(s.begin(), s.end()); <span class="comment">//  排序</span></span><br><span class="line">        dfs(s, <span class="number">0</span>, res);</span><br><span class="line">        <span class="keyword">return</span> res;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">dfs</span><span class="params">(<span class="built_in">string</span> s, <span class="keyword">int</span> start, <span class="built_in">vector</span>&lt;<span class="built_in">string</span>&gt;&amp; res)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (start &gt;= s.length() - <span class="number">1</span>)&#123; <span class="comment">// 仅剩最后一个字符</span></span><br><span class="line">            res.push_back(s);</span><br><span class="line">            <span class="keyword">return</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">// “已排列”字符串末尾添加一个字符</span></span><br><span class="line">        dfs(s, start + <span class="number">1</span>, res);  <span class="comment">// 第一个“待排序”字符添加到“已排序”末尾</span></span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = start + <span class="number">1</span>; i &lt; s.length(); ++i) &#123;</span><br><span class="line">            <span class="keyword">if</span> (s[start] == s[i])  <span class="comment">// 剪枝 相同字符只插入一次</span></span><br><span class="line">                <span class="keyword">continue</span>;</span><br><span class="line">            swap(s[start], s[i]); <span class="comment">// 交换很巧妙！！！太妙了！！！</span></span><br><span class="line">            dfs(s, start + <span class="number">1</span>, res);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+
+
+
+
+
     </div>
 
-  <article itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-      <div class="post-meta-container">
-        <time itemprop="dateCreated"
-              datetime="2021-03-13T17:07:58+08:00"
-              content="2021-03-13">
-          03-13
-        </time>
-      </div>
-
-      <div class="post-title">
-          <a class="post-title-link" href="/leetcode/%E5%89%91%E6%8C%87Offer-38.%E5%AD%97%E7%AC%A6%E4%B8%B2%E7%9A%84%E6%8E%92%E5%88%97/" itemprop="url">
-            <span itemprop="name">剑指Offer-38.字符串的排列</span>
-          </a>
-      </div>
-
+    
+    
+    
       
-    </header>
+  <div class="popular-posts-header">相关文章推荐</div>
+  <ul class="popular-posts">
+    <li class="popular-posts-item">
+      <div class="popular-posts-title"><a href="\leetcode\力扣-1178.猜字谜\" rel="bookmark">力扣-1178.猜字谜</a></div>
+    </li>
+    <li class="popular-posts-item">
+      <div class="popular-posts-title"><a href="\Algorithm\【转载】Union-Find算法详解\" rel="bookmark">【转载】Union-Find算法详解</a></div>
+    </li>
+    <li class="popular-posts-item">
+      <div class="popular-posts-title"><a href="\Algorithm\算法排序\" rel="bookmark">排序算法</a></div>
+    </li>
+    <li class="popular-posts-item">
+      <div class="popular-posts-title"><a href="\Algorithm\算法收录\" rel="bookmark">算法收录</a></div>
+    </li>
+    <li class="popular-posts-item">
+      <div class="popular-posts-title"><a href="\C++\C++11智能指针\" rel="bookmark">C++11智能指针</a></div>
+    </li>
+  </ul>
+
+
+         <script type="text/javascript" src="//rf.revolvermaps.com/0/0/8.js?i=510wybm3she&amp;m=0&amp;c=ff0000&amp;cr1=ffffff&amp;f=arial&amp;l=33" async="async"></script>
+
+    <footer class="post-footer"><script type="text/javascript" src="//rf.revolvermaps.com/0/0/8.js?i=510wybm3she&amp;m=0&amp;c=ff0000&amp;cr1=ffffff&amp;f=arial&amp;l=33" async="async"></script>
+
+          
+
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>本文作者： </strong>jakelin
+  </li>
+  <li class="post-copyright-link">
+      <strong>本文链接：</strong>
+      <a href="https://jakelin.cn/leetcode/%E5%89%91%E6%8C%87Offer-38.%E5%AD%97%E7%AC%A6%E4%B8%B2%E7%9A%84%E6%8E%92%E5%88%97/" title="剑指Offer-38.字符串的排列">https://jakelin.cn/leetcode/剑指Offer-38.字符串的排列/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/C/" rel="tag"><i class="fa fa-tag"></i> C++</a>
+              <a href="/tags/%E5%AD%97%E7%AC%A6%E4%B8%B2/" rel="tag"><i class="fa fa-tag"></i> 字符串</a>
+              <a href="/tags/dfs/" rel="tag"><i class="fa fa-tag"></i> dfs</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/leetcode/%E5%89%91%E6%8C%87Offer-37.%E5%BA%8F%E5%88%97%E5%8C%96%E4%BA%8C%E5%8F%89%E6%A0%91/" rel="prev" title="剑指Offer-37.序列化二叉树">
+                  <i class="fa fa-chevron-left"></i> 剑指Offer-37.序列化二叉树
+                </a>
+            </div>
+            <div class="post-nav-item">
+            </div>
+          </div>
+    </footer>
   </article>
+</div>
 
-  <article itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-      <div class="post-meta-container">
-        <time itemprop="dateCreated"
-              datetime="2021-03-12T15:40:21+08:00"
-              content="2021-03-12">
-          03-12
-        </time>
-      </div>
 
-      <div class="post-title">
-          <a class="post-title-link" href="/leetcode/%E5%89%91%E6%8C%87Offer-37.%E5%BA%8F%E5%88%97%E5%8C%96%E4%BA%8C%E5%8F%89%E6%A0%91/" itemprop="url">
-            <span itemprop="name">剑指Offer-37.序列化二叉树</span>
-          </a>
-      </div>
 
-      
-    </header>
-  </article>
 
-  <article itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-      <div class="post-meta-container">
-        <time itemprop="dateCreated"
-              datetime="2021-03-09T20:52:24+08:00"
-              content="2021-03-09">
-          03-09
-        </time>
-      </div>
 
-      <div class="post-title">
-          <a class="post-title-link" href="/leetcode/%E5%89%91%E6%8C%87Offer-36.%E4%BA%8C%E5%8F%89%E6%90%9C%E7%B4%A2%E6%A0%91%E4%B8%8E%E5%8F%8C%E5%90%91%E9%93%BE%E8%A1%A8/" itemprop="url">
-            <span itemprop="name">剑指Offer-36.二叉搜索树与双向链表</span>
-          </a>
-      </div>
-
-      
-    </header>
-  </article>
-
-  <article itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-      <div class="post-meta-container">
-        <time itemprop="dateCreated"
-              datetime="2021-03-08T00:00:00+08:00"
-              content="2021-03-08">
-          03-08
-        </time>
-      </div>
-
-      <div class="post-title">
-          <a class="post-title-link" href="/leetcode/%E5%8A%9B%E6%89%A3-132.%E5%88%86%E5%89%B2%E5%9B%9E%E6%96%87%E4%B8%B2-II/" itemprop="url">
-            <span itemprop="name">力扣-132.分割回文串 II</span>
-          </a>
-      </div>
-
-      
-    </header>
-  </article>
-
-  <article itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-      <div class="post-meta-container">
-        <time itemprop="dateCreated"
-              datetime="2021-03-07T00:00:00+08:00"
-              content="2021-03-07">
-          03-07
-        </time>
-      </div>
-
-      <div class="post-title">
-          <a class="post-title-link" href="/leetcode/%E5%8A%9B%E6%89%A3-131.%E5%88%86%E5%89%B2%E5%9B%9E%E6%96%87%E4%B8%B2/" itemprop="url">
-            <span itemprop="name">力扣-131.分割回文串</span>
-          </a>
-      </div>
-
-      
-    </header>
-  </article>
-
-  <article itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-      <div class="post-meta-container">
-        <time itemprop="dateCreated"
-              datetime="2021-03-07T00:00:00+08:00"
-              content="2021-03-07">
-          03-07
-        </time>
-      </div>
-
-      <div class="post-title">
-          <a class="post-title-link" href="/leetcode/%E5%89%91%E6%8C%87Offer-35.%E5%A4%8D%E6%9D%82%E9%93%BE%E8%A1%A8%E7%9A%84%E5%A4%8D%E5%88%B6/" itemprop="url">
-            <span itemprop="name">剑指Offer-35.复杂链表的复制</span>
-          </a>
-      </div>
-
-      
-    </header>
-  </article>
-
-  <article itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-      <div class="post-meta-container">
-        <time itemprop="dateCreated"
-              datetime="2021-03-03T00:00:00+08:00"
-              content="2021-03-03">
-          03-03
-        </time>
-      </div>
-
-      <div class="post-title">
-          <a class="post-title-link" href="/leetcode/%E5%8A%9B%E6%89%A3-1353.%E6%9C%80%E5%A4%9A%E5%8F%AF%E4%BB%A5%E5%8F%82%E5%8A%A0%E7%9A%84%E4%BC%9A%E8%AE%AE%E6%95%B0%E7%9B%AE/" itemprop="url">
-            <span itemprop="name">力扣-1353.最多可以参加的会议数目</span>
-          </a>
-      </div>
-
-      
-    </header>
-  </article>
-
-  <article itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-      <div class="post-meta-container">
-        <time itemprop="dateCreated"
-              datetime="2021-02-28T00:00:00+08:00"
-              content="2021-02-28">
-          02-28
-        </time>
-      </div>
-
-      <div class="post-title">
-          <a class="post-title-link" href="/leetcode/%E5%8A%9B%E6%89%A3-5690.%E6%9C%80%E6%8E%A5%E8%BF%91%E7%9B%AE%E6%A0%87%E4%BB%B7%E6%A0%BC%E7%9A%84%E7%94%9C%E7%82%B9%E6%88%90%E6%9C%AC/" itemprop="url">
-            <span itemprop="name">力扣-5690.最接近目标价格的甜点成本</span>
-          </a>
-      </div>
-
-      
-    </header>
-  </article>
-
-  <article itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-      <div class="post-meta-container">
-        <time itemprop="dateCreated"
-              datetime="2021-02-26T00:00:00+08:00"
-              content="2021-02-26">
-          02-26
-        </time>
-      </div>
-
-      <div class="post-title">
-          <a class="post-title-link" href="/leetcode/%E5%8A%9B%E6%89%A3-1178.%E7%8C%9C%E5%AD%97%E8%B0%9C/" itemprop="url">
-            <span itemprop="name">力扣-1178.猜字谜</span>
-          </a>
-      </div>
-
-      
-    </header>
-  </article>
-
-  <article itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-      <div class="post-meta-container">
-        <time itemprop="dateCreated"
-              datetime="2021-02-24T00:00:00+08:00"
-              content="2021-02-24">
-          02-24
-        </time>
-      </div>
-
-      <div class="post-title">
-          <a class="post-title-link" href="/leetcode/%E5%89%91%E6%8C%87Offer-03.%E6%95%B0%E7%BB%84%E4%B8%AD%E9%87%8D%E5%A4%8D%E7%9A%84%E6%95%B0%E5%AD%97/" itemprop="url">
-            <span itemprop="name">剑指Offer-03.数组中重复的数字</span>
-          </a>
-      </div>
-
-      
-    </header>
-  </article>
-
-    </div>
-  </div>
-  
-  
-  
-  <nav class="pagination">
-    <span class="page-number current">1</span><a class="page-number" href="/categories/%E7%AC%94%E8%AE%B0/%E5%88%B7%E9%A2%98/page/2/">2</a><a class="page-number" href="/categories/%E7%AC%94%E8%AE%B0/%E5%88%B7%E9%A2%98/page/3/">3</a><a class="extend next" rel="next" href="/categories/%E7%AC%94%E8%AE%B0/%E5%88%B7%E9%A2%98/page/2/"><i class="fa fa-angle-right" aria-label="下一页"></i></a>
-  </nav>
 
 
 <script>
