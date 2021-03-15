@@ -25,24 +25,22 @@
     var NexT = window.NexT || {};
     var CONFIG = {"hostname":"jakelin.cn","root":"/","images":"/images","scheme":"Gemini","version":"8.2.2","exturl":false,"sidebar":{"position":"left","display":"always","padding":18,"offset":12},"copycode":true,"bookmark":{"enable":true,"color":"#222","save":"auto"},"fancybox":true,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}};
   </script>
-<meta name="description" content="STL容器vector与array非常相似，唯一区别在于空间的运用的灵活性。array是静态空间，vector是动态空间。值得注意的是vector是以两倍增长的方式进行自行扩容空间容纳新元素。">
+<meta name="description" content="输入一个整型数组，数组中的一个或连续多个整数组成一个子数组。求所有子数组的和的最大值。要求时间复杂度为O(n)。">
 <meta property="og:type" content="article">
-<meta property="og:title" content="STL源码剖析-容器-vector">
-<meta property="og:url" content="https://jakelin.cn/STL/STL%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90-%E5%AE%B9%E5%99%A8-vector/index.html">
+<meta property="og:title" content="剑指Offer-42.连续子数组的最大和">
+<meta property="og:url" content="https://jakelin.cn/leetcode/%E5%89%91%E6%8C%87Offer-42.%E8%BF%9E%E7%BB%AD%E5%AD%90%E6%95%B0%E7%BB%84%E7%9A%84%E6%9C%80%E5%A4%A7%E5%92%8C/index.html">
 <meta property="og:site_name" content="JakeLin&#39;s Blog">
-<meta property="og:description" content="STL容器vector与array非常相似，唯一区别在于空间的运用的灵活性。array是静态空间，vector是动态空间。值得注意的是vector是以两倍增长的方式进行自行扩容空间容纳新元素。">
+<meta property="og:description" content="输入一个整型数组，数组中的一个或连续多个整数组成一个子数组。求所有子数组的和的最大值。要求时间复杂度为O(n)。">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="https://i.loli.net/2020/08/07/5KPtrc42gBWpMnz.png">
-<meta property="article:published_time" content="2020-04-09T16:00:00.000Z">
-<meta property="article:modified_time" content="2020-08-07T13:56:07.322Z">
+<meta property="article:published_time" content="2021-03-15T11:53:27.000Z">
+<meta property="article:modified_time" content="2021-03-15T12:22:46.492Z">
 <meta property="article:author" content="jakelin">
 <meta property="article:tag" content="C++">
-<meta property="article:tag" content="STL">
+<meta property="article:tag" content="动态规划">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://i.loli.net/2020/08/07/5KPtrc42gBWpMnz.png">
 
 
-<link rel="canonical" href="https://jakelin.cn/STL/STL%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90-%E5%AE%B9%E5%99%A8-vector/">
+<link rel="canonical" href="https://jakelin.cn/leetcode/%E5%89%91%E6%8C%87Offer-42.%E8%BF%9E%E7%BB%AD%E5%AD%90%E6%95%B0%E7%BB%84%E7%9A%84%E6%9C%80%E5%A4%A7%E5%92%8C/">
 
 
 <script class="page-configurations">
@@ -54,7 +52,7 @@
     lang   : 'zh-CN'
   };
 </script>
-<title>STL源码剖析-容器-vector | JakeLin's Blog</title>
+<title>剑指Offer-42.连续子数组的最大和 | JakeLin's Blog</title>
   
     <script async src="https://www.googletagmanager.com/gtag/js?id=UA-174281095-1"></script>
     <script>
@@ -210,7 +208,7 @@
       <div class="sidebar-panel-container">
         <!--noindex-->
         <div class="post-toc-wrap sidebar-panel">
-            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#vector"><span class="nav-number">1.</span> <span class="nav-text">vector</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#vector%E5%8A%A8%E6%80%81%E5%A2%9E%E5%8A%A0%E5%AE%B9%E9%87%8F%E5%8E%9F%E7%90%86-M-insert-aux"><span class="nav-number">2.</span> <span class="nav-text">vector动态增加容量原理_M_insert_aux</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#vector%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C"><span class="nav-number">3.</span> <span class="nav-text">vector基本操作</span></a></li></ol></div>
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%89%91%E6%8C%87Offer-42-%E8%BF%9E%E7%BB%AD%E5%AD%90%E6%95%B0%E7%BB%84%E7%9A%84%E6%9C%80%E5%A4%A7%E5%92%8C"><span class="nav-number">1.</span> <span class="nav-text">剑指Offer-42.连续子数组的最大和</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92-%E5%8C%BA%E9%97%B4%E9%97%AE%E9%A2%98"><span class="nav-number">2.</span> <span class="nav-text">动态规划-区间问题</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BC%98%E5%8C%96%EF%BC%9A%E5%8E%9F%E6%95%B0%E7%BB%84dp"><span class="nav-number">3.</span> <span class="nav-text">优化：原数组dp</span></a></li></ol></div>
         </div>
         <!--/noindex-->
 
@@ -295,7 +293,7 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://jakelin.cn/STL/STL%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90-%E5%AE%B9%E5%99%A8-vector/">
+    <link itemprop="mainEntityOfPage" href="https://jakelin.cn/leetcode/%E5%89%91%E6%8C%87Offer-42.%E8%BF%9E%E7%BB%AD%E5%AD%90%E6%95%B0%E7%BB%84%E7%9A%84%E6%9C%80%E5%A4%A7%E5%92%8C/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="https://i.loli.net/2020/07/31/OZl2JxuSRrweIk5.jpg">
@@ -308,7 +306,7 @@
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          STL源码剖析-容器-vector
+          剑指Offer-42.连续子数组的最大和
         </h1>
 
         <div class="post-meta-container">
@@ -319,14 +317,14 @@
       </span>
       <span class="post-meta-item-text">发表于</span>
 
-      <time title="创建时间：2020-04-10 00:00:00" itemprop="dateCreated datePublished" datetime="2020-04-10T00:00:00+08:00">2020-04-10</time>
+      <time title="创建时间：2021-03-15 19:53:27" itemprop="dateCreated datePublished" datetime="2021-03-15T19:53:27+08:00">2021-03-15</time>
     </span>
       <span class="post-meta-item">
         <span class="post-meta-item-icon">
           <i class="far fa-calendar-check"></i>
         </span>
         <span class="post-meta-item-text">更新于</span>
-        <time title="修改时间：2020-08-07 21:56:07" itemprop="dateModified" datetime="2020-08-07T21:56:07+08:00">2020-08-07</time>
+        <time title="修改时间：2021-03-15 20:22:46" itemprop="dateModified" datetime="2021-03-15T20:22:46+08:00">2021-03-15</time>
       </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -338,7 +336,11 @@
         </span>
           ，
         <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/%E7%AC%94%E8%AE%B0/STL/" itemprop="url" rel="index"><span itemprop="name">STL</span></a>
+          <a href="/categories/%E7%AC%94%E8%AE%B0/%E5%88%B7%E9%A2%98/" itemprop="url" rel="index"><span itemprop="name">刷题</span></a>
+        </span>
+          ，
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E7%AC%94%E8%AE%B0/%E5%88%B7%E9%A2%98/%E5%89%91%E6%8C%87Offer/" itemprop="url" rel="index"><span itemprop="name">剑指Offer</span></a>
         </span>
     </span>
 
@@ -357,18 +359,18 @@
         <i class="far fa-file-word"></i>
       </span>
       <span class="post-meta-item-text">本文字数：</span>
-      <span>2.8k</span>
+      <span>1k</span>
     </span>
     <span class="post-meta-item" title="阅读时长">
       <span class="post-meta-item-icon">
         <i class="far fa-clock"></i>
       </span>
       <span class="post-meta-item-text">阅读时长 &asymp;</span>
-      <span>3 分钟</span>
+      <span>1 分钟</span>
     </span>
 </div>
 
-            <div class="post-description">STL容器vector与array非常相似，唯一区别在于空间的运用的灵活性。array是静态空间，vector是动态空间。值得注意的是vector是以两倍增长的方式进行自行扩容空间容纳新元素。</div>
+            <div class="post-description">输入一个整型数组，数组中的一个或连续多个整数组成一个子数组。求所有子数组的和的最大值。要求时间复杂度为O(n)。</div>
         </div>
       </header>
 
@@ -376,58 +378,36 @@
     
     
     <div class="post-body" itemprop="articleBody">
-        <p>vector 常被称为向量容器，因为该容器擅长在<strong>尾部</strong>插入或删除元素，在常量时间内就可以完成，时间复杂度为<code>O(1)</code>；而对于在容器<strong>头部或者中部</strong>插入或删除元素，则花费时间要长一些（移动元素需要耗费时间），时间复杂度为线性阶<code>O(n)</code>。</p>
-<p>vector实现的关键在于其对<strong>大小的控制</strong>以及<strong>重新配置时的数据移动效率</strong>。</p>
-<h2 id="vector"><a href="#vector" class="headerlink" title="vector"></a>vector</h2><ul>
-<li>vector 与 array 唯一区别是空间的运用的灵活性。<ul>
-<li>array 是<strong>静态空间</strong>，一旦配置了就不能改变。</li>
-<li>vector是<strong>动态空间</strong>。</li>
-</ul>
-</li>
-<li>vector 维护的是一个<strong>连续线性空间</strong>，所以不论其元素类型为何，普通指针都可以作为 vector 的迭代器而满足所有必要条件。</li>
-<li>增加新元素时，如果超过当时的容量，则容量会扩大至<strong>两倍</strong>。</li>
-</ul>
-<img src="https://i.loli.net/2020/08/07/5KPtrc42gBWpMnz.png" alt="vector-两倍增长示意图.png" style="zoom:67%;" />
-
-<ul>
-<li><p>所谓动态增加大小，并不是在原空间之后接续新空间(因为无法保证原空间之后尚有可供配置的空间)，而是以原空间的两倍大小另外配置一块较大空间，然后将原内容拷贝过来并插入新元素，释放原空间，最后更新迭代器！！！</p>
-</li>
-<li><p>一旦引起空间重新配置，指向原 vector 的所有迭代器就都失效了。</p>
-</li>
-<li><p><code>at()</code> 函数 比 <code>[]</code> 运算符更加安全, 因为它不会让你去访问到Vector内越界的元素。</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">ifdef</span> __STL_THROW_RANGE_ERRORS</span></span><br><span class="line">  <span class="keyword">void</span> _M_range_check(size_type __n) <span class="keyword">const</span> &#123;</span><br><span class="line">    <span class="keyword">if</span> (__n &gt;= <span class="keyword">this</span>-&gt;<span class="built_in">size</span>())</span><br><span class="line">      __stl_throw_range_error(<span class="string">&quot;vector&quot;</span>);</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="function">reference <span class="title">at</span><span class="params">(size_type __n)</span></span></span><br><span class="line"><span class="function">    </span>&#123; _M_range_check(__n); <span class="keyword">return</span> (*<span class="keyword">this</span>)[__n]; &#125;</span><br><span class="line">  <span class="function">const_reference <span class="title">at</span><span class="params">(size_type __n)</span> <span class="keyword">const</span></span></span><br><span class="line"><span class="function">    </span>&#123; _M_range_check(__n); <span class="keyword">return</span> (*<span class="keyword">this</span>)[__n]; &#125;</span><br><span class="line"><span class="meta">#<span class="meta-keyword">endif</span> <span class="comment">/* __STL_THROW_RANGE_ERRORS */</span></span></span><br></pre></td></tr></table></figure>
-
-</li>
-</ul>
-<h2 id="vector动态增加容量原理-M-insert-aux"><a href="#vector动态增加容量原理-M-insert-aux" class="headerlink" title="vector动态增加容量原理_M_insert_aux"></a>vector动态增加容量原理_M_insert_aux</h2><p><strong>过程分析：</strong></p>
+        <h2 id="剑指Offer-42-连续子数组的最大和"><a href="#剑指Offer-42-连续子数组的最大和" class="headerlink" title="剑指Offer-42.连续子数组的最大和"></a>剑指Offer-42.连续子数组的最大和</h2><p>输入一个整型数组，数组中的一个或连续多个整数组成一个子数组。求所有子数组的和的最大值。要求时间复杂度为O(n)。</p>
 <blockquote>
-<ol>
-<li><p>配置一块更大空间（2倍，初始为0则配置新的空间大小为1）</p>
-</li>
-<li><p>拷贝原数据并插入新元素</p>
-<p>1）拷贝插入位置前的数据</p>
-<p>2）在插入位置插入新元素</p>
-<p>3）拷贝插入位置后的数据</p>
-</li>
-<li><p>释放原空间</p>
-</li>
-<li><p>更新迭代器！！！</p>
-</li>
-</ol>
+<p><strong>示例1:</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">输入: nums &#x3D; [-2,1,-3,4,-1,2,1,-5,4]</span><br><span class="line">输出: 6</span><br><span class="line">解释: 连续子数组 [4,-1,2,1] 的和最大，为 6。</span><br></pre></td></tr></table></figure>
+<p><strong>提示：</strong></p>
+<ul>
+<li><code>1 &lt;= arr.length &lt;= 10^5</code></li>
+<li><code>-100 &lt;= arr[i] &lt;= 100</code></li>
+</ul>
 </blockquote>
-<p>源码参考：</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">template</span> &lt;<span class="class"><span class="keyword">class</span> _<span class="title">Tp</span>, <span class="title">class</span> _<span class="title">Alloc</span>&gt;</span></span><br><span class="line"><span class="class"><span class="title">void</span> </span></span><br><span class="line"><span class="class"><span class="title">vector</span>&lt;_Tp, _Alloc&gt;:</span>:_M_insert_aux(iterator __position, <span class="keyword">const</span> _Tp&amp; __x)</span><br><span class="line">&#123; <span class="comment">/* 判断是否有备用空间 */</span></span><br><span class="line">  <span class="keyword">if</span> (_M_finish != _M_end_of_storage) &#123;</span><br><span class="line">    construct(_M_finish, *(_M_finish - <span class="number">1</span>));</span><br><span class="line">    ++_M_finish;</span><br><span class="line">    _Tp __x_copy = __x;</span><br><span class="line">    copy_backward(__position, _M_finish - <span class="number">2</span>, _M_finish - <span class="number">1</span>);</span><br><span class="line">    *__position = __x_copy;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">else</span> &#123;</span><br><span class="line">    <span class="keyword">const</span> size_type __old_size = <span class="built_in">size</span>();</span><br><span class="line">    <span class="comment">/* 扩容两倍。 注意：初始时为0，扩容后为1 */</span></span><br><span class="line">    <span class="keyword">const</span> size_type __len = __old_size != <span class="number">0</span> ? <span class="number">2</span> * __old_size : <span class="number">1</span>;</span><br><span class="line">    iterator __new_start = _M_allocate(__len); <span class="comment">/*分配新的连续空间*/</span></span><br><span class="line">    iterator __new_finish = __new_start;</span><br><span class="line">    __STL_TRY &#123;</span><br><span class="line">      <span class="comment">/* 拷贝插入位置前的数据到新空间 [old_start, position) --&gt; [new_start, position) */</span></span><br><span class="line">      __new_finish = uninitialized_copy(_M_start, __position, __new_start);</span><br><span class="line">      <span class="comment">/* 插入新元素 position */</span></span><br><span class="line">      construct(__new_finish, __x);</span><br><span class="line">      ++__new_finish;</span><br><span class="line">      <span class="comment">/* 拷贝插入位置后的数据到新空间 [position, finish) -- [position+1, new_finish) */</span></span><br><span class="line">      __new_finish = uninitialized_copy(__position, _M_finish, __new_finish);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">/* 释放原空间 */</span></span><br><span class="line">    __STL_UNWIND((destroy(__new_start,__new_finish), </span><br><span class="line">                  _M_deallocate(__new_start,__len)));</span><br><span class="line">    destroy(<span class="built_in">begin</span>(), <span class="built_in">end</span>());</span><br><span class="line">    _M_deallocate(_M_start, _M_end_of_storage - _M_start);</span><br><span class="line">    <span class="comment">/* 更新迭代器 */</span></span><br><span class="line">    _M_start = __new_start;</span><br><span class="line">    _M_finish = __new_finish;</span><br><span class="line">    _M_end_of_storage = __new_start + __len;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="动态规划-区间问题"><a href="#动态规划-区间问题" class="headerlink" title="动态规划-区间问题"></a>动态规划-区间问题</h2><blockquote>
+<p>【<strong>时间复杂度</strong>】<strong>O(n)</strong> </p>
+<p>【<strong>空间复杂度</strong>】<strong>O(n)</strong> </p>
+</blockquote>
+<ul>
+<li><p><strong>dp[i]</strong> ：记录[0, i] 中包括 nums[i] 的最大子数组和。</p>
+</li>
+<li><p>状态转移方程：<code>dp[i] = max(dp[i-1] + nums[i], nums[i])</code> </p>
+</li>
+</ul>
+<ul>
+<li>初始状态：<code>dp[0]= nums[0]</code> </li>
+</ul>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line"><span class="comment">// 动态规划 区间问题</span></span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">maxSubArray</span><span class="params">(<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&amp; nums)</span> </span>&#123; </span><br><span class="line">        <span class="keyword">int</span> n = nums.size();</span><br><span class="line">        <span class="keyword">if</span> (n &lt; <span class="number">1</span>)</span><br><span class="line">            <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">        <span class="comment">// dp[i] -- [0, i] 中包括 nums[i] 的最大子数组和</span></span><br><span class="line">        <span class="function"><span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; <span class="title">dp</span><span class="params">(n)</span></span>;</span><br><span class="line">        <span class="keyword">int</span> maxSum = dp[<span class="number">0</span>] = nums[<span class="number">0</span>];</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span>; i &lt; n; ++i) &#123;</span><br><span class="line">            dp[i] = max(dp[i - <span class="number">1</span>] + nums[i], nums[i]);</span><br><span class="line">            maxSum = max(maxSum, dp[i]);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> maxSum;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
 
-<h2 id="vector基本操作"><a href="#vector基本操作" class="headerlink" title="vector基本操作"></a>vector基本操作</h2><p><code>push_back()</code>：插入操作(末尾)</p>
-<p><code>pop_back()</code>：删除操作(末尾)</p>
-<p><code>erase()</code>：清除某范围 <code>[first, last)</code> 元素，或删除某个位置上的元素</p>
-<p><code>insert()</code>：从某个位置，插入 n 个元素，元素初值为x</p>
-<p><code>clear()</code>：清除所有元素</p>
-<p><code>begin()</code>：返回第一个元素的迭代器</p>
-<p><code>end()</code>：返回最末元素的迭代器(译注:实指向最末元素的下一个位置)</p>
-<p>注意：</p>
-<p><code>reserve(size_type __n)</code>：配置vector容量为<code>__n</code>，如果 vector 的容量已经大于或等于<code>__n</code>个元素，那么什么也不做；调用 reserve() 不会影响已存储的元素，也不会生成任何元素。</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">vector</span>&lt;_Tp, _Alloc&gt;&amp; <span class="keyword">operator</span>=(<span class="keyword">const</span> <span class="built_in">vector</span>&lt;_Tp, _Alloc&gt;&amp; __x);</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">reserve</span><span class="params">(size_type __n)</span> </span>&#123;</span><br><span class="line">  <span class="keyword">if</span> (capacity() &lt; __n) &#123;</span><br><span class="line">    <span class="keyword">const</span> size_type __old_size = <span class="built_in">size</span>();</span><br><span class="line">    iterator __tmp = _M_allocate_and_copy(__n, _M_start, _M_finish);</span><br><span class="line">    destroy(_M_start, _M_finish);</span><br><span class="line">    _M_deallocate(_M_start, _M_end_of_storage - _M_start);</span><br><span class="line">    _M_start = __tmp;</span><br><span class="line">    _M_finish = __tmp + __old_size;</span><br><span class="line">    _M_end_of_storage = _M_start + __n;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="优化：原数组dp"><a href="#优化：原数组dp" class="headerlink" title="优化：原数组dp"></a>优化：原数组dp</h2><blockquote>
+<p>【<strong>时间复杂度</strong>】<strong>O(n)</strong> </p>
+<p>【<strong>空间复杂度</strong>】<strong>O(1)</strong> </p>
+</blockquote>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment">动态规划 区间问题</span></span><br><span class="line"><span class="comment">1、dp[i] -- [0, i] 中包括 nums[i] 的最大子数组和</span></span><br><span class="line"><span class="comment">2、优化：原数组dp</span></span><br><span class="line"><span class="comment">**/</span></span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">maxSubArray</span><span class="params">(<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&amp; nums)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> n = nums.size();</span><br><span class="line">        <span class="keyword">if</span> (n &lt; <span class="number">1</span>)</span><br><span class="line">            <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">int</span> maxSum = nums[<span class="number">0</span>];</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span>; i &lt; n; ++i) &#123;</span><br><span class="line">            nums[i] = max(nums[i - <span class="number">1</span>] + nums[i], nums[i]);</span><br><span class="line">            maxSum = max(maxSum, nums[i]);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> maxSum;       </span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
 
 
     </div>
@@ -439,19 +419,19 @@
   <div class="popular-posts-header">相关文章推荐</div>
   <ul class="popular-posts">
     <li class="popular-posts-item">
-      <div class="popular-posts-title"><a href="\STL\STL源码剖析-分配器Allocator\" rel="bookmark">STL源码剖析-分配器Allocators</a></div>
+      <div class="popular-posts-title"><a href="\leetcode\力扣-买卖股票问题合集\" rel="bookmark">力扣-买卖股票问题合集</a></div>
     </li>
     <li class="popular-posts-item">
-      <div class="popular-posts-title"><a href="\STL\STL源码剖析-容器-RB-tree\" rel="bookmark">STL源码剖析-容器-RB-tree</a></div>
+      <div class="popular-posts-title"><a href="\leetcode\力扣-131.分割回文串\" rel="bookmark">力扣-131.分割回文串</a></div>
     </li>
     <li class="popular-posts-item">
-      <div class="popular-posts-title"><a href="\STL\STL源码剖析-容器-deque\" rel="bookmark">STL源码剖析-容器-deque</a></div>
+      <div class="popular-posts-title"><a href="\leetcode\力扣-132.分割回文串-II\" rel="bookmark">力扣-132.分割回文串 II</a></div>
     </li>
     <li class="popular-posts-item">
-      <div class="popular-posts-title"><a href="\STL\STL源码剖析-容器-list\" rel="bookmark">STL源码剖析-容器-list</a></div>
+      <div class="popular-posts-title"><a href="\Algorithm\【转载】Union-Find算法详解\" rel="bookmark">【转载】Union-Find算法详解</a></div>
     </li>
     <li class="popular-posts-item">
-      <div class="popular-posts-title"><a href="\STL\STL源码剖析-容器-slist\" rel="bookmark">STL源码剖析-容器-slist</a></div>
+      <div class="popular-posts-title"><a href="\Algorithm\算法排序\" rel="bookmark">排序算法</a></div>
     </li>
   </ul>
 
@@ -469,7 +449,7 @@
   </li>
   <li class="post-copyright-link">
       <strong>本文链接：</strong>
-      <a href="https://jakelin.cn/STL/STL%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90-%E5%AE%B9%E5%99%A8-vector/" title="STL源码剖析-容器-vector">https://jakelin.cn/STL/STL源码剖析-容器-vector/</a>
+      <a href="https://jakelin.cn/leetcode/%E5%89%91%E6%8C%87Offer-42.%E8%BF%9E%E7%BB%AD%E5%AD%90%E6%95%B0%E7%BB%84%E7%9A%84%E6%9C%80%E5%A4%A7%E5%92%8C/" title="剑指Offer-42.连续子数组的最大和">https://jakelin.cn/leetcode/剑指Offer-42.连续子数组的最大和/</a>
   </li>
   <li class="post-copyright-license">
     <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
@@ -479,21 +459,18 @@
 
           <div class="post-tags">
               <a href="/tags/C/" rel="tag"><i class="fa fa-tag"></i> C++</a>
-              <a href="/tags/STL/" rel="tag"><i class="fa fa-tag"></i> STL</a>
+              <a href="/tags/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/" rel="tag"><i class="fa fa-tag"></i> 动态规划</a>
           </div>
 
         
 
           <div class="post-nav">
             <div class="post-nav-item">
-                <a href="/STL/STL%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90-%E8%BF%AD%E4%BB%A3%E5%99%A8-iterators/" rel="prev" title="STL源码剖析-迭代器-iterators">
-                  <i class="fa fa-chevron-left"></i> STL源码剖析-迭代器-iterators
+                <a href="/leetcode/%E5%89%91%E6%8C%87Offer-38.%E5%AD%97%E7%AC%A6%E4%B8%B2%E7%9A%84%E6%8E%92%E5%88%97/" rel="prev" title="剑指Offer-38.字符串的排列">
+                  <i class="fa fa-chevron-left"></i> 剑指Offer-38.字符串的排列
                 </a>
             </div>
             <div class="post-nav-item">
-                <a href="/STL/STL%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90-%E5%AE%B9%E5%99%A8-deque/" rel="next" title="STL源码剖析-容器-deque">
-                  STL源码剖析-容器-deque <i class="fa fa-chevron-right"></i>
-                </a>
             </div>
           </div>
     </footer>
