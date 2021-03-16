@@ -5429,4 +5429,62 @@
         <tag>动态规划</tag>
       </tags>
   </entry>
+  <entry>
+    <title>力扣-142.环形链表 II</title>
+    <url>/leetcode/%E5%8A%9B%E6%89%A3-142.%E7%8E%AF%E5%BD%A2%E9%93%BE%E8%A1%A8-II/</url>
+    <content><![CDATA[<h2 id="力扣-142-环形链表-II"><a href="#力扣-142-环形链表-II" class="headerlink" title="力扣-142.环形链表 II"></a>力扣-142.环形链表 II</h2><blockquote>
+<p>给定一个链表，返回链表开始入环的第一个节点。 如果链表无环，则返回 null。</p>
+<p>为了表示给定链表中的环，我们使用整数 pos 来表示链表尾连接到链表中的位置（索引从 0 开始）。 如果 pos 是 -1，则在该链表中没有环。注意，pos 仅仅是用于标识环的情况，并不会作为参数传递到函数中。</p>
+<p>说明：不允许修改给定的链表。</p>
+<p>进阶：你是否可以使用 O(1) 空间解决此题？</p>
+<p><strong>示例 1：</strong></p>
+<p><img src="https://gitee.com/jakel-in/images/raw/master/2021-03/%E5%8A%9B%E6%89%A3-142.%E7%8E%AF%E5%BD%A2%E9%93%BE%E8%A1%A8II.png"></p>
+<p>来源：力扣（LeetCode） <a href="https://leetcode-cn.com/problems/linked-list-cycle-ii">https://leetcode-cn.com/problems/linked-list-cycle-ii</a></p>
+</blockquote>
+<p>【<strong>分析</strong>】</p>
+<p>解决该问题有两个步骤：</p>
+<ol>
+<li>判断链表中是否包含环。</li>
+<li>找到环的入口。</li>
+</ol>
+<h2 id="哈希表"><a href="#哈希表" class="headerlink" title="哈希表"></a>哈希表</h2><blockquote>
+<p>【<strong>时间复杂度</strong>】<strong>O(n)</strong></p>
+<p>【<strong>空间复杂度</strong>】<strong>O(n)</strong>  </p>
+</blockquote>
+<p>【<strong>思路</strong>】遍历链表，并记录已访问的结点。</p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * Definition for singly-linked list.</span></span><br><span class="line"><span class="comment"> * struct ListNode &#123;</span></span><br><span class="line"><span class="comment"> *     int val;</span></span><br><span class="line"><span class="comment"> *     ListNode *next;</span></span><br><span class="line"><span class="comment"> *     ListNode(int x) : val(x), next(NULL) &#123;&#125;</span></span><br><span class="line"><span class="comment"> * &#125;;</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function">ListNode *<span class="title">detectCycle</span><span class="params">(ListNode *head)</span> </span>&#123;</span><br><span class="line">        ListNode *node = head;</span><br><span class="line">        <span class="built_in">unordered_map</span>&lt;ListNode*, <span class="keyword">int</span>&gt; visited;</span><br><span class="line">        <span class="keyword">while</span> (<span class="literal">NULL</span> != node) &#123;</span><br><span class="line">            <span class="keyword">if</span> (<span class="number">0</span> != visited.count(node)) &#123;</span><br><span class="line">                <span class="keyword">return</span> node;</span><br><span class="line">            &#125;</span><br><span class="line">            ++visited[node];</span><br><span class="line">            node = node-&gt;next;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">NULL</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<h2 id="快慢指针"><a href="#快慢指针" class="headerlink" title="快慢指针"></a>快慢指针</h2><blockquote>
+<p>【<strong>时间复杂度</strong>】<strong>O(n)</strong></p>
+<p>【<strong>空间复杂度</strong>】<strong>O(1)</strong>  </p>
+</blockquote>
+<p>【<strong>证明</strong>】</p>
+<p>前提：快指针一次移动距离为2，慢指针一次移动距离为1。假设有环链表各段长度如下图，快慢指针会在点 <strong>C</strong> 处首次相会。</p>
+<p><img src="https://gitee.com/jakel-in/images/raw/master/2021-03/%E5%8A%9B%E6%89%A3-142.%E7%8E%AF%E5%BD%A2%E9%93%BE%E8%A1%A8II-%E7%BB%98%E5%9B%BE.png"></p>
+<p><strong>证明一</strong>：证明慢指针在只走了 <strong>a+b</strong> 的距离（即第一圈便会相遇）。</p>
+<p>慢指针到达点B后，假设快指针在图中某一点M，距离差为 m (m &lt; 环长b+c)。移动一圈，慢指针移动距离 <strong>b+c</strong>，快指针移动距离 **2(b+c)**。移动距离差为一圈 b+c 长，过程中必然会相遇。</p>
+<p><strong>证明二</strong>：首次相遇后两指针每次移动距离一样，一个从首次相遇点C出发，一个从链表头点A出发，必然在还口相遇。</p>
+<p>首次相遇过程中有：</p>
+<p>快指针移动距离：<strong>a + b + n(b + c)</strong> </p>
+<p>慢指针移动距离：<strong>a + b</strong> </p>
+<p>且有  <strong>2(a + b) = a + b + n(b + c)</strong>  —&gt;  <strong>a = (n - 1)(b  + c) + c</strong> </p>
+<p>即，两指针一个从首次相遇点C出发，一个从链表头点A出发，进过距离 a 将会相遇，也就是在环口相遇。</p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * Definition for singly-linked list.</span></span><br><span class="line"><span class="comment"> * struct ListNode &#123;</span></span><br><span class="line"><span class="comment"> *     int val;</span></span><br><span class="line"><span class="comment"> *     ListNode *next;</span></span><br><span class="line"><span class="comment"> *     ListNode(int x) : val(x), next(NULL) &#123;&#125;</span></span><br><span class="line"><span class="comment"> * &#125;;</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function">ListNode *<span class="title">detectCycle</span><span class="params">(ListNode *head)</span> </span>&#123;</span><br><span class="line">        ListNode *slow = head;</span><br><span class="line">        ListNode *fast = head;</span><br><span class="line">        <span class="keyword">while</span> (<span class="literal">NULL</span> != fast &amp;&amp; <span class="literal">NULL</span> != fast-&gt;next) &#123;</span><br><span class="line">            fast = fast-&gt;next-&gt;next;</span><br><span class="line">            slow = slow-&gt;next;</span><br><span class="line">            <span class="keyword">if</span> (fast == slow) <span class="comment">// 第一次相遇</span></span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span> (<span class="literal">NULL</span> == fast || <span class="literal">NULL</span> == fast-&gt;next)</span><br><span class="line">            <span class="keyword">return</span> <span class="literal">NULL</span>;</span><br><span class="line">        fast = head;</span><br><span class="line">        <span class="keyword">while</span> (fast != slow) &#123; <span class="comment">// 再次相遇必然在环扣</span></span><br><span class="line">            fast = fast-&gt;next;</span><br><span class="line">            slow = slow-&gt;next;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> fast;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<h2 id="堆地址取巧"><a href="#堆地址取巧" class="headerlink" title="堆地址取巧"></a>堆地址取巧</h2><blockquote>
+<p>【<strong>时间复杂度</strong>】<strong>O(n)</strong></p>
+<p>【<strong>空间复杂度</strong>】<strong>O(1)</strong>  </p>
+</blockquote>
+<p><strong>堆的地址从低到高</strong>。若结点是根据链表顺序申请的对空间，那么结点地址就是递增的。若存在环，尾结点的 next 指针指向环口结点，此时根据两结点地址大小关系即可判断。</p>
+]]></content>
+      <categories>
+        <category>笔记</category>
+        <category>刷题</category>
+        <category>leetcode</category>
+      </categories>
+      <tags>
+        <tag>C++</tag>
+        <tag>链表</tag>
+      </tags>
+  </entry>
 </search>
