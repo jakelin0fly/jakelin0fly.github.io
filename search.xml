@@ -5687,4 +5687,34 @@
         <tag>emoji</tag>
       </tags>
   </entry>
+  <entry>
+    <title>git pull错误:TCP connection reset by peer</title>
+    <url>/doc/git-pull%E9%94%99%E8%AF%AFTCP-connection-reset-by-peer/</url>
+    <content><![CDATA[<h2 id="Git版本升级"><a href="#Git版本升级" class="headerlink" title="Git版本升级"></a>Git版本升级</h2><blockquote>
+<p>旧Git：git version 1.8.3.1</p>
+<p>CentOS Linux release 7.6.1810 (Core)</p>
+</blockquote>
+<h3 id="安装依赖"><a href="#安装依赖" class="headerlink" title="安装依赖"></a>安装依赖</h3><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">yum install curl-devel expat-devel gettext-devel openssl-devel zlib-devel asciidoc -y</span><br><span class="line">yum install  gcc perl-ExtUtils-MakeMaker -y</span><br></pre></td></tr></table></figure>
+
+<h3 id="卸载旧版本"><a href="#卸载旧版本" class="headerlink" title="卸载旧版本"></a>卸载旧版本</h3><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">yum remove git</span><br></pre></td></tr></table></figure>
+
+<h3 id="下载Git安装包"><a href="#下载Git安装包" class="headerlink" title="下载Git安装包"></a>下载Git安装包</h3><blockquote>
+<p><a href="https://mirrors.edge.kernel.org/pub/software/scm/git/">https://mirrors.edge.kernel.org/pub/software/scm/git/</a></p>
+</blockquote>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">wget https://mirrors.edge.kernel.org/pub/software/scm/git/git-2.28.0.tar.gz</span><br></pre></td></tr></table></figure>
+
+<h3 id="解压安装"><a href="#解压安装" class="headerlink" title="解压安装"></a>解压安装</h3><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">tar -zxf git-2.28.0.tar.gz</span><br><span class="line">cd git-2.28.0/</span><br><span class="line">make prefix=/usr/local/git all</span><br><span class="line">make prefix=/usr/local/git install</span><br><span class="line">echo &quot;export PATH=$PATH:/usr/local/git/bin&quot; &gt;&gt; /etc/profile</span><br><span class="line">source /etc/profile</span><br></pre></td></tr></table></figure>
+
+<p>如果是非root用户使用git，则需要配置下该用户下的环境变量：</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"></span><br><span class="line">echo &quot;export PATH=$PATH:/usr/local/git/bin&quot; &gt;&gt; ~/.bashrc</span><br><span class="line">source ~/.bashrc</span><br></pre></td></tr></table></figure>
+
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><p><a href="https://www.cnblogs.com/kevingrace/p/8252517.html">centos下升级git版本的操作记录</a></p>
+]]></content>
+      <categories>
+        <category>文档</category>
+      </categories>
+      <tags>
+        <tag>github</tag>
+      </tags>
+  </entry>
 </search>
