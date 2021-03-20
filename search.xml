@@ -5717,4 +5717,24 @@
         <tag>github</tag>
       </tags>
   </entry>
+  <entry>
+    <title>CLion多个main函数</title>
+    <url>/doc/CLion%E5%A4%9A%E4%B8%AAmain%E5%87%BD%E6%95%B0/</url>
+    <content><![CDATA[<p>以前非常羡慕Java有单元测试，进行测试非常方便，但C/C++项目中，只允许有一个main函数，不方便进行单元测试，也不方便使用一个项目记录刷题。自从看到了cmake的强大，满心欢喜，喜迎cmake。</p>
+<p>有多种方法实现，记录下最满意的解决办法：**修改 CMakeLists.txt **.</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">cmake_minimum_required(VERSION 3.17)</span><br><span class="line">project(TestCPP)</span><br><span class="line"></span><br><span class="line">set(CMAKE_CXX_STANDARD 11)</span><br><span class="line"></span><br><span class="line"># 添加以下内容 两层目录</span><br><span class="line">file (GLOB files *.cpp *&#x2F;*.cpp)</span><br><span class="line">foreach (file $&#123;files&#125;)</span><br><span class="line">    string(REGEX REPLACE &quot;.+&#x2F;(.+)&#x2F;(.+)\\..*&quot; &quot;\\1-\\2&quot; exe $&#123;file&#125;)</span><br><span class="line">    add_executable ($&#123;exe&#125; $&#123;file&#125; )</span><br><span class="line">endforeach ()</span><br></pre></td></tr></table></figure>
+
+<p>其中注意 <code>GLOB files</code> ，根据具体 cpp 文件路径修改，例如：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line"># 一层目录</span><br><span class="line">file (GLOB files *.cpp)</span><br><span class="line"></span><br><span class="line"># 两层目录</span><br><span class="line">file (GLOB files *.cpp *&#x2F;*.cpp)</span><br><span class="line"></span><br><span class="line"># 三层目录</span><br><span class="line">file (GLOB files *.cpp *&#x2F;*.cpp *&#x2F;*&#x2F;*.cpp)</span><br></pre></td></tr></table></figure>
+
+<p><strong>需要双击 shift 键，Reload CMake Project</strong> 。</p>
+<p>【参考】<a href="http://blog.isk.ink/2020/12/03/%E5%A6%82%E4%BD%95%E5%9C%A8CLion%E8%BF%90%E8%A1%8C%E5%A4%9A%E4%B8%AAmain%E5%87%BD%E6%95%B0/">如何在CLion运行多个main函数</a> </p>
+]]></content>
+      <categories>
+        <category>文档</category>
+      </categories>
+      <tags>
+        <tag>Clion</tag>
+      </tags>
+  </entry>
 </search>

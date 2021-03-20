@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
+    <loc>https://jakelin.cn/doc/CLion%E5%A4%9A%E4%B8%AAmain%E5%87%BD%E6%95%B0/</loc>
+    <lastmod>2021-03-20</lastmod>
+  </url>
+  <url>
     <loc>https://jakelin.cn/doc/git-pull%E9%94%99%E8%AF%AFTCP-connection-reset-by-peer/</loc>
     <lastmod>2021-03-17</lastmod>
   </url>
