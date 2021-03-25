@@ -1,6 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
+    <loc>https://jakelin.cn/leetcode/K%E6%95%B0%E4%B9%8B%E5%92%8C%E6%80%BB%E7%BB%93/</loc>
+    <lastmod>2021-03-25</lastmod>
+  </url>
+  <url>
+    <loc>https://jakelin.cn/STL/STL%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90-%E5%AE%B9%E5%99%A8-deque/</loc>
+    <lastmod>2021-03-23</lastmod>
+  </url>
+  <url>
     <loc>https://jakelin.cn/doc/CLion%E5%A4%9A%E4%B8%AAmain%E5%87%BD%E6%95%B0/</loc>
     <lastmod>2021-03-20</lastmod>
   </url>
@@ -247,10 +255,6 @@
   <url>
     <loc>https://jakelin.cn/STL/STL%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90-%E5%AE%B9%E5%99%A8-stack-queue/</loc>
     <lastmod>2020-08-09</lastmod>
-  </url>
-  <url>
-    <loc>https://jakelin.cn/STL/STL%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90-%E5%AE%B9%E5%99%A8-deque/</loc>
-    <lastmod>2020-08-08</lastmod>
   </url>
   <url>
     <loc>https://jakelin.cn/STL/STL%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90-%E5%AE%B9%E5%99%A8-list/</loc>
