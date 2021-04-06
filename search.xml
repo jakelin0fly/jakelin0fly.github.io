@@ -3351,7 +3351,7 @@
 <li>扩散未知帧</li>
 </ul>
 </li>
-<li><p>以太网交换机：实质就是多借口的<strong>网桥</strong>，能<strong>隔离碰撞域</strong>。</p>
+<li><p>以太网交换机：实质就是多接口的<strong>网桥</strong>，能<strong>隔离碰撞域</strong>。</p>
 <p><strong>广播风暴</strong>：一个数据帧或包被传输到本地网段 (由广播域定义)上的每个节点就是广播；由于网络拓扑的设计和连接问题，或其他原因导致广播在网段内大量复制，传播数据帧，导致网络性能下降，甚至网络瘫痪。</p>
 <p>生成树协议STP：阻塞一个或多个冗余端口。</p>
 </li>
@@ -5076,6 +5076,7 @@
 <p>书籍先看tcp/ip网络编程查漏补缺，补齐网络编程基础知识，然后看《Linux高性能编程》。</p>
 <p>《Unix网络编程 卷1：套接字联网API》、《Unix网络编程 卷2：进程间通信》</p>
 </blockquote>
+<p><a href="https://blog.csdn.net/songchuwang1868/article/details/89877739?utm_medium=distribute.pc_relevant_t0.none-task-blog-2~default~BlogCommendFromMachineLearnPai2~default-1.baidujs&dist_request_id=&depth_1-utm_source=distribute.pc_relevant_t0.none-task-blog-2~default~BlogCommendFromMachineLearnPai2~default-1.baidujs">Epoll的本质（内部实现原理）</a></p>
 <p><a href="http://gityuan.com/2019/01/05/linux-poll-select/">源码解读poll/select内核机制 - Gityuan博客 | 袁辉辉的技术博客</a> </p>
 <p><a href="http://gityuan.com/2019/01/06/linux-epoll/">源码解读epoll内核机制 - Gityuan博客 | 袁辉辉的技术博客</a> </p>
 <p><a href="https://blog.csdn.net/qq_29108585/article/details/60468522">epoll底层实现过程_学无止境-CSDN博客_epoll底层数据结构</a> </p>
@@ -5103,7 +5104,6 @@
 </li>
 </ul>
 <h2 id="项目"><a href="#项目" class="headerlink" title="项目"></a>项目</h2><ul>
-<li><a href="https://github.com/qinguoyi/TinyWebServer">qinguoyi/TinyWebServer: Linux下C++轻量级Web服务器</a> </li>
 <li><a href="https://github.com/wangbojing?tab=repositories">wangbojing (王博靖) / Repositories</a> </li>
 <li><a href="https://blog.csdn.net/qq_39751437/article/details/105265301">服务器项目–Tinyhttpd_with_threadpool_epoll_田田天天甜甜的博客-CSDN博客</a> </li>
 </ul>
