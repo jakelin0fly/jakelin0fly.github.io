@@ -242,8 +242,7 @@
 <p>sizeof(A) = 16  </p>
 <p>sizeof(B) = 40 </p>
 </blockquote>
-<img src="https://i.loli.net/2020/09/24/Xu15mr2JeHyjpVY.jpg" alt="字节对齐-样例.jpg" style="zoom: 25%;" /> 
-
+<p><img src="https://gitee.com/jakel-in/images/raw/master/2020-09/%E5%AD%97%E8%8A%82%E5%AF%B9%E9%BD%90-%E6%A0%B7%E4%BE%8B.jpg"></p>
 <h2 id="static静态数据"><a href="#static静态数据" class="headerlink" title="static静态数据"></a>static静态数据</h2><p>静态变量的存放位置与结构体实例的存储地址无关，是单独存放在静态数据区的，因此用 sizeof() 计算其大小时没有将静态成员所占的空间计算进来。</p>
 <h2 id="类"><a href="#类" class="headerlink" title="类"></a>类</h2><p><strong>空类是会占用内存空间的，而且大小是</strong><font color=red><strong>1 byte</strong></font>，原因是<strong>C++要求每个实例在内存中都有独一无二的地址</strong> 。</p>
 <ul>
