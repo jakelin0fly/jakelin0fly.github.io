@@ -3769,7 +3769,7 @@
 <li>记录上锁<strong>不应该同标准I/O一块使用</strong>，因为标准I/O函数库会执行<strong>内部缓冲</strong>。应使用 read 和 write 系统调用。</li>
 </ol>
 <h3 id="劝告性上锁"><a href="#劝告性上锁" class="headerlink" title="劝告性上锁"></a>劝告性上锁</h3><p>Posix 记录上锁称为 <strong>劝告性上锁</strong> （advisory locking）。其含义是内核维护着由各个进程上锁的所有文件的正确信息，但是它不能防止一个进程写一个读锁定文件，或者读一个写锁定文件。（类似互斥锁的协作性）</p>
-<h3 id="强制性上锁"><a href="#强制性上锁" class="headerlink" title="强制性上锁"></a>强制性上锁</h3><p>有些系统提供另一种类型文档记录上锁，称为 <strong>强制性上锁</strong> （mandatory locking）。使用强制性锁后，内核检查每个 read 和 write 请求，已验证起草组不会干扰由某个进程持有的某个锁。</p>
+<h3 id="强制性上锁"><a href="#强制性上锁" class="headerlink" title="强制性上锁"></a>强制性上锁</h3><p>有些系统提供另一种类型文档记录上锁，称为 <strong>强制性上锁</strong> （mandatory locking）。使用强制性锁后，内核检查每个 read 和 write 请求，已验证其操作不会干扰由某个进程持有的某个锁。</p>
 <p>若有干扰，对于阻塞式，冲突的 read 或 write 将把进程投入睡眠，直到锁释放。对于非阻塞式，返回 EAGAIN 错误。</p>
 <p><strong>强制性上锁也会导致不一致的数据</strong>，若下图：</p>
 <p><img src="https://gitee.com/jakel-in/images/raw/master/2021-02/%E8%AE%B0%E5%BD%95%E9%94%81-%E5%BC%BA%E5%88%B6%E6%80%A7%E4%B8%8A%E9%94%81-%E9%94%99%E8%AF%AF.png"></p>
@@ -3789,7 +3789,7 @@
 
 <ul>
 <li><strong>进程终止</strong>时（无论自愿与否），内核会对其上仍然打开着的所有 <strong>有名信号量</strong> <strong>自动执行</strong> <code>sem_close</code> 信号量关闭操作（<strong>不是释放</strong>）。</li>
-<li>关闭一个信号量斌没有将它从系统中删除，即，<strong>Posix有名信号量</strong> 至少是 <strong>随内核持续</strong> 的：即使当前没有进程打开着某个信号量，它的值仍然保持。</li>
+<li>关闭一个信号量并没有将它从系统中删除，即，<strong>Posix有名信号量</strong> 至少是 <strong>随内核持续</strong> 的：即使当前没有进程打开着某个信号量，它的值仍然保持。</li>
 <li><code>sem_unlink</code> 类似于文件I/O的 unlink 函数，当引用计数还大于0时， <code>name</code> 就能从文件系统中删除，但是<strong>信号量的析构</strong>（不同于将它名字从文件系统中删除）要等到最后一个 <code>sem_close</code> 发生时为止。</li>
 </ul>
 <h4 id="sem-wait和sem-trywait"><a href="#sem-wait和sem-trywait" class="headerlink" title="sem_wait和sem_trywait"></a>sem_wait和sem_trywait</h4><p>若信号量值大于0，将它减1。</p>
@@ -5748,7 +5748,7 @@
 <p>【<strong>时间复杂度</strong>】<strong>O(n)</strong></p>
 <p>【<strong>空间复杂度</strong>】<strong>O(n)</strong>  </p>
 </blockquote>
-<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; <span class="title">twoSum</span><span class="params">(<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&amp; nums, <span class="keyword">int</span> target)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> n = nums.size();</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; n; ++i) &#123;</span><br><span class="line">            <span class="keyword">for</span> (<span class="keyword">int</span> j = i + <span class="number">1</span>; j &lt; n; ++j) &#123;</span><br><span class="line">                <span class="keyword">if</span> (nums[i] + nums[j] == target) &#123;</span><br><span class="line">                    <span class="keyword">return</span> &#123;i, j&#125;;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> &#123;&#125;;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; <span class="title">twoSum</span><span class="params">(<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&amp; nums, <span class="keyword">int</span> target)</span> </span>&#123;</span><br><span class="line">        <span class="built_in">unordered_map</span>&lt;<span class="keyword">int</span>, <span class="keyword">int</span>&gt; hashMap;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; nums.size(); ++i) &#123;</span><br><span class="line">            <span class="keyword">if</span> (hashMap.count(target - nums[i]) != <span class="number">0</span>) &#123;</span><br><span class="line">                <span class="keyword">return</span> &#123;hashMap[target - nums[i]], i&#125;;</span><br><span class="line">            &#125;</span><br><span class="line">            hashMap[nums[i]] = i;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> &#123;&#125;;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
 
 <h2 id="力扣-15-三数之和"><a href="#力扣-15-三数之和" class="headerlink" title="力扣-15. 三数之和"></a>力扣-15. 三数之和</h2><blockquote>
 <p>给你一个包含 n 个整数的数组 nums，判断 nums 中是否存在三个元素 a，b，c ，使得 a + b + c = 0 ？请你找出所有和为 0 且不重复的三元组。</p>
@@ -6193,6 +6193,39 @@
       <tags>
         <tag>Go</tag>
         <tag>Gin框架</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>设计模式的七大原则</title>
+    <url>/DesignPatterns/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E7%9A%84%E4%B8%83%E5%A4%A7%E5%8E%9F%E5%88%99/</url>
+    <content><![CDATA[<p>设计模式的最终目的是使程序：<strong>“高内聚、低耦合，可维护、可扩展，有良好复用性、灵活性”</strong>。</p>
+<h3 id="单一职责原则"><a href="#单一职责原则" class="headerlink" title="单一职责原则"></a>单一职责原则</h3><p>单一职责原则（Single Responsibility Principle， SRP），<strong>一个类/方法/模块只负责一个职责</strong>。降低复杂度，提高可读性、可维护性，降低更改引起的风险。</p>
+<h3 id="开放-封闭原则"><a href="#开放-封闭原则" class="headerlink" title="开放-封闭原则"></a>开放-封闭原则</h3><p>开放-封闭原则（Open-Closed Principle，OCP），<strong>软件实体（类/方法/模块等）应该对扩展开放，对修改封闭</strong>。简单来说，增加新功能应该在已有代码的基础上进行扩展，而不是修改已有代码。</p>
+<h3 id="里氏代换原则"><a href="#里氏代换原则" class="headerlink" title="里氏代换原则"></a>里氏代换原则</h3><p>里氏替换原则（Liskvo Substitution Principle，LSP），<strong>子类对象能够替换程序中父类对象出现的任何地方，并且保证原来程序的逻辑性为不变及正确性不被破坏</strong>。</p>
+<h3 id="依赖倒置原则"><a href="#依赖倒置原则" class="headerlink" title="依赖倒置原则"></a>依赖倒置原则</h3><p>依赖倒转原则（Dependency Inversion Principle，DIP），<strong>程序要依赖于抽象接口，不要依赖于具体实现</strong>。简单的说就是要求对抽象进行编程，不要对实现进行编程，这样就降低了客户与实现模块间的耦合。核心就是面向接口编程。</p>
+<ul>
+<li><strong>高层模块不应该依赖低层模块，高层模块和低层模块都应该依赖于抽象</strong>。</li>
+<li><strong>抽象不应该依赖于具体，具体应该依赖于抽象</strong>。</li>
+</ul>
+<h3 id="接口隔离原则"><a href="#接口隔离原则" class="headerlink" title="接口隔离原则"></a>接口隔离原则</h3><p>接口隔离原则（Interface Segregation Principle，ISP），<strong>客户不应该依赖它不需要的接口，类间的依赖关系应该建立在最小的接口上</strong>。简单来说就是接口内容细分，避免一个接口包括过多的方法，迫使子类去实现所有方法，却没完全得到使用。</p>
+<h3 id="合成-聚合复用原则"><a href="#合成-聚合复用原则" class="headerlink" title="合成/聚合复用原则"></a>合成/聚合复用原则</h3><p>合成/聚合复用原则（Composite/Aggregate Reuse Principle，CARP），一般也叫合成复用原则(Composite Reuse Principle, CRP)，<strong>尽量使用合成/聚合，而不是通过继承达到复用的目的</strong>。</p>
+<h3 id="迪米特法则"><a href="#迪米特法则" class="headerlink" title="迪米特法则"></a>迪米特法则</h3><p>迪米特法则（Law of Demeter，LoD），有时候也叫做最少知识原则（Least Knowledge Principle，LKP），一个软件实体应当尽可能少地与其他实体发生相互作用。</p>
+<ul>
+<li>一个对象应该对其他对象保持最少的了解。</li>
+<li>类与类之间关系越密切，耦合度越大。</li>
+<li>只与直接的朋友通讯，一个对象的”朋友”包括他本身(this)、它持有的成员对象、入参对象、它所创建的对象。</li>
+</ul>
+<p>参考：</p>
+<ul>
+<li>《大话设计模式》 程杰</li>
+</ul>
+]]></content>
+      <categories>
+        <category>笔记</category>
+        <category>DesignPatterns</category>
+      </categories>
+      <tags>
+        <tag>DesignPatterns</tag>
       </tags>
   </entry>
 </search>
