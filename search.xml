@@ -6222,10 +6222,53 @@
 ]]></content>
       <categories>
         <category>笔记</category>
-        <category>DesignPatterns</category>
+        <category>Design-Patterns</category>
       </categories>
       <tags>
-        <tag>DesignPatterns</tag>
+        <tag>Design-Patterns</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>单例模式</title>
+    <url>/DesignPatterns/%E5%8D%95%E4%BE%8B%E6%A8%A1%E5%BC%8F/</url>
+    <content><![CDATA[<h2 id="概念"><a href="#概念" class="headerlink" title="概念"></a>概念</h2><p>单例模式(Singleton Pattern)：单例模式确保某一个类只有一个实例，而且自行实例化并向整个系统提供这个实例，这个类称为单例类，它提供全局访问的方法。</p>
+<p>要点：</p>
+<ol>
+<li>某个类只有一个实例。</li>
+<li>保证自行创建这个实例。</li>
+<li>向这个系统提供这个实例。</li>
+</ol>
+<h2 id="实现分析"><a href="#实现分析" class="headerlink" title="实现分析"></a>实现分析</h2><p>基于单例模式的三个要点，代码实现中需要有一下保证：</p>
+<ul>
+<li>禁止用户创建实例：私有化构造函数。</li>
+<li>单例类提供一个公有方法，该方法负责确保实例存在，并将该实例提供给整个系统使用。</li>
+</ul>
+<p>根据实例创建的时间可分为：懒汉模式、恶汉模式。</p>
+<h2 id="C-样例"><a href="#C-样例" class="headerlink" title="C++样例"></a>C++样例</h2><h3 id="恶汉模式"><a href="#恶汉模式" class="headerlink" title="恶汉模式"></a>恶汉模式</h3><p>程序一开始就产生该类的实例。</p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"> <span class="class"><span class="keyword">class</span> <span class="title">Singleton</span> &#123;</span></span><br><span class="line"> <span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">static</span> Singleton* <span class="title">getInstance</span><span class="params">()</span></span>;</span><br><span class="line"></span><br><span class="line"> <span class="keyword">private</span>:</span><br><span class="line">    Singleton();</span><br><span class="line"></span><br><span class="line">    <span class="keyword">static</span> Singleton* instance;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 恶汉模式，线程安全</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line">Singleton::instance = <span class="keyword">new</span> Singleton();</span><br><span class="line"></span><br><span class="line"><span class="function">Singleton* <span class="title">Singleton::getInstance</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> instance;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="懒汉模式"><a href="#懒汉模式" class="headerlink" title="懒汉模式"></a>懒汉模式</h3><p>程序中第一次该类实例时才创建实例。</p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 恶汉模式</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Singleton</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">static</span> Singleton* <span class="title">getInstance</span><span class="params">()</span></span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">    Singleton();</span><br><span class="line"></span><br><span class="line">    <span class="keyword">static</span> Lock; <span class="comment">// 并发锁</span></span><br><span class="line">    <span class="keyword">static</span> Singleton* instance;</span><br><span class="line">&#125;;</span><br><span class="line">Singleton::instance = <span class="literal">nullptr</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 线程不安全版本</span></span><br><span class="line"><span class="function">Singleton* <span class="title">Singleton::getInstance</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (instance == <span class="literal">nullptr</span>) &#123;</span><br><span class="line">        instance = <span class="keyword">new</span> Singleton();</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> instance;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 线程安全版本</span></span><br><span class="line"><span class="function">Singleton* <span class="title">Singleton::getInstance</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (instance == <span class="literal">nullptr</span>) &#123;</span><br><span class="line">        <span class="comment">// Lock 并发锁</span></span><br><span class="line">        <span class="keyword">if</span> (instance == <span class="literal">nullptr</span>) &#123;</span><br><span class="line">            instance = <span class="keyword">new</span> Singleton();</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">// UnLock</span></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> instance;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="Go样例"><a href="#Go样例" class="headerlink" title="Go样例"></a>Go样例</h2><h3 id="恶汉模式-1"><a href="#恶汉模式-1" class="headerlink" title="恶汉模式"></a>恶汉模式</h3><figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">init</span><span class="params">()</span></span> &#123;</span><br><span class="line">    <span class="comment">// 恶汉模式</span></span><br><span class="line">    hInstance = &amp;hungerSingleton&#123;&#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">type</span> hungerSingleton <span class="keyword">struct</span> &#123; &#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> hInstance *hungerSingleton</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">GetHungerInstance</span><span class="params">()</span> *<span class="title">hungerSingleton</span></span> &#123;</span><br><span class="line">    <span class="keyword">return</span> hInstance</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="懒汉模式-1"><a href="#懒汉模式-1" class="headerlink" title="懒汉模式"></a>懒汉模式</h3><figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="keyword">type</span> lazySingleton <span class="keyword">struct</span> &#123; &#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> instance *lazySingleton</span><br><span class="line"><span class="keyword">var</span> lock sync.Mutex</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">GetLazyInstance</span><span class="params">()</span> *<span class="title">lazySingleton</span></span> &#123;</span><br><span class="line">    <span class="keyword">if</span> instance == <span class="literal">nil</span> &#123; <span class="comment">// 不是完全原子的</span></span><br><span class="line">        lock.Lock()</span><br><span class="line">        <span class="keyword">defer</span> lock.Unlock()</span><br><span class="line">        <span class="keyword">if</span> instance == <span class="literal">nil</span> &#123;</span><br><span class="line">            instance = &amp;lazySingleton&#123;&#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> instance</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 通过使用sync/atomic这个包，我们可以原子化加载并设置一个标志，以标识是否创建实例</span></span><br><span class="line"><span class="keyword">var</span> initialized <span class="keyword">uint32</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">GetLazyInstanceAtom</span><span class="params">()</span> *<span class="title">lazySingleton</span></span> &#123;</span><br><span class="line">    <span class="keyword">if</span> atomic.LoadUint32(&amp;initialized) == <span class="number">1</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> instance</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    lock.Lock()</span><br><span class="line">    <span class="keyword">defer</span> lock.Unlock()</span><br><span class="line">    <span class="keyword">if</span> instance == <span class="literal">nil</span> &#123;</span><br><span class="line">        instance = &amp;lazySingleton&#123;&#125;</span><br><span class="line">        atomic.StoreUint32(&amp;initialized, <span class="number">1</span>)</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> instance</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 通过 sync.Once 来确保创建实例的方法只执行一次</span></span><br><span class="line"><span class="keyword">var</span> initOnce sync.Once</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">GetLazyInstanceOnce</span><span class="params">()</span> *<span class="title">lazySingleton</span></span> &#123;</span><br><span class="line">    initOnce.Do(<span class="function"><span class="keyword">func</span><span class="params">()</span></span> &#123;</span><br><span class="line">        instance = &amp;lazySingleton&#123;&#125;</span><br><span class="line">    &#125;)</span><br><span class="line">    <span class="keyword">return</span> instance</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<hr>
+<p>参考：</p>
+<ul>
+<li>《大话设计模式》 程杰</li>
+<li><a href="https://design-patterns.readthedocs.io/zh_CN/latest/creational_patterns/singleton.html">图说设计模式-单例模式</a></li>
+</ul>
+]]></content>
+      <categories>
+        <category>笔记</category>
+        <category>Design-Patterns</category>
+      </categories>
+      <tags>
+        <tag>Design-Patterns</tag>
       </tags>
   </entry>
 </search>
