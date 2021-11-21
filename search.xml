@@ -6243,14 +6243,14 @@
 <li>禁止用户创建实例：私有化构造函数。</li>
 <li>单例类提供一个公有方法，该方法负责确保实例存在，并将该实例提供给整个系统使用。</li>
 </ul>
-<p>根据实例创建的时间可分为：懒汉模式、恶汉模式。</p>
-<h2 id="C-样例"><a href="#C-样例" class="headerlink" title="C++样例"></a>C++样例</h2><h3 id="恶汉模式"><a href="#恶汉模式" class="headerlink" title="恶汉模式"></a>恶汉模式</h3><p>程序一开始就产生该类的实例。</p>
-<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"> <span class="class"><span class="keyword">class</span> <span class="title">Singleton</span> &#123;</span></span><br><span class="line"> <span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">static</span> Singleton* <span class="title">getInstance</span><span class="params">()</span></span>;</span><br><span class="line"></span><br><span class="line"> <span class="keyword">private</span>:</span><br><span class="line">    Singleton();</span><br><span class="line"></span><br><span class="line">    <span class="keyword">static</span> Singleton* instance;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 恶汉模式，线程安全</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line">Singleton::instance = <span class="keyword">new</span> Singleton();</span><br><span class="line"></span><br><span class="line"><span class="function">Singleton* <span class="title">Singleton::getInstance</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> instance;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>根据实例创建的时间可分为：懒汉模式、饿汉模式。</p>
+<h2 id="C-样例"><a href="#C-样例" class="headerlink" title="C++样例"></a>C++样例</h2><h3 id="饿汉模式"><a href="#饿汉模式" class="headerlink" title="饿汉模式"></a>饿汉模式</h3><p>程序一开始就产生该类的实例。</p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Singleton</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">static</span> Singleton* <span class="title">getInstance</span><span class="params">()</span></span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">    Singleton();</span><br><span class="line"></span><br><span class="line">    <span class="keyword">static</span> Singleton* INSTANCE;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">Singleton* Singleton::INSTANCE = <span class="keyword">new</span> Singleton();</span><br><span class="line"></span><br><span class="line"><span class="function">Singleton* <span class="title">Singleton::getInstance</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> Singleton::INSTANCE;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
-<h3 id="懒汉模式"><a href="#懒汉模式" class="headerlink" title="懒汉模式"></a>懒汉模式</h3><p>程序中第一次该类实例时才创建实例。</p>
-<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 恶汉模式</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Singleton</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">static</span> Singleton* <span class="title">getInstance</span><span class="params">()</span></span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">    Singleton();</span><br><span class="line"></span><br><span class="line">    <span class="keyword">static</span> Lock; <span class="comment">// 并发锁</span></span><br><span class="line">    <span class="keyword">static</span> Singleton* instance;</span><br><span class="line">&#125;;</span><br><span class="line">Singleton::instance = <span class="literal">nullptr</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 线程不安全版本</span></span><br><span class="line"><span class="function">Singleton* <span class="title">Singleton::getInstance</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (instance == <span class="literal">nullptr</span>) &#123;</span><br><span class="line">        instance = <span class="keyword">new</span> Singleton();</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> instance;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 线程安全版本</span></span><br><span class="line"><span class="function">Singleton* <span class="title">Singleton::getInstance</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (instance == <span class="literal">nullptr</span>) &#123;</span><br><span class="line">        <span class="comment">// Lock 并发锁</span></span><br><span class="line">        <span class="keyword">if</span> (instance == <span class="literal">nullptr</span>) &#123;</span><br><span class="line">            instance = <span class="keyword">new</span> Singleton();</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">// UnLock</span></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> instance;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="懒汉模式"><a href="#懒汉模式" class="headerlink" title="懒汉模式"></a>懒汉模式</h3><p>程序中第一次使用该类实例时才创建实例。</p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Singleton</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">static</span> Singleton* <span class="title">getInstance</span><span class="params">()</span></span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">    Singleton();</span><br><span class="line"></span><br><span class="line">    <span class="keyword">static</span> Lock; <span class="comment">// 并发锁</span></span><br><span class="line">    <span class="keyword">static</span> Singleton* INSTANCE;</span><br><span class="line">&#125;;</span><br><span class="line">Singleton* Singleton::INSTANCE = <span class="literal">nullptr</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 线程不安全版本</span></span><br><span class="line"><span class="function">Singleton* <span class="title">Singleton::getInstance</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (INSTANCE == <span class="literal">nullptr</span>) &#123;</span><br><span class="line">        INSTANCE = <span class="keyword">new</span> Singleton();</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> INSTANCE;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 线程安全版本</span></span><br><span class="line"><span class="function">Singleton* <span class="title">Singleton::getInstance</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (INSTANCE == <span class="literal">nullptr</span>) &#123;</span><br><span class="line">        <span class="comment">// Lock 并发锁</span></span><br><span class="line">        <span class="keyword">if</span> (INSTANCE == <span class="literal">nullptr</span>) &#123;</span><br><span class="line">            INSTANCE = <span class="keyword">new</span> Singleton();</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">// UnLock</span></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> INSTANCE;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
-<h2 id="Go样例"><a href="#Go样例" class="headerlink" title="Go样例"></a>Go样例</h2><h3 id="恶汉模式-1"><a href="#恶汉模式-1" class="headerlink" title="恶汉模式"></a>恶汉模式</h3><figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">init</span><span class="params">()</span></span> &#123;</span><br><span class="line">    <span class="comment">// 恶汉模式</span></span><br><span class="line">    hInstance = &amp;hungerSingleton&#123;&#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">type</span> hungerSingleton <span class="keyword">struct</span> &#123; &#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> hInstance *hungerSingleton</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">GetHungerInstance</span><span class="params">()</span> *<span class="title">hungerSingleton</span></span> &#123;</span><br><span class="line">    <span class="keyword">return</span> hInstance</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="Go样例"><a href="#Go样例" class="headerlink" title="Go样例"></a>Go样例</h2><h3 id="饿汉模式-1"><a href="#饿汉模式-1" class="headerlink" title="饿汉模式"></a>饿汉模式</h3><figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">init</span><span class="params">()</span></span> &#123;</span><br><span class="line">    <span class="comment">// 饿汉模式</span></span><br><span class="line">    hInstance = &amp;hungerSingleton&#123;&#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">type</span> hungerSingleton <span class="keyword">struct</span> &#123; &#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> hInstance *hungerSingleton</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">GetHungerInstance</span><span class="params">()</span> *<span class="title">hungerSingleton</span></span> &#123;</span><br><span class="line">    <span class="keyword">return</span> hInstance</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
 <h3 id="懒汉模式-1"><a href="#懒汉模式-1" class="headerlink" title="懒汉模式"></a>懒汉模式</h3><figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="keyword">type</span> lazySingleton <span class="keyword">struct</span> &#123; &#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> instance *lazySingleton</span><br><span class="line"><span class="keyword">var</span> lock sync.Mutex</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">GetLazyInstance</span><span class="params">()</span> *<span class="title">lazySingleton</span></span> &#123;</span><br><span class="line">    <span class="keyword">if</span> instance == <span class="literal">nil</span> &#123; <span class="comment">// 不是完全原子的</span></span><br><span class="line">        lock.Lock()</span><br><span class="line">        <span class="keyword">defer</span> lock.Unlock()</span><br><span class="line">        <span class="keyword">if</span> instance == <span class="literal">nil</span> &#123;</span><br><span class="line">            instance = &amp;lazySingleton&#123;&#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> instance</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 通过使用sync/atomic这个包，我们可以原子化加载并设置一个标志，以标识是否创建实例</span></span><br><span class="line"><span class="keyword">var</span> initialized <span class="keyword">uint32</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">GetLazyInstanceAtom</span><span class="params">()</span> *<span class="title">lazySingleton</span></span> &#123;</span><br><span class="line">    <span class="keyword">if</span> atomic.LoadUint32(&amp;initialized) == <span class="number">1</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> instance</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    lock.Lock()</span><br><span class="line">    <span class="keyword">defer</span> lock.Unlock()</span><br><span class="line">    <span class="keyword">if</span> instance == <span class="literal">nil</span> &#123;</span><br><span class="line">        instance = &amp;lazySingleton&#123;&#125;</span><br><span class="line">        atomic.StoreUint32(&amp;initialized, <span class="number">1</span>)</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> instance</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 通过 sync.Once 来确保创建实例的方法只执行一次</span></span><br><span class="line"><span class="keyword">var</span> initOnce sync.Once</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">GetLazyInstanceOnce</span><span class="params">()</span> *<span class="title">lazySingleton</span></span> &#123;</span><br><span class="line">    initOnce.Do(<span class="function"><span class="keyword">func</span><span class="params">()</span></span> &#123;</span><br><span class="line">        instance = &amp;lazySingleton&#123;&#125;</span><br><span class="line">    &#125;)</span><br><span class="line">    <span class="keyword">return</span> instance</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
@@ -6381,6 +6381,242 @@
 <p>参考：</p>
 <ul>
 <li>《大话设计模式》 程杰</li>
+</ul>
+]]></content>
+      <categories>
+        <category>笔记</category>
+        <category>Design-Patterns</category>
+      </categories>
+      <tags>
+        <tag>Design-Patterns</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>结构型模式</title>
+    <url>/DesignPatterns/%E7%BB%93%E6%9E%84%E5%9E%8B%E6%A8%A1%E5%BC%8F/</url>
+    <content><![CDATA[<p><strong>结构型模式</strong>（Structural Pattern）描述如何将类或者对象结合在一起形成更大的结构。它分为类结构型模式和对象结构型模式。</p>
+<ul>
+<li><strong>类结构性模式</strong>：采用继承机制来组织接口和类。</li>
+<li><strong>对象结构型模式</strong>：釆用组合或聚合来组合对象。</li>
+</ul>
+<h2 id="代理模式"><a href="#代理模式" class="headerlink" title="代理模式"></a>代理模式</h2><h3 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h3><p>某些情况客户不想或者不能直接访问到目标，此时，可通过“代理”的方式引入第三方中间者，通过代理间接地访问到目标。</p>
+<p>代理模式(Proxy Pattern) ：给某一个对象提供一个代理，并由代理对象控制对原对象的引用。代理模式包含的角色如下：</p>
+<ul>
+<li><strong>抽象主题（Subject）类</strong>： 通过接口或抽象类声明真实主题和代理对象实现的业务方法。</li>
+<li><strong>真实主题（Real Subject）类</strong>： 实现了抽象主题中的具体业务，是代理对象所代表的真实对象，是最终要引用的对象。</li>
+<li><strong>代理（Proxy）类</strong> ： 提供了与真实主题相同的接口，其内部含有对真实主题的引用，它可以访问、控制或扩展真实主题的功能。</li>
+</ul>
+<h3 id="示例"><a href="#示例" class="headerlink" title="示例"></a>示例</h3><p>以前交通、互联网没那么发达，购买火车票可以在火车站直接购买，但通常人们是在车票代售点进行购买。这个例子中火车站是目标对象，代售点是代理对象。</p>
+<p><img src="https://gitee.com/jakel-in/images/raw/master/2021-11/Proxy-Pattern-SellTickets.jpg"></p>
+<p>【示例代码】</p>
+<ul>
+<li>CPP：<a href="https://github.com/JakeLin0fly/CPP-Design-Patterns/blob/master/Proxy-Pattern/Proxy-Pattern.cpp">Proxy-Pattern.cpp</a> </li>
+<li>Go：<a href="https://github.com/JakeLin0fly/Go-Design-Patterns/blob/master/Proxy-Pattern/Proxy-Pattern.go">Proxy-Pattern.go</a>、<a href="https://github.com/JakeLin0fly/Go-Design-Patterns/blob/master/Proxy-Pattern/Proxy-Pattern_test.go">Proxy-Pattern_test.go</a> </li>
+</ul>
+<h3 id="优缺点"><a href="#优缺点" class="headerlink" title="优缺点"></a>优缺点</h3><p><strong>优点</strong>：</p>
+<ul>
+<li>将客户端与目标对象分离，一定程度上降低耦合。</li>
+<li>可以控制对真实对象的使用权限。</li>
+<li>可对代理对象进行功能扩展（如进行过滤）。</li>
+</ul>
+<p><strong>缺点</strong>：</p>
+<ul>
+<li>增加复杂度。</li>
+<li>客户端与目标之间增加了代理，可能会导致处理速度变慢。</li>
+</ul>
+<h2 id="适配器模式"><a href="#适配器模式" class="headerlink" title="适配器模式"></a>适配器模式</h2><h3 id="概述-1"><a href="#概述-1" class="headerlink" title="概述"></a>概述</h3><p>适配器模式(Adapter Pattern)：<strong>将一个类的接口转换成客户希望的另外一个接口，使得原本由于接口不兼容而不能一起工作的那些类能一起工作</strong>。</p>
+<p>适配器模式包含以下角色：</p>
+<ul>
+<li><strong>Client</strong> ：客户。</li>
+<li><strong>Target</strong> ：目标抽象类（接口），客户侧所感知的接口，客户所期待的接口。</li>
+<li><strong>Adaptee</strong> ：适配者类，需要进行适配的组件，可理解为已存在的组件，客户无感知。</li>
+<li><strong>Adapter</strong> ：适配器类，通过继承或引用适配者的对象，把Adaptee组件接口转换成Target目标接口，让客户按目标接口的格式访问适配者。</li>
+</ul>
+<p><img src="https://gitee.com/jakel-in/images/raw/master/2021-11/Adapter-Pattern.jpg"></p>
+<h3 id="分类"><a href="#分类" class="headerlink" title="分类"></a>分类</h3><p>适配器模式可分为<strong>对象适配器</strong>和<strong>类适配器</strong>。</p>
+<ul>
+<li><p><strong>对象适配器</strong> ：适配器实现了其中一个对象的接口， 并对另一个对象进行封装。 </p>
+</li>
+<li><p><strong>类适配器</strong>：适配器同时继承两个对象的接口。仅能在支持多重继承的编程语言中实现， 例如 C++。</p>
+<blockquote>
+<p>类适配器模式违背了合成复用原则。类适配器是客户类有一个接口规范的情况下可用，反之不可用。</p>
+</blockquote>
+</li>
+</ul>
+<h3 id="示例-1"><a href="#示例-1" class="headerlink" title="示例"></a>示例</h3><p>现有电脑仅有SD卡读写接口，而数据存储使用TF卡，此时就需要一个适配器（转接器），使得能通过电脑上仅有的SD卡接口实现对TF卡的读写。</p>
+<h4 id="类适配器（多继承）"><a href="#类适配器（多继承）" class="headerlink" title="类适配器（多继承）"></a>类适配器（多继承）</h4><p><img src="https://gitee.com/jakel-in/images/raw/master/2021-11/Class-Adapter-Pattern.jpg"></p>
+<p>【<strong>示例代码</strong>】</p>
+<ul>
+<li>CPP：<a href="https://github.com/JakeLin0fly/CPP-Design-Patterns/blob/master/Adapter-Pattern/Class-Adapter-Pattern.cpp">Class-Adapter-Pattern.cpp</a> </li>
+</ul>
+<h4 id="对象适配器"><a href="#对象适配器" class="headerlink" title="对象适配器"></a>对象适配器</h4><p>对象适配器模式可釆用将现有组件库中已经实现的组件引入适配器类中，该类同时实现当前系统的业务接口。</p>
+<p><img src="https://gitee.com/jakel-in/images/raw/master/2021-11/Object-Adapter-Pattern.jpg"></p>
+<p>【<strong>示例代码</strong>】</p>
+<ul>
+<li>CPP：<a href="https://github.com/JakeLin0fly/CPP-Design-Patterns/blob/master/Adapter-Pattern/Object-Adapter-Pattern.cpp">Object-Adapter-Pattern.cpp</a> </li>
+<li>Go：<a href="https://github.com/JakeLin0fly/Go-Design-Patterns/blob/master/Adapter-Pattern/Object-Adapter-Pattern.go">Object-Adapter-Pattern.go</a>、<a href="https://github.com/JakeLin0fly/Go-Design-Patterns/blob/master/Adapter-Pattern/Object-Adapter-Pattern_test.go">Object-Adapter-Pattern_test.go</a> </li>
+</ul>
+<h2 id="装饰者模式"><a href="#装饰者模式" class="headerlink" title="装饰者模式"></a>装饰者模式</h2><h3 id="概述-2"><a href="#概述-2" class="headerlink" title="概述"></a>概述</h3><p>装饰模式（Decorator Pattern）<strong>在不改变现有类（封闭-开放原则）和不使用继承（类爆炸）的情况下，动态地扩展一个对象的功能</strong>。它是通过创建一个包装对象，也就是装饰来包裹真实的对象。</p>
+<p>装饰者模式中包含以下角色：</p>
+<ul>
+<li><strong>抽象构件（Component）</strong>角色 ：定义一个抽象接口以规范准备接收附加责任的对象。</li>
+<li><strong>具体构件（Concrete  Component）</strong>角色 ：实现抽象构件，将被装饰的对象。</li>
+<li><strong>抽象装饰（Decorator）</strong>角色 ： 继承或实现抽象构件，并包含具体构件的实例，可以通过其子类扩展具体构件的功能。</li>
+<li><strong>具体装饰（Concrete Decorator）</strong>角色 ：实现抽象装饰的相关方法，并给具体构件对象添加附加的责任。</li>
+</ul>
+<p><img src="https://gitee.com/jakel-in/images/raw/master/2021-11/Decorator-Pattern.png"></p>
+<h3 id="示例-2"><a href="#示例-2" class="headerlink" title="示例"></a>示例</h3><p>【<strong>问题描述</strong>】</p>
+<p>现在有一个咖啡店售卖多种单品咖啡（Espresso、ShortBlack等）销售火爆，店家推出组合咖啡（单品咖啡+配料），组合很多，如：单品咖啡+牛奶，单品咖啡+糖 等等。现需要更新系统支持组合咖啡价格计算。</p>
+<p>【<strong>问题分析</strong>】</p>
+<ul>
+<li><p>方案一</p>
+<p>在原单品咖啡类中加入添加组合调料的功能，可选择是否添加任意调料。</p>
+<p>该方案新增或者删除调料时，需要修改咖啡类中的内容，<strong>违反了开放-封闭原则（OCP）</strong>。</p>
+</li>
+<li><p>方案二</p>
+<p>创建一个抽象类Coffee，让单品咖啡和所有的组合咖啡继承Coffee类。</p>
+<p>该方案新增加一个单品咖啡或者调料，类的数量就会倍增，产生<strong>类爆炸</strong>。</p>
+</li>
+<li><p>方案三（装饰者模式）</p>
+<ol>
+<li>创建咖啡抽象类Coffee。【<strong>抽象构件</strong>】</li>
+<li>创建个单品咖啡，让单品咖啡继承Coffee。【<strong>具体构件</strong>】</li>
+<li>创建组合咖啡抽象基类CoffeeDecorator，包含Coffee指针（引用）类型的成员变量。【<strong>抽象装饰</strong>】</li>
+<li>创建各种加调料的组合咖啡装饰类，都继承自组合咖啡抽象基类CoffeeDecorator。【<strong>具体装饰</strong>】</li>
+</ol>
+</li>
+</ul>
+<p><img src="https://gitee.com/jakel-in/images/raw/master/2021-11/Decorator-Pattern-example.jpg"></p>
+<p>【<strong>示例代码</strong>】</p>
+<ul>
+<li>CPP：<a href="https://github.com/JakeLin0fly/CPP-Design-Patterns/blob/master/Decorator-Pattern/Decorator-Pattern.cpp">Decorator-Pattern.cpp</a> </li>
+<li>Go：<a href="https://github.com/JakeLin0fly/Go-Design-Patterns/blob/master/Decorator-Pattern/Decorator-Pattern.go">Decorator-Pattern.go</a>、<a href="https://github.com/JakeLin0fly/Go-Design-Patterns/blob/master/Decorator-Pattern/Decorator-Pattern_test.go">Decorator-Pattern_test.go</a> </li>
+</ul>
+<h2 id="桥接模式"><a href="#桥接模式" class="headerlink" title="桥接模式"></a>桥接模式</h2><h3 id="概述-3"><a href="#概述-3" class="headerlink" title="概述"></a>概述</h3><p>桥接模式(Bridge Pattern)：<strong>将抽象部分与它的实现部分分离，使他们都能独立的变化</strong>。简单理解，在有多个变化因素的情况下，减少使用继承（降低耦合），采用合成/聚合的方式实现。</p>
+<p>桥接模式包含以下角色：</p>
+<ul>
+<li><strong>抽象角色（Abstraction）</strong> ：抽象类，定义抽象角色的接口，并维护指向实现接口角色的引用（或指针）。</li>
+<li><strong>扩充抽象角色（Refined Abstraction）</strong> ：扩充抽象类，扩充由抽象角色定义的接口，调用在 “实现接口类” 中定义的业务接口。</li>
+<li><strong>实现接口角色（Implementor）</strong> ：实现接口类，定义实现角色的接口。</li>
+<li><strong>具体实现角色（Concrete Implementor）</strong> ：具体实现类，实现 “实现接口类” 中定义的接口方法。</li>
+</ul>
+<p><img src="https://gitee.com/jakel-in/images/raw/master/2021-11/Bridge-Pattern.png"></p>
+<h3 id="示例-3"><a href="#示例-3" class="headerlink" title="示例"></a>示例</h3><p>【<strong>问题描述</strong>】</p>
+<p>现需设计实现一个视频播放器，有多个版本，分别支持不同的操作系统、解码不同的视频格式。如：Windows系统+AVI视频格式，Mac系统+RMVB视频格式等。</p>
+<p>【<strong>问题分析</strong>】</p>
+<p>显然该案例中，变化因素有两个：操作系统和解码器。</p>
+<ul>
+<li><p>方案一：继承</p>
+<p>使用继承等方式实现，有Windows-AVI播放器，Windows-RMVB播放器，Mac-AVI播放器等。若是增加一种操作系统或增加一种视频格式，就需要创建更多的类。（<strong>类爆炸</strong>）</p>
+</li>
+<li><p>方案二：<strong>桥接模式</strong></p>
+<p>其中角色设计如下：</p>
+<ul>
+<li><strong>抽象角色</strong>：操作系统，包含一个解码器，定义视频播放接口。</li>
+<li><strong>扩充抽象角色</strong>：具体操作系统，Windows、Mac等。</li>
+<li><strong>实现接口角色</strong>：解码器，定义解码视频文件接口。</li>
+<li><strong>具体实现角色</strong>：具体解码器，实习具体格式文件解码。</li>
+</ul>
+</li>
+</ul>
+<p><img src="https://gitee.com/jakel-in/images/raw/master/2021-11/Bridge-Pattern-Example.png"></p>
+<p>【<strong>示例代码</strong>】</p>
+<ul>
+<li>CPP：<a href="https://github.com/JakeLin0fly/CPP-Design-Patterns/blob/master/Bridge-Pattern/Bridge-Pattern.cpp">Bridge-Pattern.cpp</a> </li>
+<li>Go：<a href="https://github.com/JakeLin0fly/Go-Design-Patterns/blob/master/Bridge-Pattern/Bridge-Pattern.go">Bridge-Pattern.go</a>、<a href="https://github.com/JakeLin0fly/Go-Design-Patterns/blob/master/Bridge-Pattern/Bridge-Pattern_test.go">Bridge-Pattern_test.go</a> </li>
+</ul>
+<h3 id="优缺点-1"><a href="#优缺点-1" class="headerlink" title="优缺点"></a>优缺点</h3><p><strong>桥接模式优点：</strong></p>
+<ul>
+<li>接口和实现分离，可对客户影藏实现细节。</li>
+<li>提高了系统的可扩展性，对两个变化维度中的任意一个进行扩展，都不需要修改原系统。</li>
+</ul>
+<p><strong>桥接模式缺点</strong>：</p>
+<ul>
+<li>增加系统理解和设计难度</li>
+</ul>
+<h2 id="外观模式"><a href="#外观模式" class="headerlink" title="外观模式"></a>外观模式</h2><h3 id="概述-4"><a href="#概述-4" class="headerlink" title="概述"></a>概述</h3><p>外观模式(Facade Pattern)：通过为多个复杂的子系统提供一个一致的接口，而使这些子系统更加容易被访问的模式。外观模式又称为门面模式，它是一种对象结构型模式。外观模式是 <strong>迪米特法则</strong> 的典型应用。</p>
+<p>外观模式包含以下角色：</p>
+<ul>
+<li><strong>外观角色（Facade）</strong>：为复杂的子系统提供一个统一的接口，面向客户端。</li>
+<li><strong>子系统角色（Sub System）</strong>：系统实现的细节，客户不关注这些细节，客户通过外观角色对子系统进行访问。</li>
+</ul>
+<h3 id="示例-4"><a href="#示例-4" class="headerlink" title="示例"></a>示例</h3><p>【<strong>场景描述</strong>】</p>
+<p>小明每天作息很规律，其中包括以下场景操作：</p>
+<ul>
+<li>下班回家：开灯、打开空调、打开电视；</li>
+<li>睡觉：关电视、关灯；</li>
+</ul>
+<p>小明购买了一个天猫精灵，通过语言控制这些设备开启关闭。设计类图如下：</p>
+<p><img src="https://gitee.com/jakel-in/images/raw/master/2021-11/Facade-Pattern-Example.png"></p>
+<p>【<strong>示例代码</strong>】</p>
+<ul>
+<li>CPP：<a href="https://github.com/JakeLin0fly/CPP-Design-Patterns/blob/master/Facade-Pattern/Facade-Pattern.cpp">Facade-Pattern.cpp</a> </li>
+<li>Go：<a href="https://github.com/JakeLin0fly/Go-Design-Patterns/blob/master/Facade-Pattern/Facade-Pattern.go">Facade-Pattern.go</a>、<a href="https://github.com/JakeLin0fly/Go-Design-Patterns/blob/master/Facade-Pattern/Facade-Pattern_test.go">Facade-Pattern_test.go</a> </li>
+</ul>
+<h3 id="优缺点-2"><a href="#优缺点-2" class="headerlink" title="优缺点"></a>优缺点</h3><p><strong>优点</strong>：</p>
+<ul>
+<li>降低了客户端和子系统间的耦合度，子系统的变化不会影响到客户端的调用。</li>
+<li>对客户端屏蔽了子系统的组件细节，减少了客户端处理的对象数量。</li>
+</ul>
+<p><strong>缺点</strong>：</p>
+<ul>
+<li>违背了 “开放-封闭原则”，不使用抽象外观的情况下，新增子系统可能需要修改外观类或客户端的源代码。</li>
+</ul>
+<h2 id="组合模式"><a href="#组合模式" class="headerlink" title="组合模式"></a>组合模式</h2><h3 id="概述-5"><a href="#概述-5" class="headerlink" title="概述"></a>概述</h3><p>组合模式（Composite Pattern），又称为整体-部分（Part-Whole）模式，<strong>将对象组合成树形结构以表示“部分-整体”的层次结构</strong>。组合模式使用户对单个对象和组合对象的使用具有一致性。</p>
+<p><img src="https://gitee.com/jakel-in/images/raw/master/2021-11/Composite-Pattern.png"></p>
+<p>组合模式包括以下角色:</p>
+<ul>
+<li><strong>抽象部件（Component）</strong>：主要作用是为叶子和容器部件声明公共接口，适当情况下实现它们的默认行为。</li>
+<li><strong>容器部件（Composite）</strong>：主要作用是存储和管理子部件，实现与子部件有关操作，如增加(add)和删除(remove)等。是树形结构中的分支节点。</li>
+<li><strong>叶子（Leaf）</strong>：叶子结点没有子结点。</li>
+</ul>
+<p><strong>分类</strong>：</p>
+<ol>
+<li><strong>透明组合模式</strong>：抽象部件中声明了所有用于管理成员对象的方法。叶子中可能某些操作无意义或者应该被禁止。</li>
+<li><strong>安全组合模式</strong>：抽象部件中 <strong>没有</strong> 声明了所有用于管理成员对象的方法。此时，容器部件和叶子是有区别的，客户必须区别对待它们。</li>
+</ol>
+<h3 id="示例-5"><a href="#示例-5" class="headerlink" title="示例"></a>示例</h3><p>【<strong>场景描述</strong>】</p>
+<p>实现一个文件管理工具，支持对文件夹和文件的创建和删除功能，并且提供 tree 接口显示文件系统结构。设计类图如下：</p>
+<p><img src="https://gitee.com/jakel-in/images/raw/master/2021-11/Composite-Pattern-Example.png"></p>
+<p>【<strong>示例代码</strong>】</p>
+<ul>
+<li>CPP：<a href="https://github.com/JakeLin0fly/CPP-Design-Patterns/blob/master/Composite-Pattern/Composite-Pattern.cpp">Composite-Pattern.cpp</a> </li>
+<li>Go：<a href="https://github.com/JakeLin0fly/Go-Design-Patterns/blob/master/Composite-Pattern/Composite-Pattern.go">Composite-Pattern.go</a>、<a href="https://github.com/JakeLin0fly/Go-Design-Patterns/blob/master/Composite-Pattern/Composite-Pattern_test.go">Composite-Pattern_test.go</a>  </li>
+</ul>
+<h2 id="享元模式"><a href="#享元模式" class="headerlink" title="享元模式"></a>享元模式</h2><h3 id="概述-6"><a href="#概述-6" class="headerlink" title="概述"></a>概述</h3><p>享元模式(Flyweight Pattern)：<strong>运用共享技术有效地支持大量细粒度对象的复用</strong>。享元模式中存在两种状态：</p>
+<ul>
+<li><strong>内部状态</strong>：不会随着环境的改变而改变的<strong>可共享</strong>部分。</li>
+<li><strong>外部状态</strong>：随环境改变而改变的<strong>不可以共享</strong>的部分。</li>
+</ul>
+<p><img src="https://gitee.com/jakel-in/images/raw/master/2021-11/Flyweight-Pattern.png"></p>
+<p>享元模式包括以下角色：</p>
+<ul>
+<li><strong>抽象享元（Flyweight）角色</strong>：抽象类或接口，声明了具体享元类公共的方法。</li>
+<li><strong>具体享元（Concrete Flyweight）</strong>：实现了抽象享元的接口方法，称为享元对象，为内部状态。</li>
+<li><strong>非共享具体享元（Unshared Concrete Flyweight）</strong>：不进行共享的Flyweight子类，为外部状态。</li>
+<li><strong>享元工厂（Flyweight Factory）</strong>：用来创建和管理Flyweight对象，提供给客户使用。</li>
+</ul>
+<h3 id="示例-6"><a href="#示例-6" class="headerlink" title="示例"></a>示例</h3><p>【<strong>场景描述</strong>】</p>
+<p>俄罗斯方块中每次产生的方块只有几种形状（L、I、T、O），如果每个不同的方块都是一个实例对象，这些对象就要占用很多的内存空间，此时适合利用享元模式进行实现。类图设计如下：</p>
+<p><img src="https://gitee.com/jakel-in/images/raw/master/2021-11/Flyweight-Pattern-Example.png"></p>
+<p>【<strong>示例代码</strong>】</p>
+<ul>
+<li>CPP：<a href="https://github.com/JakeLin0fly/CPP-Design-Patterns/blob/master/Flyweight-Pattern/Flyweight-Pattern.cpp">Flyweight-Pattern.cpp</a> </li>
+<li>Go：<a href="https://github.com/JakeLin0fly/Go-Design-Patterns/blob/master/Flyweight-Pattern/Flyweight-Pattern.go">Flyweight-Pattern.go</a>、<a href="https://github.com/JakeLin0fly/Go-Design-Patterns/blob/master/Flyweight-Pattern/Flyweight-Pattern_test.go">Flyweight-Pattern_test.go</a> </li>
+</ul>
+<h3 id="优缺点-3"><a href="#优缺点-3" class="headerlink" title="优缺点"></a>优缺点</h3><p>【<strong>优点</strong>】</p>
+<ul>
+<li>减少内存中相同或相似对象的数量，节约系统资源。</li>
+</ul>
+<p>【<strong>缺点</strong>】</p>
+<ul>
+<li>将享元对象的部分状态外部化，分离内部状态和外部状态，使程序逻辑复杂。</li>
+</ul>
+<hr>
+<p>参考：</p>
+<ul>
+<li>《大话设计模式》 程杰</li>
+<li><a href="https://www.bilibili.com/video/BV1Np4y1z7BU?from=search&seid=12020153179667995390&spm_id_from=333.337.0.0">黑马程序员Java设计模式详解，全网最全23种Java设计</a></li>
 </ul>
 ]]></content>
       <categories>
