@@ -6627,4 +6627,128 @@
         <tag>Design-Patterns</tag>
       </tags>
   </entry>
+  <entry>
+    <title>Kafka基础笔记</title>
+    <url>/MQ/Kafka%E5%9F%BA%E7%A1%80%E7%AC%94%E8%AE%B0/</url>
+    <content><![CDATA[<h2 id="消息队列"><a href="#消息队列" class="headerlink" title="消息队列"></a>消息队列</h2><ol>
+<li>消息队列是存放消息的组件。</li>
+<li>程序A将消息放入消息队列，程序B从消息队列中获取消息。</li>
+<li>大多数情况下，消息队列都不是永久性的存储消息，只是作为一种临时缓冲存储存在。</li>
+</ol>
+<p>消息的处理方式可分为同步处理、异步处理，如下图所示：<img src="https://cdn.jsdelivr.net/gh/jakelin0fly/images/2022-05/%E5%A4%84%E7%90%86%E6%96%B9%E5%BC%8F-%E5%90%8C%E6%AD%A5-%E5%BC%82%E6%AD%A5.png"></p>
+<h3 id="消息队列的优势"><a href="#消息队列的优势" class="headerlink" title="消息队列的优势"></a>消息队列的优势</h3><ul>
+<li><strong>系统解耦</strong>：允许相关联的两个服务（系统）独立扩展，只需遵守一定规范。</li>
+<li><strong>缓冲</strong>：控制、优化数据经过系统的速度，解决消息生产和消费速度不一致的问题。</li>
+<li><strong>可恢复性</strong>：系统中消息处理的某一组件异常，系统恢复后消息仍能被处理。</li>
+<li><strong>异步处理</strong>：提供异步处理方式。</li>
+<li><strong>峰值处理能力</strong>：在消息量剧增的情况下，突发流量不会使系统直接崩溃。</li>
+</ul>
+<h3 id="消息队列工作模式"><a href="#消息队列工作模式" class="headerlink" title="消息队列工作模式"></a>消息队列工作模式</h3><h4 id="点对点模式（生产者-消费者模式）"><a href="#点对点模式（生产者-消费者模式）" class="headerlink" title="点对点模式（生产者-消费者模式）"></a>点对点模式（生产者-消费者模式）</h4><ol>
+<li>消息生产者向队列发送消息，消息消费者从队列中取出消息并消费。</li>
+<li>一条消息只能被一个消费者消费。</li>
+</ol>
+<h4 id="发布-订阅模式"><a href="#发布-订阅模式" class="headerlink" title="发布/订阅模式"></a>发布/订阅模式</h4><ol>
+<li>消息生产者将消息<strong>发布</strong>到Topic中，多个消费者<strong>订阅</strong>该Topic。</li>
+<li>一条消息可以被多个消费者消费。</li>
+</ol>
+<h2 id="Kafka"><a href="#Kafka" class="headerlink" title="Kafka"></a>Kafka</h2><h3 id="Kafka基础架构"><a href="#Kafka基础架构" class="headerlink" title="Kafka基础架构"></a>Kafka基础架构</h3><p><img src="https://cdn.jsdelivr.net/gh/jakelin0fly/images/2022-05/Kafka%E5%9F%BA%E7%A1%80%E6%9E%B6%E6%9E%84.png"></p>
+<ol>
+<li><p><strong>Producer</strong>：消息生产者。</p>
+</li>
+<li><p><strong>Consumer</strong>：消息消费者。</p>
+</li>
+<li><p><strong>Consumer Group</strong>：消费者组，由一个或多个消费者组成。</p>
+<blockquote>
+<p>1）一个消费者组中的不同消费者可以消费一个Topic中的不同分区数据，一个分区只能由组内一个消费者消费。</p>
+<p>2）每一个消费者组都一个唯一的名字，配置 group.id 一样的消费者是属于同一个组中。</p>
+<p>3）消费者组是逻辑上的订阅者，消费者组之间互不影响。</p>
+</blockquote>
+</li>
+<li><p><strong>Broker</strong>：Kafka的服务进程，一个服务进程就是一个Broker。一个Broker可容纳多个Topic。</p>
+</li>
+<li><p><strong>Topic</strong>：主题，可理解为逻辑上的消息队列。消息的生产和消费都须指定Topic。一个Topic可包括多个Partition。</p>
+</li>
+<li><p><strong>Partition</strong>：分区，每个Partition是一个有序的队列。Kafka集群的分布式特性由Partition实现，一个Topic的消息可分布在该Topic的不同Partition中。</p>
+</li>
+<li><p><strong>Replica</strong>：副本，实现Kafka集群的容错，实现Partition的容错。一个Topic的每个Partition都有若干个副本，包括一个leader和若干个follower。</p>
+<blockquote>
+<p><strong>leader</strong>：Partition的<strong>主副本</strong>，消息的生产、消费的对象都是leader。</p>
+<p><strong>follower</strong>：Partition的<strong>从副本</strong>，实时同步leader的数据，leader发生故障时，从follower中选择一个成为新的leader。</p>
+</blockquote>
+</li>
+<li><p><strong>offset</strong>：偏移量。相对Consumer和Partition来说，可以通过offset，从该位置拉取数据。</p>
+</li>
+</ol>
+<h3 id="Kafka存储机制"><a href="#Kafka存储机制" class="headerlink" title="Kafka存储机制"></a>Kafka存储机制</h3><p>Kafka中消息根据<strong>Topic</strong>进行分类，消息的生产和消费都是面向Topic。Topic是<strong>逻辑上的消息队列</strong>。一个Topic分为多个Partition，Partition负责实际的消息存取，每个Partition有对应的log文件，每条消息记录都有自己的offset。Kafka的分区采取<strong>分段+索引</strong>的机制。</p>
+<p><img src="https://cdn.jsdelivr.net/gh/jakelin0fly/images/2022-05/Kafka%E6%96%87%E4%BB%B6%E5%AD%98%E5%82%A8%E6%9C%BA%E5%88%B6.png"></p>
+<p><code>.log</code> 数据文件、 <code>.index</code> 稀疏索引文件、<code>.timeindex</code>时间索引文件的名称对应着该文件存储的第一条记录的分区全局offset偏移量。</p>
+<blockquote>
+<p>00000000000000000000.index            稀疏索引文件<br>00000000000000000000.log                日志数据文件<br>00000000000000000000.timeindex    时间索引</p>
+</blockquote>
+<p>数据消费流程如下：</p>
+<ul>
+<li>消费者的offset是一个针对partition的「<strong>全局offset</strong>」。</li>
+<li>可以根据这个offset找到「<strong>segment段</strong>」。</li>
+<li>接着需要将全局的offset转换成segment的「<strong>局部offset</strong>」。</li>
+<li>根据局部的offset，就可以从（.index稀疏索引）找到对应的「<strong>数据位置</strong>」。</li>
+<li>开始顺序读取。</li>
+</ul>
+<h3 id="Producer分区写入策略"><a href="#Producer分区写入策略" class="headerlink" title="Producer分区写入策略"></a>Producer分区写入策略</h3><ol>
+<li><p><strong>轮询策略</strong></p>
+<p>消息以轮询的方式，均衡地写入Topic的不同分区。如果在生产消息时，key为null，则使用轮询算法均衡地分配分区。</p>
+</li>
+<li><p><strong>按key分配策略</strong></p>
+<p>消息是 &lt;key, value&gt;格式。key.hash() % Partition数量。</p>
+<p>可能因为某个key包含大量数据，数据都被分配到一个分区中，导致数据倾斜。</p>
+</li>
+</ol>
+<h3 id="Consumer分区分配策略"><a href="#Consumer分区分配策略" class="headerlink" title="Consumer分区分配策略"></a>Consumer分区分配策略</h3><p>消费者分区分配——尽可能地确保每个消费者消费的分区数量是均衡的。</p>
+<h4 id="Range范围分配策略"><a href="#Range范围分配策略" class="headerlink" title="Range范围分配策略"></a>Range范围分配策略</h4><p>Kafka的默认分配策略。Range策略针每个Topic。对若图所示：<img src="https://cdn.jsdelivr.net/gh/jakelin0fly/images/2022-05/Range%E8%8C%83%E5%9B%B4%E5%88%86%E9%85%8D%E7%AD%96%E7%95%A5.png"></p>
+<blockquote>
+<p><strong>算法公式</strong></p>
+<p>n = 分区数量 / 消费者数量</p>
+<p>m = 分区数量 % 消费者数量</p>
+<p>前m个消费者消费n+1个</p>
+<p>剩余消费者消费n个</p>
+</blockquote>
+<h4 id="RoundRobin轮询策略"><a href="#RoundRobin轮询策略" class="headerlink" title="RoundRobin轮询策略"></a>RoundRobin轮询策略</h4><p>RoundRobin策略是将消费组内所有消费者以及消费者所订阅的所有Topic的Partition按照字典序排序（topic和分区的hashcode进行排序），然后通过轮询方式逐个将分区以此分配给每个消费者。如下图：<img src="https://cdn.jsdelivr.net/gh/jakelin0fly/images/2022-05/RoundRobin%E8%BD%AE%E8%AF%A2%E7%AD%96%E7%95%A5.png"></p>
+<h4 id="Stricky粘性分配策略"><a href="#Stricky粘性分配策略" class="headerlink" title="Stricky粘性分配策略"></a>Stricky粘性分配策略</h4><p>Stricky粘性分配策略设计的目标包括以下两点：</p>
+<ol>
+<li>分区分配尽可能均匀。</li>
+<li>在发生Rebalance的时候，分区的分配尽可能与上一次分配保持相同。</li>
+</ol>
+<p>在没有发生Rebalance的情况下，Stricky粘性分配策略和RoundRobin分配策略相同。发生Rebalance后，减少对系统资源的浪费，保留Rebalance之前的分配结果，再将需要重新分配的分区均匀分配给当前的消费者。如下图所示：<img src="https://cdn.jsdelivr.net/gh/jakelin0fly/images/2022-05/Stricky%E7%B2%98%E6%80%A7%E5%88%86%E9%85%8D%E7%AD%96%E7%95%A5-Rebalance.png"></p>
+<h3 id="消费者组Rebalance机制"><a href="#消费者组Rebalance机制" class="headerlink" title="消费者组Rebalance机制"></a>消费者组Rebalance机制</h3><p>Kafka高性能表现得益于均衡负载，Kafka消费者组中，Kafka提供了分区的均衡分配机制，同时，当发生变化时，进行再平衡（Rebalance）。Rebalance过程中l 所有的消费者都将停止工作，直到Rebalance完成。</p>
+<p>Rebalance触发因素：</p>
+<ol>
+<li>消费者组中Consumer个数发生变化。新的Consumer加入或某个Consumer停止。</li>
+<li>消费者组订阅的Topic个数发生变化。</li>
+<li>订阅的Topic分区数量发生变化。</li>
+</ol>
+<h3 id="副本与ACK机制"><a href="#副本与ACK机制" class="headerlink" title="副本与ACK机制"></a>副本与ACK机制</h3><p>Kafka中Partition又分为leader和follower。follower即是消息数据的备份。创建Topic时，Kafka会尽可能的将各分区的leader分配到不同的Broker中。</p>
+<ul>
+<li>分区leader：读、写数据。</li>
+<li>分区follower：同步leader的数据；参与选举成为新leader。</li>
+</ul>
+<p>Producer不断地往Kafka中写入消息，整个过程不是原子性的，由此Kafka提供了ACK机制来确保消息的写入。对应的ACKs有一下：</p>
+<ul>
+<li><strong>acks = 0</strong>：生产者只管写入，不管是否写入成功，可能会数据丢失。性能最好。</li>
+<li><strong>acks = 1</strong>：生产者会等到leader分区写入成功后，返回成功，接着写下一条消息。</li>
+<li><strong>acks = -1/all</strong>：确保消息写入到leader分区、还确保消息同步follower都成功后，接着写下一条，性能最差。</li>
+</ul>
+<h3 id="AR-ISR-OSR"><a href="#AR-ISR-OSR" class="headerlink" title="AR\ISR\OSR"></a>AR\ISR\OSR</h3><ul>
+<li>AR（Assigned Replicas）表示一个Topic下的所有副本。</li>
+<li>ISR（In Sync Replicas）所有与leader副本保持一定程度同步的副本（包括leader副本在内）。</li>
+<li>OSR（Out of Sync Replicas）与leader副本同步滞后过多的副本（不包括leader副本）。</li>
+<li>AR = ISR + OSR</li>
+</ul>
+]]></content>
+      <categories>
+        <category>笔记</category>
+        <category>消息队列</category>
+      </categories>
+      <tags>
+        <tag>消息队列</tag>
+      </tags>
+  </entry>
 </search>
